@@ -1,0 +1,37 @@
+{
+  "name": "harmony",
+  "version": "0.1.0",
+  "description": "A Discord bot for verifying users.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/datasektionen/harmony.git"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "verification",
+    "security",
+    "email"
+  ],
+  "author": "Gábor Nagy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/datasektionen/harmony/issues"
+  },
+  "homepage": "https://github.com/datasektionen/harmony#readme",
+  "devDependencies": {
+    "eslint": "^7.18.0"
+  },
+  "dependencies": {
+    "@keyv/mysql": "^1.1.4",
+    "base64url": "^3.0.1",
+    "discord.js": "^12.5.1",
+    "keyv": "^4.0.3",
+    "node-fetch": "^2.6.1"
+  }
+}
