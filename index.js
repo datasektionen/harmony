@@ -16,7 +16,7 @@ const WELCOME_CHANNEL_ID = process.env.DISCORD_WELCOME_CHANNEL_ID;
 const GUILD_ID = process.env.DISCORD_GUILD_ID;
 
 if (!DB_URL || !SPAM_URL || !SPAM_API_TOKEN || !DISCORD_TOKEN || !WELCOME_CHANNEL_ID || !GUILD_ID) {
-	if (!DEBUG) throw new Error("Missing proper configuration!");
+  if (!DEBUG) throw new Error("Missing proper configuration!");
 }
 
 const VERIFIED_ROLE = process.env.DISCORD_VERIFIED_ROLE ? process.env.DISCORD_VERIFIED_ROLE : "Verified";
@@ -79,71 +79,71 @@ client.login(DISCORD_TOKEN).then(console.log("Logged in!"));
  * 		100% certain on how correct the async behavior is...
  */
 client.on("message", async msg => {
-	if (msg.author.bot) {
-		return;
-	}
-	if (hasRoleVerified(msg.author)) {
-		return;
-	}
-	const text = msg.content.trim();
-	if (msg.channel.id === WELCOME_CHANNEL_ID) {
-		if (text === "!verify") {
-			msg.author.createDM()
-				.then(channel => {
-					channel.send("Svara med din KTH-mejladress för att få en registreringskod!");
-				})
-				.catch(err => console.error(err));
-		} else {
-			msg.channel
-				.send(MESSAGE_PREFIX + "Använd kommandot '!verify' för att påbörja verifikationsprocessen och få tillgång till övriga kanaler!")
-				.catch(err => console.error(err));
-		}
-	} else if (msg.channel.type === "dm") {
-		if (new RegExp(/^.*@kth.se$/).test(text)) {
-			const token = generateToken(TOKEN_SIZE);
-			token_discord.set(token, msg.author.id, TOKEN_TIMEOUT);
-			token_email.set(token, text, TOKEN_TIMEOUT);
-			// TODO: Abstract away email dispatch, maybe write a better template.
-			fetch(`${SPAM_URL}/api/sendmail`, {
-				method: "post",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					from: "no-reply@datasektionen.se",
-					to: text,
-					subject: "Discord Verifikation",
-					html: `<p>Verifikationskod: ${token}</p>`,
-					key: SPAM_API_TOKEN,
-				}),
-			})
-				.then(res => console.log(`Email sent, received response: ${JSON.stringify(res)}`))
-				.then(msg.channel
-					.send("Verifikationskod skickad. Kolla dina mejl!")
-					.catch(err => console.error(err)));
-		} else if (text.match(/^[a-zA-Z0-9_-]+$/)) {
-			Promise.all([token_email.get(text), token_discord.get(text)])
-				.then(([email_address, discord_id]) => {
-					if (email_address && discord_id && discord_id === msg.author.id) {
-						verified_users.set(discord_id, email_address);
-						setRoleVerified(msg.author)
-							.then(
-								msg.channel
-									.send(`Du är nu verifierad. Dubbelkolla att du har blivit tilldelad ${VERIFIED_ROLE} rollen!`)
-									.catch(err => console.error(err)));
-					} else {
-						msg.channel
-							.send("Felaktig kod.")
-							.catch(err => console.error(err));
-					}
-				})
-				.catch(err => console.error(err));
-		} else {
-			msg.channel
-				.send("Något har blivit fel. Du ska antingen svara med en @kth.se adress, eller en giltig kod.")
-				.catch(err => console.error(err));
-		}
-	}
+  if (msg.author.bot) {
+    return;
+  }
+  if (hasRoleVerified(msg.author)) {
+    return;
+  }
+  const text = msg.content.trim();
+  if (msg.channel.id === WELCOME_CHANNEL_ID) {
+    if (text === "!verify") {
+      msg.author.createDM()
+        .then(channel => {
+          channel.send("Svara med din KTH-mejladress för att få en registreringskod!");
+        })
+        .catch(err => console.error(err));
+    } else {
+      msg.channel
+        .send(MESSAGE_PREFIX + "Använd kommandot '!verify' för att påbörja verifikationsprocessen och få tillgång till övriga kanaler!")
+        .catch(err => console.error(err));
+    }
+  } else if (msg.channel.type === "dm") {
+    if (new RegExp(/^.*@kth.se$/).test(text)) {
+      const token = generateToken(TOKEN_SIZE);
+      token_discord.set(token, msg.author.id, TOKEN_TIMEOUT);
+      token_email.set(token, text, TOKEN_TIMEOUT);
+      // TODO: Abstract away email dispatch, maybe write a better template.
+      fetch(`${SPAM_URL}/api/sendmail`, {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from: "no-reply@datasektionen.se",
+          to: text,
+          subject: "Discord Verifikation",
+          html: `<p>Verifikationskod: ${token}</p>`,
+          key: SPAM_API_TOKEN,
+        }),
+      })
+        .then(res => console.log(`Email sent, received response: ${JSON.stringify(res)}`))
+        .then(msg.channel
+          .send("Verifikationskod skickad. Kolla dina mejl!")
+          .catch(err => console.error(err)));
+    } else if (text.match(/^[a-zA-Z0-9_-]+$/)) {
+      Promise.all([token_email.get(text), token_discord.get(text)])
+        .then(([email_address, discord_id]) => {
+          if (email_address && discord_id && discord_id === msg.author.id) {
+            verified_users.set(discord_id, email_address);
+            setRoleVerified(msg.author)
+              .then(
+                msg.channel
+                  .send(`Du är nu verifierad. Dubbelkolla att du har blivit tilldelad ${VERIFIED_ROLE} rollen!`)
+                  .catch(err => console.error(err)));
+          } else {
+            msg.channel
+              .send("Felaktig kod.")
+              .catch(err => console.error(err));
+          }
+        })
+        .catch(err => console.error(err));
+    } else {
+      msg.channel
+        .send("Något har blivit fel. Du ska antingen svara med en @kth.se adress, eller en giltig kod.")
+        .catch(err => console.error(err));
+    }
+  }
 });
 
 /**
@@ -154,13 +154,13 @@ client.on("message", async msg => {
  * @returns {Boolean} if the {GuildMember} has the Verified role or not.
  */
 const hasRoleVerified = async (user) => {
-	return await client.guilds.fetch(GUILD_ID)
-		.then(guild => {
-			return guild.members.fetch(user);
-		})
-		.then(member => {
-			return member.roles.cache.find(role => role.name === VERIFIED_ROLE) ? true : false;
-		});
+  return await client.guilds.fetch(GUILD_ID)
+    .then(guild => {
+      return guild.members.fetch(user);
+    })
+    .then(member => {
+      return member.roles.cache.find(role => role.name === VERIFIED_ROLE) ? true : false;
+    });
 };
 
 /**
@@ -171,14 +171,14 @@ const hasRoleVerified = async (user) => {
  * @returns {void}
  */
 const setRoleVerified = async (user) => {
-	const guild = await client.guilds.fetch(GUILD_ID);
-	const role = guild.roles.cache.find(r => r.name === VERIFIED_ROLE);
-	if (!role) {
-		new Error(`Role ${VERIFIED_ROLE} does not exist on the Server!`);
-	}
-	guild.members.fetch(user)
-		.then(u => u.roles.add(role))
-		.catch(err => console.error(err));
+  const guild = await client.guilds.fetch(GUILD_ID);
+  const role = guild.roles.cache.find(r => r.name === VERIFIED_ROLE);
+  if (!role) {
+    new Error(`Role ${VERIFIED_ROLE} does not exist on the Server!`);
+  }
+  guild.members.fetch(user)
+    .then(u => u.roles.add(role))
+    .catch(err => console.error(err));
 };
 
 /**
@@ -189,5 +189,5 @@ const setRoleVerified = async (user) => {
  * @returns {String} the Base64URL-encoded token.
  */
 const generateToken = (size) => {
-	return base64url(crypto.randomBytes(size));
+  return base64url(crypto.randomBytes(size));
 };
