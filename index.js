@@ -1,8 +1,8 @@
-const Discord = require("discord.js");
-const Keyv = require("keyv");
-const crypto = require("crypto");
-const base64url = require("base64url");
-const fetch = require("node-fetch");
+import { Client } from "discord.js";
+import Keyv from "keyv";
+import { randomBytes } from "crypto";
+import base64url from "base64url";
+import fetch from "node-fetch";
 
 const DEBUG = process.env.DEBUG ? true : false;
 
@@ -38,7 +38,7 @@ const TOKEN_TIMEOUT = process.env.TOKEN_TIMEOUT ? process.env.TOKEN_TIMEOUT : 10
  */
 const TOKEN_SIZE = process.env.TOKEN_SIZE ? process.env.TOKEN_SIZE : 8;
 
-const client = new Discord.Client();
+const client = new Client();
 
 // TODO: We probably do not need 3 key-value stores for this if we used some class for this.
 const token_email = new Keyv(DB_URL, { namespace: "token_email" });
@@ -189,5 +189,5 @@ const setRoleVerified = async (user) => {
  * @returns {String} the Base64URL-encoded token.
  */
 const generateToken = (size) => {
-  return base64url(crypto.randomBytes(size));
+  return base64url(randomBytes(size));
 };
