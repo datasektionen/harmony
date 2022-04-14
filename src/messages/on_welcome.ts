@@ -9,7 +9,7 @@ export function onWelcome(message: Message, messageText: string) {
 	}
 	return sendMessage(
 		message,
-		"Använd kommandot '!verify' för att påbörja verifikationsprocessen och få tillgång till övriga kanaler!"
+		" Använd kommandot '!verify' för att påbörja verifikationsprocessen och få tillgång till övriga kanaler!"
 	);
 }
 
