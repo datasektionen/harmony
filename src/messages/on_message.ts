@@ -31,14 +31,13 @@ import { onWelcome } from "./on_welcome";
  * 		100% certain on how correct the async behavior is...
  */
 export async function onMessage(message: Message) {
-	if (message.author.bot || hasRoleVerified(message.author)) {
+	if (message.author.bot || (await hasRoleVerified(message.author))) {
 		return;
 	}
 
 	const messageText = message.content.trim();
 	if (inWelcomeChat(message)) onWelcome(message, messageText);
-
-	if (inDM(message)) onDM(message, messageText);
+	else if (inDM(message)) onDM(message, messageText);
 }
 
 function inWelcomeChat(msg: Message) {

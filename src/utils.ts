@@ -14,11 +14,13 @@ export async function hasRoleVerified(user: User): Promise<boolean> {
 			return guild.members.fetch(user);
 		})
 		.then((member) => {
-			return member.roles.cache.find(
+			const cache = member.roles.cache.find(
 				(role) => role.name === process.env.DISCORD_VERIFIED_ROLE
-			)
-				? true
-				: false;
+			);
+			if (cache) {
+				return true;
+			}
+			return false;
 		});
 }
 
@@ -61,7 +63,6 @@ export const generateToken = (size: number) => {
  */
 export const validateEnvironment = () => {
 	if (
-		!process.env.DATABASE_URL ||
 		!process.env.SPAM_URL ||
 		!process.env.SPAM_API_TOKEN ||
 		!process.env.DISCORD_TOKEN ||

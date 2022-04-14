@@ -7,8 +7,8 @@ export async function onDM(message: Message, messageText: string) {
 	if (isKthEmail(messageText)) {
 		const token = generateToken(parseInt(process.env.TOKEN_SIZE as string));
 		const timeout = parseInt(process.env.TOKEN_TIMEOUT as string);
-		token_discord.set(token, message.author.id, timeout);
-		token_email.set(token, messageText, timeout);
+		await token_discord.set(token, message.author.id, timeout);
+		await token_email.set(token, messageText, timeout);
 
 		let result;
 		try {
@@ -23,7 +23,7 @@ export async function onDM(message: Message, messageText: string) {
 	}
 
 	if (messageIsToken(messageText)) {
-		const [email_address, discord_id] = await Promise.all([
+		const [discord_id, email_address] = await Promise.all([
 			token_discord.get(messageText),
 			token_email.get(messageText),
 		]);
@@ -67,5 +67,9 @@ function emailAndDiscordIdIsCorrect(
 	email_address: string,
 	discord_id: string
 ) {
-	return email_address && discord_id && discord_id === message.author.id;
+	return (
+		email_address &&
+		discord_id &&
+		discord_id.toString() === message.author.id.toString()
+	);
 }
