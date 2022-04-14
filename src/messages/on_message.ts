@@ -1,3 +1,4 @@
+import { Message } from "discord.js";
 import { hasRoleVerified } from "../utils";
 import { onDM } from "./on_dm";
 import { onWelcome } from "./on_welcome";
@@ -29,22 +30,21 @@ import { onWelcome } from "./on_welcome";
  * TODO: Should probably break this up into smaller functions, and I am not
  * 		100% certain on how correct the async behavior is...
  */
-export async function onMessage(message) {
-  if (message.author.bot || hasRoleVerified(message.author)) {
-    return;
-  }
+export async function onMessage(message: Message) {
+	if (message.author.bot || hasRoleVerified(message.author)) {
+		return;
+	}
 
-  const messageText = message.content.trim();
-  if (inWelcomeChat(message)) onWelcome(message, messageText);
+	const messageText = message.content.trim();
+	if (inWelcomeChat(message)) onWelcome(message, messageText);
 
-  if (inDM(message)) onDM(message, messageText);
+	if (inDM(message)) onDM(message, messageText);
 }
 
-function inWelcomeChat(msg) {
-  return msg.channel.id === process.env.DISCORD_WELCOME_CHANNEL_ID;
+function inWelcomeChat(msg: Message) {
+	return msg.channel.id === process.env.DISCORD_WELCOME_CHANNEL_ID;
 }
 
-function inDM(msg) {
-  return msg.channel.type === "dm";
+function inDM(msg: Message) {
+	return msg.channel.type === "dm";
 }
-
