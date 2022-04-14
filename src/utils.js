@@ -39,6 +39,7 @@ export const setRoleVerified = async (user) => {
     .fetch(user)
     .then((u) => u.roles.add(role))
     .catch((err) => console.error(err));
+  return guild;
 };
 
 /**
