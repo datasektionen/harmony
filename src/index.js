@@ -1,7 +1,7 @@
 import { Client as DiscordClient } from "discord.js";
 import { configDatabase } from "./database_config";
 import { validateEnvironment } from "./utils";
-import { onMessage } from "./on_message";
+import { onMessage } from "./messages/on_message";
 
 export const discordClient = new DiscordClient();
 
