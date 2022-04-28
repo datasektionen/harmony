@@ -18,7 +18,9 @@ export async function onDM(message: Message, messageText: string) {
 		}
 		console.log(`Email sent, received response: ${JSON.stringify(result)}`);
 		return message.channel
-			.send("Verifikationskod skickad. Kolla dina mejl!")
+			.send(
+				"Verifikationskod skickad. Kopiera koden från ditt mail och klistra in den här"
+			)
 			.catch((err) => console.error(err));
 	}
 
