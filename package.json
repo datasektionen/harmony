@@ -2,7 +2,7 @@
   "name": "harmony",
   "version": "0.2.1",
   "description": "A Discord bot for verifying users.",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint",
