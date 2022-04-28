@@ -1,7 +1,7 @@
 import { Message } from "discord.js";
 import { hasRoleVerified } from "../utils";
 import { onDM } from "./on_dm";
-import { onWelcome } from "./on_welcome";
+import { onWelcome } from "./on_server_message";
 
 /**
  * Listens to  message events emitted to the Client, and responds according to
