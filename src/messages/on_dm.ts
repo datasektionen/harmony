@@ -55,7 +55,7 @@ export async function onDM(message: Message, messageText: string) {
 }
 
 function isKthEmail(messageText: string) {
-	return new RegExp(/^.*@kth.se$/).test(messageText);
+	return new RegExp(/^[a-zA-Z0-9]+@kth[.]se$/).test(messageText);
 }
 
 function messageIsToken(messageText: string) {
