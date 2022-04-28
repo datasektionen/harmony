@@ -53,15 +53,15 @@ export async function setRoleVerified(user: User): Promise<void> {
  * @param {Integer} size The number of bytes to be generated.
  * @returns {String} the Base64URL-encoded token.
  */
-export const generateToken = (size: number) => {
+export function generateToken(size: number) {
 	return base64url(randomBytes(size));
-};
+}
 
 /**
  * Goes through all dotenv vars and checks if they are defined.
  * If not, the service will throw and error
  */
-export const validateEnvironment = () => {
+export function validateEnvironment() {
 	if (
 		!process.env.SPAM_URL ||
 		!process.env.SPAM_API_TOKEN ||
@@ -72,4 +72,4 @@ export const validateEnvironment = () => {
 		if (process.env.NODE_ENV === "development")
 			throw new Error("Missing proper configuration!");
 	}
-};
+}
