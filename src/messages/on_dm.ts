@@ -1,4 +1,4 @@
-import { setRoleVerified } from "../utils/roles";
+import { setN0llanRole, setRoleVerified } from "../utils/roles";
 import { token_discord, token_email, verified_users } from "../database_config";
 import { sendMail } from "../utils/mail";
 import { Message } from "discord.js";
@@ -24,17 +24,21 @@ export async function onDM(message: Message, messageText: string) {
 	}
 
 	if (messageIsToken(messageText)) {
-		const [discord_id, email_address] = await Promise.all([
+		const [discordId, emailAddress] = await Promise.all([
 			token_discord.get(messageText),
 			token_email.get(messageText),
 		]);
 
-		if (emailAndDiscordIdIsCorrect(message, email_address, discord_id)) {
-			verified_users.set(discord_id, email_address);
+		if (emailAndDiscordIdIsCorrect(message, emailAddress, discordId)) {
+			verified_users.set(discordId, emailAddress);
 			try {
 				await setRoleVerified(message.author);
 				message.channel.send(
 					`Du är nu verifierad. Dubbelkolla att du har blivit tilldelad @**${process.env.DISCORD_VERIFIED_ROLE}** rollen!`
+				);
+				await setN0llanRole(
+					message.author,
+					(emailAddress as string).split("@")[0]
 				);
 			} catch (error) {
 				console.error(error);
