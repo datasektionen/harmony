@@ -1,7 +1,8 @@
-import { generateToken, setRoleVerified } from "../utils";
+import { setRoleVerified } from "../utils/roles";
 import { token_discord, token_email, verified_users } from "../database_config";
-import { sendMail } from "../mail";
+import { sendMail } from "../utils/mail";
 import { Message } from "discord.js";
+import { generateToken } from "../utils/generate_token";
 
 export async function onDM(message: Message, messageText: string) {
 	if (isKthEmail(messageText)) {
@@ -18,7 +19,7 @@ export async function onDM(message: Message, messageText: string) {
 		}
 		console.log(`Email sent, received response: ${JSON.stringify(result)}`);
 		return message.channel
-			.send("Verifikationskod skickad. Kolla dina mejl!")
+			.send("Verifikationskod skickad. Kolla din KTH-email!")
 			.catch((err) => console.error(err));
 	}
 
@@ -33,7 +34,7 @@ export async function onDM(message: Message, messageText: string) {
 			try {
 				await setRoleVerified(message.author);
 				message.channel.send(
-					`Du är nu verifierad. Dubbelkolla att du har blivit tilldelad ${process.env.DISCORD_VERIFIED_ROLE} rollen!`
+					`Du är nu verifierad. Dubbelkolla att du har blivit tilldelad @**${process.env.DISCORD_VERIFIED_ROLE}** rollen!`
 				);
 			} catch (error) {
 				console.error(error);
@@ -42,14 +43,14 @@ export async function onDM(message: Message, messageText: string) {
 		}
 
 		return message.channel
-			.send("Felaktig kod.")
+			.send("Ogiltig verifieringskod! Försök igen.")
 			.catch((err) => console.error(err));
 	}
 
 	// If the message is not and email address or a token then it's a faulty input.
 	message.channel
 		.send(
-			"Något har blivit fel. Du ska antingen svara med en @kth.se adress, eller en giltig kod."
+			"Oj, något har blivit fel! Du ska antingen svara med en @kth.se emailadress, eller en giltig verifikationskod."
 		)
 		.catch((err) => console.error(err));
 }
