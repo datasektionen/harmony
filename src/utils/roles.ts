@@ -19,9 +19,7 @@ export async function setRole(user: User, roleName: string): Promise<void> {
 	const guild = await getGuild();
 	const role = guild.roles.cache.find((r) => r.name === roleName);
 	if (!role) {
-		throw new Error(
-			`Role ${process.env.DISCORD_VERIFIED_ROLE} does not exist on the Server!`
-		);
+		throw new Error(`Role ${roleName} does not exist on the Server!`);
 	}
 	try {
 		const guildMember = await getGuildMember(user);
