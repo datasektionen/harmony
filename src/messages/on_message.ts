@@ -1,7 +1,6 @@
 import { Message } from "discord.js";
-import { hasRoleVerified } from "../utils";
+import { hasRoleVerified } from "../utils/roles";
 import { onDM } from "./on_dm";
-import { onWelcome } from "./on_welcome";
 
 /**
  * Listens to  message events emitted to the Client, and responds according to
@@ -36,12 +35,7 @@ export async function onMessage(message: Message) {
 	}
 
 	const messageText = message.content.trim();
-	if (inWelcomeChat(message)) onWelcome(message, messageText);
-	else if (inDM(message)) onDM(message, messageText);
-}
-
-function inWelcomeChat(msg: Message) {
-	return msg.channel.id === process.env.DISCORD_WELCOME_CHANNEL_ID;
+	if (inDM(message)) onDM(message, messageText);
 }
 
 function inDM(msg: Message) {
