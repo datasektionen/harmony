@@ -12,6 +12,6 @@ type HodisUser = {
 };
 
 export async function getHodisUser(kthId: string): Promise<HodisUser> {
-	return (await axios.get(`https://hodis.datasektionen.se/uid/${kthId}`))
+	return (await axios.get(`https://hodis.datasektionen.se/uid/${kthId.toLowerCase()}`))
 		.data as HodisUser;
 }
