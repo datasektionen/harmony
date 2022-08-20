@@ -1,4 +1,5 @@
 import { Client as DiscordClient, GatewayIntentBits } from "discord.js";
+import { register_commands } from "./commands/register_commands";
 import { onMessage } from "./messages/on_message";
 import { onWelcome } from "./messages/on_welcome";
 
@@ -31,5 +32,6 @@ async function main() {
 
 	discordClient.on("message", onMessage);
 	discordClient.on("guildMemberAdd", onWelcome);
+	register_commands();
 }
 main();
