@@ -1,8 +1,8 @@
-import { Client as DiscordClient } from "discord.js";
+import { Client as DiscordClient, GatewayIntentBits } from "discord.js";
 import { onMessage } from "./messages/on_message";
 import { onWelcome } from "./messages/on_welcome";
 
-/**
+/**p
  * Goes through all dotenv vars and checks if they are defined.
  * If not, the service will throw and error
  */
@@ -18,15 +18,17 @@ function validateEnvironment() {
 	}
 }
 
-export const discordClient = new DiscordClient();
+export const discordClient = new DiscordClient({
+	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
+});
 
-function main() {
+async function main() {
 	validateEnvironment();
 
 	discordClient.once("ready", () => console.log("Starting..."));
-	discordClient
-		.login(process.env.DISCORD_TOKEN)
-		.then(() => console.log("Logged in!"));
+	await discordClient.login(process.env.DISCORD_TOKEN);
+	console.log("Logged in");
+
 	discordClient.on("message", onMessage);
 	discordClient.on("guildMemberAdd", onWelcome);
 }
