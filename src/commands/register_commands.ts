@@ -1,9 +1,9 @@
 import { discordClient } from "..";
 import { getGuild } from "../utils/guild";
-import { handleAdd } from "./add/handle_add";
+import { handleAdd } from "./add/add.handler";
 import { commands } from "./commands";
-import { CommandNames } from "./command_names";
-import { handlePing } from "./ping/ping_handler";
+import { CommandNames } from "./command.names";
+import { handlePing } from "./ping/ping.handler";
 
 export const register_commands = async () => {
 	const guild = await getGuild();

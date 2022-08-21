@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "discord.js";
-import { CommandNames } from "../command_names";
+import { CommandNames } from "../command.names";
 
 export const addCommand = new SlashCommandBuilder()
 	.setName(CommandNames.ADD)
