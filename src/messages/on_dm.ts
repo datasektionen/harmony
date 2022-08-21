@@ -3,6 +3,10 @@ import { token_discord, token_email, verified_users } from "../database_config";
 import { sendMail } from "../utils/mail";
 import { Message } from "discord.js";
 import { generateToken } from "../utils/generate_token";
+import {
+	isKthEmail,
+	messageIsToken,
+} from "../commands/verify/subcommands/util";
 
 export async function onDM(message: Message, messageText: string) {
 	if (isKthEmail(messageText)) {
@@ -25,11 +29,11 @@ export async function onDM(message: Message, messageText: string) {
 
 	if (messageIsToken(messageText)) {
 		const [discordId, emailAddress] = await Promise.all([
-			token_discord.get(messageText),
-			token_email.get(messageText),
+			token_discord.get(messageText) as Promise<string>,
+			token_email.get(messageText) as Promise<string>,
 		]);
 
-		if (emailAndDiscordIdIsCorrect(message, emailAddress, discordId)) {
+		if (emailAddress && discordId && discordId !== message.author.id) {
 			verified_users.set(discordId, emailAddress);
 			try {
 				await setRoleVerified(message.author);
@@ -57,24 +61,4 @@ export async function onDM(message: Message, messageText: string) {
 			"Oj, något har blivit fel! Du ska antingen svara med en @kth.se emailadress, eller en giltig verifikationskod."
 		)
 		.catch((err) => console.error(err));
-}
-
-function isKthEmail(messageText: string) {
-	return new RegExp(/^[a-zA-Z0-9]+@kth[.]se$/).test(messageText);
-}
-
-function messageIsToken(messageText: string) {
-	return messageText.match(/^[a-zA-Z0-9_-]+$/);
-}
-
-function emailAndDiscordIdIsCorrect(
-	message: Message,
-	email_address: string,
-	discord_id: string
-) {
-	return (
-		email_address &&
-		discord_id &&
-		discord_id.toString() === message.author.id.toString()
-	);
 }
