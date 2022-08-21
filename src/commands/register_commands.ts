@@ -4,6 +4,7 @@ import { handleAdd } from "./add/add.handler";
 import { commands } from "./commands";
 import { CommandNames } from "./command.names";
 import { handlePing } from "./ping/ping.handler";
+import { handleVerify } from "./verify/verify.handler";
 
 export const register_commands = async () => {
 	const guild = await getGuild();
@@ -15,10 +16,13 @@ export const register_commands = async () => {
 		}
 		switch (interaction.commandName) {
 			case CommandNames.PING:
-				handlePing(interaction);
+				await handlePing(interaction);
 				break;
 			case CommandNames.ADD:
-				handleAdd(interaction);
+				await handleAdd(interaction);
+				break;
+			case CommandNames.VERIFY:
+				await handleVerify(interaction);
 				break;
 		}
 	});
