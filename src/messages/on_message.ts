@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { ChannelType, Message } from "discord.js";
 import { hasRoleVerified } from "../utils/roles";
 import { onDM } from "./on_dm";
 
@@ -39,5 +39,5 @@ export async function onMessage(message: Message) {
 }
 
 function inDM(msg: Message) {
-	return msg.channel.type === "dm";
+	return msg.channel.type === ChannelType.DM;
 }
