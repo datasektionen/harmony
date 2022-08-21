@@ -1,4 +1,5 @@
-import { addCommand } from "./add/add_command";
-import { pingCommand } from "./ping/ping_command";
+import { addCommand } from "./add/add.command";
+import { pingCommand } from "./ping/ping.command";
+import { verifyCommand } from "./verify/verify.command";
 
-export const commands = [addCommand, pingCommand];
+export const commands = [addCommand, pingCommand, verifyCommand];
