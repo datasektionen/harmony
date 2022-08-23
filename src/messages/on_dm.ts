@@ -4,7 +4,10 @@ import { sendMail } from "../utils/mail";
 import { Message } from "discord.js";
 import { generateToken } from "../utils/generate_token";
 
-export async function onDM(message: Message, messageText: string) {
+export async function onDM(
+	message: Message,
+	messageText: string
+): Promise<void | Message> {
 	if (isKthEmail(messageText)) {
 		const token = generateToken(parseInt(process.env.TOKEN_SIZE as string));
 		const timeout = parseInt(process.env.TOKEN_TIMEOUT as string);
@@ -20,13 +23,13 @@ export async function onDM(message: Message, messageText: string) {
 		console.log(`Email sent, received response: ${JSON.stringify(result)}`);
 		return message.channel
 			.send("Verifikationskod skickad. Kolla din KTH-email!")
-			.catch((err) => console.error(err));
+			.catch(err => console.error(err));
 	}
 
 	if (messageIsToken(messageText)) {
 		const [discordId, emailAddress] = await Promise.all([
 			token_discord.get(messageText),
-			token_email.get(messageText),
+			token_email.get(messageText)
 		]);
 
 		if (emailAndDiscordIdIsCorrect(message, emailAddress, discordId)) {
@@ -48,7 +51,7 @@ export async function onDM(message: Message, messageText: string) {
 
 		return message.channel
 			.send("Ogiltig verifieringskod! Försök igen.")
-			.catch((err) => console.error(err));
+			.catch(err => console.error(err));
 	}
 
 	// If the message is not and email address or a token then it's a faulty input.
@@ -56,14 +59,14 @@ export async function onDM(message: Message, messageText: string) {
 		.send(
 			"Oj, något har blivit fel! Du ska antingen svara med en @kth.se emailadress, eller en giltig verifikationskod."
 		)
-		.catch((err) => console.error(err));
+		.catch(err => console.error(err));
 }
 
-function isKthEmail(messageText: string) {
+function isKthEmail(messageText: string): boolean {
 	return new RegExp(/^[a-zA-Z0-9]+@kth[.]se$/).test(messageText);
 }
 
-function messageIsToken(messageText: string) {
+function messageIsToken(messageText: string): RegExpMatchArray | null {
 	return messageText.match(/^[a-zA-Z0-9_-]+$/);
 }
 
@@ -71,10 +74,10 @@ function emailAndDiscordIdIsCorrect(
 	message: Message,
 	email_address: string,
 	discord_id: string
-) {
+): boolean {
 	return (
-		email_address &&
-		discord_id &&
+		!!email_address &&
+		!!discord_id &&
 		discord_id.toString() === message.author.id.toString()
 	);
 }
