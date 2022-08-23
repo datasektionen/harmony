@@ -25,9 +25,5 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Install your linters here
-      - name: Run linters
-        uses: wearerequired/lint-action@v2
-        with:
-          eslint: true
-          prettier: true
+      - name: Run linting
+        run: eslint . --ext .js,.jsx,.ts,.tsx
