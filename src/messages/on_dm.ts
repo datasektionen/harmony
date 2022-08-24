@@ -6,7 +6,7 @@ import { generateToken } from "../utils/generate_token";
 
 export async function onDM(
 	message: Message,
-	messageText: string
+	messageText: string,
 ): Promise<void | Message> {
 	if (isKthEmail(messageText)) {
 		const token = generateToken(parseInt(process.env.TOKEN_SIZE as string));
@@ -29,7 +29,7 @@ export async function onDM(
 	if (messageIsToken(messageText)) {
 		const [discordId, emailAddress] = await Promise.all([
 			token_discord.get(messageText),
-			token_email.get(messageText)
+			token_email.get(messageText),
 		]);
 
 		if (emailAndDiscordIdIsCorrect(message, emailAddress, discordId)) {
@@ -37,11 +37,11 @@ export async function onDM(
 			try {
 				await setRoleVerified(message.author);
 				message.channel.send(
-					`Du är nu verifierad. Dubbelkolla att du har blivit tilldelad @**${process.env.DISCORD_VERIFIED_ROLE}** rollen!`
+					`Du är nu verifierad. Dubbelkolla att du har blivit tilldelad @**${process.env.DISCORD_VERIFIED_ROLE}** rollen!`,
 				);
 				await setN0llanRole(
 					message.author,
-					(emailAddress as string).split("@")[0]
+					(emailAddress as string).split("@")[0],
 				);
 			} catch (error) {
 				console.error(error);
@@ -57,7 +57,7 @@ export async function onDM(
 	// If the message is not and email address or a token then it's a faulty input.
 	message.channel
 		.send(
-			"Oj, något har blivit fel! Du ska antingen svara med en @kth.se emailadress, eller en giltig verifikationskod."
+			"Oj, något har blivit fel! Du ska antingen svara med en @kth.se emailadress, eller en giltig verifikationskod.",
 		)
 		.catch(err => console.error(err));
 }
@@ -73,7 +73,7 @@ function messageIsToken(messageText: string): RegExpMatchArray | null {
 function emailAndDiscordIdIsCorrect(
 	message: Message,
 	email_address: string,
-	discord_id: string
+	discord_id: string,
 ): boolean {
 	return (
 		!!email_address &&
