@@ -20,7 +20,11 @@ function validateEnvironment() {
 }
 
 export const discordClient = new DiscordClient({
-	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
+	intents: [
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.GuildMembers,
+	],
 });
 
 async function main() {
