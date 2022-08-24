@@ -1,8 +1,29 @@
-import { ChatInputCommandInteraction, GuildMember } from "discord.js";
+import {
+	ChatInputCommandInteraction,
+	GuildMember,
+	GuildMemberManager,
+	GuildMemberRoleManager,
+} from "discord.js";
+
+const requiredRole = process.env.DISCORD_MOD_ROLE;
 
 export const handleKick = async (interaction: ChatInputCommandInteraction) => {
 	const { options } = interaction;
 	const role = options.getString("role", true);
+	const message = options.getString("message", false);
+
+	// ? Preferably we not even show this command to unauthorized users
+	// ? but this is here as a quick-fix and later second line of defense
+	if (
+		!(interaction.member?.roles as GuildMemberRoleManager).cache.some(
+			(current) => current.name === requiredRole
+		)
+	) {
+		return await interaction.reply({
+			content: `You need to have the \`${requiredRole}\` role to use this command`,
+			ephemeral: true,
+		});
+	}
 
 	await interaction.guild?.members.fetch();
 	const targetMembers = interaction.guild?.members.cache.filter(
@@ -21,13 +42,13 @@ export const handleKick = async (interaction: ChatInputCommandInteraction) => {
 		targetMembers.reduce<Promise<GuildMember>[]>((total, current) => {
 			return [
 				...total,
-				current.kick("Grattis ettan! Denna server fanns aldrig..."),
+				current.kick(message ?? "Grattis ettan! Denna server fanns aldrig..."),
 			];
 		}, [])
 	);
 
 	await interaction.reply({
-		content: `Kicked all with role ${role} (${targetMembers.size} members)`,
+		content: `Kicked all with role \`${role}\` (${targetMembers.size} members)`,
 		ephemeral: true,
 	});
 };
