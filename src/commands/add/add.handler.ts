@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction } from "discord.js";
+import { ChatInputCommandInteraction, InteractionResponse } from "discord.js";
 
 export const handleAdd = async (interaction: ChatInputCommandInteraction) => {
 	const { options } = interaction;
@@ -9,4 +9,5 @@ export const handleAdd = async (interaction: ChatInputCommandInteraction) => {
 		content: `The sum of the two numbers is: ${num1 + num2}`,
 		ephemeral: true,
 	});
+	return;
 };

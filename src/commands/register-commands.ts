@@ -8,20 +8,29 @@ import { handleVerify } from "./verify/verify.handler";
 
 export const registerCommands = async () => {
 	const guild = await getGuild();
-	commands.forEach((command) => guild.commands.create(command));
+	Promise.all(commands.map((command) => guild.commands.create(command)));
 
 	discordClient.on("interactionCreate", async (interaction) => {
 		if (!interaction.isChatInputCommand()) {
 			return;
 		}
 
-		switch (interaction.commandName) {
-			case CommandNames.PING:
-				return await handlePing(interaction);
-			case CommandNames.ADD:
-				return await handleAdd(interaction);
-			case CommandNames.VERIFY:
-				return await handleVerify(interaction);
+		try {
+			switch (interaction.commandName) {
+				case CommandNames.PING:
+					await handlePing(interaction);
+					return;
+				case CommandNames.ADD:
+					await handleAdd(interaction);
+					return;
+				case CommandNames.VERIFY:
+					await handleVerify(interaction);
+					return;
+				default:
+					throw new Error(`Command name not found ${interaction.commandName}`);
+			}
+		} catch (error) {
+			console.error(error);
 		}
 	});
 };

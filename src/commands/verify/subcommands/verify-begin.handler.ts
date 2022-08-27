@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, CommandInteraction } from "discord.js";
+import { ChatInputCommandInteraction, InteractionResponse } from "discord.js";
 import { tokenDiscord, tokenEmail } from "../../../database-config";
 import { generateToken } from "../../../utils/generate-token";
 import { sendMail } from "../../../utils/mail";
@@ -25,15 +25,17 @@ export const handleVerifyBegin = async (
 	try {
 		const result = await sendMail(messageText, token);
 		console.log(`Email sent, received response: ${JSON.stringify(result)}`);
+		await interaction.reply({
+			content: `Verification email sent, check ${messageText} for your verification code.`,
+			ephemeral: true,
+		});
+		return;
 	} catch (error) {
 		console.error(error);
 		await interaction.reply({
 			content: "Something went wrong, please try again.",
 			ephemeral: true,
 		});
+		return;
 	}
-	await interaction.reply({
-		content: `Verification email sent, check ${messageText} for your verification code.`,
-		ephemeral: true,
-	});
 };

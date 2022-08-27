@@ -1,7 +1,7 @@
-import { ChatInputCommandInteraction, CommandInteraction } from "discord.js";
+import { ChatInputCommandInteraction, InteractionResponse } from "discord.js";
 import { handleVerifyBegin } from "./subcommands/verify-begin.handler";
-import { VerifySubcommandNames } from "./verify-subcommands-names.enum";
 import { handleVerifySubmit } from "./subcommands/verify-submit.handler";
+import { VerifySubcommandNames } from "./verify-subcommands-names.enum";
 
 export const handleVerify = async (
 	interaction: ChatInputCommandInteraction
@@ -10,10 +10,10 @@ export const handleVerify = async (
 
 	switch (subCommandName) {
 		case VerifySubcommandNames.BEGIN:
-			await handleVerifyBegin(interaction);
-			break;
+			return await handleVerifyBegin(interaction);
 		case VerifySubcommandNames.SUBMIT:
-			await handleVerifySubmit(interaction);
-			break;
+			return await handleVerifySubmit(interaction);
+		default:
+			throw new Error(`Command name not found ${interaction.commandName}`);
 	}
 };

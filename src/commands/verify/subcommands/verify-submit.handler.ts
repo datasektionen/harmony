@@ -4,7 +4,7 @@ import {
 	tokenEmail,
 	verifiedUsers,
 } from "../../../database-config";
-import { setN0llanRole, setRoleVerified } from "../../../utils/roles";
+import { setRoleVerified } from "../../../utils/roles";
 import { messageIsToken } from "./util";
 
 export enum VariableNames {
@@ -14,7 +14,7 @@ export enum VariableNames {
 export const handleVerifySubmit = async (
 	interaction: ChatInputCommandInteraction
 ) => {
-	const { member, user, options } = interaction;
+	const { user, options } = interaction;
 	const messageText = options.getString(VariableNames.VERIFICATION_CODE, true);
 
 	if (!messageIsToken(messageText)) {
@@ -46,6 +46,7 @@ export const handleVerifySubmit = async (
 			content: `Du är nu verifierad. Dubbelkolla att du har blivit tilldelad @**${process.env.DISCORD_VERIFIED_ROLE}** rollen!`,
 			ephemeral: true,
 		});
+		return;
 		// setN0llanRole(user, emailAddress.split("@")[0]);
 	} catch (error) {
 		console.error(error);
@@ -53,6 +54,6 @@ export const handleVerifySubmit = async (
 			content: "Something went wrong, please try again.",
 			ephemeral: true,
 		});
+		return;
 	}
-	return;
 };
