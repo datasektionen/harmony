@@ -1,5 +1,6 @@
 import { discordClient } from "..";
-import { getGuild } from "../utils/guild";
+import { CommandNotFoundError } from "../shared/errors/command-not-founder.error";
+import { getGuild } from "../shared/utils/guild";
 import { handleAdd } from "./add/add.handler";
 import { commands } from "./commands";
 import { CommandNames } from "./commands.names";
@@ -27,7 +28,7 @@ export const registerCommands = async () => {
 					await handleVerify(interaction);
 					return;
 				default:
-					throw new Error(`Command name not found ${interaction.commandName}`);
+					throw new CommandNotFoundError(interaction.commandName);
 			}
 		} catch (error) {
 			console.error(error);

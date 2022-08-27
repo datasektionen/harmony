@@ -1,8 +1,8 @@
-import { setN0llanRole, setRoleVerified } from "../utils/roles";
+import { setN0llanRole, setRoleVerified } from "../shared/utils/roles";
 import { tokenDiscord, tokenEmail, verifiedUsers } from "../database-config";
-import { sendMail } from "../utils/mail";
+import { sendMail } from "../shared/utils/mail";
 import { Message } from "discord.js";
-import { generateToken } from "../utils/generate-token";
+import { generateToken } from "../shared/utils/generate-token";
 import {
 	isKthEmail,
 	messageIsToken,

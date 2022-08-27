@@ -1,5 +1,5 @@
 import { ChannelType, Message } from "discord.js";
-import { hasRoleVerified } from "../utils/roles";
+import { hasRoleVerified } from "../shared/utils/roles";
 import { onDM } from "./on-dm";
 
 /**

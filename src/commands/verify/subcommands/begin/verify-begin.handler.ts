@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction } from "discord.js";
 import { tokenDiscord, tokenEmail } from "../../../../database-config";
-import { generateToken } from "../../../../utils/generate-token";
-import { sendMail } from "../../../../utils/mail";
+import { generateToken } from "../../../../shared/utils/generate-token";
+import { sendMail } from "../../../../shared/utils/mail";
 import { isKthEmail } from "../util";
 import { VerifyBeginVariables } from "./verify-begin.variables";
 

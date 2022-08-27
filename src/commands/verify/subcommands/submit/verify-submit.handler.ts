@@ -4,7 +4,7 @@ import {
 	tokenEmail,
 	verifiedUsers,
 } from "../../../../database-config";
-import { setRoleVerified } from "../../../../utils/roles";
+import { setRoleVerified } from "../../../../shared/utils/roles";
 import { messageIsToken } from "../util";
 import { VerifySubmitVariables } from "./verify-submit.variables";
 
