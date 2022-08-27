@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, InteractionResponse } from "discord.js";
+import { ChatInputCommandInteraction } from "discord.js";
 
 export const handlePing = async (interaction: ChatInputCommandInteraction) => {
 	await interaction.reply({

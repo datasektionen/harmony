@@ -3,19 +3,19 @@ import {
 	tokenDiscord,
 	tokenEmail,
 	verifiedUsers,
-} from "../../../database-config";
-import { setRoleVerified } from "../../../utils/roles";
-import { messageIsToken } from "./util";
-
-export enum VariableNames {
-	VERIFICATION_CODE = "verification-code",
-}
+} from "../../../../database-config";
+import { setRoleVerified } from "../../../../utils/roles";
+import { messageIsToken } from "../util";
+import { VerifySubmitVariables } from "./verify-submit.variables";
 
 export const handleVerifySubmit = async (
 	interaction: ChatInputCommandInteraction
 ) => {
 	const { user, options } = interaction;
-	const messageText = options.getString(VariableNames.VERIFICATION_CODE, true);
+	const messageText = options.getString(
+		VerifySubmitVariables.VERIFICATION_CODE,
+		true
+	);
 
 	if (!messageIsToken(messageText)) {
 		await interaction.reply({

@@ -1,7 +1,7 @@
-import { ChatInputCommandInteraction, InteractionResponse } from "discord.js";
-import { handleVerifyBegin } from "./subcommands/verify-begin.handler";
-import { handleVerifySubmit } from "./subcommands/verify-submit.handler";
-import { VerifySubcommandNames } from "./verify-subcommands-names.enum";
+import { ChatInputCommandInteraction } from "discord.js";
+import { handleVerifyBegin } from "./subcommands/begin/verify-begin.handler";
+import { handleVerifySubmit } from "./subcommands/submit/verify-submit.handler";
+import { VerifySubcommandNames } from "./verify-subcommands.names";
 
 export const handleVerify = async (
 	interaction: ChatInputCommandInteraction

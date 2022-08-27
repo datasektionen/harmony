@@ -2,7 +2,7 @@ import { discordClient } from "..";
 import { getGuild } from "../utils/guild";
 import { handleAdd } from "./add/add.handler";
 import { commands } from "./commands";
-import { CommandNames } from "./command-names.enum";
+import { CommandNames } from "./commands.names";
 import { handlePing } from "./ping/ping.handler";
 import { handleVerify } from "./verify/verify.handler";
 

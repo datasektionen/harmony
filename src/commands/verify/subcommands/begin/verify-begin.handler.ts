@@ -1,14 +1,15 @@
-import { ChatInputCommandInteraction, InteractionResponse } from "discord.js";
-import { tokenDiscord, tokenEmail } from "../../../database-config";
-import { generateToken } from "../../../utils/generate-token";
-import { sendMail } from "../../../utils/mail";
-import { isKthEmail } from "./util";
+import { ChatInputCommandInteraction } from "discord.js";
+import { tokenDiscord, tokenEmail } from "../../../../database-config";
+import { generateToken } from "../../../../utils/generate-token";
+import { sendMail } from "../../../../utils/mail";
+import { isKthEmail } from "../util";
+import { VerifyBeginVariables } from "./verify-begin.variables";
 
 export const handleVerifyBegin = async (
 	interaction: ChatInputCommandInteraction
 ) => {
 	const { user, options } = interaction;
-	const messageText = options.getString("email", true);
+	const messageText = options.getString(VerifyBeginVariables.EMAIL, true);
 	if (!isKthEmail(messageText)) {
 		await interaction.reply({
 			content: "Please, enter a valid KTH email address.",
