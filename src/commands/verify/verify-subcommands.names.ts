@@ -1,4 +1,4 @@
-export enum VerifyCommandNames {
+export enum VerifySubcommandNames {
 	BEGIN = "begin",
 	SUBMIT = "submit",
 }

@@ -1,5 +1,5 @@
-import { Guild, User } from "discord.js";
-import { discordClient } from "..";
+import { Guild, GuildMember, User } from "discord.js";
+import { discordClient } from "../..";
 
 export async function getGuild(): Promise<Guild> {
 	return await discordClient.guilds.fetch(
@@ -7,7 +7,7 @@ export async function getGuild(): Promise<Guild> {
 	);
 }
 
-export async function getGuildMember(user: User) {
+export async function getGuildMember(user: User): Promise<GuildMember> {
 	const guild = await getGuild();
 	return await guild.members.fetch(user);
 }
