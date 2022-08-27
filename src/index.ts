@@ -1,6 +1,7 @@
 import { Client as DiscordClient, GatewayIntentBits } from "discord.js";
-import { onMessage } from "./messages/on_message";
-import { onWelcome } from "./messages/on_welcome";
+import { registerCommands } from "./commands/register-commands";
+import { onMessage } from "./messages/on-message";
+import { onWelcome } from "./messages/on-welcome";
 
 /**p
  * Goes through all dotenv vars and checks if they are defined.
@@ -31,5 +32,6 @@ async function main() {
 
 	discordClient.on("message", onMessage);
 	discordClient.on("guildMemberAdd", onWelcome);
+	registerCommands();
 }
 main();

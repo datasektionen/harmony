@@ -1,15 +1,19 @@
-import { setN0llanRole, setRoleVerified } from "../utils/roles";
-import { token_discord, token_email, verified_users } from "../database_config";
-import { sendMail } from "../utils/mail";
+import { setN0llanRole, setRoleVerified } from "../shared/utils/roles";
+import { tokenDiscord, tokenEmail, verifiedUsers } from "../database-config";
+import { sendMail } from "../shared/utils/mail";
 import { Message } from "discord.js";
-import { generateToken } from "../utils/generate_token";
+import { generateToken } from "../shared/utils/generate-token";
+import {
+	isKthEmail,
+	messageIsToken,
+} from "../commands/verify/subcommands/util";
 
 export async function onDM(message: Message, messageText: string) {
 	if (isKthEmail(messageText)) {
 		const token = generateToken(parseInt(process.env.TOKEN_SIZE as string));
 		const timeout = parseInt(process.env.TOKEN_TIMEOUT as string);
-		await token_discord.set(token, message.author.id, timeout);
-		await token_email.set(token, messageText, timeout);
+		await tokenDiscord.set(token, message.author.id, timeout);
+		await tokenEmail.set(token, messageText, timeout);
 
 		let result;
 		try {
@@ -25,12 +29,12 @@ export async function onDM(message: Message, messageText: string) {
 
 	if (messageIsToken(messageText)) {
 		const [discordId, emailAddress] = await Promise.all([
-			token_discord.get(messageText),
-			token_email.get(messageText),
+			tokenDiscord.get(messageText) as Promise<string>,
+			tokenEmail.get(messageText) as Promise<string>,
 		]);
 
-		if (emailAndDiscordIdIsCorrect(message, emailAddress, discordId)) {
-			verified_users.set(discordId, emailAddress);
+		if (emailAddress && discordId && discordId !== message.author.id) {
+			verifiedUsers.set(discordId, emailAddress);
 			try {
 				await setRoleVerified(message.author);
 				message.channel.send(
@@ -57,24 +61,4 @@ export async function onDM(message: Message, messageText: string) {
 			"Oj, något har blivit fel! Du ska antingen svara med en @kth.se emailadress, eller en giltig verifikationskod."
 		)
 		.catch((err) => console.error(err));
-}
-
-function isKthEmail(messageText: string) {
-	return new RegExp(/^[a-zA-Z0-9]+@kth[.]se$/).test(messageText);
-}
-
-function messageIsToken(messageText: string) {
-	return messageText.match(/^[a-zA-Z0-9_-]+$/);
-}
-
-function emailAndDiscordIdIsCorrect(
-	message: Message,
-	email_address: string,
-	discord_id: string
-) {
-	return (
-		email_address &&
-		discord_id &&
-		discord_id.toString() === message.author.id.toString()
-	);
 }
