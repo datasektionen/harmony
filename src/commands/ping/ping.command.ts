@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "discord.js";
-import { CommandNames } from "../command.names";
+import { CommandNames } from "../command-names.enum";
 
 export const pingCommand = new SlashCommandBuilder()
 	.setName(CommandNames.PING)

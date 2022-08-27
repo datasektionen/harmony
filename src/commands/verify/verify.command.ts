@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "discord.js";
-import { CommandNames } from "../command.names";
-import { VerifyCommandNames } from "./subcommands/verify_command.names";
+import { CommandNames } from "../command-names.enum";
+import { VerifySubcommandNames } from "./verify-subcommands-names.enum";
 
 export const verifyCommand = new SlashCommandBuilder()
 	.setName(CommandNames.VERIFY)
@@ -10,7 +10,7 @@ export const verifyCommand = new SlashCommandBuilder()
 
 verifyCommand.addSubcommand((subcommand) =>
 	subcommand
-		.setName(VerifyCommandNames.BEGIN)
+		.setName(VerifySubcommandNames.BEGIN)
 		.setDescription("Enter your @kth.se address to receive a verification code")
 		.addStringOption((option) =>
 			option
@@ -22,7 +22,7 @@ verifyCommand.addSubcommand((subcommand) =>
 
 verifyCommand.addSubcommand((subcommand) =>
 	subcommand
-		.setName(VerifyCommandNames.SUBMIT)
+		.setName(VerifySubcommandNames.SUBMIT)
 		.setDescription("Verifies you with the code sent to your email")
 		.addStringOption((option) =>
 			option

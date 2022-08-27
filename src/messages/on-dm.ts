@@ -1,8 +1,8 @@
 import { setN0llanRole, setRoleVerified } from "../utils/roles";
-import { token_discord, token_email, verified_users } from "../database_config";
+import { tokenDiscord, tokenEmail, verifiedUsers } from "../database-config";
 import { sendMail } from "../utils/mail";
 import { Message } from "discord.js";
-import { generateToken } from "../utils/generate_token";
+import { generateToken } from "../utils/generate-token";
 import {
 	isKthEmail,
 	messageIsToken,
@@ -12,8 +12,8 @@ export async function onDM(message: Message, messageText: string) {
 	if (isKthEmail(messageText)) {
 		const token = generateToken(parseInt(process.env.TOKEN_SIZE as string));
 		const timeout = parseInt(process.env.TOKEN_TIMEOUT as string);
-		await token_discord.set(token, message.author.id, timeout);
-		await token_email.set(token, messageText, timeout);
+		await tokenDiscord.set(token, message.author.id, timeout);
+		await tokenEmail.set(token, messageText, timeout);
 
 		let result;
 		try {
@@ -29,12 +29,12 @@ export async function onDM(message: Message, messageText: string) {
 
 	if (messageIsToken(messageText)) {
 		const [discordId, emailAddress] = await Promise.all([
-			token_discord.get(messageText) as Promise<string>,
-			token_email.get(messageText) as Promise<string>,
+			tokenDiscord.get(messageText) as Promise<string>,
+			tokenEmail.get(messageText) as Promise<string>,
 		]);
 
 		if (emailAddress && discordId && discordId !== message.author.id) {
-			verified_users.set(discordId, emailAddress);
+			verifiedUsers.set(discordId, emailAddress);
 			try {
 				await setRoleVerified(message.author);
 				message.channel.send(

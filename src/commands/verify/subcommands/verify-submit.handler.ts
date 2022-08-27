@@ -1,17 +1,21 @@
 import { ChatInputCommandInteraction } from "discord.js";
 import {
-	token_discord,
-	token_email,
-	verified_users,
-} from "../../../database_config";
+	tokenDiscord,
+	tokenEmail,
+	verifiedUsers,
+} from "../../../database-config";
 import { setN0llanRole, setRoleVerified } from "../../../utils/roles";
 import { messageIsToken } from "./util";
+
+export enum VariableNames {
+	VERIFICATION_CODE = "verification-code",
+}
 
 export const handleVerifySubmit = async (
 	interaction: ChatInputCommandInteraction
 ) => {
-	const { user, options } = interaction;
-	const messageText = options.getString("verification-code", true);
+	const { member, user, options } = interaction;
+	const messageText = options.getString(VariableNames.VERIFICATION_CODE, true);
 
 	if (!messageIsToken(messageText)) {
 		await interaction.reply({
@@ -22,8 +26,8 @@ export const handleVerifySubmit = async (
 	}
 
 	const [discordId, emailAddress] = await Promise.all([
-		token_discord.get(messageText) as Promise<string | undefined>,
-		token_email.get(messageText) as Promise<string | undefined>,
+		tokenDiscord.get(messageText) as Promise<string | undefined>,
+		tokenEmail.get(messageText) as Promise<string | undefined>,
 	]);
 
 	if (!emailAddress || !discordId || discordId !== user.id) {
@@ -35,7 +39,7 @@ export const handleVerifySubmit = async (
 		return;
 	}
 
-	verified_users.set(discordId, emailAddress);
+	verifiedUsers.set(discordId, emailAddress);
 	try {
 		await setRoleVerified(user);
 		await interaction.reply({

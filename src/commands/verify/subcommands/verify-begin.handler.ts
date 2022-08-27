@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction, CommandInteraction } from "discord.js";
-import { token_discord, token_email } from "../../../database_config";
-import { generateToken } from "../../../utils/generate_token";
+import { tokenDiscord, tokenEmail } from "../../../database-config";
+import { generateToken } from "../../../utils/generate-token";
 import { sendMail } from "../../../utils/mail";
 import { isKthEmail } from "./util";
 
@@ -19,8 +19,8 @@ export const handleVerifyBegin = async (
 
 	const token = generateToken(parseInt(process.env.TOKEN_SIZE as string));
 	const timeout = parseInt(process.env.TOKEN_TIMEOUT as string);
-	await token_discord.set(token, user.id, timeout);
-	await token_email.set(token, messageText, timeout);
+	await tokenDiscord.set(token, user.id, timeout);
+	await tokenEmail.set(token, messageText, timeout);
 
 	try {
 		const result = await sendMail(messageText, token);
