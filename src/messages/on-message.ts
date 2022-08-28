@@ -38,6 +38,6 @@ export async function onMessage(message: Message): Promise<void> {
 	if (inDM(message)) onDM(message, messageText);
 }
 
-function inDM(msg: Message) {
+function inDM(msg: Message): boolean {
 	return msg.channel.type === ChannelType.DM;
 }

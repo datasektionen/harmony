@@ -7,7 +7,7 @@ import { VerifyBeginVariables } from "./verify-begin.variables";
 
 export const handleVerifyBegin = async (
 	interaction: ChatInputCommandInteraction
-) => {
+): Promise<void> => {
 	const { user, options } = interaction;
 	const messageText = options.getString(VerifyBeginVariables.EMAIL, true);
 	if (!isKthEmail(messageText)) {

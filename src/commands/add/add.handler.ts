@@ -1,7 +1,9 @@
 import { ChatInputCommandInteraction } from "discord.js";
 import { AddVariables } from "./add.variables";
 
-export const handleAdd = async (interaction: ChatInputCommandInteraction) => {
+export const handleAdd = async (
+	interaction: ChatInputCommandInteraction
+): Promise<void> => {
 	const { options } = interaction;
 	const num1 = options.getNumber(AddVariables.NUM1, true);
 	const num2 = options.getNumber(AddVariables.NUM2, true);

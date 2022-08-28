@@ -7,7 +7,7 @@ import { CommandNames } from "./commands.names";
 import { handlePing } from "./ping/ping.handler";
 import { handleVerify } from "./verify/verify.handler";
 
-export const registerCommands = async () => {
+export const registerCommands = async (): Promise<void> => {
 	const guild = await getGuild();
 	Promise.all(commands.map((command) => guild.commands.create(command)));
 
