@@ -1,6 +1,6 @@
-import { Message } from "discord.js";
-import { hasRoleVerified } from "../utils/roles";
-import { onDM } from "./on_dm";
+import { ChannelType, Message } from "discord.js";
+import { hasRoleVerified } from "../shared/utils/roles";
+import { onDM } from "./on-dm";
 
 /**
  * Listens to  message events emitted to the Client, and responds according to
@@ -38,6 +38,6 @@ export async function onMessage(message: Message): Promise<void> {
 	if (inDM(message)) onDM(message, messageText);
 }
 
-function inDM(msg: Message): boolean {
-	return msg.channel.type === "dm";
+function inDM(msg: Message) {
+	return msg.channel.type === ChannelType.DM;
 }
