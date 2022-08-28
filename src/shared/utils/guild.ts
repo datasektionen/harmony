@@ -3,7 +3,7 @@ import { discordClient } from "../..";
 
 export async function getGuild(): Promise<Guild> {
 	return await discordClient.guilds.fetch(
-		process.env.DISCORD_GUILD_ID as string
+		process.env.DISCORD_GUILD_ID as string,
 	);
 }
 

@@ -29,7 +29,7 @@ import { onDM } from "./on-dm";
  * TODO: Should probably break this up into smaller functions, and I am not
  * 		100% certain on how correct the async behavior is...
  */
-export async function onMessage(message: Message) {
+export async function onMessage(message: Message): Promise<void> {
 	if (message.author.bot || (await hasRoleVerified(message.author))) {
 		return;
 	}
@@ -38,6 +38,6 @@ export async function onMessage(message: Message) {
 	if (inDM(message)) onDM(message, messageText);
 }
 
-function inDM(msg: Message) {
+function inDM(msg: Message): boolean {
 	return msg.channel.type === ChannelType.DM;
 }

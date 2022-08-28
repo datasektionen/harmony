@@ -6,7 +6,7 @@ import { VerifySubcommandNames } from "./verify-subcommands.names";
 
 export const handleVerify = async (
 	interaction: ChatInputCommandInteraction
-) => {
+): Promise<void> => {
 	const subCommandName = interaction.options.getSubcommand(true);
 
 	switch (subCommandName) {

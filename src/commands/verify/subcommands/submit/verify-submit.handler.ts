@@ -10,7 +10,7 @@ import { VerifySubmitVariables } from "./verify-submit.variables";
 
 export const handleVerifySubmit = async (
 	interaction: ChatInputCommandInteraction
-) => {
+): Promise<void> => {
 	const { user, options } = interaction;
 	const messageText = options.getString(
 		VerifySubmitVariables.VERIFICATION_CODE,

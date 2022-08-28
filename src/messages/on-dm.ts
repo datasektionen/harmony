@@ -8,7 +8,10 @@ import {
 	messageIsToken,
 } from "../commands/verify/subcommands/util";
 
-export async function onDM(message: Message, messageText: string) {
+export async function onDM(
+	message: Message,
+	messageText: string,
+): Promise<void | Message> {
 	if (isKthEmail(messageText)) {
 		const token = generateToken(parseInt(process.env.TOKEN_SIZE as string));
 		const timeout = parseInt(process.env.TOKEN_TIMEOUT as string);
@@ -24,7 +27,7 @@ export async function onDM(message: Message, messageText: string) {
 		console.log(`Email sent, received response: ${JSON.stringify(result)}`);
 		return message.channel
 			.send("Verifikationskod skickad. Kolla din KTH-email!")
-			.catch((err) => console.error(err));
+			.catch(err => console.error(err));
 	}
 
 	if (messageIsToken(messageText)) {
@@ -38,11 +41,11 @@ export async function onDM(message: Message, messageText: string) {
 			try {
 				await setRoleVerified(message.author);
 				message.channel.send(
-					`Du är nu verifierad. Dubbelkolla att du har blivit tilldelad @**${process.env.DISCORD_VERIFIED_ROLE}** rollen!`
+					`Du är nu verifierad. Dubbelkolla att du har blivit tilldelad @**${process.env.DISCORD_VERIFIED_ROLE}** rollen!`,
 				);
 				await setN0llanRole(
 					message.author,
-					(emailAddress as string).split("@")[0]
+					(emailAddress as string).split("@")[0],
 				);
 			} catch (error) {
 				console.error(error);
@@ -52,13 +55,13 @@ export async function onDM(message: Message, messageText: string) {
 
 		return message.channel
 			.send("Ogiltig verifieringskod! Försök igen.")
-			.catch((err) => console.error(err));
+			.catch(err => console.error(err));
 	}
 
 	// If the message is not and email address or a token then it's a faulty input.
 	message.channel
 		.send(
-			"Oj, något har blivit fel! Du ska antingen svara med en @kth.se emailadress, eller en giltig verifikationskod."
+			"Oj, något har blivit fel! Du ska antingen svara med en @kth.se emailadress, eller en giltig verifikationskod.",
 		)
-		.catch((err) => console.error(err));
+		.catch(err => console.error(err));
 }

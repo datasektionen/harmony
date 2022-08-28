@@ -7,7 +7,7 @@ import { onWelcome } from "./messages/on-welcome";
  * Goes through all dotenv vars and checks if they are defined.
  * If not, the service will throw and error
  */
-function validateEnvironment() {
+function validateEnvironment(): void {
 	if (
 		!process.env.SPAM_URL ||
 		!process.env.SPAM_API_TOKEN ||
@@ -23,7 +23,7 @@ export const discordClient = new DiscordClient({
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 });
 
-async function main() {
+async function main(): void {
 	validateEnvironment();
 
 	discordClient.once("ready", () => console.log("Starting..."));

@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 
-export async function sendMail(to: string, token: string) {
+export async function sendMail(to: string, token: string): Promise<unknown> {
 	return await fetch(`${process.env.SPAM_URL}/api/sendmail`, {
 		method: "post",
 		headers: {

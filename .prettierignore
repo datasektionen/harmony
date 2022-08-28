@@ -1,0 +1,9 @@
+node_modules
+dist
+
+*.d.ts
+*.generated.ts
+*.config.js
+*.yml
+*.md
+*.json
