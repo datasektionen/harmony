@@ -37,7 +37,7 @@ export async function setRoleVerified(user: User): Promise<void> {
 	await setRole(user, process.env.DISCORD_VERIFIED_ROLE as string);
 }
 
-export async function setN0llanRole(user: User, kthId: string) {
+export async function setN0llanRole(user: User, kthId: string): Promise<void> {
 	const hodisUser = await getHodisUser(kthId);
 	if (hodisUser.tag.split(",").includes("D22")) {
 		await setRole(user, "n0llan");

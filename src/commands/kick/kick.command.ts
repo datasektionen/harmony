@@ -1,5 +1,5 @@
 import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
-import { CommandNames } from "../command.names";
+import { CommandNames } from "../commands.names";
 
 export const kickCommand = new SlashCommandBuilder()
 	.setName(CommandNames.KICK)

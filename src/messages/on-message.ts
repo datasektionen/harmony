@@ -1,6 +1,6 @@
 import { ChannelType, Message } from "discord.js";
-import { hasRoleVerified } from "../utils/roles";
-import { onDM } from "./on_dm";
+import { hasRoleVerified } from "../shared/utils/roles";
+import { onDM } from "./on-dm";
 
 /**
  * Listens to  message events emitted to the Client, and responds according to

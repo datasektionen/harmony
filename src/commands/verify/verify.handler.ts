@@ -1,7 +1,8 @@
-import { ChatInputCommandInteraction, CommandInteraction } from "discord.js";
-import { handleVerifyBegin } from "./subcommands/verify_begin.handler";
-import { VerifyCommandNames } from "./subcommands/verify_command.names";
-import { handleVerifySubmit } from "./subcommands/verify_submit.handler";
+import { ChatInputCommandInteraction } from "discord.js";
+import { CommandNotFoundError } from "../../shared/errors/command-not-founder.error";
+import { handleVerifyBegin } from "./subcommands/begin/verify-begin.handler";
+import { handleVerifySubmit } from "./subcommands/submit/verify-submit.handler";
+import { VerifySubcommandNames } from "./verify-subcommands.names";
 
 export const handleVerify = async (
 	interaction: ChatInputCommandInteraction
@@ -9,11 +10,11 @@ export const handleVerify = async (
 	const subCommandName = interaction.options.getSubcommand(true);
 
 	switch (subCommandName) {
-		case VerifyCommandNames.BEGIN:
-			await handleVerifyBegin(interaction);
-			break;
-		case VerifyCommandNames.SUBMIT:
-			await handleVerifySubmit(interaction);
-			break;
+		case VerifySubcommandNames.BEGIN:
+			return await handleVerifyBegin(interaction);
+		case VerifySubcommandNames.SUBMIT:
+			return await handleVerifySubmit(interaction);
+		default:
+			throw new CommandNotFoundError(interaction.commandName);
 	}
 };

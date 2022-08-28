@@ -1,8 +1,9 @@
-import { CommandInteraction } from "discord.js";
+import { ChatInputCommandInteraction } from "discord.js";
 
-export const handlePing = async (interaction: CommandInteraction) => {
+export const handlePing = async (interaction: ChatInputCommandInteraction) => {
 	await interaction.reply({
 		content: "pong",
 		ephemeral: true,
 	});
+	return;
 };
