@@ -24,13 +24,6 @@ rules:
     - double
   require-await: off
   no-unused-vars: off
-  comma-dangle: 
-    - error
-    - arrays: always-multiline
-      objects: always-multiline
-      imports: always-multiline
-      exports: always-multiline
-      functions: always-multiline
   "@typescript-eslint/explicit-function-return-type": 
     - error
     - allowExpressions: true
