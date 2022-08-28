@@ -5,6 +5,7 @@ import { handleAdd } from "./add/add.handler";
 import { commands } from "./commands";
 import { CommandNames } from "./commands.names";
 import { handleKick } from "./kick/kick.handler";
+import { handleMessage } from "./message/message.handler";
 import { handlePing } from "./ping/ping.handler";
 import { handleVerify } from "./verify/verify.handler";
 
@@ -28,6 +29,9 @@ export const registerCommands = async () => {
 				case CommandNames.KICK:
 					await handleKick(interaction);
 					break;
+				case CommandNames.MESSAGE:
+					await handleMessage(interaction);
+					return;
 				case CommandNames.VERIFY:
 					await handleVerify(interaction);
 					return;
