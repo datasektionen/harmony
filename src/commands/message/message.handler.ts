@@ -21,9 +21,7 @@ export const handleMessage = async (
 	}
 
 	const result = await Promise.allSettled(
-		targetMembers.reduce<Promise<Message<boolean>>[]>((total, current) => {
-			return [...total, current.send(message)];
-		}, [])
+		targetMembers.map((member) => member.send(message))
 	);
 
 	if (result.some((r) => r.status === "rejected")) {
