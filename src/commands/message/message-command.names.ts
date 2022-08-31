@@ -1,4 +1,4 @@
-export enum MessageCommandNames {
+export enum MessageVariableNames {
 	ROLE = "role",
 	MESSAGE = "message",
 }
