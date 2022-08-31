@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, TextChannel, VoiceChannel } from "discord.js";
+import { ChatInputCommandInteraction, TextChannel } from "discord.js";
 import { JoinVariables } from "./join.variables";
 import { validCourseCode } from "./util";
 
