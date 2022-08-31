@@ -27,3 +27,6 @@ jobs:
 
       - name: Run linting
         run: npx eslint . --ext .js,.jsx,.ts,.tsx
+
+      - name: Build
+        run: npm build
