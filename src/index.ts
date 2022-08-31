@@ -27,7 +27,7 @@ export const discordClient = new DiscordClient({
 	],
 });
 
-async function main(): void {
+async function main(): Promise<void> {
 	validateEnvironment();
 
 	discordClient.once("ready", () => console.log("Starting..."));
