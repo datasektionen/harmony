@@ -1,6 +1,10 @@
 import { ChatInputCommandInteraction, TextChannel } from "discord.js";
 import { JoinVariables } from "./join.variables";
-import { validCourseCode } from "../../shared/utils/valid-course-code";
+import { aliasExists } from "../../shared/utils/read-alias-mappings";
+import {
+	handleChannel,
+	handleChannelAlias,
+} from "../../shared/utils/channel-utils";
 
 export const handleJoin = async (
 	interaction: ChatInputCommandInteraction
@@ -10,33 +14,18 @@ export const handleJoin = async (
 		.getString(JoinVariables.COURSE_CODE, true)
 		.trim()
 		.toLowerCase();
-	if (!validCourseCode(courseCode)) {
-		await interaction.reply({
-			content: "The course code is not valid",
-			ephemeral: true,
-		});
-		return;
-	}
 
-	await interaction.guild?.channels.fetch();
-	const channel = interaction.guild?.channels.cache.find(
-		({ name }) => name === courseCode
-	);
-
-	if (!(channel instanceof TextChannel)) {
-		await interaction.reply({
-			content: "Not a text channel...",
-			ephemeral: true,
-		});
-		return;
+	if (aliasExists(courseCode)) {
+		return await handleChannelAlias(courseCode, interaction, joinChannel);
 	}
+	return await handleChannel(courseCode, interaction, joinChannel);
+};
+
+const joinChannel = async (
+	channel: TextChannel,
+	interaction: ChatInputCommandInteraction
+): Promise<void> => {
 	await channel.permissionOverwrites.create(interaction.user, {
 		ViewChannel: true,
 	});
-
-	await interaction.reply({
-		content: `Successfully joined \`#${channel.name}\``,
-		ephemeral: true,
-	});
-	return;
 };
