@@ -35,7 +35,7 @@ export const handleJoin = async (
 	});
 
 	await interaction.reply({
-		content: "Successfully joined channel :)",
+		content: `Successfully joined \`#${channel.name}\``,
 		ephemeral: true,
 	});
 	return;
