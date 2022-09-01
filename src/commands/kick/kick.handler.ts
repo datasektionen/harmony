@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction, GuildMember } from "discord.js";
 
-export const handleKick = async (interaction: ChatInputCommandInteraction) => {
+export const handleKick = async (interaction: ChatInputCommandInteraction) : Promise<void> => {
 	const { options } = interaction;
 	const role = options.getRole("role", true);
 	const message = options.getString("message", false);
@@ -12,10 +12,11 @@ export const handleKick = async (interaction: ChatInputCommandInteraction) => {
 	);
 
 	if (!targetMembers) {
-		return await interaction.reply({
+		await interaction.reply({
 			content: "No users with that role found",
 			ephemeral: true,
 		});
+		return
 	}
 
 	const result = await Promise.allSettled(
