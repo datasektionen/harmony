@@ -4,4 +4,5 @@ export enum CommandNames {
 	KICK = "kick",
 	VERIFY = "verify",
 	JOIN = "join",
+	LEAVE = "leave",
 }

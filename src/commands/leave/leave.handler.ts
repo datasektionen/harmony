@@ -1,13 +1,13 @@
 import { ChatInputCommandInteraction, TextChannel } from "discord.js";
-import { JoinVariables } from "./join.variables";
 import { validCourseCode } from "../../shared/utils/valid-course-code";
+import { LeaveVariables } from "./leave.variables";
 
-export const handleJoin = async (
+export const handleLeave = async (
 	interaction: ChatInputCommandInteraction
 ): Promise<void> => {
 	const { options } = interaction;
 	const courseCode = options
-		.getString(JoinVariables.COURSE_CODE, true)
+		.getString(LeaveVariables.COURSE_CODE, true)
 		.trim()
 		.toLowerCase();
 	if (!validCourseCode(courseCode)) {
@@ -30,12 +30,12 @@ export const handleJoin = async (
 		});
 		return;
 	}
-	await channel.permissionOverwrites.create(interaction.user, {
-		ViewChannel: true,
+	await channel.permissionOverwrites.edit(interaction.user, {
+		ViewChannel: false,
 	});
 
 	await interaction.reply({
-		content: "Successfully joined channel :)",
+		content: "Successfully leave channel :)",
 		ephemeral: true,
 	});
 	return;
