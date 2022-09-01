@@ -35,7 +35,7 @@ export const handleLeave = async (
 	});
 
 	await interaction.reply({
-		content: "Successfully leave channel :)",
+		content: `Successfully left channel \`#${channel.name}\``,
 		ephemeral: true,
 	});
 	return;
