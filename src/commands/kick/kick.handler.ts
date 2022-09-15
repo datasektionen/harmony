@@ -1,6 +1,8 @@
-import { ChatInputCommandInteraction, GuildMember } from "discord.js";
+import { ChatInputCommandInteraction } from "discord.js";
 
-export const handleKick = async (interaction: ChatInputCommandInteraction) : Promise<void> => {
+export const handleKick = async (
+	interaction: ChatInputCommandInteraction
+): Promise<void> => {
 	const { options } = interaction;
 	const role = options.getRole("role", true);
 	const message = options.getString("message", false);
@@ -16,16 +18,26 @@ export const handleKick = async (interaction: ChatInputCommandInteraction) : Pro
 			content: "No users with that role found",
 			ephemeral: true,
 		});
-		return
+		return;
 	}
 
+	await Promise.allSettled(
+		targetMembers.map((current) =>
+			current
+				.createDM(true)
+				.then((dm) =>
+					dm.send(
+						message ??
+							"Grattis ettan! Denna server fanns aldrig..., ditt nya hem är nu: https://dsekt.se/discord"
+					)
+				)
+		)
+	);
+
 	const result = await Promise.allSettled(
-		targetMembers.reduce<Promise<GuildMember>[]>((total, current) => {
-			return [
-				...total,
-				current.kick(message ?? "Grattis ettan! Denna server fanns aldrig..."),
-			];
-		}, [])
+		targetMembers.map((current) =>
+			current.kick(message ?? "Grattis ettan! Denna server fanns aldrig...")
+		)
 	);
 
 	if (result.some((r) => r.status === "rejected")) {
