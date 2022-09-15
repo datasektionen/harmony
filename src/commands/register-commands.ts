@@ -6,6 +6,7 @@ import { commands } from "./commands";
 import { CommandNames } from "./commands.names";
 import { handleJoin } from "./join/join.handler";
 import { handleKick } from "./kick/kick.handler";
+import { handleLeave } from "./leave/leave.handler";
 import { handlePing } from "./ping/ping.handler";
 import { handleVerify } from "./verify/verify.handler";
 
@@ -34,7 +35,10 @@ export const registerCommands = async (): Promise<void> => {
 					return;
 				case CommandNames.JOIN:
 					await handleJoin(interaction);
-					return
+					return;
+				case CommandNames.LEAVE:
+					await handleLeave(interaction);
+					return;
 				default:
 					throw new CommandNotFoundError(interaction.commandName);
 			}
