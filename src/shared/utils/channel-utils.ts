@@ -61,7 +61,8 @@ export const handleChannel = async (
 
 	if (!(channel instanceof TextChannel)) {
 		await interaction.reply({
-			content: "Not a text channel...",
+			content:
+				"Channel not found, please contact a mod if you think this is a mistake",
 			ephemeral: true,
 		});
 		return;
