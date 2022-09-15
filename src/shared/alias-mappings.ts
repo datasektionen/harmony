@@ -1,5 +1,11 @@
-export const mappings: Record<string, string[]> = {
-	year1: [
+export enum AliasName {
+	YEAR1 = "year1",
+	YEAR2 = "year2",
+	YEAR3 = "year3",
+}
+
+export const mappings: Record<AliasName, string[]> = {
+	[AliasName.YEAR1]: [
 		"sf1671",
 		"da1600",
 		"dd1337",
@@ -12,7 +18,7 @@ export const mappings: Record<string, string[]> = {
 		"dd1396",
 		"sf1626",
 	],
-	year2: [
+	[AliasName.YEAR2]: [
 		"dd1390",
 		"dd1351",
 		"dd1360",
@@ -23,5 +29,12 @@ export const mappings: Record<string, string[]> = {
 		"sf1547",
 		"sf1935",
 	],
-	year3: ["dd1390", "al1504", "da150X", "dd2350", "id1200", "sf1688"],
+	[AliasName.YEAR3]: [
+		"dd1390",
+		"al1504",
+		"da150X",
+		"dd2350",
+		"id1200",
+		"sf1688",
+	],
 };

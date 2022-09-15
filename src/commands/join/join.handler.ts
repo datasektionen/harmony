@@ -5,6 +5,7 @@ import {
 	handleChannel,
 	handleChannelAlias,
 } from "../../shared/utils/channel-utils";
+import { AliasName } from "../../shared/alias-mappings";
 
 export const handleJoin = async (
 	interaction: ChatInputCommandInteraction
@@ -15,7 +16,7 @@ export const handleJoin = async (
 		.trim()
 		.toLowerCase();
 
-	if (aliasExists(courseCode)) {
+	if (aliasExists(courseCode as AliasName)) {
 		return await handleChannelAlias(courseCode, interaction, joinChannel);
 	}
 	return await handleChannel(courseCode, interaction, joinChannel);

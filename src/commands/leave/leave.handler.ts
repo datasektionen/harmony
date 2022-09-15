@@ -1,4 +1,5 @@
 import { ChatInputCommandInteraction, TextChannel } from "discord.js";
+import { AliasName } from "../../shared/alias-mappings";
 import {
 	handleChannel,
 	handleChannelAlias,
@@ -14,7 +15,7 @@ export const handleLeave = async (
 		.getString(LeaveVariables.COURSE_CODE, true)
 		.trim()
 		.toLowerCase();
-	if (aliasExists(courseCode)) {
+	if (aliasExists(courseCode as AliasName)) {
 		return await handleChannelAlias(courseCode, interaction, leaveChannel);
 	}
 	return await handleChannel(courseCode, interaction, leaveChannel);

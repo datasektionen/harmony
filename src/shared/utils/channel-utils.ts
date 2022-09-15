@@ -1,4 +1,5 @@
 import { ChatInputCommandInteraction, TextChannel } from "discord.js";
+import { AliasName } from "../alias-mappings";
 import { getAliasChannels } from "./read-alias-mappings";
 import { validCourseCode } from "./valid-course-code";
 
@@ -10,7 +11,7 @@ export const handleChannelAlias = async (
 		interaction: ChatInputCommandInteraction
 	) => Promise<void>
 ): Promise<void> => {
-	const channelNames = getAliasChannels(alias);
+	const channelNames = getAliasChannels(alias as AliasName);
 	if (channelNames.length === 0) {
 		return;
 	}
