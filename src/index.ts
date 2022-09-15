@@ -1,7 +1,5 @@
 import { Client as DiscordClient, GatewayIntentBits } from "discord.js";
 import { registerCommands } from "./commands/register-commands";
-import { onMessage } from "./messages/on-message";
-import { onWelcome } from "./messages/on-welcome";
 
 /**p
  * Goes through all dotenv vars and checks if they are defined.
@@ -24,6 +22,8 @@ export const discordClient = new DiscordClient({
 		GatewayIntentBits.Guilds,
 		GatewayIntentBits.GuildMessages,
 		GatewayIntentBits.GuildMembers,
+		GatewayIntentBits.DirectMessages,
+		GatewayIntentBits.DirectMessageTyping,
 	],
 });
 
@@ -34,8 +34,6 @@ async function main(): Promise<void> {
 	await discordClient.login(process.env.DISCORD_TOKEN);
 	console.log("Logged in");
 
-	discordClient.on("message", onMessage);
-	discordClient.on("guildMemberAdd", onWelcome);
 	registerCommands();
 }
 main();

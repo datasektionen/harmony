@@ -43,7 +43,7 @@ export const handleVerifySubmit = async (
 	try {
 		await setRoleVerified(user);
 		await interaction.reply({
-			content: `Du är nu verifierad. Dubbelkolla att du har blivit tilldelad @**${process.env.DISCORD_VERIFIED_ROLE}** rollen!`,
+			content: `You are now verified! Please check that you have been assigned the $**${process.env.DISCORD_VERIFIED_ROLE}** role.`,
 			ephemeral: true,
 		});
 		return;
