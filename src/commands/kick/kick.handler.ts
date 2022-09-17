@@ -28,7 +28,7 @@ export const handleKick = async (
 				.then((dm) =>
 					dm.send(
 						message ??
-							"Grattis ettan! Denna server fanns aldrig..., ditt nya hem är nu: https://dsekt.se/discord"
+							"***Tutorial: complete!***\n\n*Det känns som om du vaknat upp från en dröm. Du försöker minnas, men minnena känns hala. \"Något om ett skrymsle?,\" säger du till dig själv. Du känner hur minnet försvinner bort, ut i etern. Du viftar på axlarna.*\n\nVälkommen till KTH, *ettan*!\n\nGå med i den officiella Discorden här: <https://dsekt.se/discord>\nDär finns kanaler för alla kurser på programmet, hjälpande assar, information om roliga event och mycket, mycket annat.\n\nVi ses där ettan!"
 					)
 				)
 		)
