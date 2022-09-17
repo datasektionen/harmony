@@ -1,12 +1,11 @@
-import { Client as DiscordClient } from "discord.js";
-import { onMessage } from "./messages/on_message";
-import { onWelcome } from "./messages/on_welcome";
+import { Client as DiscordClient, GatewayIntentBits } from "discord.js";
+import { registerCommands } from "./commands/register-commands";
 
-/**
+/**p
  * Goes through all dotenv vars and checks if they are defined.
  * If not, the service will throw and error
  */
-function validateEnvironment() {
+function validateEnvironment(): void {
 	if (
 		!process.env.SPAM_URL ||
 		!process.env.SPAM_API_TOKEN ||
@@ -18,16 +17,23 @@ function validateEnvironment() {
 	}
 }
 
-export const discordClient = new DiscordClient();
+export const discordClient = new DiscordClient({
+	intents: [
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.GuildMembers,
+		GatewayIntentBits.DirectMessages,
+		GatewayIntentBits.DirectMessageTyping,
+	],
+});
 
-function main() {
+async function main(): Promise<void> {
 	validateEnvironment();
 
 	discordClient.once("ready", () => console.log("Starting..."));
-	discordClient
-		.login(process.env.DISCORD_TOKEN)
-		.then(() => console.log("Logged in!"));
-	discordClient.on("message", onMessage);
-	discordClient.on("guildMemberAdd", onWelcome);
+	await discordClient.login(process.env.DISCORD_TOKEN);
+	console.log("Logged in");
+
+	registerCommands();
 }
 main();

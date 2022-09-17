@@ -8,6 +8,6 @@ import { randomBytes } from "crypto";
  * @param {Integer} size The number of bytes to be generated.
  * @returns {String} the Base64URL-encoded token.
  */
-export function generateToken(size: number) {
+export function generateToken(size: number): string {
 	return base64url(randomBytes(size));
 }
