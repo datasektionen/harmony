@@ -43,3 +43,12 @@ export async function setN0llanRole(user: User, kthId: string): Promise<void> {
 		await setRole(user, "n0llan");
 	}
 }
+
+export async function setYearRole(user: User, kthId: string) : Promise<void> {
+	const hodisUser = await getHodisUser(kthId);
+	const yearTag = hodisUser.tag.split(",").find(tag => tag.match(/^D\d{2}$/i))
+	if (yearTag) {
+		const yearTagWithDash = `${yearTag.slice(0, 1).toUpperCase()}-${yearTag.slice(1)}`
+		await setRole(user, yearTagWithDash);
+	}
+}
