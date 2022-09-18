@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy Official
 
 on:
   # Can be activated manually
@@ -19,5 +19,5 @@ jobs:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
       # https://stackoverflow.com/a/2462357/16911837
       run: |
-        chmod +x ./deploy.sh
-        ./deploy.sh
+        chmod +x ./deploy-official.sh
+        ./deploy-official.sh
