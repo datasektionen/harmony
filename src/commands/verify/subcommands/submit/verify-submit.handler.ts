@@ -4,7 +4,7 @@ import {
 	tokenEmail,
 	verifiedUsers,
 } from "../../../../database-config";
-import { setRoleVerified } from "../../../../shared/utils/roles";
+import { setN0llanRole, setRoleVerified, setYearRole } from "../../../../shared/utils/roles";
 import { messageIsToken } from "../util";
 import { VerifySubmitVariables } from "./verify-submit.variables";
 
@@ -46,8 +46,7 @@ export const handleVerifySubmit = async (
 			content: `You are now verified! Please check that you have been assigned the $**${process.env.DISCORD_VERIFIED_ROLE}** role.`,
 			ephemeral: true,
 		});
-		return;
-		// setN0llanRole(user, emailAddress.split("@")[0]);
+		await setYearRole(user, emailAddress.split("@")[0]);
 	} catch (error) {
 		console.error(error);
 		await interaction.reply({
