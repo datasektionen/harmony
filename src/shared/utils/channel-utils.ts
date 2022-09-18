@@ -15,6 +15,9 @@ export const handleChannelAlias = async (
 	if (channelNames.length === 0) {
 		return;
 	}
+	interaction.deferReply({
+		ephemeral: true,
+	})
 
 	await interaction.guild?.channels.fetch();
 	const channels = interaction.guild?.channels.cache.filter((current) =>
@@ -31,9 +34,8 @@ export const handleChannelAlias = async (
 		actionCallback(channel as TextChannel, interaction)
 	);
 	await Promise.allSettled(promises);
-	await interaction.reply({
+	await interaction.editReply({
 		content: `Successfully updated your visibility for \`${alias}\`! (${channels.size}) channels updated`,
-		ephemeral: true,
 	});
 	return;
 };
@@ -46,32 +48,30 @@ export const handleChannel = async (
 		interaction: ChatInputCommandInteraction
 	) => Promise<void>
 ): Promise<void> => {
+	interaction.deferReply({ephemeral: true})
 	if (!validCourseCode(courseCode)) {
-		await interaction.reply({
+		await interaction.editReply({
 			content: "The course code is not valid",
-			ephemeral: true,
 		});
 		return;
 	}
 
 	await interaction.guild?.channels.fetch();
 	const channel = interaction.guild?.channels.cache.find(
-		({ name }) => name === courseCode
+		({ name }) => name.startsWith(courseCode)
 	);
 
 	if (!(channel instanceof TextChannel)) {
-		await interaction.reply({
+		await interaction.editReply({
 			content:
 				"Channel not found, please contact a mod if you think this is a mistake",
-			ephemeral: true,
 		});
 		return;
 	}
 	await actionCallback(channel as TextChannel, interaction);
 
-	await interaction.reply({
+	await interaction.editReply({
 		content: `Successfully updated visibility for \`#${channel.name}\``,
-		ephemeral: true,
 	});
 	return;
 };

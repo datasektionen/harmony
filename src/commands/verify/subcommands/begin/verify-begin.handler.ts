@@ -9,15 +9,14 @@ export const handleVerifyBegin = async (
 	interaction: ChatInputCommandInteraction
 ): Promise<void> => {
 	const { user, options } = interaction;
+	await interaction.deferReply({ephemeral: true})
 	const messageText = options.getString(VerifyBeginVariables.EMAIL, true);
 	if (!isKthEmail(messageText)) {
-		await interaction.reply({
+		await interaction.editReply({
 			content: "Please, enter a valid KTH email address.",
-			ephemeral: true,
 		});
 		return;
 	}
-
 	const token = generateToken(parseInt(process.env.TOKEN_SIZE as string));
 	const timeout = parseInt(process.env.TOKEN_TIMEOUT as string);
 	await tokenDiscord.set(token, user.id, timeout);
@@ -26,16 +25,14 @@ export const handleVerifyBegin = async (
 	try {
 		const result = await sendMail(messageText, token);
 		console.log(`Email sent, received response: ${JSON.stringify(result)}`);
-		await interaction.reply({
+		await interaction.editReply({
 			content: `Verification email sent, check ${messageText} for your verification code.`,
-			ephemeral: true,
 		});
 		return;
 	} catch (error) {
 		console.error(error);
-		await interaction.reply({
+		await interaction.editReply({
 			content: "Something went wrong, please try again.",
-			ephemeral: true,
 		});
 		return;
 	}
