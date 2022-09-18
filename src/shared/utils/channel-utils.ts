@@ -15,7 +15,7 @@ export const handleChannelAlias = async (
 	if (channelNames.length === 0) {
 		return;
 	}
-	interaction.deferReply({
+	await interaction.deferReply({
 		ephemeral: true,
 	})
 
@@ -48,7 +48,7 @@ export const handleChannel = async (
 		interaction: ChatInputCommandInteraction
 	) => Promise<void>
 ): Promise<void> => {
-	interaction.deferReply({ephemeral: true})
+	await interaction.deferReply({ephemeral: true})
 	if (!validCourseCode(courseCode)) {
 		await interaction.editReply({
 			content: "The course code is not valid",
