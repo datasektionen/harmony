@@ -5,5 +5,5 @@ export const aliasExists = (alias: AliasName): boolean => {
 };
 
 export const getAliasChannels = (alias: AliasName): string[] => {
-	return mappings[alias];
+	return mappings[alias].map(current => current.toLowerCase());
 };
