@@ -4,7 +4,7 @@ import { getHodisUser } from "./hodis";
 
 export async function hasRole(user: User, roleName: string): Promise<boolean> {
 	const guildMember = await getGuildMember(user);
-	return !!guildMember.roles.cache.find(role => role.name === roleName);
+	return !!guildMember.roles.cache.find((role) => role.name === roleName);
 }
 
 /**
@@ -17,7 +17,7 @@ export async function hasRoleVerified(user: User): Promise<boolean> {
 
 export async function setRole(user: User, roleName: string): Promise<void> {
 	const guild = await getGuild();
-	const role = guild.roles.cache.find(r => r.name === roleName);
+	const role = guild.roles.cache.find((r) => r.name === roleName);
 	if (!role) {
 		throw new Error(`Role ${roleName} does not exist on the Server!`);
 	}
@@ -44,11 +44,16 @@ export async function setN0llanRole(user: User, kthId: string): Promise<void> {
 	}
 }
 
-export async function setYearRole(user: User, kthId: string) : Promise<void> {
+export async function setYearRole(user: User, kthId: string): Promise<void> {
 	const hodisUser = await getHodisUser(kthId);
-	const yearTag = hodisUser.tag.split(",").find(tag => tag.match(/^D\d{2}$/i))
+	const yearTag = hodisUser.tag
+		.split(",")
+		.find((tag) => tag.match(/^D\d{2}$/i));
 	if (yearTag) {
-		const yearTagWithDash = `${yearTag.slice(0, 1).toUpperCase()}-${yearTag.slice(1)}`
+		const yearTagWithDash = `${yearTag
+			.slice(0, 1)
+			.toUpperCase()}-${yearTag.slice(1)}`;
 		await setRole(user, yearTagWithDash);
+		await setRole(user, "Datasektionen");
 	}
 }
