@@ -1,4 +1,8 @@
-import { ChatInputCommandInteraction, TextChannel } from "discord.js";
+import {
+	ChatInputCommandInteraction,
+	ForumChannel,
+	TextChannel,
+} from "discord.js";
 import { JoinVariables } from "./join.variables";
 import { aliasExists } from "../../shared/utils/read-alias-mappings";
 import {
@@ -23,7 +27,7 @@ export const handleJoin = async (
 };
 
 const joinChannel = async (
-	channel: TextChannel,
+	channel: ForumChannel | TextChannel,
 	interaction: ChatInputCommandInteraction
 ): Promise<void> => {
 	await channel.permissionOverwrites.create(interaction.user, {
