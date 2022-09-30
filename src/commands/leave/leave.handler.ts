@@ -1,8 +1,4 @@
-import {
-	ChatInputCommandInteraction,
-	ForumChannel,
-	TextChannel,
-} from "discord.js";
+import { ChatInputCommandInteraction } from "discord.js";
 import { AliasName } from "../../shared/alias-mappings";
 import {
 	CourseChannel,
