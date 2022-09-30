@@ -4,6 +4,6 @@ export const aliasExists = (alias: AliasName): boolean => {
 	return mappings[alias] !== undefined;
 };
 
-export const getAliasChannels = (alias: AliasName): string[] => {
-	return mappings[alias].map(current => current.toLowerCase());
+export const getAliasChannels = (alias: AliasName): Set<string> => {
+	return new Set(mappings[alias].map((current) => current.toLowerCase()));
 };

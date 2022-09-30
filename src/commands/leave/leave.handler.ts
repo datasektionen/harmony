@@ -5,6 +5,7 @@ import {
 } from "discord.js";
 import { AliasName } from "../../shared/alias-mappings";
 import {
+	CourseChannel,
 	handleChannel,
 	handleChannelAlias,
 } from "../../shared/utils/channel-utils";
@@ -26,7 +27,7 @@ export const handleLeave = async (
 };
 
 const leaveChannel = async (
-	channel: ForumChannel | TextChannel,
+	channel: CourseChannel,
 	interaction: ChatInputCommandInteraction
 ): Promise<void> => {
 	await channel.permissionOverwrites.create(interaction.user, {
