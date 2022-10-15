@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction } from "discord.js";
+import { ChatInputCommandInteraction, ForumChannel } from "discord.js";
 import { JoinVariables } from "./join.variables";
 import { aliasExists } from "../../shared/utils/read-alias-mappings";
 import {
@@ -27,6 +27,12 @@ const joinChannel = async (
 	channel: CourseChannel,
 	interaction: ChatInputCommandInteraction
 ): Promise<void> => {
+	if (channel instanceof ForumChannel) {
+		const thread = channel.threads.cache.find(
+			(thread) => thread.name === "General Chat"
+		);
+		await thread?.members.add(interaction.user);
+	}
 	await channel.permissionOverwrites.create(interaction.user, {
 		ViewChannel: true,
 	});
