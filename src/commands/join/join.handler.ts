@@ -27,13 +27,13 @@ const joinChannel = async (
 	channel: CourseChannel,
 	interaction: ChatInputCommandInteraction
 ): Promise<void> => {
-	if (channel instanceof ForumChannel) {
-		const thread = channel.threads.cache.find(
-			(thread) => thread.name === "General Chat"
-		);
-		await thread?.members.add(interaction.user);
-	}
 	await channel.permissionOverwrites.create(interaction.user, {
 		ViewChannel: true,
 	});
+	if (channel instanceof ForumChannel) {
+		const thread = channel.threads.cache.find(
+			(thread) => thread.name === "⌠💬⌡ General Chat"
+		);
+		await thread?.members.add(interaction.user);
+	}
 };
