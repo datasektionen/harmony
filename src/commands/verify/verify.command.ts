@@ -7,9 +7,10 @@ import { VerifySubcommandNames } from "./verify-subcommands.names";
 export const verifyCommand = new SlashCommandBuilder()
 	.setName(CommandNames.VERIFY)
 	.setDescription(
-		"Automatically verifies that you are a kth student via @kth.se email"
-	);
-
+		// Note: General command description is not shown if the command has sub command.
+		//       This description is therefore not show to users.
+		"Verify that you are a KTH student via @kth.se email" 
+	);                                                                      
 verifyCommand.addSubcommand((subcommand) =>
 	subcommand
 		.setName(VerifySubcommandNames.BEGIN)
