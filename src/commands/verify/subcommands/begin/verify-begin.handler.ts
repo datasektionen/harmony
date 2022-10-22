@@ -26,7 +26,7 @@ export const handleVerifyBegin = async (
 		const result = await sendMail(messageText, token);
 		console.log(`Email sent, received response: ${JSON.stringify(result)}`);
 		await interaction.editReply({
-			content: `Check inbox of ${messageText} for your verification code: https://webmail.kth.se/ \nSubmit your verification code using the "/verify submit" command.`,
+			content: `Check the inbox of ${messageText} for your verification code: https://webmail.kth.se/ \nSubmit your verification code using the \`/verify submit\` command.`,
 		});
 		return;
 	} catch (error) {
