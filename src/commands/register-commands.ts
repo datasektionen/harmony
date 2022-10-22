@@ -4,6 +4,7 @@ import { getGuild } from "../shared/utils/guild";
 import { handleAdd } from "./add/add.handler";
 import { commands } from "./commands";
 import { CommandNames } from "./commands.names";
+import { handleCourses } from "./courses/courses.handler";
 import { handleJoin } from "./join/join.handler";
 import { handleKick } from "./kick/kick.handler";
 import { handleLeave } from "./leave/leave.handler";
@@ -38,6 +39,9 @@ export const registerCommands = async (): Promise<void> => {
 					return;
 				case CommandNames.LEAVE:
 					await handleLeave(interaction);
+					return;
+				case CommandNames.COURSES:
+					await handleCourses(interaction);
 					return;
 				default:
 					throw new CommandNotFoundError(interaction.commandName);
