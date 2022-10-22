@@ -4,7 +4,14 @@ import {
 	tokenEmail,
 	verifiedUsers,
 } from "../../../../database-config";
-import {  setRoleVerified, setYearRole } from "../../../../shared/utils/roles";
+import { mapYearToAlias } from "../../../../shared/utils/alias_to_year_mapper";
+import { handleChannelAlias } from "../../../../shared/utils/channel-utils";
+import {
+	extractYearFromUser,
+	setRoleVerified,
+	setYearRoles,
+} from "../../../../shared/utils/roles";
+import { joinChannel } from "../../../join/join.handler";
 import { messageIsToken } from "../util";
 import { VerifySubmitVariables } from "./verify-submit.variables";
 
@@ -46,7 +53,11 @@ export const handleVerifySubmit = async (
 			content: `You are now verified! Please check that you have been assigned the **${process.env.DISCORD_VERIFIED_ROLE}** role.`,
 			ephemeral: true,
 		});
-		await setYearRole(user, emailAddress.split("@")[0]);
+		const { year, yearRole } = await extractYearFromUser(emailAddress);
+		if (yearRole && year) {
+			await setYearRoles(user, yearRole);
+			await handleChannelAlias(mapYearToAlias(year), interaction, joinChannel);
+		}
 	} catch (error) {
 		console.error(error);
 		await interaction.reply({

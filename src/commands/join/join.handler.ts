@@ -23,7 +23,7 @@ export const handleJoin = async (
 	return await handleChannel(courseCode, interaction, joinChannel);
 };
 
-const joinChannel = async (
+export const joinChannel = async (
 	channel: CourseChannel,
 	interaction: ChatInputCommandInteraction
 ): Promise<void> => {
