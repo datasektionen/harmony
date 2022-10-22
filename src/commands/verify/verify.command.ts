@@ -13,11 +13,11 @@ export const verifyCommand = new SlashCommandBuilder()
 verifyCommand.addSubcommand((subcommand) =>
 	subcommand
 		.setName(VerifySubcommandNames.BEGIN)
-		.setDescription("Enter your @kth.se address to receive a verification code")
+		.setDescription("Enter your @kth.se email address to receive a verification code")
 		.addStringOption((option) =>
 			option
 				.setName(VerifyBeginVariables.EMAIL)
-				.setDescription("Your @kth address")
+				.setDescription("Your @kth.se email address")
 				.setRequired(true)
 		)
 );
