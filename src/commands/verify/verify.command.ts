@@ -25,7 +25,7 @@ verifyCommand.addSubcommand((subcommand) =>
 verifyCommand.addSubcommand((subcommand) =>
 	subcommand
 		.setName(VerifySubcommandNames.SUBMIT)
-		.setDescription("Complete verification using a verification code sent to your KTH email")
+		.setDescription("Complete verification using the verification code sent to your KTH email")
 		.addStringOption((option) =>
 			option
 				.setName(VerifySubmitVariables.VERIFICATION_CODE)
