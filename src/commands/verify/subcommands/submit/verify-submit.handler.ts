@@ -24,6 +24,14 @@ export const handleVerifySubmit = async (
 		true
 	);
 
+	if (!interaction.guild) {
+		await interaction.reply({
+			content: "Something went wrong...",
+			ephemeral: true,
+		});
+		return;
+	}
+
 	if (!messageIsToken(messageText)) {
 		await interaction.reply({
 			content: "Not a valid code",
@@ -48,14 +56,14 @@ export const handleVerifySubmit = async (
 
 	verifiedUsers.set(discordId, emailAddress);
 	try {
-		await setRoleVerified(user);
+		await setRoleVerified(user, interaction.guild);
 		await interaction.reply({
 			content: `You are now verified! Please check that you have been assigned the **${process.env.DISCORD_VERIFIED_ROLE}** role.`,
 			ephemeral: true,
 		});
 		const { year, yearRole } = await extractYearFromUser(emailAddress);
 		if (yearRole && year) {
-			await setYearRoles(user, yearRole);
+			await setYearRoles(user, yearRole, interaction.guild);
 			await handleChannelAlias(mapYearToAlias(year), interaction, joinChannel);
 		}
 	} catch (error) {
