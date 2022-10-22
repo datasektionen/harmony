@@ -29,9 +29,11 @@ export const handleChannelAlias = async (
 	if (channelNames.size === 0) {
 		return;
 	}
-	await interaction.deferReply({
-		ephemeral: true,
-	});
+	if (!interaction.replied) {
+		await interaction.deferReply({
+			ephemeral: true,
+		});
+	}
 
 	await interaction.guild?.channels.fetch();
 	const channels = interaction.guild?.channels.cache
@@ -45,9 +47,11 @@ export const handleChannelAlias = async (
 		actionCallback(channel as CourseChannel, interaction)
 	);
 	await Promise.allSettled(promises);
-	await interaction.editReply({
-		content: `Successfully updated your visibility for \`${alias}\`! (${channels.size}) channels updated`,
-	});
+	if (!interaction.replied) {
+		await interaction.editReply({
+			content: `Successfully updated your visibility for \`${alias}\`! (${channels.size}) channels updated`,
+		});
+	}
 	return;
 };
 

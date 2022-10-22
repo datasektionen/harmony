@@ -44,7 +44,10 @@ export async function setN0llanRole(user: User, kthId: string): Promise<void> {
 	}
 }
 
-export async function setYearRole(user: User, kthId: string): Promise<void> {
+export async function setYearRole(
+	user: User,
+	kthId: string
+): Promise<number | null> {
 	const hodisUser = await getHodisUser(kthId);
 	const yearTag = hodisUser.tag
 		.split(",")
@@ -55,5 +58,7 @@ export async function setYearRole(user: User, kthId: string): Promise<void> {
 			.toUpperCase()}-${yearTag.slice(1)}`;
 		await setRole(user, yearTagWithDash);
 		await setRole(user, "Datasektionen");
+		return parseInt(yearTag.slice(1));
 	}
+	return null;
 }
