@@ -1,9 +1,13 @@
-import { User } from "discord.js";
-import { getGuild, getGuildMember } from "./guild";
+import { Guild, User } from "discord.js";
+import { getGuildMember } from "./guild";
 import { getHodisUser } from "./hodis";
 
-export async function hasRole(user: User, roleName: string): Promise<boolean> {
-	const guildMember = await getGuildMember(user);
+export async function hasRole(
+	user: User,
+	roleName: string,
+	guild: Guild
+): Promise<boolean> {
+	const guildMember = await getGuildMember(user, guild);
 	return !!guildMember.roles.cache.find((role) => role.name === roleName);
 }
 
@@ -11,18 +15,28 @@ export async function hasRole(user: User, roleName: string): Promise<boolean> {
  * Attempts to resolve the specified User-like data to a {Discord.GuildMember} on the server,
  * and, if successful, checks if they possess the Verified role or not.
  */
-export async function hasRoleVerified(user: User): Promise<boolean> {
-	return await hasRole(user, process.env.DISCORD_VERIFIED_ROLE as string);
+export async function hasRoleVerified(
+	user: User,
+	guild: Guild
+): Promise<boolean> {
+	return await hasRole(
+		user,
+		process.env.DISCORD_VERIFIED_ROLE as string,
+		guild
+	);
 }
 
-export async function setRole(user: User, roleName: string): Promise<void> {
-	const guild = await getGuild();
+export async function setRole(
+	user: User,
+	roleName: string,
+	guild: Guild
+): Promise<void> {
 	const role = guild.roles.cache.find((r) => r.name === roleName);
 	if (!role) {
 		throw new Error(`Role ${roleName} does not exist on the Server!`);
 	}
 	try {
-		const guildMember = await getGuildMember(user);
+		const guildMember = await getGuildMember(user, guild);
 		guildMember.roles.add(role);
 	} catch (err) {
 		console.log(err);
@@ -33,14 +47,18 @@ export async function setRole(user: User, roleName: string): Promise<void> {
  * Attempts to resolve the provided User-like data to a {Discord.GuildMember} on the server,
  * and, if successful, assigns them the Verified role.
  */
-export async function setRoleVerified(user: User): Promise<void> {
-	await setRole(user, process.env.DISCORD_VERIFIED_ROLE as string);
+export async function setRoleVerified(user: User, guild: Guild): Promise<void> {
+	await setRole(user, process.env.DISCORD_VERIFIED_ROLE as string, guild);
 }
 
-export async function setN0llanRole(user: User, kthId: string): Promise<void> {
+export async function setN0llanRole(
+	user: User,
+	kthId: string,
+	guild: Guild
+): Promise<void> {
 	const hodisUser = await getHodisUser(kthId);
 	if (hodisUser.tag.split(",").includes("D22")) {
-		await setRole(user, "n0llan");
+		await setRole(user, "n0llan", guild);
 	}
 }
 
@@ -64,8 +82,9 @@ export async function extractYearFromUser(kthEmail: string): Promise<{
 
 export async function setYearRoles(
 	user: User,
-	yearTagWithDash: string
+	yearTagWithDash: string,
+	guild: Guild
 ): Promise<void> {
-	await setRole(user, yearTagWithDash);
-	await setRole(user, "Datasektionen");
+	await setRole(user, yearTagWithDash, guild);
+	await setRole(user, "Datasektionen", guild);
 }
