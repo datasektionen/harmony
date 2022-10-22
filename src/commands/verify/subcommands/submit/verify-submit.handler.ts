@@ -55,6 +55,7 @@ export const handleVerifySubmit = async (
 	}
 
 	verifiedUsers.set(discordId, emailAddress);
+	console.log("hello");
 	try {
 		await setRoleVerified(user, interaction.guild);
 		await interaction.reply({
@@ -67,7 +68,7 @@ export const handleVerifySubmit = async (
 			await handleChannelAlias(mapYearToAlias(year), interaction, joinChannel);
 		}
 	} catch (error) {
-		console.error(error);
+		console.warn(error);
 		await interaction.reply({
 			content: "Something went wrong, please try again.",
 			ephemeral: true,

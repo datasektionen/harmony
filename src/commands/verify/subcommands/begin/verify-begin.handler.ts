@@ -9,7 +9,7 @@ export const handleVerifyBegin = async (
 	interaction: ChatInputCommandInteraction
 ): Promise<void> => {
 	const { user, options } = interaction;
-	await interaction.deferReply({ephemeral: true})
+	await interaction.deferReply({ ephemeral: true });
 	const messageText = options.getString(VerifyBeginVariables.EMAIL, true);
 	if (!isKthEmail(messageText)) {
 		await interaction.editReply({
@@ -30,7 +30,7 @@ export const handleVerifyBegin = async (
 		});
 		return;
 	} catch (error) {
-		console.error(error);
+		console.warn(error);
 		await interaction.editReply({
 			content: "Something went wrong, please try again.",
 		});

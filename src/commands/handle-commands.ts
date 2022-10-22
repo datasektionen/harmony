@@ -41,7 +41,7 @@ export const handleCommands = (env: Env): void => {
 					throw new CommandNotFoundError(interaction.commandName);
 			}
 		} catch (error) {
-			console.error(error);
+			console.warn(error);
 		}
 	});
 
@@ -59,7 +59,7 @@ export const handleCommands = (env: Env): void => {
 						throw new CommandNotFoundError(interaction.commandName);
 				}
 			} catch (error) {
-				console.error(error);
+				console.warn(error);
 			}
 		});
 	}

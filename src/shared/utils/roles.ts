@@ -35,12 +35,8 @@ export async function setRole(
 	if (!role) {
 		throw new Error(`Role ${roleName} does not exist on the Server!`);
 	}
-	try {
-		const guildMember = await getGuildMember(user, guild);
-		guildMember.roles.add(role);
-	} catch (err) {
-		console.log(err);
-	}
+	const guildMember = await getGuildMember(user, guild);
+	await guildMember.roles.add(role);
 }
 
 /**
