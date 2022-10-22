@@ -5,4 +5,5 @@ export enum CommandNames {
 	VERIFY = "verify",
 	JOIN = "join",
 	LEAVE = "leave",
+	COURSES = "courses",
 }

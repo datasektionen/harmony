@@ -10,7 +10,7 @@ import { validCourseCode } from "./valid-course-code";
 
 export type CourseChannel = ForumChannel | TextChannel;
 
-const isCourseChannel = (channel?: GuildBasedChannel): boolean => {
+export const isCourseChannel = (channel?: GuildBasedChannel): boolean => {
 	return (
 		channel !== undefined &&
 		(channel instanceof TextChannel || channel instanceof ForumChannel)
