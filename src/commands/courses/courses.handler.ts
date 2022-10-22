@@ -19,7 +19,7 @@ export const handleCourses = async (
 	await interaction.guild?.channels.fetch();
 	const nonIncludedChannelNames = interaction.guild?.channels.cache
 		.filter(isCourseChannel)
-		.filter((channel) => aliasedChannels.includes(channel.name))
+		.filter((channel) => !aliasedChannels.includes(channel.name))
 		.map((channel) => channel.name);
 
 	if (nonIncludedChannelNames) {
