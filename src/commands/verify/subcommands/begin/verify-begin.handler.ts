@@ -13,7 +13,7 @@ export const handleVerifyBegin = async (
 	const messageText = options.getString(VerifyBeginVariables.EMAIL, true);
 	if (!isKthEmail(messageText)) {
 		await interaction.editReply({
-			content: "Please, enter a valid KTH email address.",
+			content: "Please enter a valid KTH email address.",
 		});
 		return;
 	}
