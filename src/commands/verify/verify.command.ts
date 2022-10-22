@@ -25,11 +25,11 @@ verifyCommand.addSubcommand((subcommand) =>
 verifyCommand.addSubcommand((subcommand) =>
 	subcommand
 		.setName(VerifySubcommandNames.SUBMIT)
-		.setDescription("Verifies you with the code sent to your email")
+		.setDescription("Complete verification using a verification code sent to your KTH email")
 		.addStringOption((option) =>
 			option
 				.setName(VerifySubmitVariables.VERIFICATION_CODE)
-				.setDescription("The code sent to your email address")
+				.setDescription("The code sent to your KTH email address")
 				.setRequired(true)
 		)
 );
