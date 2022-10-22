@@ -4,7 +4,7 @@ import { LeaveVariables } from "./leave.variables";
 
 export const leaveCommand = new SlashCommandBuilder()
 	.setName(CommandNames.LEAVE)
-	.setDescription("Leave a course");
+	.setDescription("Leave a course channel");
 
 leaveCommand.addStringOption((option) =>
 	option
