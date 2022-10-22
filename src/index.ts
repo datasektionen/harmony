@@ -10,7 +10,7 @@ function validateEnvironment(): void {
 	if (
 		!process.env.SPAM_URL ||
 		!process.env.SPAM_API_TOKEN ||
-		!process.env.DISCORD_TOKEN
+		!process.env.DISCORD_BOT_TOKEN
 	) {
 		throw new Error("Missing proper configuration!");
 	}
@@ -58,7 +58,7 @@ async function main(): Promise<void> {
 	validateEnvironment();
 
 	harmonyClient.once("ready", () => console.log("Starting..."));
-	await harmonyClient.login(process.env.DISCORD_TOKEN);
+	await harmonyClient.login(process.env.DISCORD_BOT_TOKEN);
 	if (env === "production") {
 		await harmonyLightClient.login(process.env.DISCORD_LIGHT_BOT_TOKEN);
 	}
