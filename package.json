@@ -9,7 +9,8 @@
 		"start": "node -r dotenv/config ./dist/index.js",
 		"dev": "./node_modules/nodemon/bin/nodemon.js -e ts  --exec \"tsc && node -r dotenv/config ./dist/index.js\"",
 		"build": "tsc",
-		"watch": "tsc --watch"
+		"watch": "tsc --watch",
+		"bs": "tsc && node -r dotenv/config ./dist/index.js"
 	},
 	"repository": {
 		"type": "git",
