@@ -1,6 +1,7 @@
 import { ChatInputCommandInteraction } from "discord.js";
 import { mappings } from "../../shared/alias-mappings";
 import { isCourseChannel } from "../../shared/utils/channel-utils";
+import { validCourseCode } from "../../shared/utils/valid-course-code";
 
 export const handleCourses = async (
 	interaction: ChatInputCommandInteraction
@@ -19,6 +20,7 @@ export const handleCourses = async (
 	await interaction.guild?.channels.fetch();
 	const nonIncludedChannelNames = interaction.guild?.channels.cache
 		.filter(isCourseChannel)
+		.filter((channel) => validCourseCode(channel.name))
 		.filter((channel) => !aliasedChannels.includes(channel.name))
 		.map((channel) => channel.name);
 
