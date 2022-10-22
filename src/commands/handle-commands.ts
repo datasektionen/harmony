@@ -2,6 +2,7 @@ import { Env, harmonyClient, harmonyLightClient } from "..";
 import { CommandNotFoundError } from "../shared/errors/command-not-founder.error";
 import { handleAdd } from "./add/add.handler";
 import { CommandNames } from "./commands.names";
+import { handleCourses } from "./courses/courses.handler";
 import { handleJoin } from "./join/join.handler";
 import { handleKick } from "./kick/kick.handler";
 import { handleLeave } from "./leave/leave.handler";
@@ -32,6 +33,9 @@ export const handleCommands = (env: Env): void => {
 					return;
 				case CommandNames.LEAVE:
 					await handleLeave(interaction);
+					return;
+				case CommandNames.COURSES:
+					await handleCourses(interaction);
 					return;
 				default:
 					throw new CommandNotFoundError(interaction.commandName);
