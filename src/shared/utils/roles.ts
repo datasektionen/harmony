@@ -44,11 +44,11 @@ export async function setN0llanRole(user: User, kthId: string): Promise<void> {
 	}
 }
 
-export async function extractYearFromUser(kthId: string): Promise<{
+export async function extractYearFromUser(kthEmail: string): Promise<{
 	yearRole: string | null;
 	year: number | null;
 }> {
-	const hodisUser = await getHodisUser(kthId);
+	const hodisUser = await getHodisUser(kthEmail.split("@")[0]);
 	const yearTag = hodisUser.tag
 		.split(",")
 		.find((tag) => tag.match(/^D\d{2}$/i));

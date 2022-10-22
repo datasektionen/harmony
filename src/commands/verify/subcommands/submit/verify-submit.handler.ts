@@ -53,9 +53,7 @@ export const handleVerifySubmit = async (
 			content: `You are now verified! Please check that you have been assigned the **${process.env.DISCORD_VERIFIED_ROLE}** role.`,
 			ephemeral: true,
 		});
-		const { year, yearRole } = await extractYearFromUser(
-			emailAddress.split("@")[0]
-		);
+		const { year, yearRole } = await extractYearFromUser(emailAddress);
 		if (yearRole && year) {
 			await setYearRoles(user, yearRole);
 			await handleChannelAlias(mapYearToAlias(year), interaction, joinChannel);
