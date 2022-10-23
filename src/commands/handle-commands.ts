@@ -49,7 +49,7 @@ export const handleCommands = (env: Env): void => {
 						throw new CommandNotFoundError(interaction.commandName);
 				}
 			} else if (guild) {
-				const validCommands = Object.values(CommandNames) as Array<string>; // Get all valid command names
+				const validCommands = Object.values(CommandNames) as string[]; // Get all valid command names
 				if (interaction.commandName === CommandNames.VERIFY) {
 					await handleVerify(interaction);
 					return;
