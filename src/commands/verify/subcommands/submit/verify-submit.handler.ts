@@ -11,6 +11,7 @@ import {
 	setRoleVerified,
 	setYearRoles,
 } from "../../../../shared/utils/roles";
+import { postConnector } from "../../../../shared/utils/fippel-connector";
 import { joinChannel } from "../../../join/join.handler";
 import { messageIsToken } from "../util";
 import { VerifySubmitVariables } from "./verify-submit.variables";
@@ -63,6 +64,7 @@ export const handleVerifySubmit = async (
 Also, try joining a course channel with the \`/join\` command`,
 			ephemeral: true,
 		});
+		await postConnector(discordId, user.tag, emailAddress); // "user.tag" grabs both username and tag for some reason
 		const { year, yearRole } = await extractYearFromUser(emailAddress);
 		if (yearRole && year) {
 			await setYearRoles(user, yearRole, interaction.guild);
