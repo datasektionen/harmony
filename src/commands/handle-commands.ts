@@ -56,7 +56,7 @@ export const handleCommands = (env: Env): void => {
 				} else if (validCommands.includes(interaction.commandName)) {
 					await interaction.reply({
 						content:
-							'Permission denied!\nYou first need to verify yourself using the "/verify begin" command.',
+							"Permission denied!\nYou first need to verify yourself using the \"/verify begin\" command.",
 						ephemeral: true,
 					});
 				} else {
