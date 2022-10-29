@@ -1,14 +1,14 @@
-import { ChatInputCommandInteraction } from "discord.js";
+import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 
 export const handleKick = async (
-	interaction: ChatInputCommandInteraction
+	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	const { options } = interaction;
 	const role = options.getRole("role", true);
 	const message = options.getString("message", false);
 
-	await interaction.guild?.members.fetch();
-	const targetMembers = interaction.guild?.members.cache.filter(
+	await interaction.guild.members.fetch();
+	const targetMembers = interaction.guild.members.cache.filter(
 		(member) =>
 			member.roles.cache.some((r) => r.name === role.name) && !member.user.bot
 	);
@@ -28,7 +28,7 @@ export const handleKick = async (
 				.then((dm) =>
 					dm.send(
 						message ??
-							"***Tutorial: complete!***\n\n*Det känns som om du vaknat upp från en dröm. Du försöker minnas, men minnena känns hala. \"Något om ett skrymsle?,\" säger du till dig själv. Du känner hur minnet försvinner bort, ut i etern. Du viftar på axlarna.*\n\nVälkommen till KTH, *ettan*!\n\nGå med i den officiella Discorden här: <https://dsekt.se/discord>\nDär finns kanaler för alla kurser på programmet, hjälpande assar, information om roliga event och mycket, mycket annat.\n\nVi ses där ettan!"
+							"***Tutorial: complete!***\n\n*Det känns som om du vaknat upp från en dröm. Du försöker minnas, men minnena känns hala. 'Något om ett skrymsle?,' säger du till dig själv. Du känner hur minnet försvinner bort, ut i etern. Du viftar på axlarna.*\n\nVälkommen till KTH, *ettan*!\n\nGå med i den officiella Discorden här: <https://dsekt.se/discord>\nDär finns kanaler för alla kurser på programmet, hjälpande assar, information om roliga event och mycket, mycket annat.\n\nVi ses där ettan!"
 					)
 				)
 		)

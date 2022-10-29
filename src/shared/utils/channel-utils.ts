@@ -1,10 +1,6 @@
-import {
-	ChatInputCommandInteraction,
-	ForumChannel,
-	GuildBasedChannel,
-	TextChannel,
-} from "discord.js";
+import { ForumChannel, GuildBasedChannel, TextChannel } from "discord.js";
 import { AliasName } from "../alias-mappings";
+import { GuildChatInputCommandInteraction } from "../types/GuildChatInputCommandType";
 import { getAliasChannels } from "./read-alias-mappings";
 import { validCourseCode } from "./valid-course-code";
 
@@ -19,10 +15,10 @@ export const isCourseChannel = (channel?: GuildBasedChannel): boolean => {
 
 export const handleChannelAlias = async (
 	alias: string,
-	interaction: ChatInputCommandInteraction,
+	interaction: GuildChatInputCommandInteraction,
 	actionCallback: (
 		channel: CourseChannel,
-		interaction: ChatInputCommandInteraction
+		interaction: GuildChatInputCommandInteraction
 	) => Promise<void>
 ): Promise<void> => {
 	const channelNames = getAliasChannels(alias as AliasName);
@@ -35,8 +31,8 @@ export const handleChannelAlias = async (
 		});
 	}
 
-	await interaction.guild?.channels.fetch();
-	const channels = interaction.guild?.channels.cache
+	await interaction.guild.channels.fetch();
+	const channels = interaction.guild.channels.cache
 		.filter((current) => channelNames.has(current.name.split("-")[0]))
 		.filter(isCourseChannel);
 	if (!channels) {
@@ -57,10 +53,10 @@ export const handleChannelAlias = async (
 
 export const handleChannel = async (
 	courseCode: string,
-	interaction: ChatInputCommandInteraction,
+	interaction: GuildChatInputCommandInteraction,
 	actionCallback: (
 		channel: ForumChannel | TextChannel,
-		interaction: ChatInputCommandInteraction
+		interaction: GuildChatInputCommandInteraction
 	) => Promise<void>
 ): Promise<void> => {
 	await interaction.deferReply({ ephemeral: true });
@@ -71,8 +67,8 @@ export const handleChannel = async (
 		return;
 	}
 
-	await interaction.guild?.channels.fetch();
-	const channel = interaction.guild?.channels.cache.find(({ name }) =>
+	await interaction.guild.channels.fetch();
+	const channel = interaction.guild.channels.cache.find(({ name }) =>
 		name.startsWith(courseCode)
 	);
 
