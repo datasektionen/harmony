@@ -9,6 +9,7 @@ import { handleLeave } from "./leave/leave.handler";
 import { handlePing } from "./ping/ping.handler";
 import { handleVerify } from "./verify/verify.handler";
 import { hasRoleVerified } from "../shared/utils/roles";
+import type { GuildChatInputCommandInteraction } from "../shared/types/GuildChatInputCommandType";
 
 export const handleCommands = (env: Env): void => {
 	harmonyClient.on("interactionCreate", async (interaction) => {
@@ -16,10 +17,7 @@ export const handleCommands = (env: Env): void => {
 			return;
 		}
 		try {
-			const { user, guild } = interaction;
-			if (!guild) {
-				throw new Error("Couldn't get guild from interaction!");
-			}
+			const { user, guild } = interaction as GuildChatInputCommandInteraction;
 			// Checks which commands the user should have access to:
 			if (await hasRoleVerified(user, guild)) {
 				switch (interaction.commandName) {
