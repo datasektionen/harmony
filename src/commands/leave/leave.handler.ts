@@ -1,5 +1,5 @@
-import { ChatInputCommandInteraction } from "discord.js";
 import { AliasName } from "../../shared/alias-mappings";
+import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import {
 	CourseChannel,
 	handleChannel,
@@ -9,7 +9,7 @@ import { aliasExists } from "../../shared/utils/read-alias-mappings";
 import { LeaveVariables } from "./leave.variables";
 
 export const handleLeave = async (
-	interaction: ChatInputCommandInteraction
+	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	const { options } = interaction;
 	const courseCode = options
@@ -24,7 +24,7 @@ export const handleLeave = async (
 
 const leaveChannel = async (
 	channel: CourseChannel,
-	interaction: ChatInputCommandInteraction
+	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	await channel.permissionOverwrites.create(interaction.user, {
 		ViewChannel: false,

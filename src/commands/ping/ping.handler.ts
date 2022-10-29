@@ -1,7 +1,7 @@
-import { ChatInputCommandInteraction } from "discord.js";
+import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 
 export const handlePing = async (
-	interaction: ChatInputCommandInteraction
+	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	await interaction.reply({
 		content: "pong",

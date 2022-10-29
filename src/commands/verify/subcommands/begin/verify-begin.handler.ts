@@ -1,12 +1,12 @@
-import { ChatInputCommandInteraction } from "discord.js";
 import { tokenDiscord, tokenEmail } from "../../../../database-config";
+import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 import { generateToken } from "../../../../shared/utils/generate-token";
 import { sendMail } from "../../../../shared/utils/mail";
 import { isKthEmail } from "../util";
 import { VerifyBeginVariables } from "./verify-begin.variables";
 
 export const handleVerifyBegin = async (
-	interaction: ChatInputCommandInteraction
+	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	const { user, options } = interaction;
 	await interaction.deferReply({ ephemeral: true });

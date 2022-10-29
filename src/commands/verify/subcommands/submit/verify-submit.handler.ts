@@ -1,9 +1,9 @@
-import { ChatInputCommandInteraction } from "discord.js";
 import {
 	tokenDiscord,
 	tokenEmail,
 	verifiedUsers,
 } from "../../../../database-config";
+import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 import { mapYearToAlias } from "../../../../shared/utils/alias_to_year_mapper";
 import { handleChannelAlias } from "../../../../shared/utils/channel-utils";
 import {
@@ -16,21 +16,13 @@ import { messageIsToken } from "../util";
 import { VerifySubmitVariables } from "./verify-submit.variables";
 
 export const handleVerifySubmit = async (
-	interaction: ChatInputCommandInteraction
+	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	const { user, options } = interaction;
 	const messageText = options.getString(
 		VerifySubmitVariables.VERIFICATION_CODE,
 		true
 	);
-
-	if (!interaction.guild) {
-		await interaction.reply({
-			content: "Something went wrong...",
-			ephemeral: true,
-		});
-		return;
-	}
 
 	if (!messageIsToken(messageText)) {
 		await interaction.reply({

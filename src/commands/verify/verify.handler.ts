@@ -1,11 +1,11 @@
-import { ChatInputCommandInteraction } from "discord.js";
 import { CommandNotFoundError } from "../../shared/errors/command-not-founder.error";
+import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import { handleVerifyBegin } from "./subcommands/begin/verify-begin.handler";
 import { handleVerifySubmit } from "./subcommands/submit/verify-submit.handler";
 import { VerifySubcommandNames } from "./verify-subcommands.names";
 
 export const handleVerify = async (
-	interaction: ChatInputCommandInteraction
+	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	const subCommandName = interaction.options.getSubcommand(true);
 

@@ -17,50 +17,53 @@ export const handleCommands = (env: Env): void => {
 			return;
 		}
 		try {
-			const { user, guild } = interaction as GuildChatInputCommandInteraction;
+			if (!interaction.guild) {
+				throw new Error("Guild not found!");
+			}
+			const guildInteraction = interaction as GuildChatInputCommandInteraction;
 			// Checks which commands the user should have access to:
-			if (await hasRoleVerified(user, guild)) {
+			if (await hasRoleVerified(interaction.user, interaction.guild)) {
 				switch (interaction.commandName) {
 					case CommandNames.PING:
-						await handlePing(interaction);
+						await handlePing(guildInteraction);
 						return;
 					case CommandNames.ADD:
-						await handleAdd(interaction);
+						await handleAdd(guildInteraction);
 						return;
 					case CommandNames.KICK:
-						await handleKick(interaction);
+						await handleKick(guildInteraction);
 						break;
 					case CommandNames.VERIFY:
-						await interaction.reply({
+						await guildInteraction.reply({
 							content: "You are already verified!",
 							ephemeral: true,
 						});
 						return;
 					case CommandNames.JOIN:
-						await handleJoin(interaction);
+						await handleJoin(guildInteraction);
 						return;
 					case CommandNames.LEAVE:
-						await handleLeave(interaction);
+						await handleLeave(guildInteraction);
 						return;
 					case CommandNames.COURSES:
-						await handleCourses(interaction);
+						await handleCourses(guildInteraction);
 						return;
 					default:
-						throw new CommandNotFoundError(interaction.commandName);
+						throw new CommandNotFoundError(guildInteraction.commandName);
 				}
 			} else {
 				const validCommands = Object.values(CommandNames) as string[]; // Get all valid command names
-				if (interaction.commandName === CommandNames.VERIFY) {
-					await handleVerify(interaction);
+				if (guildInteraction.commandName === CommandNames.VERIFY) {
+					await handleVerify(guildInteraction);
 					return;
-				} else if (validCommands.includes(interaction.commandName)) {
-					await interaction.reply({
+				} else if (validCommands.includes(guildInteraction.commandName)) {
+					await guildInteraction.reply({
 						content:
 							"Permission denied!\nYou first need to verify yourself using the '/verify begin' command.",
 						ephemeral: true,
 					});
 				} else {
-					throw new CommandNotFoundError(interaction.commandName);
+					throw new CommandNotFoundError(guildInteraction.commandName);
 				}
 			}
 		} catch (error) {
@@ -73,13 +76,17 @@ export const handleCommands = (env: Env): void => {
 			if (!interaction.isChatInputCommand()) {
 				return;
 			}
+			if (!interaction.guild) {
+				throw new Error("Guild not found!");
+			}
+			const guildInteraction = interaction as GuildChatInputCommandInteraction;
 			try {
-				switch (interaction.commandName) {
+				switch (guildInteraction.commandName) {
 					case CommandNames.VERIFY:
-						await handleVerify(interaction);
+						await handleVerify(guildInteraction);
 						return;
 					default:
-						throw new CommandNotFoundError(interaction.commandName);
+						throw new CommandNotFoundError(guildInteraction.commandName);
 				}
 			} catch (error) {
 				console.warn(error);

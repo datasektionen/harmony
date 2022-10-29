@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, ForumChannel } from "discord.js";
+import { ForumChannel } from "discord.js";
 import { JoinVariables } from "./join.variables";
 import { aliasExists } from "../../shared/utils/read-alias-mappings";
 import {
@@ -7,9 +7,10 @@ import {
 	handleChannelAlias,
 } from "../../shared/utils/channel-utils";
 import { AliasName } from "../../shared/alias-mappings";
+import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 
 export const handleJoin = async (
-	interaction: ChatInputCommandInteraction
+	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	const { options } = interaction;
 	const courseCode = options
@@ -25,7 +26,7 @@ export const handleJoin = async (
 
 export const joinChannel = async (
 	channel: CourseChannel,
-	interaction: ChatInputCommandInteraction
+	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	await channel.permissionOverwrites.create(interaction.user, {
 		ViewChannel: true,
