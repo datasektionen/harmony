@@ -1,4 +1,3 @@
-import { ChatInputCommandInteraction } from "discord.js";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import { AddVariables } from "./add.variables";
 

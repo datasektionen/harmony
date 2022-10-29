@@ -1,4 +1,3 @@
-import { ForumChannel } from "discord.js";
 import { JoinVariables } from "./join.variables";
 import { aliasExists } from "../../shared/utils/read-alias-mappings";
 import {
@@ -31,10 +30,14 @@ export const joinChannel = async (
 	await channel.permissionOverwrites.create(interaction.user, {
 		ViewChannel: true,
 	});
-	if (channel instanceof ForumChannel) {
+	// Code to auto opt-in in the general discussion channel in forums.
+	// Temporarily inactivated due to a message being sent for everyone that joins.
+	// For more context: https://github.com/discord/discord-api-docs/discussions/5038
+	// To activate: Add an import from discord.js for { ForumChannel }
+	/* if (channel instanceof ForumChannel) {
 		const thread = channel.threads.cache.find(
 			(thread) => thread.name === "⌠💬⌡ General Chat"
 		);
 		await thread?.members.add(interaction.user);
-	}
+	} */
 };
