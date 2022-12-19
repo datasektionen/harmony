@@ -51,8 +51,7 @@ export const handleVerifySubmit = async (
 	try {
 		await setRoleVerified(user, interaction.guild);
 		await interaction.reply({
-			content: `You are now verified! Please check that you have been assigned the **${process.env.DISCORD_VERIFIED_ROLE}** role.
-Also, try joining a course channel with the \`/join\` command`,
+			content: `You are now verified! Please check that you have been assigned the **${process.env.DISCORD_VERIFIED_ROLE}** role.`,
 			ephemeral: true,
 		});
 		const { year, yearRole } = await extractYearFromUser(emailAddress);
