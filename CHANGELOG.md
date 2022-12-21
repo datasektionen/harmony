@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/datasektionen/harmony/compare/v1.0.1...v1.0.2) (2022-12-21)
+
+
+### Bug Fixes
+
+* Remove '/join' prompt on verify ([9d4662a](https://github.com/datasektionen/harmony/commit/9d4662a3383f3c9a7df198d62c9c95a860c6ee78))
+
 ## 1.0.0 (2022-10-22)
 
 

@@ -1,6 +1,6 @@
 {
 	"name": "harmony",
-	"version": "1.0.0",
+	"version": "1.0.2",
 	"description": "A Discord bot for verifying users.",
 	"main": "index.ts",
 	"scripts": {
