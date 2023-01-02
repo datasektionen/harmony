@@ -68,11 +68,11 @@ export const handleChannel = async (
 	}
 
 	await interaction.guild.channels.fetch();
-	const channel = interaction.guild.channels.cache.find(({ name }) =>
-		name.startsWith(courseCode)
-	);
+	const channels = interaction.guild.channels.cache
+		.filter(({ name }) => name.startsWith(courseCode))
+		.filter(isCourseChannel);
 
-	if (!isCourseChannel(channel)) {
+	if (channels.size === 0) {
 		await interaction.editReply({
 			content:
 				"Channel not found, please contact a mod if you think this is a mistake",
@@ -80,11 +80,15 @@ export const handleChannel = async (
 		return;
 	}
 
-	await actionCallback(channel as CourseChannel, interaction);
+	await Promise.all(
+		channels.map((channel) =>
+			actionCallback(channel as CourseChannel, interaction)
+		)
+	);
 
 	await interaction.editReply({
 		content: `Successfully updated visibility for \`#${
-			(channel as CourseChannel).name
+			(channels.first() as CourseChannel).name
 		}\``,
 	});
 	return;
