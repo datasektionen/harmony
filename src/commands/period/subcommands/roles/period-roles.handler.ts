@@ -1,7 +1,7 @@
 import { GuildMember } from "discord.js";
-import { DateTime } from "luxon";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 import { handleChannelAlias } from "../../../../shared/utils/channel-utils";
+import { getGradeYear } from "../../../../shared/utils/year";
 import { joinChannel } from "../../../join/join.handler";
 import { PeriodRolesVariables } from "./period-roles.variables";
 
@@ -27,18 +27,17 @@ async function updateMember(
 	member: GuildMember,
 	period: number
 ): Promise<void> {
+	const regex = /^D-\d{2}$/;
 	const yearString = member?.roles.cache
-		.find((role) => role.name.startsWith("D-"))
+		.find((role) => regex.test(role.name))
 		?.name.slice(2);
 
 	if (!yearString || isNaN(yearString as unknown as number)) return;
 	const year = parseInt(yearString);
-	const currentYear = DateTime.now().year;
 
+	const memberYear = getGradeYear(year);
 	// Only manage periods for people in first, second or third year
-	if (currentYear - year > 3) return;
-
-	const memberYear = currentYear - year;
+	if (memberYear < 1 || memberYear > 3) return;
 
 	await handleChannelAlias(
 		`y${memberYear}p${period}`,
