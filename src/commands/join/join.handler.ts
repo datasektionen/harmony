@@ -7,6 +7,7 @@ import {
 } from "../../shared/utils/channel-utils";
 import { AliasName } from "../../shared/alias-mappings";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
+import { User } from "discord.js";
 
 export const handleJoin = async (
 	interaction: GuildChatInputCommandInteraction
@@ -25,9 +26,10 @@ export const handleJoin = async (
 
 export const joinChannel = async (
 	channel: CourseChannel,
-	interaction: GuildChatInputCommandInteraction
+	interaction: GuildChatInputCommandInteraction,
+	user?: User
 ): Promise<void> => {
-	await channel.permissionOverwrites.create(interaction.user, {
+	await channel.permissionOverwrites.create(user ?? interaction.user, {
 		ViewChannel: true,
 	});
 	// Code to auto opt-in in the general discussion channel in forums.

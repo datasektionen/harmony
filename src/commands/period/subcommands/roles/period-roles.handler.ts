@@ -15,11 +15,17 @@ export const handlePeriodRoles = async (
 	// Get guild from interaction
 	const guild = interaction.guild;
 	// Iterate through all members in guild
+
+	await guild.members.fetch();
+
 	await Promise.all(
-		guild.members.cache.map((member) =>
-			updateMember(interaction, member, period)
-		)
+		guild.members.cache
+			.filter((member) => !member.user.bot)
+			.map((member) => updateMember(interaction, member, period))
 	);
+	await interaction.editReply({
+		content: "Successfully updated your period roles!",
+	});
 };
 
 async function updateMember(
@@ -33,7 +39,8 @@ async function updateMember(
 		?.name.slice(2);
 
 	if (!yearString || isNaN(yearString as unknown as number)) return;
-	const year = parseInt(yearString);
+	// This will break in year 3000 but who cares :D
+	const year = parseInt(yearString) + 2000;
 
 	const memberYear = getGradeYear(year);
 	// Only manage periods for people in first, second or third year
@@ -42,6 +49,7 @@ async function updateMember(
 	await handleChannelAlias(
 		`y${memberYear}p${period}`,
 		interaction,
-		joinChannel
+		(channel, interaction) => joinChannel(channel, interaction, member.user),
+		true
 	);
 }

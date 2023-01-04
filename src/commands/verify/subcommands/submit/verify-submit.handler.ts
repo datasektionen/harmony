@@ -47,7 +47,6 @@ export const handleVerifySubmit = async (
 	}
 
 	verifiedUsers.set(discordId, emailAddress);
-	console.log("hello");
 	try {
 		await setRoleVerified(user, interaction.guild);
 		await interaction.reply({
@@ -57,7 +56,8 @@ export const handleVerifySubmit = async (
 		const { year, yearRole } = await extractYearFromUser(emailAddress);
 		if (yearRole && year) {
 			await setYearRoles(user, yearRole, interaction.guild);
-			await handleChannelAlias(mapYearToAlias(year), interaction, joinChannel);
+			const alias = mapYearToAlias(year);
+			if (alias) await handleChannelAlias(alias, interaction, joinChannel);
 		}
 	} catch (error) {
 		console.warn(error);
