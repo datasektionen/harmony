@@ -8,6 +8,7 @@ import { mapYearToAlias } from "../../../../shared/utils/alias_to_year_mapper";
 import { handleChannelAlias } from "../../../../shared/utils/channel-utils";
 import {
 	extractYearFromUser,
+	setExternRole,
 	setRoleVerified,
 	setYearRoles,
 } from "../../../../shared/utils/roles";
@@ -47,7 +48,6 @@ export const handleVerifySubmit = async (
 	}
 
 	verifiedUsers.set(discordId, emailAddress);
-	console.log("hello");
 	try {
 		await setRoleVerified(user, interaction.guild);
 		await interaction.reply({
@@ -58,7 +58,7 @@ export const handleVerifySubmit = async (
 		if (yearRole && year) {
 			await setYearRoles(user, yearRole, interaction.guild);
 			await handleChannelAlias(mapYearToAlias(year), interaction, joinChannel);
-		}
+		} else setExternRole(user, interaction.guild);
 	} catch (error) {
 		console.warn(error);
 		await interaction.reply({

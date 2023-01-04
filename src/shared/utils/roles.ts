@@ -84,3 +84,7 @@ export async function setYearRoles(
 	await setRole(user, yearTagWithDash, guild);
 	await setRole(user, "Datasektionen", guild);
 }
+
+export async function setExternRole(user: User, guild: Guild): Promise<void> {
+	await setRole(user, "Extern", guild);
+}
