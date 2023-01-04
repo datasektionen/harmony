@@ -9,6 +9,7 @@ import { handleChannelAlias } from "../../../../shared/utils/channel-utils";
 import {
 	extractYearFromUser,
 	setExternRole,
+	setPingRoles,
 	setRoleVerified,
 	setYearRoles,
 } from "../../../../shared/utils/roles";
@@ -59,6 +60,9 @@ export const handleVerifySubmit = async (
 			await setYearRoles(user, yearRole, interaction.guild);
 			await handleChannelAlias(mapYearToAlias(year), interaction, joinChannel);
 		} else setExternRole(user, interaction.guild);
+
+		// Add all ping roles
+		await setPingRoles(user, interaction.guild);
 	} catch (error) {
 		console.warn(error);
 		await interaction.reply({
