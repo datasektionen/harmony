@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.2](https://github.com/datasektionen/harmony/compare/v1.0.1...v1.0.2) (2023-01-04)
+
+
+### Bug Fixes
+
+* Assign ping roles to every user that verifies ([034d776](https://github.com/datasektionen/harmony/commit/034d776f3d19bcf97a3b462d75b2c41d2ca75754))
+* Extern role is now automatically assigned to everyone that doesn't have the datasektionen role ([98fcb11](https://github.com/datasektionen/harmony/commit/98fcb11995291ffde20f3943edf9343146db51d9))
+* Fix role ([81f7d73](https://github.com/datasektionen/harmony/commit/81f7d73e993b3470ac6060ff99f9646883a26670))
+* Remove '/join' prompt on verify ([9d4662a](https://github.com/datasektionen/harmony/commit/9d4662a3383f3c9a7df198d62c9c95a860c6ee78))
+
 ## 1.0.0 (2022-10-22)
 
 
