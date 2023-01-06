@@ -84,3 +84,12 @@ export async function setYearRoles(
 	await setRole(user, yearTagWithDash, guild);
 	await setRole(user, "Datasektionen", guild);
 }
+
+export async function setExternRole(user: User, guild: Guild): Promise<void> {
+	await setRole(user, "Extern", guild);
+}
+
+export async function setPingRoles(user: User, guild: Guild): Promise<void> {
+	const pingRoles = ["StudyInfo", "ChapterInfo", "SponsoredInfo"];
+	await Promise.all(pingRoles.map((role) => setRole(user, role, guild)));
+}

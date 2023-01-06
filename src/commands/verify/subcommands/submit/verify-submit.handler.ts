@@ -8,6 +8,8 @@ import { mapYearToAlias } from "../../../../shared/utils/alias_to_year_mapper";
 import { handleChannelAlias } from "../../../../shared/utils/channel-utils";
 import {
 	extractYearFromUser,
+	setExternRole,
+	setPingRoles,
 	setRoleVerified,
 	setYearRoles,
 } from "../../../../shared/utils/roles";
@@ -58,7 +60,10 @@ export const handleVerifySubmit = async (
 			await setYearRoles(user, yearRole, interaction.guild);
 			const alias = mapYearToAlias(year);
 			if (alias) await handleChannelAlias(alias, interaction, joinChannel);
-		}
+		} else setExternRole(user, interaction.guild);
+
+		// Add all ping roles
+		await setPingRoles(user, interaction.guild);
 	} catch (error) {
 		console.warn(error);
 		await interaction.reply({
