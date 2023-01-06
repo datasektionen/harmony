@@ -9,6 +9,7 @@ export const handleCourses = async (
 	const lines = [];
 	const aliasedChannels: string[] = [];
 	for (const [key, value] of Object.entries(mappings)) {
+		if (value.length === 0) continue;
 		lines.push(`**${key}**:\n`);
 		for (let i = 0; i < value.length; i++) {
 			lines.push(`${value[i]}${i === value.length - 1 ? "" : ", "}`);
@@ -21,14 +22,17 @@ export const handleCourses = async (
 	const nonIncludedChannelNames = interaction.guild.channels.cache
 		.filter(isCourseChannel)
 		.filter((channel) => validCourseCode(channel.name))
-		.filter((channel) => !aliasedChannels.includes(channel.name))
+		.filter(
+			(channel) =>
+				!aliasedChannels.some((current) => channel.name.startsWith(current))
+		)
 		.map((channel) => channel.name);
 
 	if (nonIncludedChannelNames) {
 		lines.push("**other courses:**\n");
 		for (let i = 0; i < nonIncludedChannelNames.length; i++) {
 			lines.push(
-				`${nonIncludedChannelNames[i]}${
+				`${nonIncludedChannelNames[i].split("-")[0]}${
 					i === nonIncludedChannelNames.length - 1 ? "" : ", "
 				}`
 			);
