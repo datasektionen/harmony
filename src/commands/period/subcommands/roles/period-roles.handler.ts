@@ -44,7 +44,7 @@ async function updateMember(
 
 	const memberYear = getGradeYear(year);
 	// Only manage periods for people in first, second or third year
-	if (memberYear < 1 || memberYear > 4) return;
+	if (memberYear < 1 || memberYear > 5) return;
 
 	await handleChannelAlias(
 		`y${memberYear}p${period}`,
