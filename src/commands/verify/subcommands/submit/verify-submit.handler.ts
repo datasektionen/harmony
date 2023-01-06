@@ -58,7 +58,8 @@ export const handleVerifySubmit = async (
 		const { year, yearRole } = await extractYearFromUser(emailAddress);
 		if (yearRole && year) {
 			await setYearRoles(user, yearRole, interaction.guild);
-			await handleChannelAlias(mapYearToAlias(year), interaction, joinChannel);
+			const alias = mapYearToAlias(year);
+			if (alias) await handleChannelAlias(alias, interaction, joinChannel);
 		} else setExternRole(user, interaction.guild);
 
 		// Add all ping roles

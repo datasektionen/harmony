@@ -19,13 +19,16 @@ export const handleChannelAlias = async (
 	actionCallback: (
 		channel: CourseChannel,
 		interaction: GuildChatInputCommandInteraction
-	) => Promise<void>
+	) => Promise<void>,
+	noInteraction?: boolean
 ): Promise<void> => {
+	noInteraction = noInteraction ?? false;
+
 	const channelNames = getAliasChannels(alias as AliasName);
 	if (channelNames.size === 0) {
 		return;
 	}
-	if (!interaction.replied) {
+	if (!noInteraction && !interaction.replied) {
 		await interaction.deferReply({
 			ephemeral: true,
 		});
@@ -43,7 +46,7 @@ export const handleChannelAlias = async (
 		actionCallback(channel as CourseChannel, interaction)
 	);
 	await Promise.allSettled(promises);
-	if (!interaction.replied) {
+	if (!noInteraction && !interaction.replied) {
 		await interaction.editReply({
 			content: `Successfully updated your visibility for \`${alias}\`! (${channels.size}) channels updated`,
 		});

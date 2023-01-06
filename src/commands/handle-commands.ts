@@ -10,6 +10,7 @@ import { handlePing } from "./ping/ping.handler";
 import { handleVerify } from "./verify/verify.handler";
 import { hasRoleVerified } from "../shared/utils/roles";
 import type { GuildChatInputCommandInteraction } from "../shared/types/GuildChatInputCommandType";
+import { handlePeriod } from "./period/period.handler";
 
 export const handleCommands = (env: Env): void => {
 	harmonyClient.on("interactionCreate", async (interaction) => {
@@ -47,6 +48,9 @@ export const handleCommands = (env: Env): void => {
 						return;
 					case CommandNames.COURSES:
 						await handleCourses(guildInteraction);
+						return;
+					case CommandNames.PERIOD:
+						await handlePeriod(guildInteraction);
 						return;
 					default:
 						throw new CommandNotFoundError(guildInteraction.commandName);

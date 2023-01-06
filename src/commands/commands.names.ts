@@ -1,9 +1,10 @@
 export enum CommandNames {
 	ADD = "add",
-	PING = "ping",
-	KICK = "kick",
-	VERIFY = "verify",
-	JOIN = "join",
-	LEAVE = "leave",
 	COURSES = "courses",
+	JOIN = "join",
+	KICK = "kick",
+	LEAVE = "leave",
+	PERIOD = "period",
+	PING = "ping",
+	VERIFY = "verify",
 }
