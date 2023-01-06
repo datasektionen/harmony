@@ -24,7 +24,7 @@ export const handlePeriodRoles = async (
 			.map((member) => updateMember(interaction, member, period))
 	);
 	await interaction.editReply({
-		content: "Successfully updated your period roles!",
+		content: "Successfully updated all period roles!",
 	});
 };
 
@@ -44,7 +44,7 @@ async function updateMember(
 
 	const memberYear = getGradeYear(year);
 	// Only manage periods for people in first, second or third year
-	if (memberYear < 1 || memberYear > 3) return;
+	if (memberYear < 1 || memberYear > 4) return;
 
 	await handleChannelAlias(
 		`y${memberYear}p${period}`,
