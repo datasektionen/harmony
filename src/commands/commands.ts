@@ -1,3 +1,4 @@
+import { communityCommand } from "./community/community.command";
 import { coursesCommand } from "./courses/courses.command";
 import { joinCommand } from "./join/join.command";
 import { leaveCommand } from "./leave/leave.command";
@@ -13,6 +14,7 @@ export const getOfficialBotCommands = (): SlashCommandBuilder[] => [
 	createVerifyCommand(),
 	periodCommand,
 	mottagningsmodeCommand,
+	communityCommand,
 ];
 
 export const getLightBotCommands = (): SlashCommandBuilder[] => [
