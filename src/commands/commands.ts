@@ -1,3 +1,4 @@
+import { communityCommand } from "./community/community.command";
 import { coursesCommand } from "./courses/courses.command";
 import { joinCommand } from "./join/join.command";
 import { leaveCommand } from "./leave/leave.command";
@@ -10,5 +11,6 @@ export const officialBotCommands = [
 	leaveCommand,
 	verifyCommand,
 	periodCommand,
+	communityCommand,
 ];
 export const lightBotCommands = [verifyCommand];
