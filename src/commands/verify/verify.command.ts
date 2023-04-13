@@ -34,3 +34,15 @@ verifyCommand.addSubcommand((subcommand) =>
 				.setRequired(true)
 		)
 );
+
+verifyCommand.addSubcommand((subcommand) =>
+	subcommand
+		.setName(VerifySubcommandNames.NOLLAN)
+		.setDescription("Verifiera dig på servern med den hemliga koden du fick från din dadda")
+		.addStringOption((option) =>
+			option
+				.setName(VerifySubmitVariables.VERIFICATION_CODE)
+				.setDescription("Den hemliga koden du fick från din dadda")
+				.setRequired(true)
+		)
+);

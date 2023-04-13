@@ -93,3 +93,8 @@ export async function setPingRoles(user: User, guild: Guild): Promise<void> {
 	const pingRoles = ["StudyInfo", "ChapterInfo", "SponsoredInfo"];
 	await Promise.all(pingRoles.map((role) => setRole(user, role, guild)));
 }
+
+export async function setNollegruppRoles(user: User, guild: Guild): Promise<void> {
+	const nollegruppRoles = ["A", "B", "C", "D", "E", "F", "G", "H"];
+	await Promise.all(nollegruppRoles.map((role) => setRole(user, role, guild)));
+}
