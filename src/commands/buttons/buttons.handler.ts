@@ -1,9 +1,8 @@
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import {
 	ActionRowBuilder,
-	ActionRowData,
-	AnyComponentBuilder,
 	ButtonBuilder,
+	ButtonInteraction,
 	ButtonStyle,
 } from "discord.js";
 
@@ -12,18 +11,36 @@ export const generateButtons = async (
 ): Promise<void> => {
 	if (!interaction.isChatInputCommand()) return;
 
-	if (interaction.commandName === "button") {
-		const row = new ActionRowBuilder().addComponents(
-			new ButtonBuilder()
-				.setCustomId("primary")
-				.setLabel("Click me!")
-				.setStyle(ButtonStyle.Primary)
-		);
+	const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
+		new ButtonBuilder()
+			.setCustomId("SF1688")
+			.setLabel("SF1688")
+			.setStyle(ButtonStyle.Primary)
+	);
 
-		await interaction.reply({
-			content: "I think you should,",
-			ephemeral: true,
-			components: [row],
-		});
-	}
+	await interaction.reply({
+		content: "I think you should,",
+		components: [row],
+	});
+};
+
+export const handleButtonInteraction = async (
+	interaction: ButtonInteraction
+): Promise<void> => {
+	// Change the style of the button component,
+	// that triggered this interaction
+	interaction.component.setStyle("DANGER");
+
+	// Respond to the interaction,
+	// and send updated components to the Discord API
+	interaction.update({
+		components: interaction.message.components,
+	});
+
+	// Respond to the interaction,
+	// and send updated component to the Discord API
+	interaction.update({
+		components: [new MessageActionRow().addComponents(interaction.component)],
+	});
+	await interaction.reply({ ephemeral: true, content: "Hej Herman :)" });
 };
