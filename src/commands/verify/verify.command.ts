@@ -3,6 +3,7 @@ import { CommandNames } from "../commands.names";
 import { VerifyBeginVariables } from "./subcommands/begin/verify-begin.variables";
 import { VerifySubmitVariables } from "./subcommands/submit/verify-submit.variables";
 import { VerifySubcommandNames } from "./verify-subcommands.names";
+import { VerifyNollanVariables } from "./subcommands/nollan/verify-nollan.variables"
 
 export const verifyCommand = new SlashCommandBuilder()
 	.setName(CommandNames.VERIFY)
@@ -35,13 +36,15 @@ verifyCommand.addSubcommand((subcommand) =>
 		)
 );
 
+// let clone: SlashCommandBuilder = Object.assign(Object.create(Object.getPrototypeOf(verifyCommand)), verifyCommand)
+
 verifyCommand.addSubcommand((subcommand) =>
 	subcommand
 		.setName(VerifySubcommandNames.NOLLAN)
 		.setDescription("Verifiera dig på servern med den hemliga koden du fick från din dadda")
 		.addStringOption((option) =>
 			option
-				.setName(VerifySubmitVariables.VERIFICATION_CODE)
+				.setName(VerifyNollanVariables.NOLLE_KOD)
 				.setDescription("Den hemliga koden du fick från din dadda")
 				.setRequired(true)
 		)

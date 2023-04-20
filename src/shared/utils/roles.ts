@@ -1,6 +1,8 @@
 import { Guild, User } from "discord.js";
 import { getGuildMember } from "./guild";
 import { getHodisUser } from "./hodis";
+import { NollegruppRoles } from "../assets/mottagning/nolle_codes";
+import { verifyNolleCode } from "./verify_nolle_code";
 
 export async function hasRole(
 	user: User,
@@ -47,6 +49,7 @@ export async function setRoleVerified(user: User, guild: Guild): Promise<void> {
 	await setRole(user, process.env.DISCORD_VERIFIED_ROLE as string, guild);
 }
 
+// Should spell with "o" instead of "0"
 export async function setN0llanRole(
 	user: User,
 	kthId: string,
@@ -94,7 +97,14 @@ export async function setPingRoles(user: User, guild: Guild): Promise<void> {
 	await Promise.all(pingRoles.map((role) => setRole(user, role, guild)));
 }
 
-export async function setNollegruppRoles(user: User, guild: Guild): Promise<void> {
-	const nollegruppRoles = ["A", "B", "C", "D", "E", "F", "G", "H"];
-	await Promise.all(nollegruppRoles.map((role) => setRole(user, role, guild)));
+export async function setNollegruppRoles(user: User, code: string, guild: Guild): Promise<void> {
+	const validNollegruppRoleNames = verifyNolleCode(code);
+	if (!validNollegruppRoleNames)
+		throw new Error("Invalid code!")
+
+	try {
+		await setRole(user, validNollegruppRoleNames[0], guild); // Real group name
+	} catch {
+		await setRole(user, validNollegruppRoleNames[1], guild); // "Grupp X"
+	}
 }
