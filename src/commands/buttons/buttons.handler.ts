@@ -27,20 +27,7 @@ export const generateButtons = async (
 export const handleButtonInteraction = async (
 	interaction: ButtonInteraction
 ): Promise<void> => {
-	// Change the style of the button component,
-	// that triggered this interaction
-	interaction.component.setStyle("DANGER");
-
 	// Respond to the interaction,
-	// and send updated components to the Discord API
-	interaction.update({
-		components: interaction.message.components,
-	});
-
-	// Respond to the interaction,
-	// and send updated component to the Discord API
-	interaction.update({
-		components: [new MessageActionRow().addComponents(interaction.component)],
-	});
-	await interaction.reply({ ephemeral: true, content: "Hej Herman :)" });
+	// TODO: This message should inform the user about whether they're joining or leaving
+	await interaction.reply({ ephemeral: true, content: "Hej Herman :)" }); 
 };
