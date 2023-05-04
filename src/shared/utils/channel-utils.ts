@@ -1,6 +1,6 @@
-import { ForumChannel, GuildBasedChannel, TextChannel } from "discord.js";
+import { ForumChannel, GuildBasedChannel, TextChannel, } from "discord.js";
 import { AliasName } from "../alias-mappings";
-import { GuildChatInputCommandInteraction } from "../types/GuildChatInputCommandType";
+import { GuildButtonOrCommandInteraction } from "../types/GuildButtonOrCommandInteraction"; 
 import { getAliasChannels } from "./read-alias-mappings";
 import { validCourseCode } from "./valid-course-code";
 
@@ -15,10 +15,10 @@ export const isCourseChannel = (channel?: GuildBasedChannel): boolean => {
 
 export const handleChannelAlias = async (
 	alias: string,
-	interaction: GuildChatInputCommandInteraction,
+	interaction: GuildButtonOrCommandInteraction,
 	actionCallback: (
 		channel: CourseChannel,
-		interaction: GuildChatInputCommandInteraction
+		interaction: GuildButtonOrCommandInteraction,
 	) => Promise<void>,
 	noInteraction?: boolean
 ): Promise<void> => {
@@ -56,10 +56,10 @@ export const handleChannelAlias = async (
 
 export const handleChannel = async (
 	courseCode: string,
-	interaction: GuildChatInputCommandInteraction,
+	interaction: GuildButtonOrCommandInteraction,
 	actionCallback: (
 		channel: ForumChannel | TextChannel,
-		interaction: GuildChatInputCommandInteraction
+		interaction: GuildButtonOrCommandInteraction
 	) => Promise<void>
 ): Promise<void> => {
 	await interaction.deferReply({ ephemeral: true });

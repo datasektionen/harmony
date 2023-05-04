@@ -10,6 +10,7 @@ import { handlePing } from "./ping/ping.handler";
 import { handleVerify } from "./verify/verify.handler";
 import { hasRoleVerified } from "../shared/utils/roles";
 import type { GuildChatInputCommandInteraction } from "../shared/types/GuildChatInputCommandType";
+import type { GuildButtonInteraction } from "../shared/types/GuildButtonInteraction";
 import { handlePeriod } from "./period/period.handler";
 import {
 	generateButtons,
@@ -24,7 +25,7 @@ export const handleCommands = (env: Env): void => {
 				interaction as GuildChatInputCommandInteraction
 			);
 		} else if (interaction.isButton()) {
-			await handleButtonInteraction(interaction as ButtonInteraction);
+			await handleButtonInteraction(interaction as GuildButtonInteraction);
 		} else {
 			return;
 		}
