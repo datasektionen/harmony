@@ -16,7 +16,6 @@ import {
 	generateButtons,
 	handleButtonInteraction,
 } from "./buttons/buttons.handler";
-import { ButtonInteraction } from "discord.js";
 
 export const handleCommands = (env: Env): void => {
 	harmonyClient.on("interactionCreate", async (interaction) => {

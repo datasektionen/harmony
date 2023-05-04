@@ -4,11 +4,10 @@ import { joinChannel } from "../join/join.handler";
 import {
 	ActionRowBuilder,
 	ButtonBuilder,
-	ButtonInteraction,
 	ButtonStyle,
 } from "discord.js";
 
-import { AliasName, mappings } from "../../shared/alias-mappings";
+import { AliasName } from "../../shared/alias-mappings";
 import { ButtonAliases } from "./buttons.properties";
 import { aliasExists } from "../../shared/utils/read-alias-mappings";
 import { handleChannel, handleChannelAlias } from "../../shared/utils/channel-utils";
@@ -44,10 +43,10 @@ export const handleButtonInteraction = async (
 
 function createAliasButtons(aliases: AliasName[]): ActionRowBuilder<ButtonBuilder>[] {
 	const BUTTONS_PER_ROW = 3;
-	let rows = []
+	const rows = []
 	let row = new ActionRowBuilder<ButtonBuilder>();
-	for (const [_, alias] of Object.entries(aliases)) {		
-		let buttonLabel = alias.charAt(0).toUpperCase() + alias.slice(1);
+	for (const [, alias] of Object.entries(aliases)) {		
+		const buttonLabel = alias.charAt(0).toUpperCase() + alias.slice(1);
 		row.addComponents(
 			new ButtonBuilder()
 				.setCustomId(alias)
