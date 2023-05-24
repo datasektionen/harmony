@@ -1,6 +1,7 @@
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import { GuildButtonInteraction } from "../../shared/types/GuildButtonInteraction";
 import { joinChannel } from "../join/join.handler";
+import { leaveChannel } from  "../leave/leave.handler";
 import {
 	ActionRowBuilder,
 	ButtonBuilder,
@@ -10,7 +11,7 @@ import {
 import { AliasName } from "../../shared/alias-mappings";
 import { ButtonAliases } from "./buttons.properties";
 import { aliasExists } from "../../shared/utils/read-alias-mappings";
-import { handleChannel, handleChannelAlias } from "../../shared/utils/channel-utils";
+import { handleChannel, handleChannelAlias, isMemberOfAlias } from "../../shared/utils/channel-utils";
 
 export const generateButtons = async (
 	interaction: GuildChatInputCommandInteraction
@@ -20,7 +21,7 @@ export const generateButtons = async (
 	const buttons = createAliasButtons(ButtonAliases);
 
 	await interaction.reply({
-		ephemeral: true,
+		//ephemeral: true,
 		components: buttons,
 	});
 };
@@ -30,15 +31,17 @@ export const handleButtonInteraction = async (
 ): Promise<void> => {
 	// Respond to the interaction,
 	// TODO: This message should inform the user about whether they're joining or leaving
-
 	const courseCode = interaction.customId;
-
-	if (aliasExists(courseCode as AliasName)) {
-		return await handleChannelAlias(courseCode, interaction, joinChannel);
+	const alias = courseCode as AliasName;
+	if (aliasExists(alias)) {
+		await interaction.deferReply({ephemeral: true});
+		const joining = !await isMemberOfAlias(interaction.guild, interaction.user.id, alias);
+		const action = joining ? joinChannel : leaveChannel;
+		const actionVerb = joining ? "joined" : "left";
+		await handleChannelAlias(alias, interaction, action, undefined, actionVerb);
+	} else {
+		await handleChannel(courseCode, interaction, joinChannel);
 	}
-	return await handleChannel(courseCode, interaction, joinChannel);
-
-	//await interaction.reply({ ephemeral: true, content: `${interaction.customId}` });
 };
 
 function createAliasButtons(aliases: AliasName[]): ActionRowBuilder<ButtonBuilder>[] {

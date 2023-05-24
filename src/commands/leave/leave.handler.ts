@@ -23,7 +23,7 @@ export const handleLeave = async (
 	return await handleChannel(courseCode, interaction, leaveChannel);
 };
 
-const leaveChannel = async (
+export const leaveChannel = async (
 	channel: CourseChannel,
 	interaction: GuildButtonOrCommandInteraction
 ): Promise<void> => {
