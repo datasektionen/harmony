@@ -41,13 +41,27 @@ export const handleChannelAlias = async (
 		return;
 	}
 
+	const couldViewChannel = new Collection<CourseChannel, boolean>();
+	for (const channel of channels.values()) {
+		couldViewChannel.set(channel, userCanViewChannel(interaction.user.id, channel));
+	}
+
 	const promises = channels.map((channel) =>
 		actionCallback(channel as CourseChannel, interaction)
 	);
 	await Promise.allSettled(promises);
+
+	let updateCount = 0;
+	for (const channel of channels.values()) {
+		const oldPermission = couldViewChannel.get(channel);
+		const newPermission = userCanViewChannel(interaction.user.id, channel);
+		if (oldPermission != newPermission) {
+			updateCount += 1;
+		}
+	}
 	if (!noInteraction && !interaction.replied) {
 		await interaction.editReply({
-			content: `Successfully updated your visibility for \`${alias}\`! (${channels.size}) channels ${updateVerbPastTense}`,
+			content: `Successfully updated your visibility for \`${alias}\`! (${updateCount}) channels ${updateVerbPastTense}`,
 		});
 	}
 	return;
