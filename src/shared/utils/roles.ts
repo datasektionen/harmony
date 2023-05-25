@@ -1,7 +1,6 @@
 import { Guild, User } from "discord.js";
 import { getGuildMember } from "./guild";
 import { getHodisUser } from "./hodis";
-import { NollegruppRoles } from "../assets/mottagning/nolle_codes";
 import { verifyNolleCode } from "./verify_nolle_code";
 
 export async function hasRole(
@@ -97,10 +96,13 @@ export async function setPingRoles(user: User, guild: Guild): Promise<void> {
 	await Promise.all(pingRoles.map((role) => setRole(user, role, guild)));
 }
 
-export async function setNollegruppRoles(user: User, code: string, guild: Guild): Promise<void> {
+export async function setNollegruppRoles(
+	user: User,
+	code: string,
+	guild: Guild
+): Promise<void> {
 	const validNollegruppRoleNames = verifyNolleCode(code);
-	if (!validNollegruppRoleNames)
-		throw new Error("Invalid code!")
+	if (!validNollegruppRoleNames) throw new Error("Invalid code!");
 
 	try {
 		await setRole(user, validNollegruppRoleNames[0], guild); // Real group name
