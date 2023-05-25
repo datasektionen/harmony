@@ -8,7 +8,6 @@ import {
 } from "../../../../shared/utils/roles";
 import { verifyNolleCode } from "../../../../shared/utils/verify_nolle_code";
 import { joinChannel } from "../../../join/join.handler";
-import { messageIsToken } from "../util";
 import { VerifyNollanVariables } from "./verify-nollan.variables";
 
 export const handleVerifyNollan = async (

@@ -1,7 +1,6 @@
 import { Guild, User } from "discord.js";
 import { getGuildMember } from "./guild";
 import { getHodisUser } from "./hodis";
-import { verifyNolleCode } from "./verify_nolle_code";
 
 export async function hasRole(
 	user: User,
