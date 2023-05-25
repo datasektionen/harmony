@@ -4,13 +4,14 @@ import { handleCommunityJoin } from "./subcommands/join/community-join.handler";
 import { handleCommunityLeave } from "./subcommands/leave/community-leave.handler";
 import { CommunitySubcommandNames } from "./community-subcommands.names";
 import { CommunityVariables } from "./subcommands/community.variables";
-import { isCommunity } from "./subcommands/utils";
+import { communityCategoryHeader, isCommunity } from "./subcommands/utils";
 
 export const handleCommunity = async (
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	const { options } = interaction;
 	await interaction.deferReply({ ephemeral: true });
+
 	const messageText = options.getString(CommunityVariables.COMMUNITY, true);
 	if (!isCommunity(messageText)) {
 		await interaction.editReply({
@@ -19,13 +20,15 @@ export const handleCommunity = async (
 		return;
 	}
 
-	const subCommandName = interaction.options.getSubcommand(true);
+	// Convert to a correct community category name
+	const community = communityCategoryHeader(messageText);
 
+	const subCommandName = interaction.options.getSubcommand(true);
 	switch (subCommandName) {
 		case CommunitySubcommandNames.JOIN:
-			return await handleCommunityJoin(interaction, messageText);
+			return await handleCommunityJoin(interaction, community);
 		case CommunitySubcommandNames.LEAVE:
-			return await handleCommunityLeave(interaction, messageText);
+			return await handleCommunityLeave(interaction, community);
 		default:
 			throw new CommandNotFoundError(interaction.commandName);
 	}

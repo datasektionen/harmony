@@ -7,7 +7,7 @@ export const communityCommand = new SlashCommandBuilder()
 	.setName(CommandNames.COMMUNITY)
 	.setDescription(
 		// Note: General command description is not shown if the command has sub command.
-		//       This description is therefore not show to users.
+		//       This description is therefore not shown to users.
 		"Join or leave a data science community category"
 	);
 
@@ -18,7 +18,7 @@ communityCommand.addSubcommand((subcommand) =>
 		.addStringOption((option) =>
 			option
 				.setName(CommunityVariables.COMMUNITY)
-				.setDescription("A valid data science community (e.g. D-22, D-21)")
+				.setDescription("A valid data science community (e.g. D-21, D-22)")
 				.setRequired(true)
 		)
 );
@@ -30,7 +30,7 @@ communityCommand.addSubcommand((subcommand) =>
 		.addStringOption((option) =>
 			option
 				.setName(CommunityVariables.COMMUNITY)
-				.setDescription("A valid data science community (e.g. D-22, D-21)")
+				.setDescription("A valid data science community (e.g. D-21, D-22)")
 				.setRequired(true)
 		)
 );
