@@ -1,13 +1,15 @@
+import { Guild, User } from "discord.js";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
-import { leaveCategoryChannels } from "../../../../shared/utils/category";
+import { getChannelsInCategory } from "../../../../shared/utils/category";
+import { joinableCommunityChannels } from "../utils";
 
 export const handleCommunityLeave = async (
 	interaction: GuildChatInputCommandInteraction,
-	messageText: string
+	community: string
 ): Promise<void> => {
 	const { guild, user } = interaction;
 	try {
-		await leaveCategoryChannels(messageText, guild, user);
+		await leaveCommunity(community, guild, user);
 		await interaction.editReply({
 			content: "Left community",
 		});
@@ -22,4 +24,22 @@ export const handleCommunityLeave = async (
 			});
 		}
 	}
+};
+
+const leaveCommunity = async (
+	searchCategory: string,
+	guild: Guild,
+	user: User
+): Promise<void> => {
+	const channels = await getChannelsInCategory(
+		guild,
+		searchCategory,
+		joinableCommunityChannels
+	);
+
+	channels.forEach(async (channel) => {
+		await channel?.permissionOverwrites.create(user, {
+			ViewChannel: false,
+		});
+	});
 };

@@ -1,13 +1,15 @@
+import { Guild, User } from "discord.js";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
-import { joinCategoryChannels } from "../../../../shared/utils/category";
+import { getChannelsInCategory } from "../../../../shared/utils/category";
+import { joinableCommunityChannels } from "../utils";
 
 export const handleCommunityJoin = async (
 	interaction: GuildChatInputCommandInteraction,
-	messageText: string
+	community: string
 ): Promise<void> => {
 	const { guild, user } = interaction;
 	try {
-		await joinCategoryChannels(messageText, guild, user);
+		await joinCommunity(community, guild, user);
 		await interaction.editReply({
 			content: "Joined community",
 		});
@@ -22,4 +24,22 @@ export const handleCommunityJoin = async (
 			});
 		}
 	}
+};
+
+const joinCommunity = async (
+	searchCategory: string,
+	guild: Guild,
+	user: User
+): Promise<void> => {
+	const channels = await getChannelsInCategory(
+		guild,
+		searchCategory,
+		joinableCommunityChannels
+	);
+
+	channels.forEach(async (channel) => {
+		await channel?.permissionOverwrites.create(user, {
+			ViewChannel: true,
+		});
+	});
 };
