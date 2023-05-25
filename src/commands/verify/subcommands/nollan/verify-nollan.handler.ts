@@ -6,6 +6,7 @@ import {
 	setYearRoles,
 	setNollegruppRoles,
 } from "../../../../shared/utils/roles";
+import { verifyNolleCode } from "../../../../shared/utils/verify_nolle_code";
 import { joinChannel } from "../../../join/join.handler";
 import { messageIsToken } from "../util";
 import { VerifyNollanVariables } from "./verify-nollan.variables";
@@ -16,8 +17,10 @@ export const handleVerifyNollan = async (
 	const { user, options } = interaction;
 	await interaction.deferReply({ ephemeral: true });
 	const code = options.getString(VerifyNollanVariables.NOLLE_KOD, true);
-
-	if (!messageIsToken(code)) {
+	
+	// Check if code is valid
+	const validNollegruppRoleNames = verifyNolleCode(code);
+	if (!validNollegruppRoleNames) {
 		await interaction.editReply({
 			content: "Ogiltig kod",
 		});
@@ -50,12 +53,9 @@ export const handleVerifyNollan = async (
 		await setPingRoles(user, interaction.guild);
 
 		// Add n0llegrupps roles
-		await setNollegruppRoles(user, code, interaction.guild);
+		await setNollegruppRoles(user, validNollegruppRoleNames, interaction.guild);
 
-		await interaction.editReply({
-			content:
-				"You are now verified! You have been added to all course channels of your current year. \nYou can join or leave course channels with the `/join` and `/leave` command. \nFor more info, see: <#1020725853157593219>",
-		});
+		await interaction.editReply({ content: "Välkommen nøllan! Du har nu blivit tillagd i några kanaler, inklusive kanaler för de första kurserna. Ha kul med schlemandet!" });
 	} catch (error) {
 		console.warn(error);
 		await interaction.editReply({

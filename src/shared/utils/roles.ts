@@ -96,17 +96,10 @@ export async function setPingRoles(user: User, guild: Guild): Promise<void> {
 	await Promise.all(pingRoles.map((role) => setRole(user, role, guild)));
 }
 
-export async function setNollegruppRoles(
-	user: User,
-	code: string,
-	guild: Guild
-): Promise<void> {
-	const validNollegruppRoleNames = verifyNolleCode(code);
-	if (!validNollegruppRoleNames) throw new Error("Invalid code!");
-
+export async function setNollegruppRoles(user: User, roleName: string[], guild: Guild): Promise<void> {
 	try {
-		await setRole(user, validNollegruppRoleNames[0], guild); // Real group name
+		await setRole(user, roleName[0], guild); // Real group name
 	} catch {
-		await setRole(user, validNollegruppRoleNames[1], guild); // "Grupp X"
+		await setRole(user, roleName[1], guild); // "Grupp X"
 	}
 }
