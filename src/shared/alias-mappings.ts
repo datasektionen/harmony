@@ -1,4 +1,5 @@
 export enum AliasName {
+  YEAR0 = "year0",
 	YEAR1 = "year1",
 	Y1P1 = "y1p1",
 	Y1P2 = "y1p2",
@@ -24,6 +25,9 @@ export enum AliasName {
 }
 
 export const mappings: Record<AliasName, string[]> = {
+  [AliasName.YEAR0]: [
+		"sf0003",
+	],
 	[AliasName.YEAR1]: [
 		"da1600",
 		"dd1337",
