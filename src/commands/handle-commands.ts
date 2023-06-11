@@ -23,6 +23,7 @@ export const handleCommands = (env: Env): void => {
 				throw new Error("Guild not found!");
 			}
 			const guildInteraction = interaction as GuildChatInputCommandInteraction;
+
 			// Checks which commands the user should have access to:
 			if (await hasRoleVerified(interaction.user, interaction.guild)) {
 				switch (interaction.commandName) {
