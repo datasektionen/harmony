@@ -1,21 +1,23 @@
 import { Env, harmonyClient } from "..";
 import { getGuild } from "../shared/utils/guild";
-import { lightBotCommands, officialBotCommands } from "./commands";
+import { getLightBotCommands, getOfficialBotCommands } from "./commands";
 
 export const registerCommands = async (env: Env): Promise<void> => {
 	if (env === "development") {
 		const guild = await getGuild();
 		await Promise.all(
-			officialBotCommands.map((command) => guild.commands.create(command))
+			(await getOfficialBotCommands()).map((
+				command) => guild.commands.create(command)
+			)
 		);
 	} else if (env === "production") {
 		await Promise.all(
-			officialBotCommands.map((command) =>
+			(await getOfficialBotCommands()).map((command) =>
 				harmonyClient.application?.commands?.create(command)
 			)
 		);
 		await Promise.all(
-			lightBotCommands.map((command) =>
+			(await getLightBotCommands()).map((command) =>
 				harmonyClient.application?.commands?.create(command)
 			)
 		);
