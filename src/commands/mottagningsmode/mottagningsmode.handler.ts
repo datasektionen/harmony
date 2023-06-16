@@ -1,27 +1,23 @@
-import { Env } from "../..";
+import { CommandNotFoundError } from "../../shared/errors/command-not-founder.error";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
-import { getState, setState } from "../../shared/utils/state";
-import { registerCommands } from "../register-commands";
+import { MottagningsmodeSubcommandNames } from "./mottagningsmode-subcommands.names";
+import { handleMottagningsmodeDisable } from "./subcommands/disable/mottagningsmode-disable.handler";
+import { handleMottagningsmodeEnable } from "./subcommands/enable/mottagningsmode-enable.handler";
+import { handleMottagningsmodeStatus } from "./subcommands/status/mottagningsmode-status.handler";
 
-// Switches between mottagningsmode and default mode
 export const handleMottagningsmode = async (
     interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
-    interaction.deferReply();
-    let mode = await getState(); // Read current mode
-    const env = process.env.NODE_ENV as Env;
+    const subCommandName = interaction.options.getSubcommand(true);
 
-    // Switch to opposite mode
-    if (mode === "default")
-        mode = "mottagning";
-    else {
-        mode = "default";
+    switch (subCommandName) {
+        case MottagningsmodeSubcommandNames.STATUS:
+            return await handleMottagningsmodeStatus(interaction);
+        case MottagningsmodeSubcommandNames.ENABLE:
+            return await handleMottagningsmodeEnable(interaction);
+        case MottagningsmodeSubcommandNames.DISABLE:
+            return await handleMottagningsmodeDisable(interaction);
+        default:
+            throw new CommandNotFoundError(interaction.commandName);
     }
-    await setState(mode);
-    await registerCommands(env);
-
-    await interaction.editReply({
-        content: "Harmony is now in mode: " + mode,
-    });
-    return;
-};
+}
