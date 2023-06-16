@@ -14,7 +14,7 @@ export const handleVerify = async (
 	const light = clientIsLight(interaction.client)
 
 	if (await isMottagningsModeActive()) {
-		let validCommands = Object.values(VerifySubcommandNames) as string[]; // Get all valid command names
+		const validCommands = Object.values(VerifySubcommandNames) as string[]; // Get all valid command names
 		if (subCommandName === VerifySubcommandNames.NOLLAN && !light)
 			return await handleVerifyNollan(interaction);
 		else if (validCommands.includes(subCommandName))
