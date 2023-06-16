@@ -14,6 +14,7 @@ export const getOfficialBotCommands = async (): Promise<SlashCommandBuilder[]> =
 	periodCommand,
 	mottagningsmodeCommand,
 ];
+
 export const getLightBotCommands = async (): Promise<SlashCommandBuilder[]> => [
-	await createVerifyCommand(true)
+	await createVerifyCommand(true),
 ];

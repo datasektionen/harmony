@@ -6,11 +6,10 @@ import { VerifySubcommandNames } from "./verify-subcommands.names";
 import { VerifyNollanVariables } from "./subcommands/nollan/verify-nollan.variables"
 import { isMottagningsModeActive } from "../../shared/utils/state";
 
-export const verifyCommand = createVerifyCommand();
-
 export async function createVerifyCommand(lightClient?: boolean): Promise<SlashCommandBuilder> {
 	lightClient = lightClient ?? false
 	const mottagning = await isMottagningsModeActive();
+
 	const command = new SlashCommandBuilder()
 		.setName(CommandNames.VERIFY)
 		.setDescription(
@@ -18,7 +17,6 @@ export async function createVerifyCommand(lightClient?: boolean): Promise<SlashC
 			//       This description is therefore not show to users.
 			"Verify that you are a KTH student via @kth.se email"
 		);
-
 
 	if (!mottagning || lightClient) {
 		command.addSubcommand((subcommand) =>
@@ -48,7 +46,6 @@ export async function createVerifyCommand(lightClient?: boolean): Promise<SlashC
 		);
 	} else if (!lightClient) {
 		// let clone: SlashCommandBuilder = Object.assign(Object.create(Object.getPrototypeOf(verifyCommand)), verifyCommand)
-
 		command.addSubcommand((subcommand) =>
 			subcommand
 				.setName(VerifySubcommandNames.NOLLAN)
@@ -60,7 +57,7 @@ export async function createVerifyCommand(lightClient?: boolean): Promise<SlashC
 						.setRequired(true)
 				)
 		);
-
 	}
+
 	return command
 }

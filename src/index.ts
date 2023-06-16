@@ -65,6 +65,6 @@ async function main(): Promise<void> {
 	}
 	console.log("Logged in");
 	handleCommands(env);
-	registerCommands(env);
+	await registerCommands(env);
 }
 main();

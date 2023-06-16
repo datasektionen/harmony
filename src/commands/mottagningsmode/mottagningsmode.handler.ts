@@ -7,6 +7,7 @@ import { registerCommands } from "../register-commands";
 export const handleMottagningsmode = async (
     interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
+    interaction.deferReply();
     let mode = await getState(); // Read current mode
     const env = process.env.NODE_ENV as Env;
 
@@ -17,9 +18,9 @@ export const handleMottagningsmode = async (
         mode = "default";
     }
     await setState(mode);
-    registerCommands(env);
+    await registerCommands(env);
 
-    await interaction.reply({
+    await interaction.editReply({
         content: "Harmony is now in mode: " + mode,
     });
     return;
