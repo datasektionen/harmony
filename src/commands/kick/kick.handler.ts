@@ -15,7 +15,7 @@ export const handleKick = async (
 
 	if (!targetMembers) {
 		await interaction.reply({
-			content: "No users with that role found",
+			content: "No users with that role found.",
 			ephemeral: true,
 		});
 		return;
