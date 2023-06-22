@@ -7,7 +7,7 @@ export const handleMottagningsmodeStatus = async (
     await interaction.deferReply({ ephemeral: true });
     const mode = await getState(); // Read current mode
     await interaction.editReply({
-        content: "Harmony is currently in mode: " + mode,
+        content: `Harmony is currently in mode: ${mode}.`,
     });
     return;
 };

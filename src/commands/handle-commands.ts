@@ -67,7 +67,7 @@ export const handleCommands = (env: Env): void => {
 					return;
 				} else if (validCommands.includes(guildInteraction.commandName)) {
 					const permissionDeniedMessage = await hasRoleN0llan(guildInteraction.user, guildInteraction.guild) ?
-						"Du är allt för schleeemig, kom tillbaka senare"
+						"Du är allt för schleeemig, kom tillbaka senare."
 						: "Permission denied!\nYou first need to verify yourself using the '/verify' command.";
 					await guildInteraction.reply({
 						content: permissionDeniedMessage,

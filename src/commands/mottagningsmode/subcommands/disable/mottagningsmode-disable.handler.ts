@@ -12,11 +12,11 @@ export const handleMottagningsmodeDisable = async (
     if (mottagningOn) {
         toggleMottagningsmode();
         await interaction.editReply({
-            content: "Harmony is now in mode: " + newMode,
+            content: `Harmony is now in mode: ${newMode}.`
         });
     } else {
         await interaction.editReply({
-            content: "Mottagnings-mode is already disabled"
+            content: "Mottagnings-mode is already disabled."
         });
     }
     return;
