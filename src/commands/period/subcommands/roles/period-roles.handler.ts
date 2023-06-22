@@ -43,7 +43,7 @@ async function updateMember(
 	const year = parseInt(yearString) + 2000;
 
 	const memberYear = getGradeYear(year);
-	// Only manage periods for people in first, second or third year
+	// Only manage periods for people in first to fifth year
 	if (memberYear < 1 || memberYear > 5) return;
 
 	await handleChannelAlias(
