@@ -13,7 +13,7 @@ export const handleVerify = async (
 	const subCommandName = interaction.options.getSubcommand(true);
 	const light = clientIsLight(interaction.client)
 
-	if (await isMottagningsModeActive()) {
+	if (isMottagningsModeActive()) {
 		const validCommands = Object.values(VerifySubcommandNames) as string[]; // Get all valid command names
 		if (subCommandName === VerifySubcommandNames.NOLLAN && !light)
 			return await handleVerifyNollan(interaction);

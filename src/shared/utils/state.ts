@@ -19,6 +19,6 @@ export async function setState(mode: string): Promise<void> {
     }
 }
 
-export async function isMottagningsModeActive(): Promise<boolean> {
+export function isMottagningsModeActive(): boolean {
     return getState() === "mottagning";
 }

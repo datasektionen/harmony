@@ -8,7 +8,7 @@ import { isMottagningsModeActive } from "../../shared/utils/state";
 
 export async function createVerifyCommand(lightClient?: boolean): Promise<SlashCommandBuilder> {
 	lightClient = lightClient ?? false
-	const mottagning = await isMottagningsModeActive();
+	const mottagning = isMottagningsModeActive();
 
 	const command = new SlashCommandBuilder()
 		.setName(CommandNames.VERIFY)

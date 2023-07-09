@@ -16,7 +16,7 @@ export const handleMottagningsmodeSet = async (
     enable: boolean
 ): Promise<void> => {
     await interaction.deferReply();
-    const mottagningOn = await isMottagningsModeActive(); // Read current mode
+    const mottagningOn = isMottagningsModeActive(); // Read current mode
     const newMode = enable ? "mottagning" : "default";
     const shouldToggle = mottagningOn != enable;
 
