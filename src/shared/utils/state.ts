@@ -2,7 +2,7 @@ import { writeFile } from "fs/promises";
 import stateData from "../../shared/assets/state.json"
 
 // Get state/mode Harmony is in (default or mottagnings-mode)
-export async function getState(): Promise<string> {
+export function getState(): string {
     return stateData.state;
 }
 
@@ -20,5 +20,5 @@ export async function setState(mode: string): Promise<void> {
 }
 
 export async function isMottagningsModeActive(): Promise<boolean> {
-    return await getState() === "mottagning";
+    return getState() === "mottagning";
 }

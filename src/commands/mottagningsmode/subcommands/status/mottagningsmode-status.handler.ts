@@ -5,7 +5,7 @@ export const handleMottagningsmodeStatus = async (
     interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
     await interaction.deferReply({ ephemeral: true });
-    const mode = await getState(); // Read current mode
+    const mode = getState(); // Read current mode
     await interaction.editReply({
         content: `Harmony is currently in mode: ${mode}.`,
     });
