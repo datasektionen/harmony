@@ -4,7 +4,7 @@ import { handleChannel } from "../../../../shared/utils/channel-utils";
 import {
 	setPingRoles,
 	setYearRoles,
-	setNollegruppRoles,
+	setRole,
 	setN0llanRole,
 	hasRoleN0llan,
 } from "../../../../shared/utils/roles";
@@ -28,31 +28,30 @@ export const handleVerifyNollan = async (
 	}
 
 	// Check if code is valid
-	const validNollegruppRoleNames = verifyNolleCode(code);
-	if (!validNollegruppRoleNames) {
+	const validNollegruppRoleName = verifyNolleCode(code);
+	if (!validNollegruppRoleName) {
 		await interaction.editReply({
-			content: "Ogiltig kod! Vänligen skriv in den personliga kod du fått från din Dadda.\nOm du har problem kontakta din Dadda!",
+			content: "Ogiltig kod! Vänligen skriv in den personliga kod du fått från din Dadda.\nOm du har problem, kontakta din Dadda!",
 		});
 		return;
 	}
 
 	try {
 		await addRolesOrRollback(user, interaction.guild, async (user, guild) => {
-			//await setRoleVerified(user, guild);
 			await setN0llanRole(user, guild);
 
 			const year = new Date().getFullYear();
-			const yearRole = "D-" + year.toString()[2] + year.toString()[3];
+			const yearRole = "D-" + year.toString().slice(2);
 
 			await setYearRoles(user, yearRole, guild);
 
 			// Add all ping roles
 			await setPingRoles(user, guild);
 
-			// Add n0llegrupps roles
-			await setNollegruppRoles(user, validNollegruppRoleNames, guild);
+			// Add n0llegrupp roles
+			await setRole(user, validNollegruppRoleName, guild);
 		});
-		
+
 		// Join all pre-NG courses
 		// sf0003n, sf1671n, dd1337n, da1600n, dd1390n
 		// n-suffix is nolle-version
@@ -67,8 +66,6 @@ export const handleVerifyNollan = async (
 				}
 			})
 		);
-
-
 
 		await interaction.editReply({ content: "Välkommen nøllan! Du har nu blivit tillagd i några kanaler, inklusive kanaler för de första kurserna. Ha kul med schlemandet!" });
 	} catch (error) {

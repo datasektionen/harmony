@@ -3,9 +3,8 @@ import { writeFile, readFile } from "fs/promises";
 // Get state/mode Harmony is in (default or mottagnings-mode)
 export async function getState(): Promise<string> {
     let mode = "default";
-    let data;
     try {
-        data = await readFile("./src/shared/assets/mode.txt");
+        let data = await readFile("./src/shared/assets/mode.txt");
         mode = data.toString();
     } catch (err) { // File does not exist -> default mode
         console.warn(err);
