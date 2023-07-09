@@ -1,23 +1,17 @@
-import { writeFile, readFile } from "fs/promises";
+import { writeFile } from "fs/promises";
+import stateData from "../../shared/assets/state.json"
 
 // Get state/mode Harmony is in (default or mottagnings-mode)
 export async function getState(): Promise<string> {
-    let mode = "default";
-    try {
-        const data = await readFile("./src/shared/assets/mode.txt");
-        mode = data.toString();
-    } catch (err) { // File does not exist -> default mode
-        console.warn(err);
-        console.log("Mottagnings-mode file may be missing. It will now be created if it doesn't exist.");
-        setState(mode);
-    }
-    return mode;
+    return stateData.state;
 }
 
 export async function setState(mode: string): Promise<void> {
     console.log(`Setting mode to ${mode}.`);
+    stateData.state = mode;
+    const newStateData = JSON.stringify(stateData);
     try {
-        await writeFile("./src/shared/assets/mode.txt", mode);
+        await writeFile("./src/shared/assets/state.json", newStateData);
         console.log(`Mode successfully set to ${mode}.`);
     } catch (err) {
         console.warn(err);

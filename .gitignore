@@ -129,4 +129,4 @@ dist
 *.env
 
 # Mottagnings-mode state
-src/shared/assets/mode.txt
+src/shared/assets/state.json
