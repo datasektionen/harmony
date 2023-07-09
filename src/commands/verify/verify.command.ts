@@ -6,7 +6,7 @@ import { VerifySubcommandNames } from "./verify-subcommands.names";
 import { VerifyNollanVariables } from "./subcommands/nollan/verify-nollan.variables"
 import { isMottagningsModeActive } from "../../shared/utils/state";
 
-export async function createVerifyCommand(lightClient?: boolean): Promise<SlashCommandBuilder> {
+export function createVerifyCommand(lightClient?: boolean): SlashCommandBuilder {
 	lightClient = lightClient ?? false
 	const mottagning = isMottagningsModeActive();
 

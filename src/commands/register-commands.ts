@@ -12,7 +12,7 @@ export const registerCommands = async (env: Env): Promise<void> => {
 		// await clearAppCommands(harmonyLightClient.application?.commands);
 		const guild = await getGuild();
 		await Promise.all(
-			(await getOfficialBotCommands()).map((
+			getOfficialBotCommands().map((
 				command) => guild.commands.create(command)
 			)
 		);
@@ -22,12 +22,12 @@ export const registerCommands = async (env: Env): Promise<void> => {
 		//
 		// await clearGuildCommands((await getGuild()).commands);
 		await Promise.all(
-			(await getOfficialBotCommands()).map((command) =>
+			getOfficialBotCommands().map((command) =>
 				harmonyClient.application?.commands?.create(command)
 			)
 		);
 		await Promise.all(
-			(await getLightBotCommands()).map((command) =>
+			getLightBotCommands().map((command) =>
 				harmonyLightClient.application?.commands?.create(command)
 			)
 		);

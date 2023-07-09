@@ -6,15 +6,15 @@ import { createVerifyCommand } from "./verify/verify.command";
 import { mottagningsmodeCommand } from "./mottagningsmode/mottagningsmode.command";
 import { SlashCommandBuilder } from "discord.js";
 
-export const getOfficialBotCommands = async (): Promise<SlashCommandBuilder[]> => [
+export const getOfficialBotCommands = (): SlashCommandBuilder[] => [
 	coursesCommand,
 	joinCommand,
 	leaveCommand,
-	await createVerifyCommand(),
+	createVerifyCommand(),
 	periodCommand,
 	mottagningsmodeCommand,
 ];
 
-export const getLightBotCommands = async (): Promise<SlashCommandBuilder[]> => [
-	await createVerifyCommand(true),
+export const getLightBotCommands = (): SlashCommandBuilder[] => [
+	createVerifyCommand(true),
 ];
