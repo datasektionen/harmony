@@ -127,6 +127,3 @@ dist
 # End of https://www.toptal.com/developers/gitignore/api/node,vscode
 
 *.env
-
-# Mottagnings-mode state
-src/shared/assets/state.json
