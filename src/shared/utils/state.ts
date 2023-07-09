@@ -4,7 +4,7 @@ import { writeFile, readFile } from "fs/promises";
 export async function getState(): Promise<string> {
     let mode = "default";
     try {
-        let data = await readFile("./src/shared/assets/mode.txt");
+        const data = await readFile("./src/shared/assets/mode.txt");
         mode = data.toString();
     } catch (err) { // File does not exist -> default mode
         console.warn(err);
