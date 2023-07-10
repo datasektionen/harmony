@@ -60,10 +60,15 @@ export const handleChannel = async (
 	actionCallback: (
 		channel: ForumChannel | TextChannel,
 		interaction: GuildChatInputCommandInteraction
-	) => Promise<void>
+	) => Promise<void>,
+	noInteraction?: boolean
 ): Promise<void> => {
-	await interaction.deferReply({ ephemeral: true });
-	if (!validCourseCode(courseCode)) {
+	noInteraction = noInteraction ?? false;
+	if (!noInteraction) {
+		await interaction.deferReply({ ephemeral: true });
+	}
+
+	if (!noInteraction && !validCourseCode(courseCode)) {
 		await interaction.editReply({
 			content: "The course code is not valid",
 		});
@@ -75,7 +80,7 @@ export const handleChannel = async (
 		name.startsWith(courseCode)
 	);
 
-	if (!isCourseChannel(channel)) {
+	if (!noInteraction && !isCourseChannel(channel)) {
 		await interaction.editReply({
 			content:
 				"Channel not found, please contact a mod if you think this is a mistake",
@@ -85,10 +90,12 @@ export const handleChannel = async (
 
 	await actionCallback(channel as CourseChannel, interaction);
 
-	await interaction.editReply({
-		content: `Successfully updated visibility for \`#${
-			(channel as CourseChannel).name
-		}\``,
-	});
+	if (!noInteraction) {
+		await interaction.editReply({
+			content: `Successfully updated visibility for \`#${
+				(channel as CourseChannel).name
+			}\``,
+		});
+	}
 	return;
 };
