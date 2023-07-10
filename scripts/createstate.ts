@@ -1,4 +1,5 @@
-import { writeFile, readFile } from "fs/promises";
+import { mkdir, writeFile, readFile } from "fs/promises";
+import { dirname } from "path"
 
 const STATE_PATH = process.env.STATE_PATH ?? 'src/shared/assets/state.json'
 const DEFAULT_MODE = process.env.DEFAULT_STATE ?? 'mottagning'
@@ -23,9 +24,12 @@ async function main() {
 
         console.log("state.json file may be missing: It will now be created if it doesn't exist.");
         try {
+            const dir = dirname(STATE_PATH);
+            await mkdir(dir, { recursive: true });
             await writeFile(STATE_PATH, json);
             console.log(`state.json file created: Mode successfully set to ${DEFAULT_MODE}.`);
         } catch (err) {
+            console.warn(err);
             console.warn('Failed to create state.json file.');
         }
     }

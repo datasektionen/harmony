@@ -20,9 +20,11 @@ async function main() {
         try {
             await unlink(STATE_PATH)
         } catch (err) {
+            console.warn(err);
             console.warn("Error uncountered while deleting state.json. File may not have been deleted.")
         }
     } catch (err) { // File does not exist -> default mode
+        console.warn(err);
         console.log("state.json file may not exist. It cannot be deleted.");
     }
 }
