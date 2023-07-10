@@ -1,7 +1,7 @@
 import { writeFile, readFile } from "fs/promises";
 
-const STATE_PATH = process.env.STATE_PATH
-const DEFAULT_MODE = process.env.DEFAULT_STATE
+const STATE_PATH = process.env.STATE_PATH ?? 'src/shared/assets/state.json'
+const DEFAULT_MODE = process.env.DEFAULT_STATE ?? 'mottagning'
 
 async function main() {
     const TEMP_MODE = process.argv.includes('--temp')

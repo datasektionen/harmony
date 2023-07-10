@@ -1,6 +1,6 @@
 import { writeFile, readFile, unlink } from "fs/promises";
 
-const STATE_PATH = process.env.STATE_PATH
+const STATE_PATH = process.env.STATE_PATH ?? 'src/shared/assets/state.json'
 
 async function main() {
     const TEMP_MODE = process.argv.includes('--temp')
