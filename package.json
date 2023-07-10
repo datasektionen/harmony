@@ -12,10 +12,10 @@
 		"postlint": "npm run deletestate -- --temp",
 		"start": "node -r dotenv/config ./dist/index.js",
 		"dev": "./node_modules/nodemon/bin/nodemon.js -e ts  --exec \"tsc && node -r dotenv/config ./dist/index.js\"",
+		"prebuild": "npm run createstate",
 		"build": "tsc",
 		"watch": "tsc --watch",
-		"prebs": "npm run createstate",
-		"bs": "tsc && node -r dotenv/config ./dist/index.js"
+		"bs": "npm run build && node -r dotenv/config ./dist/index.js"
 	},
 	"repository": {
 		"type": "git",
