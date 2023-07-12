@@ -20,6 +20,11 @@ export enum AliasName {
 	Y4P2 = "y4p2",
 	Y4P3 = "y4p3",
 	Y4P4 = "y4p4",
+	YEAR5 = "year5",
+	Y5P1 = "y5p1",
+	Y5P2 = "y5p2",
+	Y5P3 = "y5p3",
+	Y5P4 = "y5p4",
 	CS_MASTER = "cs-master",
 	ALL = "all",
 }
@@ -86,6 +91,13 @@ export const mappings: Record<AliasName, string[]> = {
 	[AliasName.Y4P2]: ["dd2380", "da2210", "dd2300"],
 	[AliasName.Y4P3]: ["dd2300"],
 	[AliasName.Y4P4]: ["dd2300"],
+	[AliasName.YEAR5]: [
+		"dd2300",
+	],
+	[AliasName.Y5P1]: ["dd2300"],
+	[AliasName.Y5P2]: ["dd2300"],
+	[AliasName.Y5P3]: ["dd2300"],
+	[AliasName.Y5P4]: ["dd2300"],
 	[AliasName.CS_MASTER]: [
 		"da2210",
 		"dd2300",
