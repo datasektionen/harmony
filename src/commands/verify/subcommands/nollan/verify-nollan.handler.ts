@@ -2,8 +2,6 @@ import { GuildChatInputCommandInteraction } from "../../../../shared/types/Guild
 import { addRolesOrRollback } from "../../../../shared/utils/atomic-roles";
 import { handleChannel } from "../../../../shared/utils/channel-utils";
 import {
-	setPingRoles,
-	setYearRoles,
 	setRole,
 	setN0llanRole,
 	hasRoleN0llan,
