@@ -2,8 +2,6 @@ import { GuildChatInputCommandInteraction } from "../../../../shared/types/Guild
 import { addRolesOrRollback } from "../../../../shared/utils/atomic-roles";
 import { handleChannel } from "../../../../shared/utils/channel-utils";
 import {
-	setPingRoles,
-	setYearRoles,
 	setRole,
 	setN0llanRole,
 	hasRoleN0llan,
@@ -39,14 +37,6 @@ export const handleVerifyNollan = async (
 	try {
 		await addRolesOrRollback(user, interaction.guild, async (user, guild) => {
 			await setN0llanRole(user, guild);
-
-			const year = new Date().getFullYear();
-			const yearRole = "D-" + year.toString().slice(2);
-
-			await setYearRoles(user, yearRole, guild);
-
-			// Add all ping roles
-			await setPingRoles(user, guild);
 
 			// Add n0llegrupp roles
 			await setRole(user, validNollegruppRoleName, guild);
