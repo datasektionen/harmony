@@ -40,14 +40,6 @@ export const handleVerifyNollan = async (
 		await addRolesOrRollback(user, interaction.guild, async (user, guild) => {
 			await setN0llanRole(user, guild);
 
-			const year = new Date().getFullYear();
-			const yearRole = "D-" + year.toString().slice(2);
-
-			await setYearRoles(user, yearRole, guild);
-
-			// Add all ping roles
-			await setPingRoles(user, guild);
-
 			// Add n0llegrupp roles
 			await setRole(user, validNollegruppRoleName, guild);
 		});

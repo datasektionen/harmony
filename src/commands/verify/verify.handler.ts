@@ -18,7 +18,7 @@ export const handleVerify = async (
 		if (subCommandName === VerifySubcommandNames.NOLLAN && !light)
 			return await handleVerifyNollan(interaction);
 		else if (validCommands.includes(subCommandName))
-			interaction.reply({ content: "You can't verify with KTH email during the reception!", ephemeral: true })
+			interaction.reply({ content: "...!̵̾͌.̸͆̅.̷̊̈́.̵͛̋Ë̵̔R̴̓͝R̵̐OR come bẵ̴c̴̋̔k̷̽ 16 se͆͠p̸̀̐t̵̐͑e̶̓̌m̵ber...ERR̶̈́͋Ô̶͂R̷̾͝.̷̊́.̶̓͒.̵͊̑.̸̑ERROR...", ephemeral: true })
 		else
 			throw new CommandNotFoundError(interaction.commandName);
 	} else {
