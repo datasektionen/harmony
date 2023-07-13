@@ -5,6 +5,9 @@ import {
 	setRole,
 	setN0llanRole,
 	hasRoleN0llan,
+	setRoleVerified,
+	setPingRoles,
+	setIntisRoles,
 } from "../../../../shared/utils/roles";
 import { verifyNolleCode } from "../../../../shared/utils/verify_nolle_code";
 import { joinChannel } from "../../../join/join.handler";
@@ -24,22 +27,34 @@ export const handleVerifyNollan = async (
 		});
 		return;
 	}
-
-	// Check if code is valid
-	const validNollegruppRoleName = verifyNolleCode(code);
-	if (!validNollegruppRoleName) {
-		await interaction.editReply({
-			content: "Ogiltig kod! Vänligen skriv in den personliga kod du fått från din Dadda.\nOm du har problem, kontakta din Dadda!",
-		});
-		return;
-	}
-
+	
 	try {
+		// Handle roles for international students
+		if (code === process.env.CODE_INTIS) {
+			await addRolesOrRollback(user, interaction.guild, async (user, guild) => {
+				await setRoleVerified(user, guild);
+				await setIntisRoles(user, guild);	
+				await setPingRoles(user, guild);
+			});
+			await interaction.editReply({
+				content: "You are now verified! \nYou can join or leave course channels with the `/join` and `/leave` command. \nFor more info, see: <#1020725853157593219>"
+			});
+			return;
+		}
+		// User is not international student
+	
+		// Check if nolle-code is valid
+		const validNollegruppRoleName = verifyNolleCode(code);
+		if (!validNollegruppRoleName) {
+			await interaction.editReply({
+				content: "Error: Invalid code!\nVänligen skriv in den personliga kod du fått från din Dadda.\nOm du har problem, kontakta din Dadda!",
+			});
+			return;
+		}
+		
 		await addRolesOrRollback(user, interaction.guild, async (user, guild) => {
 			await setN0llanRole(user, guild);
-
-			// Add n0llegrupp roles
-			await setRole(user, validNollegruppRoleName, guild);
+			await setRole(user, validNollegruppRoleName, guild); // Add n0llegrupp role
 		});
 
 		// Join all pre-NG courses
@@ -57,7 +72,9 @@ export const handleVerifyNollan = async (
 			})
 		);
 
-		await interaction.editReply({ content: "Välkommen nøllan! Du har nu blivit tillagd i några kanaler, inklusive kanaler för de första kurserna. Ha kul med schlemandet!" });
+		await interaction.editReply({
+			content: "Välkommen nøllan! Du har nu blivit tillagd i några kanaler, inklusive kanaler för de första kurserna. Ha kul med schlemandet!"
+		});
 	} catch (error) {
 		console.warn(error);
 		await interaction.editReply({
