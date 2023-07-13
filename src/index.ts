@@ -1,4 +1,5 @@
 import { Client as DiscordClient, GatewayIntentBits } from "discord.js";
+import { LightClient as LightDiscordClient } from "./shared/types/light-client";
 import { handleCommands } from "./commands/handle-commands";
 import { registerCommands } from "./commands/register-commands";
 
@@ -47,7 +48,7 @@ export const harmonyClient = new DiscordClient({
 	intents,
 });
 
-export const harmonyLightClient = new DiscordClient({
+export const harmonyLightClient = new LightDiscordClient({
 	intents,
 });
 
@@ -64,6 +65,6 @@ async function main(): Promise<void> {
 	}
 	console.log("Logged in");
 	handleCommands(env);
-	registerCommands(env);
+	await registerCommands(env);
 }
 main();

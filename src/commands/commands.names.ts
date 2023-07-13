@@ -7,5 +7,6 @@ export enum CommandNames {
 	PERIOD = "period",
 	PING = "ping",
 	VERIFY = "verify",
+	MOTTAGNINGSMODE = "mottagningsmode",
 	COMMUNITY = "community",
 }

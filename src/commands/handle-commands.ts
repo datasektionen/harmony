@@ -8,9 +8,10 @@ import { handleKick } from "./kick/kick.handler";
 import { handleLeave } from "./leave/leave.handler";
 import { handlePing } from "./ping/ping.handler";
 import { handleVerify } from "./verify/verify.handler";
-import { hasRoleVerified } from "../shared/utils/roles";
+import { hasRoleN0llan, hasRoleVerified } from "../shared/utils/roles";
 import type { GuildChatInputCommandInteraction } from "../shared/types/GuildChatInputCommandType";
 import { handlePeriod } from "./period/period.handler";
+import { handleMottagningsmode } from "./mottagningsmode/mottagningsmode.handler";
 import { handleCommunity } from "./community/community.handler";
 
 export const handleCommands = (env: Env): void => {
@@ -23,6 +24,7 @@ export const handleCommands = (env: Env): void => {
 				throw new Error("Guild not found!");
 			}
 			const guildInteraction = interaction as GuildChatInputCommandInteraction;
+
 			// Checks which commands the user should have access to:
 			if (await hasRoleVerified(interaction.user, interaction.guild)) {
 				switch (interaction.commandName) {
@@ -53,6 +55,9 @@ export const handleCommands = (env: Env): void => {
 					case CommandNames.PERIOD:
 						await handlePeriod(guildInteraction);
 						return;
+					case CommandNames.MOTTAGNINGSMODE:
+						await handleMottagningsmode(guildInteraction);
+						return;
 					case CommandNames.COMMUNITY:
 						await handleCommunity(guildInteraction);
 						return;
@@ -65,9 +70,11 @@ export const handleCommands = (env: Env): void => {
 					await handleVerify(guildInteraction);
 					return;
 				} else if (validCommands.includes(guildInteraction.commandName)) {
+					const permissionDeniedMessage = await hasRoleN0llan(guildInteraction.user, guildInteraction.guild) ?
+						"Du är allt för schleeemig, kom tillbaka senare."
+						: "Permission denied!\nYou first need to verify yourself using the '/verify' command.";
 					await guildInteraction.reply({
-						content:
-							"Permission denied!\nYou first need to verify yourself using the '/verify begin' command.",
+						content: permissionDeniedMessage,
 						ephemeral: true,
 					});
 				} else {
