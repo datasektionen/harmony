@@ -1,7 +1,9 @@
-const STATE_IMPORT_PATH = "../../../" + (process.env.STATE_PATH ?? "src/shared/assets/state.json")
-const STATE_WRITE_PATH = "./" + (process.env.STATE_PATH ?? "src/shared/assets/state.json")
-
 import { writeFile } from "fs/promises";
+import env from "../env";
+
+const STATE_IMPORT_PATH = "../../../" + (env.STATE_PATH ?? "src/shared/assets/state.json")
+const STATE_WRITE_PATH = "./" + (env.STATE_PATH ?? "src/shared/assets/state.json")
+
 const stateData = require(STATE_IMPORT_PATH) // eslint-disable-line @typescript-eslint/no-var-requires
 
 // Get state/mode Harmony is in (default or mottagnings-mode)

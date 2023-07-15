@@ -1,4 +1,5 @@
 import { tokenDiscord, tokenEmail } from "../../../../database-config";
+import env from "../../../../shared/env";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 import { generateToken } from "../../../../shared/utils/generate-token";
 import { sendMail } from "../../../../shared/utils/mail";
@@ -17,10 +18,9 @@ export const handleVerifyBegin = async (
 		});
 		return;
 	}
-	const token = generateToken(parseInt(process.env.TOKEN_SIZE as string));
-	const timeout = parseInt(process.env.TOKEN_TIMEOUT as string);
-	await tokenDiscord.set(token, user.id, timeout);
-	await tokenEmail.set(token, messageText, timeout);
+	const token = generateToken(env.TOKEN_SIZE);
+	await tokenDiscord.set(token, user.id, env.TOKEN_TIMEOUT);
+	await tokenEmail.set(token, messageText, env.TOKEN_TIMEOUT);
 
 	try {
 		const result = await sendMail(messageText, token);

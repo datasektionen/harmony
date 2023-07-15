@@ -1,4 +1,5 @@
 import { Guild, User } from "discord.js";
+import env from "../env";
 import { getGuildMember } from "./guild";
 import { getHodisUser } from "./hodis";
 
@@ -21,7 +22,7 @@ export async function hasRoleVerified(
 ): Promise<boolean> {
 	return await hasRole(
 		user,
-		process.env.DISCORD_VERIFIED_ROLE as string,
+		env.DISCORD_VERIFIED_ROLE,
 		guild
 	);
 }
@@ -60,7 +61,7 @@ export async function setRole(
  * and, if successful, assigns them the Verified role.
  */
 export async function setRoleVerified(user: User, guild: Guild): Promise<void> {
-	await setRole(user, process.env.DISCORD_VERIFIED_ROLE as string, guild);
+	await setRole(user, env.DISCORD_VERIFIED_ROLE, guild);
 }
 
 // Should spell with "o" instead of "0"

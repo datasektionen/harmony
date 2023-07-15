@@ -1,5 +1,7 @@
+import env from "../env";
+
 export async function sendMail(to: string, token: string): Promise<string> {
-	const res = await fetch(`${process.env.SPAM_URL}/api/sendmail`, {
+	const res = await fetch(`${env.SPAM_URL}/api/sendmail`, {
 		method: "post",
 		headers: {
 			"Content-Type": "application/json",
@@ -9,7 +11,7 @@ export async function sendMail(to: string, token: string): Promise<string> {
 			to,
 			subject: "Discord Verification",
 			html: `<p>Verification code: ${token}</p>`,
-			key: process.env.SPAM_API_TOKEN,
+			key: env.SPAM_API_TOKEN,
 		}),
 	});
 	const text = await res.text();

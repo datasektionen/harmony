@@ -1,4 +1,4 @@
-import { Env, harmonyClient, harmonyLightClient } from "..";
+import { harmonyClient, harmonyLightClient } from "..";
 import { CommandNotFoundError } from "../shared/errors/command-not-founder.error";
 import { handleAdd } from "./add/add.handler";
 import { CommandNames } from "./commands.names";
@@ -12,8 +12,9 @@ import { hasRoleN0llan, hasRoleVerified } from "../shared/utils/roles";
 import type { GuildChatInputCommandInteraction } from "../shared/types/GuildChatInputCommandType";
 import { handlePeriod } from "./period/period.handler";
 import { handleMottagningsmode } from "./mottagningsmode/mottagningsmode.handler";
+import env from "../shared/env";
 
-export const handleCommands = (env: Env): void => {
+export const handleCommands = (): void => {
 	harmonyClient.on("interactionCreate", async (interaction) => {
 		if (!interaction.isChatInputCommand()) {
 			return;
@@ -82,7 +83,7 @@ export const handleCommands = (env: Env): void => {
 		}
 	});
 
-	if (env === "production") {
+	if (env.NODE_ENV === "production") {
 		harmonyLightClient.on("interactionCreate", async (interaction) => {
 			if (!interaction.isChatInputCommand()) {
 				return;

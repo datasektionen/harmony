@@ -1,3 +1,4 @@
+import env from "../../../../shared/env";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 import { addRolesOrRollback } from "../../../../shared/utils/atomic-roles";
 import { handleChannel } from "../../../../shared/utils/channel-utils";
@@ -27,13 +28,13 @@ export const handleVerifyNollan = async (
 		});
 		return;
 	}
-	
+
 	try {
 		// Handle roles for international students
-		if (code === process.env.CODE_INTIS) {
+		if (code === env.CODE_INTIS) {
 			await addRolesOrRollback(user, interaction.guild, async (user, guild) => {
 				await setRoleVerified(user, guild);
-				await setIntisRoles(user, guild);	
+				await setIntisRoles(user, guild);
 				await setPingRoles(user, guild);
 			});
 			await interaction.editReply({
@@ -42,7 +43,7 @@ export const handleVerifyNollan = async (
 			return;
 		}
 		// User is not international student
-	
+
 		// Check if nolle-code is valid
 		const validNollegruppRoleName = verifyNolleCode(code);
 		if (!validNollegruppRoleName) {
@@ -51,7 +52,7 @@ export const handleVerifyNollan = async (
 			});
 			return;
 		}
-		
+
 		await addRolesOrRollback(user, interaction.guild, async (user, guild) => {
 			await setN0llanRole(user, guild);
 			await setRole(user, validNollegruppRoleName, guild); // Add n0llegrupp role
