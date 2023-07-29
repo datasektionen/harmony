@@ -8,4 +8,5 @@ export enum CommandNames {
 	PING = "ping",
 	VERIFY = "verify",
 	MOTTAGNINGSMODE = "mottagningsmode",
+	COMMUNITY = "community",
 }
