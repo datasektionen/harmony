@@ -11,7 +11,7 @@ export const handleCommunityLeave = async (
 	try {
 		await leaveCommunity(community, guild, user);
 		await interaction.editReply({
-			content: "Left community",
+			content: `Left community ${community}!`,
 		});
 	} catch (error) {
 		if (error instanceof Error) {
@@ -20,7 +20,7 @@ export const handleCommunityLeave = async (
 			});
 		} else {
 			await interaction.editReply({
-				content: "An unkown error occured",
+				content: "An unknown error occured!",
 			});
 		}
 	}

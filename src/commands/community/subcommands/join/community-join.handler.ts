@@ -11,7 +11,7 @@ export const handleCommunityJoin = async (
 	try {
 		await joinCommunity(community, guild, user);
 		await interaction.editReply({
-			content: "Joined community",
+			content: `Joined community ${community}!`,
 		});
 	} catch (error) {
 		if (error instanceof Error) {
@@ -20,7 +20,7 @@ export const handleCommunityJoin = async (
 			});
 		} else {
 			await interaction.editReply({
-				content: "An unkown error occured",
+				content: "An unknown error occured!",
 			});
 		}
 	}

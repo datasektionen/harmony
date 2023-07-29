@@ -11,7 +11,7 @@ export const getChannelsInCategory = async (
 	channelsFilter?: string[]
 ): Promise<Collection<string, NonThreadGuildBasedChannel | null>> => {
 	const allGuildChannels = await guild.channels.fetch();
-	if (!allGuildChannels) throw new Error("No channels found");
+	if (!allGuildChannels) throw new Error("No channels found!");
 
 	const category = allGuildChannels
 		.filter(
@@ -20,7 +20,7 @@ export const getChannelsInCategory = async (
 				channel?.name.includes(categoryName)
 		)
 		.first();
-	if (!category) throw new Error("Category not found");
+	if (!category) throw new Error("Sorry! Could not find the requested channel category.");
 
 	const channels = allGuildChannels.filter(
 		(channel) =>

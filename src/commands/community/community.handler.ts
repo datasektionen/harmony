@@ -4,24 +4,32 @@ import { handleCommunityJoin } from "./subcommands/join/community-join.handler";
 import { handleCommunityLeave } from "./subcommands/leave/community-leave.handler";
 import { CommunitySubcommandNames } from "./community-subcommands.names";
 import { CommunityVariables } from "./subcommands/community.variables";
-import { communityCategoryHeader, isCommunity } from "./subcommands/utils";
+import { communityCategoryHeader, communityYear, isCommunity } from "./subcommands/utils";
+import { hasRole } from "../../shared/utils/roles";
 
 export const handleCommunity = async (
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
-	const { options } = interaction;
+	const { options, user, guild } = interaction;
 	await interaction.deferReply({ ephemeral: true });
 
-	const messageText = options.getString(CommunityVariables.COMMUNITY, true);
-	if (!isCommunity(messageText)) {
+	const communityParam = options.getString(CommunityVariables.COMMUNITY, true);
+	const communityRole = "D-" + communityYear(communityParam);
+	if (!isCommunity(communityParam)) {
 		await interaction.editReply({
 			content: "Please enter a valid community name.",
+		});
+		return;
+	} else if (await hasRole(user, communityRole, guild)) {
+		// Check if user is native member of the community 
+		await interaction.editReply({
+			content: "You cannot join or leave your own class community!"
 		});
 		return;
 	}
 
 	// Convert to a correct community category name
-	const community = communityCategoryHeader(messageText);
+	const community = communityCategoryHeader(communityParam);
 
 	const subCommandName = interaction.options.getSubcommand(true);
 	switch (subCommandName) {
