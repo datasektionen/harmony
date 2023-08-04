@@ -49,11 +49,11 @@ export function createVerifyCommand(lightClient?: boolean): SlashCommandBuilder 
 		command.addSubcommand((subcommand) =>
 			subcommand
 				.setName(VerifySubcommandNames.NOLLAN)
-				.setDescription("Verifiera dig på servern med den hemliga koden du fick från din dadda")
+				.setDescription("Verifiera dig på servern med den hemliga koden du fått från din dadda")
 				.addStringOption((option) =>
 					option
 						.setName(VerifyNollanVariables.NOLLE_KOD)
-						.setDescription("Den hemliga koden du fick från din dadda")
+						.setDescription("Den hemliga koden du fått från din dadda")
 						.setRequired(true)
 				)
 		);
