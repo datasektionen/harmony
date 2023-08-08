@@ -1,5 +1,5 @@
 export enum AliasName {
-  YEAR0 = "year0",
+    YEAR0 = "year0",
 	YEAR1 = "year1",
 	Y1P1 = "y1p1",
 	Y1P2 = "y1p2",
@@ -137,4 +137,10 @@ export const mappings: Record<AliasName, string[]> = {
 		"dd2440",
 		"ik2218",
 	],
+	// Old course code mappings
+	["dd1360" as AliasName]: ["dd1366"],
+	["sf1924" as AliasName]: ["sf1935"],
+	["sf1925" as AliasName]: ["sf1935"],
+	["dd1369" as AliasName]: ["dd1367"],
+	["dh1620" as AliasName]: ["dh1623"],
 };
