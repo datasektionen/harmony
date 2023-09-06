@@ -1,5 +1,3 @@
-import axios from "axios";
-
 type HodisUser = {
 	ugKthid: string;
 	uid: string;
@@ -12,6 +10,6 @@ type HodisUser = {
 };
 
 export async function getHodisUser(kthId: string): Promise<HodisUser> {
-	return (await axios.get(`https://hodis.datasektionen.se/uid/${kthId.toLowerCase()}`))
-		.data as HodisUser;
+	const res = await fetch(`https://hodis.datasektionen.se/uid/${kthId.toLowerCase()}`);
+	return (await res.json()) as HodisUser;
 }

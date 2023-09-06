@@ -1,4 +1,5 @@
 export enum AliasName {
+    YEAR0 = "year0",
 	YEAR1 = "year1",
 	Y1P1 = "y1p1",
 	Y1P2 = "y1p2",
@@ -19,11 +20,19 @@ export enum AliasName {
 	Y4P2 = "y4p2",
 	Y4P3 = "y4p3",
 	Y4P4 = "y4p4",
+	YEAR5 = "year5",
+	Y5P1 = "y5p1",
+	Y5P2 = "y5p2",
+	Y5P3 = "y5p3",
+	Y5P4 = "y5p4",
 	CS_MASTER = "cs-master",
 	ALL = "all",
 }
 
 export const mappings: Record<AliasName, string[]> = {
+  [AliasName.YEAR0]: [
+		"sf0003",
+	],
 	[AliasName.YEAR1]: [
 		"da1600",
 		"dd1337",
@@ -43,21 +52,19 @@ export const mappings: Record<AliasName, string[]> = {
 	[AliasName.Y1P4]: ["sf1626", "dd1396", "dd1349", "dd1390"],
 	[AliasName.YEAR2]: [
 		"dd1351",
-		"dd1360",
+		"dd1366",
 		"dd1368",
-		"dd1369",
+		"dd1367",
 		"dd1390",
 		"is1500",
 		"me1010",
-		//"sf1547", GLÖM FÖRFAN INTE ATT LÄGGA TILL DENNA UNDER RÄTT PERIOD
+		"sf1547",
 		"sf1935",
-		"sf1626",
-		"dd1354",
 	],
 	[AliasName.Y2P1]: ["me1010", "dd1351", "is1500", "dd1390"],
-	[AliasName.Y2P2]: ["dd1368", "dd1369", "dd1351", "is1500", "dd1390"],
-	[AliasName.Y2P3]: ["dd1360", "sf1626", "dd1354", "dd1369", "dd1390"],
-	[AliasName.Y2P4]: ["dd1360", "dd1369", "dd1390", "sf1935"],
+	[AliasName.Y2P2]: ["dd1368", "dd1367", "dd1351", "is1500", "dd1390"],
+	[AliasName.Y2P3]: ["dd1366", "sf1547", "dd1367", "dd1390"],
+	[AliasName.Y2P4]: ["dd1366", "dd1367", "dd1390", "sf1935"],
 	[AliasName.YEAR3]: [
 		"al1504",
 		"da150x",
@@ -82,6 +89,13 @@ export const mappings: Record<AliasName, string[]> = {
 	[AliasName.Y4P2]: ["dd2380", "da2210", "dd2300"],
 	[AliasName.Y4P3]: ["dd2300"],
 	[AliasName.Y4P4]: ["dd2300"],
+	[AliasName.YEAR5]: [
+		"dd2300",
+	],
+	[AliasName.Y5P1]: ["dd2300"],
+	[AliasName.Y5P2]: ["dd2300"],
+	[AliasName.Y5P3]: ["dd2300"],
+	[AliasName.Y5P4]: ["dd2300"],
 	[AliasName.CS_MASTER]: [
 		"da2210",
 		"dd2300",
@@ -104,12 +118,12 @@ export const mappings: Record<AliasName, string[]> = {
 		"sf1671",
 		"dd1351",
 		"dd1354",
-		"dd1360",
+		"dd1366",
 		"dd1368",
-		"dd1369",
+		"dd1367",
 		"is1500",
 		"me1010",
-		//"sf1547",
+		"sf1547",
 		"sf1935",
 		"al1504",
 		"da150x",
@@ -123,4 +137,10 @@ export const mappings: Record<AliasName, string[]> = {
 		"dd2440",
 		"ik2218",
 	],
+	// Old course code mappings
+	["dd1360" as AliasName]: ["dd1366"],
+	["sf1924" as AliasName]: ["sf1935"],
+	["sf1925" as AliasName]: ["sf1935"],
+	["dd1369" as AliasName]: ["dd1367"],
+	["dh1620" as AliasName]: ["dh1623"],
 };

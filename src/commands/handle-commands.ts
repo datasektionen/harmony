@@ -8,7 +8,7 @@ import { handleKick } from "./kick/kick.handler";
 import { handleLeave } from "./leave/leave.handler";
 import { handlePing } from "./ping/ping.handler";
 import { handleVerify } from "./verify/verify.handler";
-import { hasRoleVerified } from "../shared/utils/roles";
+import { hasRoleN0llan, hasRoleVerified } from "../shared/utils/roles";
 import type { GuildChatInputCommandInteraction } from "../shared/types/GuildChatInputCommandType";
 import type { GuildButtonInteraction } from "../shared/types/GuildButtonInteraction";
 import { handlePeriod } from "./period/period.handler";
@@ -16,6 +16,8 @@ import {
 	generateButtons,
 	handleButtonInteraction,
 } from "./buttons/buttons.handler";
+import { handleMottagningsmode } from "./mottagningsmode/mottagningsmode.handler";
+import { handleCommunity } from "./community/community.handler";
 
 export const handleCommands = (env: Env): void => {
 	harmonyClient.on("interactionCreate", async (interaction) => {
@@ -95,6 +97,12 @@ const handleChatInputCommand = async (
 				case CommandNames.BUTTONS:
 					await generateButtons(guildInteraction);
 					return;
+				case CommandNames.MOTTAGNINGSMODE:
+					await handleMottagningsmode(guildInteraction);
+					return;
+				case CommandNames.COMMUNITY:
+					await handleCommunity(guildInteraction);
+					return;
 				default:
 					throw new CommandNotFoundError(guildInteraction.commandName);
 			}
@@ -104,9 +112,11 @@ const handleChatInputCommand = async (
 				await handleVerify(guildInteraction);
 				return;
 			} else if (validCommands.includes(guildInteraction.commandName)) {
+				const permissionDeniedMessage = await hasRoleN0llan(guildInteraction.user, guildInteraction.guild) ?
+					"Du är allt för schleeemig, kom tillbaka senare."
+					: "Permission denied!\nYou first need to verify yourself using the '/verify' command.";
 				await guildInteraction.reply({
-					content:
-						"Permission denied!\nYou first need to verify yourself using the '/verify begin' command.",
+					content: permissionDeniedMessage,
 					ephemeral: true,
 				});
 			} else {

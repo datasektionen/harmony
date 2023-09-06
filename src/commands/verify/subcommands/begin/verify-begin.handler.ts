@@ -24,16 +24,14 @@ export const handleVerifyBegin = async (
 
 	try {
 		const result = await sendMail(messageText, token);
-		console.log(`Email sent, received response: ${JSON.stringify(result)}`);
+		console.log(`Email sent, received response: ${result}`);
 		await interaction.editReply({
-			content: `Check the inbox of ${messageText} for your verification code: https://webmail.kth.se/ \nSubmit your verification code using the \`/verify submit\` command.`,
+			content: `Check the inbox of ${messageText} for your verification code: <https://webmail.kth.se/>\nSubmit your verification code using the \`/verify submit\` command.`,
 		});
-		return;
 	} catch (error) {
-		console.warn(error);
+		console.error(error);
 		await interaction.editReply({
 			content: "Something went wrong, please try again.",
 		});
-		return;
 	}
 };

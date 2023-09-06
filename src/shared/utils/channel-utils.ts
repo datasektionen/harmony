@@ -21,7 +21,7 @@ export const handleChannelAlias = async (
 		interaction: GuildButtonOrCommandInteraction,
 	) => Promise<void>,
 	noInteraction?: boolean,
-	updateVerbPastTense?: string 
+	updateVerbPastTense?: string
 ): Promise<void> => {
 	noInteraction = noInteraction ?? false;
 	updateVerbPastTense = updateVerbPastTense ?? "updated";
@@ -73,10 +73,15 @@ export const handleChannel = async (
 	actionCallback: (
 		channel: ForumChannel | TextChannel,
 		interaction: GuildButtonOrCommandInteraction
-	) => Promise<void>
+	) => Promise<void>,
+	noInteraction?: boolean
 ): Promise<void> => {
-	await interaction.deferReply({ ephemeral: true });
-	if (!validCourseCode(courseCode)) {
+	noInteraction = noInteraction ?? false;
+	if (!noInteraction) {
+		await interaction.deferReply({ ephemeral: true });
+	}
+
+	if (!noInteraction && !validCourseCode(courseCode)) {
 		await interaction.editReply({
 			content: "The course code is not valid",
 		});
@@ -88,7 +93,7 @@ export const handleChannel = async (
 		name.startsWith(courseCode)
 	);
 
-	if (!isCourseChannel(channel)) {
+	if (!noInteraction && !isCourseChannel(channel)) {
 		await interaction.editReply({
 			content:
 				"Channel not found, please contact a mod if you think this is a mistake",
@@ -98,10 +103,13 @@ export const handleChannel = async (
 
 	await actionCallback(channel as CourseChannel, interaction);
 
-	await interaction.editReply({
-		content: `Successfully updated visibility for \`#${(channel as CourseChannel).name
+	if (!noInteraction) {
+		await interaction.editReply({
+			content: `Successfully updated visibility for \`#${
+				(channel as CourseChannel).name
 			}\``,
-	});
+		});
+	}
 	return;
 };
 
@@ -129,7 +137,7 @@ function channelNameToCourseCode(channelName: string): string {
 }
 
 async function getCourseChannelsByNameCached(guild: Guild, names: Set<string>): Promise<Collection<string, CourseChannel>> {
-	const courseCodeChannelCache = await courseCodeToChannelIdCache(guild, names); 
+	const courseCodeChannelCache = await courseCodeToChannelIdCache(guild, names);
 	const courseChannels = new Collection<string, CourseChannel>();
 	for (const name of names) {
 		const channelId = courseCodeChannelCache.get(name);

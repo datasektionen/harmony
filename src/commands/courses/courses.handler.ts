@@ -9,7 +9,7 @@ export const handleCourses = async (
 	const lines = [];
 	const aliasedChannels: string[] = [];
 	for (const [key, value] of Object.entries(mappings)) {
-		if (value.length === 0) continue;
+		if (value.length === 0 || validCourseCode(key)) continue;
 		lines.push(`**${key}**:\n`);
 		for (let i = 0; i < value.length; i++) {
 			lines.push(`${value[i]}${i === value.length - 1 ? "" : ", "}`);
