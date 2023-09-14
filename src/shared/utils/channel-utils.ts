@@ -61,30 +61,38 @@ export const handleChannel = async (
 		channel: ForumChannel | TextChannel,
 		interaction: GuildChatInputCommandInteraction
 	) => Promise<void>,
-	noInteraction?: boolean
+	noInteraction?: boolean,
+	skipCheckingCourseCode?: boolean,
 ): Promise<void> => {
 	noInteraction = noInteraction ?? false;
 	if (!noInteraction) {
 		await interaction.deferReply({ ephemeral: true });
 	}
 
-	if (!noInteraction && !validCourseCode(courseCode)) {
-		await interaction.editReply({
-			content: "The course code is not valid",
-		});
+	await interaction.guild.channels.fetch();
+	const channel = interaction.guild.channels.cache.find(({ name }) =>
+		name.startsWith(courseCode + "-")
+	);
+
+	// If no course was found, return with a message.
+	// If we skip checking the course code (e.g. in verify-nollan) continue the function
+	// If the course code was invalid, return with a message.
+	if (channel == undefined || (!skipCheckingCourseCode && !validCourseCode(channel.name))) {
+		if (!noInteraction) {
+			await interaction.editReply({
+				content: "The course code is not valid",
+			});
+		}
 		return;
 	}
 
-	await interaction.guild.channels.fetch();
-	const channel = interaction.guild.channels.cache.find(({ name }) =>
-		name.startsWith(courseCode)
-	);
-
-	if (!noInteraction && !isCourseChannel(channel)) {
-		await interaction.editReply({
-			content:
-				"Channel not found, please contact a mod if you think this is a mistake",
-		});
+	if (!isCourseChannel(channel)) {
+		if (!noInteraction) {
+			await interaction.editReply({
+				content:
+					"Channel not found, please contact a mod if you think this is a mistake",
+			});
+		}
 		return;
 	}
 
