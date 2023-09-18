@@ -6,12 +6,12 @@ export const isCommunity = (messageText: string): RegExpMatchArray | null =>
 // Note: these are the ends of channel names without the emoji prefix.
 //       Emoji prefixes might differ from community to community.
 export const joinableCommunityChannels = [
-	"⌡︲allmänt",
-	"⌡︲announcements",
-	"⌡︲portalen",
-	"⌡︲random",
-	"⌡︲citat",
-	"⌡︲röst",
+	"allmänt",
+	"announcements",
+	"portalen",
+	"random",
+	"citat",
+	"röst",
 ];
 
 export const communityCategoryHeader = (messageText: string): string => {
