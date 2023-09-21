@@ -13,7 +13,7 @@ import { ButtonAliases } from "./buttons.properties";
 import { aliasExists } from "../../shared/utils/read-alias-mappings";
 import { handleChannel, handleChannelAlias, isMemberOfAlias } from "../../shared/utils/channel-utils";
 
-export const generateButtons = async (
+export const handleButtons = async (
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	if (!interaction.isChatInputCommand()) return;

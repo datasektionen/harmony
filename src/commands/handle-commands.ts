@@ -13,7 +13,7 @@ import type { GuildChatInputCommandInteraction } from "../shared/types/GuildChat
 import type { GuildButtonInteraction } from "../shared/types/GuildButtonInteraction";
 import { handlePeriod } from "./period/period.handler";
 import {
-	generateButtons,
+	handleButtons,
 	handleButtonInteraction,
 } from "./buttons/buttons.handler";
 
@@ -93,7 +93,7 @@ const handleChatInputCommand = async (
 					await handlePeriod(guildInteraction);
 					return;
 				case CommandNames.BUTTONS:
-					await generateButtons(guildInteraction);
+					await handleButtons(guildInteraction);
 					return;
 				default:
 					throw new CommandNotFoundError(guildInteraction.commandName);
