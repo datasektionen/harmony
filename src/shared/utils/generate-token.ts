@@ -1,4 +1,3 @@
-import base64url from "base64url";
 import { randomBytes } from "crypto";
 
 /**
@@ -9,5 +8,5 @@ import { randomBytes } from "crypto";
  * @returns {String} the Base64URL-encoded token.
  */
 export function generateToken(size: number): string {
-	return base64url(randomBytes(size));
+	return randomBytes(size).toString("base64url");
 }

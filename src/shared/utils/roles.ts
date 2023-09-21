@@ -13,7 +13,7 @@ export async function hasRole(
 
 /**
  * Attempts to resolve the specified User-like data to a {Discord.GuildMember} on the server,
- * and, if successful, checks if they possess the Verified role or not.
+ * and, if successful, checks if they possess the @verified role or not.
  */
 export async function hasRoleVerified(
 	user: User,
@@ -25,6 +25,22 @@ export async function hasRoleVerified(
 		guild
 	);
 }
+
+/**
+ * Attempts to resolve the specified User-like data to a {Discord.GuildMember} on the server,
+ * and, if successful, checks if they possess the @nØllan role or not.
+ */
+export async function hasRoleN0llan(
+	user: User,
+	guild: Guild
+): Promise<boolean> {
+	return await hasRole(
+		user,
+		"nØllan",
+		guild
+	);
+}
+
 
 export async function setRole(
 	user: User,
@@ -47,15 +63,12 @@ export async function setRoleVerified(user: User, guild: Guild): Promise<void> {
 	await setRole(user, process.env.DISCORD_VERIFIED_ROLE as string, guild);
 }
 
+// Should spell with "o" instead of "0"
 export async function setN0llanRole(
 	user: User,
-	kthId: string,
 	guild: Guild
 ): Promise<void> {
-	const hodisUser = await getHodisUser(kthId);
-	if (hodisUser.tag.split(",").includes("D22")) {
-		await setRole(user, "n0llan", guild);
-	}
+	await setRole(user, "nØllan", guild);
 }
 
 export async function extractYearFromUser(kthEmail: string): Promise<{
@@ -82,6 +95,14 @@ export async function setYearRoles(
 	guild: Guild
 ): Promise<void> {
 	await setRole(user, yearTagWithDash, guild);
+	await setRole(user, "Datasektionen", guild);
+}
+
+export async function setIntisRoles(
+	user: User,
+	guild: Guild
+): Promise<void> {
+	await setRole(user, "D-intis", guild);
 	await setRole(user, "Datasektionen", guild);
 }
 
