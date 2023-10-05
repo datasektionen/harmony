@@ -9,4 +9,5 @@ export enum CommandNames {
 	VERIFY = "verify",
 	MOTTAGNINGSMODE = "mottagningsmode",
 	COMMUNITY = "community",
+	TRANSLATE_MSG = "Translate to English",
 }
