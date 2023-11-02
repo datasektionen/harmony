@@ -13,73 +13,88 @@ import type { GuildChatInputCommandInteraction } from "../shared/types/GuildChat
 import { handlePeriod } from "./period/period.handler";
 import { handleMottagningsmode } from "./mottagningsmode/mottagningsmode.handler";
 import { handleCommunity } from "./community/community.handler";
+import { handleTranslateMsg } from "./translate/translateMsg.handler";
 
 export const handleCommands = (env: Env): void => {
 	harmonyClient.on("interactionCreate", async (interaction) => {
-		if (!interaction.isChatInputCommand()) {
-			return;
-		}
 		try {
 			if (!interaction.guild) {
 				throw new Error("Guild not found!");
 			}
-			const guildInteraction = interaction as GuildChatInputCommandInteraction;
 
-			// Checks which commands the user should have access to:
-			if (await hasRoleVerified(interaction.user, interaction.guild)) {
-				switch (interaction.commandName) {
-					case CommandNames.PING:
-						await handlePing(guildInteraction);
+			if (interaction.isChatInputCommand()) {
+				const guildInteraction =
+					interaction as GuildChatInputCommandInteraction;
+
+				// Checks which commands the user should have access to:
+				if (await hasRoleVerified(interaction.user, interaction.guild)) {
+					switch (interaction.commandName) {
+						case CommandNames.PING:
+							await handlePing(guildInteraction);
+							return;
+						case CommandNames.ADD:
+							await handleAdd(guildInteraction);
+							return;
+						case CommandNames.KICK:
+							await handleKick(guildInteraction);
+							break;
+						case CommandNames.VERIFY:
+							await guildInteraction.reply({
+								content: "You are already verified!",
+								ephemeral: true,
+							});
+							return;
+						case CommandNames.JOIN:
+							await handleJoin(guildInteraction);
+							return;
+						case CommandNames.LEAVE:
+							await handleLeave(guildInteraction);
+							return;
+						case CommandNames.COURSES:
+							await handleCourses(guildInteraction);
+							return;
+						case CommandNames.PERIOD:
+							await handlePeriod(guildInteraction);
+							return;
+						case CommandNames.MOTTAGNINGSMODE:
+							await handleMottagningsmode(guildInteraction);
+							return;
+						case CommandNames.COMMUNITY:
+							await handleCommunity(guildInteraction);
+							return;
+						default:
+							throw new CommandNotFoundError(guildInteraction.commandName);
+					}
+				} else {
+					const validCommands = Object.values(CommandNames) as string[]; // Get all valid command names
+					if (guildInteraction.commandName === CommandNames.VERIFY) {
+						await handleVerify(guildInteraction);
 						return;
-					case CommandNames.ADD:
-						await handleAdd(guildInteraction);
-						return;
-					case CommandNames.KICK:
-						await handleKick(guildInteraction);
-						break;
-					case CommandNames.VERIFY:
+					} else if (validCommands.includes(guildInteraction.commandName)) {
+						const permissionDeniedMessage = (await hasRoleN0llan(
+							guildInteraction.user,
+							guildInteraction.guild
+						))
+							? "Du är allt för schleeemig, kom tillbaka senare."
+							: "Permission denied!\nYou first need to verify yourself using the '/verify' command.";
 						await guildInteraction.reply({
-							content: "You are already verified!",
+							content: permissionDeniedMessage,
 							ephemeral: true,
 						});
-						return;
-					case CommandNames.JOIN:
-						await handleJoin(guildInteraction);
-						return;
-					case CommandNames.LEAVE:
-						await handleLeave(guildInteraction);
-						return;
-					case CommandNames.COURSES:
-						await handleCourses(guildInteraction);
-						return;
-					case CommandNames.PERIOD:
-						await handlePeriod(guildInteraction);
-						return;
-					case CommandNames.MOTTAGNINGSMODE:
-						await handleMottagningsmode(guildInteraction);
-						return;
-					case CommandNames.COMMUNITY:
-						await handleCommunity(guildInteraction);
+					} else {
+						throw new CommandNotFoundError(guildInteraction.commandName);
+					}
+				}
+			} else if (interaction.isMessageContextMenuCommand()) {
+				switch (interaction.commandName) {
+					case CommandNames.TRANSLATE_MSG:
+						await handleTranslateMsg(interaction);
 						return;
 					default:
-						throw new CommandNotFoundError(guildInteraction.commandName);
+						throw new CommandNotFoundError(interaction.commandName);
 				}
 			} else {
-				const validCommands = Object.values(CommandNames) as string[]; // Get all valid command names
-				if (guildInteraction.commandName === CommandNames.VERIFY) {
-					await handleVerify(guildInteraction);
-					return;
-				} else if (validCommands.includes(guildInteraction.commandName)) {
-					const permissionDeniedMessage = await hasRoleN0llan(guildInteraction.user, guildInteraction.guild) ?
-						"Du är allt för schleeemig, kom tillbaka senare."
-						: "Permission denied!\nYou first need to verify yourself using the '/verify' command.";
-					await guildInteraction.reply({
-						content: permissionDeniedMessage,
-						ephemeral: true,
-					});
-				} else {
-					throw new CommandNotFoundError(guildInteraction.commandName);
-				}
+				console.warn("Unknown interaction type");
 			}
 		} catch (error) {
 			console.warn(error);
