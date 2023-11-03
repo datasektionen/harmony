@@ -128,4 +128,4 @@ dist
 
 *.env
 src/shared/assets/state.json
-glossary.json
+glossary.dev.json
