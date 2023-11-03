@@ -1,12 +1,15 @@
 import { EmbedBuilder, MessageContextMenuCommandInteraction } from "discord.js";
-import { translator } from "../../shared/utils/translator";
+import {
+	isTranslationAvailable,
+	translateText,
+} from "../../shared/utils/translator";
 
 export const handleTranslateMsg = async (
 	interaction: MessageContextMenuCommandInteraction
 ): Promise<void> => {
 	await interaction.deferReply({ ephemeral: true });
 
-	if (translator === undefined) {
+	if (!isTranslationAvailable()) {
 		await interaction.editReply(
 			"Translation features are not currently available."
 		);
@@ -14,14 +17,10 @@ export const handleTranslateMsg = async (
 	}
 
 	try {
-		const result = await translator.translateText(
-			interaction.targetMessage.content,
-			"sv",
-			"en-US",
-			{
-				formality: "prefer_less",
-			}
-		);
+		const result = await translateText(interaction.targetMessage.content);
+		if (result === undefined) {
+			throw Error("No translation");
+		}
 
 		await interaction.editReply({
 			embeds: [
@@ -37,7 +36,7 @@ export const handleTranslateMsg = async (
 					})
 					.setTitle("Translated Message")
 					.setURL(interaction.targetMessage.url)
-					.setDescription(result.text)
+					.setDescription(result)
 					.setColor("Blue"),
 			],
 		});
