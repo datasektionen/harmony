@@ -2,7 +2,7 @@ import { Translator } from "deepl-node";
 import { readFile } from "fs/promises";
 
 const authKey = process.env.DEEPL_API_KEY;
-const glossaryPath = "./shared/assets/glossary.json";
+const glossaryPath = "./src/shared/assets/glossary.json";
 
 const translator =
 	authKey === undefined || authKey === "-"
