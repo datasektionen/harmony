@@ -2,7 +2,7 @@ import { Translator } from "deepl-node";
 import { readFile } from "fs/promises";
 
 const authKey = process.env.DEEPL_API_KEY;
-const glossaryPath = process.env.TRANSLATION_GLOSSARY_PATH;
+const glossaryPath = "./shared/assets/glossary.json";
 
 const translator =
 	authKey === undefined || authKey === "-"
@@ -42,10 +42,6 @@ export async function translateText(text: string): Promise<string | undefined> {
 }
 
 async function loadGlossary(): Promise<{ [k: string]: string }> {
-	if (glossaryPath === undefined || glossaryPath === "-") {
-		return {};
-	}
-
 	try {
 		const data = await readFile(glossaryPath, "utf8");
 		const obj =
