@@ -23,6 +23,7 @@ export const getOfficialBotCommands = (): ApplicationCommandBuilder[] => [
 	translateMsgCommand,
 ];
 
-export const getLightBotCommands = (): SlashCommandBuilder[] => [
+export const getLightBotCommands = (): ApplicationCommandBuilder[] => [
 	createVerifyCommand(true),
+	translateMsgCommand,
 ];
