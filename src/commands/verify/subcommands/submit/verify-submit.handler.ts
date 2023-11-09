@@ -3,6 +3,7 @@ import {
 	tokenEmail,
 	verifiedUsers,
 } from "../../../../database-config";
+import * as db from "../../../../db/db";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 import { mapYearToAlias } from "../../../../shared/utils/alias_to_year_mapper";
 import { handleChannelAlias } from "../../../../shared/utils/channel-utils";
@@ -48,6 +49,17 @@ export const handleVerifySubmit = async (
 		return;
 	}
 
+	const kthId = emailAddress.split("@")[0];
+
+	const inserted = await db.insertUser(kthId, discordId);
+	if (!inserted) {
+		await interaction.reply({
+			content: "Verification unsuccessful, your kth account has already been used to verify another discord account.",
+			ephemeral: true,
+		});
+		console.log(`Failed to verify user due to kth id already used for another discord account. email="${emailAddress}" user.id="${user.id}" user.username="${user.username}"`);
+		return;
+	}
 	verifiedUsers.set(discordId, emailAddress);
 	console.log(`Verified user by kth email. email="${emailAddress}" user.id="${user.id}" user.username="${user.username}"`);
 	try {

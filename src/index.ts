@@ -2,6 +2,7 @@ import { Client as DiscordClient, GatewayIntentBits } from "discord.js";
 import { LightClient as LightDiscordClient } from "./shared/types/light-client";
 import { handleCommands } from "./commands/handle-commands";
 import { registerCommands } from "./commands/register-commands";
+import * as db from "./db/db";
 
 /**p
  * Goes through all dotenv vars and checks if they are defined.
@@ -11,7 +12,8 @@ function validateEnvironment(): void {
 	if (
 		!process.env.SPAM_URL ||
 		!process.env.SPAM_API_TOKEN ||
-		(!process.env.DISCORD_BOT_TOKEN && !process.env.DISCORD_LIGHT_BOT_TOKEN)
+		(!process.env.DISCORD_BOT_TOKEN && !process.env.DISCORD_LIGHT_BOT_TOKEN) ||
+		!process.env.DATABASE_URL
 	) {
 		throw new Error("Missing proper configuration!");
 	}
@@ -32,6 +34,8 @@ export const harmonyLightClient = new LightDiscordClient({ intents });
 async function main(): Promise<void> {
 	validateEnvironment();
 
+	await db.init();
+	console.log("Initialized database");
 	if (process.env.DISCORD_BOT_TOKEN) {
 		harmonyClient.once("ready", () => console.log("Logged into Harmony"));
 		await harmonyClient.login(process.env.DISCORD_BOT_TOKEN);
@@ -43,4 +47,5 @@ async function main(): Promise<void> {
 	handleCommands();
 	await registerCommands();
 }
-main();
+
+main().catch(console.error);
