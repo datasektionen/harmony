@@ -1,5 +1,6 @@
 import { Translator } from "deepl-node";
 import { readFile } from "fs/promises";
+import { decode } from "he";
 
 const authKey = process.env.DEEPL_API_KEY;
 const glossaryPath = "./src/shared/assets/glossary.json";
@@ -38,7 +39,12 @@ export async function translateText(text: string): Promise<string | undefined> {
 		ignoreTags: "as-is",
 	});
 
-	return result?.text.replace(/<as-is>([^<]+)<\/as-is>/g, (_, v) => v);
+	const unescapeHtmlEntities = (s: string | undefined): string | undefined =>
+		s ? decode(s) : s;
+
+	return unescapeHtmlEntities(
+		result?.text.replace(/<as-is>([^<]+)<\/as-is>/g, (_, v) => v)
+	);
 }
 
 async function loadGlossary(): Promise<{ [k: string]: string }> {
