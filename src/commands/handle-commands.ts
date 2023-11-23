@@ -101,16 +101,13 @@ export const handleCommands = (env: Env): void => {
 		}
 	});
 
-	if (env === "production") {
-		harmonyLightClient.on("interactionCreate", async (interaction) => {
-			if (!interaction.isChatInputCommand()) {
-				return;
-			}
+	harmonyLightClient.on("interactionCreate", async (interaction) => {
+		try {
 			if (!interaction.guild) {
 				throw new Error("Guild not found!");
 			}
+			if (interaction.isChatInputCommand()) {
 			const guildInteraction = interaction as GuildChatInputCommandInteraction;
-			try {
 				switch (guildInteraction.commandName) {
 					case CommandNames.VERIFY:
 						await handleVerify(guildInteraction);
@@ -118,9 +115,19 @@ export const handleCommands = (env: Env): void => {
 					default:
 						throw new CommandNotFoundError(guildInteraction.commandName);
 				}
-			} catch (error) {
-				console.warn(error);
+			} else if (interaction.isMessageContextMenuCommand()) {
+				switch (interaction.commandName) {
+					case CommandNames.TRANSLATE_MSG:
+						await handleTranslateMsg(interaction);
+						return;
+					default:
+						throw new CommandNotFoundError(interaction.commandName);
+				}
+			} else {
+				console.warn("Unknown interaction type");
 			}
-		});
-	}
+		} catch (error) {
+			console.warn(error);
+		}
+	});
 };
