@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.1.0](https://github.com/datasektionen/harmony/compare/v1.0.1...v1.1.0) (2023-11-23)
+
+
+### Features
+
+* add translate message context menu command ([7fd658c](https://github.com/datasektionen/harmony/commit/7fd658cfd2e45583eebd202c2592d2b50a279999))
+* add translation glossary ([2ca94ef](https://github.com/datasektionen/harmony/commit/2ca94ef0101b7649b9b5f18a8be55f522c9b691f))
+* add translation glossary support ([e7521aa](https://github.com/datasektionen/harmony/commit/e7521aa4d7e7c9983d3638df3f611435bebef0b5))
+* Add year0 alias to alias-mappings.ts ([53b9cf6](https://github.com/datasektionen/harmony/commit/53b9cf60ea49507f551086d92275de5b7cfab349))
+* New command period, used to trigger channel visibility for roles ([64d8bf1](https://github.com/datasektionen/harmony/commit/64d8bf1d3031aa79684a0b4a585e651c8ba652ec))
+
+
+### Bug Fixes
+
+* Assign ping roles to every user that verifies ([034d776](https://github.com/datasektionen/harmony/commit/034d776f3d19bcf97a3b462d75b2c41d2ca75754))
+* Bug fixes related to year calculation and multi-interaction triggers ([b080be7](https://github.com/datasektionen/harmony/commit/b080be7cc0629f17ddebedb8e0a65fb57a88ee40))
+* Extern role is now automatically assigned to everyone that doesn't have the datasektionen role ([98fcb11](https://github.com/datasektionen/harmony/commit/98fcb11995291ffde20f3943edf9343146db51d9))
+* Fix bad period ([91d8ab6](https://github.com/datasektionen/harmony/commit/91d8ab63032f43d85c07b7626b8642ee574b6f84))
+* Fix courses ([9794988](https://github.com/datasektionen/harmony/commit/9794988ef385816c3734658b58890a225ff9f54d))
+* Fix role ([81f7d73](https://github.com/datasektionen/harmony/commit/81f7d73e993b3470ac6060ff99f9646883a26670))
+* Regex & year bugs, permission feature for period command ([51b6bae](https://github.com/datasektionen/harmony/commit/51b6bae0a460f2ae11d937bb96313bda07d5fa74))
+* Remove '/join' prompt on verify ([9d4662a](https://github.com/datasektionen/harmony/commit/9d4662a3383f3c9a7df198d62c9c95a860c6ee78))
+* track `glossary.json` file and ignore `glossary.dev.json` ([0fc0376](https://github.com/datasektionen/harmony/commit/0fc0376c2daaa38f20e3e5584d271271d190f0d6))
+* unescape HTML entities in translation result ([597a44e](https://github.com/datasektionen/harmony/commit/597a44e85b4036612bebbd106a5508405b321d4d))
+* Year 4 periods ([614668d](https://github.com/datasektionen/harmony/commit/614668ddc4d4db6cbf0ad26bb5b31f0baceeebd2))
+
 ## 1.0.0 (2022-10-22)
 
 
