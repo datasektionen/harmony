@@ -4,10 +4,12 @@ import {
 	CourseChannel,
 	handleChannel,
 	handleChannelAlias,
+	isCourseChannel,
 } from "../../shared/utils/channel-utils";
 import { AliasName } from "../../shared/alias-mappings";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
-import { User } from "discord.js";
+import { AutocompleteInteraction, User } from "discord.js";
+import { validCourseCode } from "../../shared/utils/valid-course-code";
 
 export const handleJoin = async (
 	interaction: GuildChatInputCommandInteraction
@@ -42,4 +44,14 @@ export const joinChannel = async (
 		);
 		await thread?.members.add(interaction.user);
 	} */
+};
+
+export const handleJoinAutocomplete = async (
+	interaction: AutocompleteInteraction
+): Promise<void> => {
+	const courseCode = interaction.options.getString(JoinVariables.COURSE_CODE, true).trim().toLowerCase();
+	if (!interaction.guild)
+		return;
+	const matchedCourses = interaction.guild.channels.cache.filter(channel => channel.name.startsWith(courseCode) && validCourseCode(channel.name) && isCourseChannel(channel));
+	await interaction.respond(matchedCourses.map(channel => ({ name: channel.name, value: channel.name.split("-")[0] })));
 };
