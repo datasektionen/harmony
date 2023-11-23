@@ -3,7 +3,7 @@ import { CommandNotFoundError } from "../shared/errors/command-not-founder.error
 import { handleAdd } from "./add/add.handler";
 import { CommandNames } from "./commands.names";
 import { handleCourses } from "./courses/courses.handler";
-import { handleJoin } from "./join/join.handler";
+import { handleJoin, handleJoinAutocomplete } from "./join/join.handler";
 import { handleKick } from "./kick/kick.handler";
 import { handleLeave } from "./leave/leave.handler";
 import { handlePing } from "./ping/ping.handler";
@@ -14,6 +14,7 @@ import { handlePeriod } from "./period/period.handler";
 import { handleMottagningsmode } from "./mottagningsmode/mottagningsmode.handler";
 import { handleCommunity } from "./community/community.handler";
 import { handleTranslateMsg } from "./translate/translateMsg.handler";
+import { AutocompleteInteraction } from "discord.js";
 
 export const handleCommands = (env: Env): void => {
 	harmonyClient.on("interactionCreate", async (interaction) => {
@@ -89,6 +90,17 @@ export const handleCommands = (env: Env): void => {
 				switch (interaction.commandName) {
 					case CommandNames.TRANSLATE_MSG:
 						await handleTranslateMsg(interaction);
+						return;
+					default:
+						throw new CommandNotFoundError(interaction.commandName);
+				}
+			} else if (interaction.isAutocomplete()) {
+				const autocompleteInteraction = interaction as AutocompleteInteraction
+
+
+				switch (autocompleteInteraction.commandName) {
+					case CommandNames.JOIN:
+						await handleJoinAutocomplete(autocompleteInteraction);
 						return;
 					default:
 						throw new CommandNotFoundError(interaction.commandName);
