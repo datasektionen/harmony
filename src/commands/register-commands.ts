@@ -1,31 +1,22 @@
 import { ApplicationCommandManager, GuildApplicationCommandManager } from "discord.js";
-import { Env, harmonyClient, harmonyLightClient } from "..";
-import { getGuild } from "../shared/utils/guild";
+import { harmonyClient, harmonyLightClient } from "..";
 import { getLightBotCommands, getOfficialBotCommands } from "./commands";
 
-export const registerCommands = async (env: Env): Promise<void> => {
-	if (env === "development") {
-		// Ensures there are no application commands left from prod runs (see below),
-		// uncomment if having trouble with duplicate or outdated commands:
-		//
-		// await clearAppCommands(harmonyClient.application?.commands);
-		// await clearAppCommands(harmonyLightClient.application?.commands);
-		const guild = await getGuild();
-		await Promise.all(
-			getOfficialBotCommands().map((
-				command) => guild.commands.create(command)
-			)
-		);
-	} else if (env === "production") {
-		// Ensures there are no guild commands left from dev runs (see above),
-		// uncomment if having trouble with duplicate or outdated commands:
-		//
-		// await clearGuildCommands((await getGuild()).commands);
+export const registerCommands = async (): Promise<void> => {
+	if (process.env.DISCORD_BOT_TOKEN) {
+		// Ensures there are no application commands left from light runs
+		await clearAppCommands(harmonyClient.application?.commands);
+
 		await Promise.all(
 			getOfficialBotCommands().map((command) =>
 				harmonyClient.application?.commands?.create(command)
 			)
 		);
+	}
+	if (process.env.DISCORD_LIGHT_BOT_TOKEN) {
+		// Ensures there are no guild commands left from non-light runs
+		await clearAppCommands(harmonyLightClient.application?.commands);
+
 		await Promise.all(
 			getLightBotCommands().map((command) =>
 				harmonyLightClient.application?.commands?.create(command)
