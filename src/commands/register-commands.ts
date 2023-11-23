@@ -1,9 +1,8 @@
 import { ApplicationCommandManager, GuildApplicationCommandManager } from "discord.js";
-import { Env, harmonyClient, harmonyLightClient } from "..";
-import { getGuild } from "../shared/utils/guild";
+import { harmonyClient, harmonyLightClient } from "..";
 import { getLightBotCommands, getOfficialBotCommands } from "./commands";
 
-export const registerCommands = async (env: Env): Promise<void> => {
+export const registerCommands = async (): Promise<void> => {
 	if (process.env.DISCORD_BOT_TOKEN) {
 		// Ensures there are no application commands left from light runs
 		await clearAppCommands(harmonyClient.application?.commands);

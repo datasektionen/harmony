@@ -1,4 +1,4 @@
-import { Env, harmonyClient, harmonyLightClient } from "..";
+import { harmonyClient, harmonyLightClient } from "..";
 import { CommandNotFoundError } from "../shared/errors/command-not-founder.error";
 import { handleAdd } from "./add/add.handler";
 import { CommandNames } from "./commands.names";
@@ -15,7 +15,7 @@ import { handleMottagningsmode } from "./mottagningsmode/mottagningsmode.handler
 import { handleCommunity } from "./community/community.handler";
 import { handleTranslateMsg } from "./translate/translateMsg.handler";
 
-export const handleCommands = (env: Env): void => {
+export const handleCommands = (): void => {
 	harmonyClient.on("interactionCreate", async (interaction) => {
 		try {
 			if (!interaction.guild) {

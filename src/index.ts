@@ -29,10 +29,7 @@ export const harmonyClient = new DiscordClient({ intents });
 
 export const harmonyLightClient = new LightDiscordClient({ intents });
 
-export type Env = "development" | "production";
-
 async function main(): Promise<void> {
-	const env = process.env.NODE_ENV as Env;
 	validateEnvironment();
 
 	if (process.env.DISCORD_BOT_TOKEN) {
@@ -43,7 +40,7 @@ async function main(): Promise<void> {
 		harmonyLightClient.once("ready", () => console.log("Logged into Harmony Light"));
 		await harmonyLightClient.login(process.env.DISCORD_LIGHT_BOT_TOKEN);
 	}
-	handleCommands(env);
-	await registerCommands(env);
+	handleCommands();
+	await registerCommands();
 }
 main();
