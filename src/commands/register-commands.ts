@@ -5,7 +5,7 @@ import { getLightBotCommands, getOfficialBotCommands } from "./commands";
 export const registerCommands = async (): Promise<void> => {
 	if (process.env.DISCORD_BOT_TOKEN) {
 		// Ensures there are no application commands left from light runs
-		await clearAppCommands(harmonyClient.application?.commands);
+		// await clearAppCommands(harmonyClient.application?.commands);
 
 		await Promise.all(
 			getOfficialBotCommands().map((command) =>
@@ -15,7 +15,7 @@ export const registerCommands = async (): Promise<void> => {
 	}
 	if (process.env.DISCORD_LIGHT_BOT_TOKEN) {
 		// Ensures there are no guild commands left from non-light runs
-		await clearAppCommands(harmonyLightClient.application?.commands);
+		// await clearAppCommands(harmonyLightClient.application?.commands);
 
 		await Promise.all(
 			getLightBotCommands().map((command) =>
