@@ -10,4 +10,5 @@ export enum CommandNames {
 	BUTTONS = "buttons",
 	MOTTAGNINGSMODE = "mottagningsmode",
 	COMMUNITY = "community",
+	TRANSLATE_MSG = "Translate to English",
 }

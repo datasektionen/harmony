@@ -5,34 +5,15 @@ import { registerCommands } from "./commands/register-commands";
 
 /**p
  * Goes through all dotenv vars and checks if they are defined.
- * If not, the service will throw and error
+ * If not, the service will throw an error
  */
 function validateEnvironment(): void {
 	if (
 		!process.env.SPAM_URL ||
 		!process.env.SPAM_API_TOKEN ||
-		!process.env.DISCORD_BOT_TOKEN
+		(!process.env.DISCORD_BOT_TOKEN && !process.env.DISCORD_LIGHT_BOT_TOKEN)
 	) {
 		throw new Error("Missing proper configuration!");
-	}
-	if (
-		process.env.NODE_ENV !== "production" &&
-		process.env.NODE_ENV !== "development"
-	) {
-		throw new Error("Env has to be 'production or 'development'!");
-	}
-	if (
-		process.env.NODE_ENV === "production" &&
-		!process.env.DISCORD_LIGHT_BOT_TOKEN
-	) {
-		throw new Error(
-			"You need a token for the light (verification) bot in prod in your env file!"
-		);
-	}
-	if (process.env.NODE_ENV === "development" && !process.env.DISCORD_GUILD_ID) {
-		throw new Error(
-			"You need a token for the light (verification) bot in prod in your env file!"
-		);
 	}
 }
 
@@ -44,27 +25,22 @@ const intents = [
 	GatewayIntentBits.DirectMessageTyping,
 ];
 
-export const harmonyClient = new DiscordClient({
-	intents,
-});
+export const harmonyClient = new DiscordClient({ intents });
 
-export const harmonyLightClient = new LightDiscordClient({
-	intents,
-});
-
-export type Env = "development" | "production";
+export const harmonyLightClient = new LightDiscordClient({ intents });
 
 async function main(): Promise<void> {
-	const env = process.env.NODE_ENV as Env;
 	validateEnvironment();
 
-	harmonyClient.once("ready", () => console.log("Starting..."));
-	await harmonyClient.login(process.env.DISCORD_BOT_TOKEN);
-	if (env === "production") {
+	if (process.env.DISCORD_BOT_TOKEN) {
+		harmonyClient.once("ready", () => console.log("Logged into Harmony"));
+		await harmonyClient.login(process.env.DISCORD_BOT_TOKEN);
+	}
+	if (process.env.DISCORD_LIGHT_BOT_TOKEN) {
+		harmonyLightClient.once("ready", () => console.log("Logged into Harmony Light"));
 		await harmonyLightClient.login(process.env.DISCORD_LIGHT_BOT_TOKEN);
 	}
-	console.log("Logged in");
-	handleCommands(env);
-	await registerCommands(env);
+	handleCommands();
+	await registerCommands();
 }
 main();

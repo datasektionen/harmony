@@ -139,6 +139,9 @@ export const mappings: Record<AliasName, string[]> = {
 	],
 	// Old course code mappings
 	["dd1360" as AliasName]: ["dd1366"],
+	["dd1361" as AliasName]: ["dd1366"],
+	["dd1362" as AliasName]: ["dd1366"],
+	["sf1923" as AliasName]: ["sf1935"],
 	["sf1924" as AliasName]: ["sf1935"],
 	["sf1925" as AliasName]: ["sf1935"],
 	["dd1369" as AliasName]: ["dd1367"],

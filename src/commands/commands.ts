@@ -6,9 +6,14 @@ import { periodCommand } from "./period/period.command";
 import { buttonsCommand } from "./buttons/buttons.command";
 import { createVerifyCommand } from "./verify/verify.command";
 import { mottagningsmodeCommand } from "./mottagningsmode/mottagningsmode.command";
-import { SlashCommandBuilder } from "discord.js";
+import { translateMsgCommand } from "./translate/translateMsg.command";
+import { ContextMenuCommandBuilder, SlashCommandBuilder } from "discord.js";
 
-export const getOfficialBotCommands = (): SlashCommandBuilder[] => [
+type ApplicationCommandBuilder =
+	| SlashCommandBuilder
+	| ContextMenuCommandBuilder;
+
+export const getOfficialBotCommands = (): ApplicationCommandBuilder[] => [
 	coursesCommand,
 	joinCommand,
 	leaveCommand,
@@ -17,8 +22,10 @@ export const getOfficialBotCommands = (): SlashCommandBuilder[] => [
 	buttonsCommand,
 	mottagningsmodeCommand,
 	communityCommand,
+	translateMsgCommand,
 ];
 
-export const getLightBotCommands = (): SlashCommandBuilder[] => [
+export const getLightBotCommands = (): ApplicationCommandBuilder[] => [
 	createVerifyCommand(true),
+	translateMsgCommand,
 ];
