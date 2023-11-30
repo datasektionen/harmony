@@ -1,8 +1,8 @@
 import { Guild, GuildMember, User } from "discord.js";
-import { harmonyLightClient } from "../../index";
+import { harmonyClient } from "../../index";
 
 export async function getGuild(): Promise<Guild> {
-	return await harmonyLightClient.guilds.fetch(
+	return await harmonyClient.guilds.fetch(
 		process.env.DISCORD_GUILD_ID as string
 	);
 }
