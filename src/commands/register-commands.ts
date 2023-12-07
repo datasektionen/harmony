@@ -8,8 +8,8 @@ export const registerCommands = async (env: Env): Promise<void> => {
 		// Ensures there are no application commands left from prod runs (see below),
 		// uncomment if having trouble with duplicate or outdated commands:
 		//
-		// await clearAppCommands(harmonyClient.application?.commands);
-		// await clearAppCommands(harmonyLightClient.application?.commands);
+		await clearAppCommands(harmonyClient.application?.commands);
+		await clearAppCommands(harmonyLightClient.application?.commands);
 		const guild = await getGuild();
 		await Promise.all(
 			getOfficialBotCommands().map((

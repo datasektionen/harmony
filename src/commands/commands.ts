@@ -6,6 +6,7 @@ import { periodCommand } from "./period/period.command";
 import { createVerifyCommand } from "./verify/verify.command";
 import { mottagningsmodeCommand } from "./mottagningsmode/mottagningsmode.command";
 import { translateMsgCommand } from "./translate/translateMsg.command";
+import { clubCommand } from "./club/club.command";
 import { ContextMenuCommandBuilder, SlashCommandBuilder } from "discord.js";
 
 type ApplicationCommandBuilder =
@@ -21,6 +22,7 @@ export const getOfficialBotCommands = (): ApplicationCommandBuilder[] => [
 	mottagningsmodeCommand,
 	communityCommand,
 	translateMsgCommand,
+	clubCommand,
 ];
 
 export const getLightBotCommands = (): ApplicationCommandBuilder[] => [

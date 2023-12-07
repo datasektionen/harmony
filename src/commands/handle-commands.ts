@@ -14,6 +14,7 @@ import { handlePeriod } from "./period/period.handler";
 import { handleMottagningsmode } from "./mottagningsmode/mottagningsmode.handler";
 import { handleCommunity } from "./community/community.handler";
 import { handleTranslateMsg } from "./translate/translateMsg.handler";
+import { handleClub } from "./club/club.handler";
 
 export const handleCommands = (env: Env): void => {
 	harmonyClient.on("interactionCreate", async (interaction) => {
@@ -61,6 +62,9 @@ export const handleCommands = (env: Env): void => {
 							return;
 						case CommandNames.COMMUNITY:
 							await handleCommunity(guildInteraction);
+							return;
+						case CommandNames.CLUB:
+							await handleClub(guildInteraction);
 							return;
 						default:
 							throw new CommandNotFoundError(guildInteraction.commandName);

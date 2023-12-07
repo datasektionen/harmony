@@ -55,6 +55,19 @@ export async function setRole(
 	await guildMember.roles.add(role);
 }
 
+export async function removeRole(
+	user: User,
+	roleName: string,
+	guild: Guild
+): Promise<void> {
+	const role = guild.roles.cache.find((r) => r.name === roleName);
+	if (!role) {
+		throw new Error(`Role ${roleName} does not exist on the Server!`);
+	}
+	const guildMember = await getGuildMember(user, guild);
+	await guildMember.roles.remove(role);
+}
+
 /**
  * Attempts to resolve the provided User-like data to a {Discord.GuildMember} on the server,
  * and, if successful, assigns them the Verified role.
