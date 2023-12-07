@@ -19,7 +19,7 @@ clubCommand.addSubcommand((subcommand) =>
 		)
 		.addStringOption((option) =>
 			option
-				.setName(ClubVariables.CLUB)
+				.setName(ClubVariables.ROLE)
 				.setDescription("The role to give")
 				.setRequired(true)
 		)
@@ -37,7 +37,7 @@ clubCommand.addSubcommand((subcommand) =>
 		)
 		.addStringOption((option) =>
 			option
-				.setName(ClubVariables.CLUB)
+				.setName(ClubVariables.ROLE)
 				.setDescription("The role to remove")
 				.setRequired(true)
 		)

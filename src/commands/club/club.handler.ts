@@ -1,12 +1,13 @@
 import { CommandNotFoundError } from "../../shared/errors/command-not-founder.error";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
-import { hasRole } from "../../shared/utils/roles";
+import { getRoles, hasRole } from "../../shared/utils/roles";
 import { ClubSubcommandNames } from "./club-subcommands.names";
 import { ClubVariables } from "./subcommands/club.variables";
 import { handleClubGive } from "./subcommands/give/club-give.handler";
 import { handleClubRemove } from "./subcommands/remove/club-remove.handler";
 import { canBeGivenBy, canGiveRole, isRole } from "./subcommands/utils";
 import { User, Guild } from "discord.js";
+import { validRoles } from "./subcommands/utils";
 
 
 export const handleClub = async (
@@ -15,17 +16,19 @@ export const handleClub = async (
 	const { options, user, guild } = interaction;
 	await interaction.deferReply({ ephemeral: true });
 
-	const clubParam = options.getString(ClubVariables.CLUB, true);
+	const clubParam = options.getString(ClubVariables.ROLE, true);
 	const targetUser = options.getUser(ClubVariables.TARGET, true);
 
 	if (!isRole(clubParam)) {
 		await interaction.editReply({
-			content: "Please enter a valid club name.",
+			content: "Please enter a valid role: "+ validRoles.join(", ") + ".",
 		});
 		return;
-	} else if (!userCanGiveRole(user, clubParam, guild)) {
+	} else if (!await userCanGiveRole(user, clubParam, guild)) {
 		await interaction.editReply({
-			content: "You cannot give or remove this role!"
+			content: `You cannot give or remove this role! ${clubParam} can only be administrated by users with the following roles: ` 
+			+ canBeGivenBy.get(clubParam)?.join(", ") + ". You have the following roles: " 
+			+ (await getRoles(user, guild)).join(", ") + ".",
 		});
 		return;
 	}
@@ -41,7 +44,18 @@ export const handleClub = async (
 	}
 };
 
+
+/**
+ * Checks if a user can give a specific role in a guild.
+ * @param user The user to check.
+ * @param role The role to check if it can be given.
+ * @param guild The guild to check in.
+ * @returns A promise that resolves to a boolean indicating if the user can give the role.
+ */
 const userCanGiveRole = async (user: User, role: string, guild: Guild): Promise<Boolean> => {
+	if (await hasRole(user, "Admin", guild)) {
+		return true;
+	}
 	for (const allowedRole of canBeGivenBy.get(role)) {
 		if (await hasRole(user, allowedRole, guild)) {
 			return true;
