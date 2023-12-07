@@ -5,7 +5,7 @@ import { ClubSubcommandNames } from "./club-subcommands.names";
 import { ClubVariables } from "./subcommands/club.variables";
 import { handleClubGive } from "./subcommands/give/club-give.handler";
 import { handleClubRemove } from "./subcommands/remove/club-remove.handler";
-import { canBeGivenBy, canGiveRole, isRole } from "./subcommands/utils";
+import { canBeGivenBy, isRole } from "./subcommands/utils";
 import { User, Guild } from "discord.js";
 
 
@@ -42,7 +42,6 @@ export const handleClub = async (
 			throw new CommandNotFoundError(interaction.commandName);
 	}
 };
-
 
 /**
  * Checks if a user can give a specific role in a guild.

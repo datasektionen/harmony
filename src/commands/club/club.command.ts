@@ -2,7 +2,7 @@ import { SlashCommandBuilder } from "discord.js";
 import { CommandNames } from "../commands.names";
 import { ClubVariables } from "./subcommands/club.variables";
 import { ClubSubcommandNames } from "./club-subcommands.names";
-import { canBeGivenBy, canGiveRole } from "./subcommands/utils";
+import { canBeGivenBy } from "./subcommands/utils";
 
 export const clubCommand = new SlashCommandBuilder()
 	.setName(CommandNames.CLUB)

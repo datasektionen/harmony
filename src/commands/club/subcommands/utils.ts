@@ -21,10 +21,21 @@ export const canBeGivenBy: { [key: string]: string[] } = {
     "dÅke": ['SNO', 'SMA', 'JNO', 'Programansvarig']
 }
 
+/**
+ * Checks if a given role is valid.
+ * @param role - The role to check.
+ * @returns True if the role is valid, false otherwise.
+ */
 export const isRole = (role: string) => {
     return Object.keys(canBeGivenBy).includes(role);
 }
 
-export const canGiveRole = (role: string, target: string) => {
-    return canBeGivenBy[role]?.includes(target);
+/**
+ * Checks if a role can be given to another role.
+ * @param role The role to check if it can give the target role.
+ * @param targetRole The role to check if it can be given by the source role.
+ * @returns A boolean indicating whether the role can give the target role.
+ */
+export const canGiveRole = (role: string, targetRole: string) => {
+    return canBeGivenBy[role]?.includes(targetRole);
 }

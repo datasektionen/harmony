@@ -7,7 +7,7 @@ export const handleClubRemove = async (
 	role: string,
     targetUser: User
 ): Promise<void> => {
-	const { guild, user } = interaction;
+	const { guild } = interaction;
     if (!await hasRole(targetUser, role, guild)) {
 		await interaction.editReply({
 			content: `${targetUser} does not have role ${role}!`,
