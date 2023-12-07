@@ -1,4 +1,4 @@
 export enum ClubVariables {
-	TARGET = "target",
+	TARGET = "user",
 	ROLE = "role"
 }
