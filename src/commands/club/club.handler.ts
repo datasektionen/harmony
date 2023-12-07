@@ -7,7 +7,6 @@ import { handleClubGive } from "./subcommands/give/club-give.handler";
 import { handleClubRemove } from "./subcommands/remove/club-remove.handler";
 import { canBeGivenBy, canGiveRole, isRole } from "./subcommands/utils";
 import { User, Guild } from "discord.js";
-import { validRoles } from "./subcommands/utils";
 
 
 export const handleClub = async (
@@ -21,13 +20,13 @@ export const handleClub = async (
 
 	if (!isRole(clubParam)) {
 		await interaction.editReply({
-			content: "Please enter a valid role: "+ validRoles.join(", ") + ".",
+			content: "Please enter a valid role: "+ Object.keys(canBeGivenBy).join(", ") + ".",
 		});
 		return;
 	} else if (!await userCanGiveRole(user, clubParam, guild)) {
 		await interaction.editReply({
 			content: `You cannot give or remove this role! ${clubParam} can only be administrated by users with the following roles: ` 
-			+ canBeGivenBy.get(clubParam)?.join(", ") + ". You have the following roles: " 
+			+ canBeGivenBy[clubParam]?.join(", ") + ". You have the following roles: " 
 			+ (await getRoles(user, guild)).join(", ") + ".",
 		});
 		return;
@@ -56,7 +55,7 @@ const userCanGiveRole = async (user: User, role: string, guild: Guild): Promise<
 	if (await hasRole(user, "Admin", guild)) {
 		return true;
 	}
-	for (const allowedRole of canBeGivenBy.get(role)) {
+	for (const allowedRole of canBeGivenBy[role]) {
 		if (await hasRole(user, allowedRole, guild)) {
 			return true;
 		}

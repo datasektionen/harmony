@@ -23,7 +23,7 @@ export const handleClubGive = async (
 	} catch (error) {
 		if (error instanceof Error) {
 			await interaction.editReply({
-				content: "Error when giving role:" + error.message,
+				content: "Error when giving role: " + error.message,
 			});
 		} else {
 			await interaction.editReply({

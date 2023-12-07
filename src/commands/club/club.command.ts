@@ -2,6 +2,7 @@ import { SlashCommandBuilder } from "discord.js";
 import { CommandNames } from "../commands.names";
 import { ClubVariables } from "./subcommands/club.variables";
 import { ClubSubcommandNames } from "./club-subcommands.names";
+import { canBeGivenBy, canGiveRole } from "./subcommands/utils";
 
 export const clubCommand = new SlashCommandBuilder()
 	.setName(CommandNames.CLUB)
@@ -22,6 +23,13 @@ clubCommand.addSubcommand((subcommand) =>
 				.setName(ClubVariables.ROLE)
 				.setDescription("The role to give")
 				.setRequired(true)
+				.addChoices(
+					...Object.keys(canBeGivenBy).map((role) => {
+						return {
+							name: role,
+							value: role,
+						};
+					}))
 		)
 );
 
@@ -40,5 +48,12 @@ clubCommand.addSubcommand((subcommand) =>
 				.setName(ClubVariables.ROLE)
 				.setDescription("The role to remove")
 				.setRequired(true)
+				.addChoices(
+					...Object.keys(canBeGivenBy).map((role) => {
+						return {
+							name: role,
+							value: role,
+						};
+					}))
 		)
 );
