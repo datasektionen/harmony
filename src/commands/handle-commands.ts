@@ -1,9 +1,9 @@
-import { Env, harmonyClient, harmonyLightClient } from "..";
+import { harmonyClient, harmonyLightClient } from "..";
 import { CommandNotFoundError } from "../shared/errors/command-not-founder.error";
 import { handleAdd } from "./add/add.handler";
 import { CommandNames } from "./commands.names";
 import { handleCourses } from "./courses/courses.handler";
-import { handleJoin } from "./join/join.handler";
+import { handleJoin, handleJoinAutocomplete } from "./join/join.handler";
 import { handleKick } from "./kick/kick.handler";
 import { handleLeave } from "./leave/leave.handler";
 import { handlePing } from "./ping/ping.handler";
@@ -15,8 +15,9 @@ import { handleMottagningsmode } from "./mottagningsmode/mottagningsmode.handler
 import { handleCommunity } from "./community/community.handler";
 import { handleTranslateMsg } from "./translate/translateMsg.handler";
 import { handleClub } from "./club/club.handler";
+import { AutocompleteInteraction } from "discord.js";
 
-export const handleCommands = (env: Env): void => {
+export const handleCommands = (): void => {
 	harmonyClient.on("interactionCreate", async (interaction) => {
 		try {
 			if (!interaction.guild) {
@@ -97,6 +98,17 @@ export const handleCommands = (env: Env): void => {
 					default:
 						throw new CommandNotFoundError(interaction.commandName);
 				}
+			} else if (interaction.isAutocomplete()) {
+				const autocompleteInteraction = interaction as AutocompleteInteraction
+
+
+				switch (autocompleteInteraction.commandName) {
+					case CommandNames.JOIN:
+						await handleJoinAutocomplete(autocompleteInteraction);
+						return;
+					default:
+						throw new CommandNotFoundError(interaction.commandName);
+				}
 			} else {
 				console.warn("Unknown interaction type");
 			}
@@ -105,16 +117,13 @@ export const handleCommands = (env: Env): void => {
 		}
 	});
 
-	if (env === "production") {
-		harmonyLightClient.on("interactionCreate", async (interaction) => {
-			if (!interaction.isChatInputCommand()) {
-				return;
-			}
+	harmonyLightClient.on("interactionCreate", async (interaction) => {
+		try {
 			if (!interaction.guild) {
 				throw new Error("Guild not found!");
 			}
+			if (interaction.isChatInputCommand()) {
 			const guildInteraction = interaction as GuildChatInputCommandInteraction;
-			try {
 				switch (guildInteraction.commandName) {
 					case CommandNames.VERIFY:
 						await handleVerify(guildInteraction);
@@ -122,9 +131,19 @@ export const handleCommands = (env: Env): void => {
 					default:
 						throw new CommandNotFoundError(guildInteraction.commandName);
 				}
-			} catch (error) {
-				console.warn(error);
+			} else if (interaction.isMessageContextMenuCommand()) {
+				switch (interaction.commandName) {
+					case CommandNames.TRANSLATE_MSG:
+						await handleTranslateMsg(interaction);
+						return;
+					default:
+						throw new CommandNotFoundError(interaction.commandName);
+				}
+			} else {
+				console.warn("Unknown interaction type");
 			}
-		});
-	}
+		} catch (error) {
+			console.warn(error);
+		}
+	});
 };

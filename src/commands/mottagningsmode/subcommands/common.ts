@@ -1,14 +1,12 @@
-import { Env } from "../../..";
 import { GuildChatInputCommandInteraction } from "../../../shared/types/GuildChatInputCommandType";
 import { isMottagningsModeActive, setState } from "../../../shared/utils/state";
 import { registerCommands } from "../../register-commands";
 
 export async function setMottagningsmode(enable: boolean): Promise<void> {
     const newMode = enable ? "mottagning" : "default";
-    const env = process.env.NODE_ENV as Env;
 
     await setState(newMode);
-    await registerCommands(env);
+    await registerCommands();
 }
 
 export const handleMottagningsmodeSet = async (
