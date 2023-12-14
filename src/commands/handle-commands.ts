@@ -14,7 +14,7 @@ import { handlePeriod } from "./period/period.handler";
 import { handleMottagningsmode } from "./mottagningsmode/mottagningsmode.handler";
 import { handleCommunity } from "./community/community.handler";
 import { handleTranslateMsg } from "./translate/translateMsg.handler";
-import { AutocompleteInteraction } from "discord.js";
+import { AutocompleteInteraction, BaseInteraction } from "discord.js";
 
 export const handleCommands = (): void => {
 	harmonyClient.on("interactionCreate", async (interaction) => {
@@ -109,6 +109,7 @@ export const handleCommands = (): void => {
 				console.warn("Unknown interaction type");
 			}
 		} catch (error) {
+			await interaction_error_reply(interaction);
 			console.warn(error);
 		}
 	});
@@ -139,7 +140,23 @@ export const handleCommands = (): void => {
 				console.warn("Unknown interaction type");
 			}
 		} catch (error) {
+			await interaction_error_reply(interaction);
 			console.warn(error);
 		}
 	});
 };
+
+async function interaction_error_reply(interaction: BaseInteraction): Promise<void> {
+	const message = "This interaction could not be completed. Please contact your local admin.";
+	try {
+		if (interaction.isChatInputCommand()) {
+			if (interaction.deferred || interaction.replied) {
+				await interaction.editReply({content: message})
+			} else {
+				await interaction.reply({content: message, ephemeral: true})
+			}
+		}
+	} catch (error) {
+		console.warn("Error when trying to send error message to user:", error)
+	}
+}
