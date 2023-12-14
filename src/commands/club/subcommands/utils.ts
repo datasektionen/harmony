@@ -7,7 +7,7 @@ export const canBeGivenBy: { [key: string]: string[] } = {
     "dJubileet": ["Jubileumsmarskalk"],
     "METAcrafter": ["Herobrine"],
     "dJul": ["Tomtemor/-far"],
-    "Storkuben": ["Qulturattaché, DESCtop"],
+    "Storkuben": ["Qulturattaché", "DESCtop"],
     "Announcer": ["dFunkt"],
     "dFunkt": ["D-rek"],
     "Titel": ["Storasyskon"],
