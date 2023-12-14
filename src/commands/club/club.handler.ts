@@ -50,7 +50,7 @@ export const handleClub = async (
  * @param guild The guild to check in.
  * @returns A promise that resolves to a boolean indicating if the user can give the role.
  */
-const userCanGiveRole = async (user: User, role: string, guild: Guild): Promise<Boolean> => {
+const userCanGiveRole = async (user: User, role: string, guild: Guild): Promise<boolean> => {
 	if (await hasRole(user, "Admin", guild)) {
 		return true;
 	}
