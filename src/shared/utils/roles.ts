@@ -55,6 +55,27 @@ export async function setRole(
 	await guildMember.roles.add(role);
 }
 
+
+/**
+ * Removes a role from a user in a guild.
+ * @param user - The user to remove the role from.
+ * @param roleName - The name of the role to be removed.
+ * @param guild - The guild where the role exists.
+ * @throws Error if the role does not exist on the server.
+ */
+export async function removeRole(
+	user: User,
+	roleName: string,
+	guild: Guild
+): Promise<void> {
+	const role = guild.roles.cache.find((r) => r.name === roleName);
+	if (!role) {
+		throw new Error(`Role ${roleName} does not exist on the Server!`);
+	}
+	const guildMember = await getGuildMember(user, guild);
+	await guildMember.roles.remove(role);
+}
+
 /**
  * Attempts to resolve the provided User-like data to a {Discord.GuildMember} on the server,
  * and, if successful, assigns them the Verified role.
@@ -113,4 +134,15 @@ export async function setExternRole(user: User, guild: Guild): Promise<void> {
 export async function setPingRoles(user: User, guild: Guild): Promise<void> {
 	const pingRoles = ["StudyInfo", "ChapterInfo", "SponsoredInfo"];
 	await Promise.all(pingRoles.map((role) => setRole(user, role, guild)));
+}
+
+/**
+ * Retrieves the roles of a user in a guild.
+ * @param user The user for whom to retrieve the roles.
+ * @param guild The guild in which to retrieve the roles.
+ * @returns A promise that resolves to an array of role names.
+ */
+export async function getRoles(user: User, guild: Guild): Promise<string[]> {
+	const guildMember = await getGuildMember(user, guild);
+	return guildMember.roles.cache.map((role) => role.name);
 }

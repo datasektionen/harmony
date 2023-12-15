@@ -10,4 +10,5 @@ export enum CommandNames {
 	MOTTAGNINGSMODE = "mottagningsmode",
 	COMMUNITY = "community",
 	TRANSLATE_MSG = "Translate to English",
+	CLUB = "club",
 }
