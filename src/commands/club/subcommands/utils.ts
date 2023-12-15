@@ -1,6 +1,6 @@
 export const canBeGivenBy: { [key: string]: string[] } = {
     "Näringslivsgruppen": ["Näringslivsansvarig"],
-    "METAdor": ["Konglig lokalansvarig"],
+    "METAdor": ["Konglig Lokalchef"],
     "Prylmångleriet": ["Prylis"],
     "Valberedningen": ["Valberedningens ordförande"],
     "METAspexet": ["METAspexets Direqteur"],
