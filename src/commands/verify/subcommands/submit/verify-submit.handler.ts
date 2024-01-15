@@ -49,6 +49,7 @@ export const handleVerifySubmit = async (
 	}
 
 	verifiedUsers.set(discordId, emailAddress);
+	console.log(`Verified user by kth email. email="${emailAddress}" user.id="${user.id}" user.username="${user.username}"`);
 	try {
 		await setRoleVerified(user, interaction.guild);
 		await interaction.reply({
