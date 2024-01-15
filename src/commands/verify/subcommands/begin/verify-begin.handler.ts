@@ -23,8 +23,7 @@ export const handleVerifyBegin = async (
 	await tokenEmail.set(token, email, timeout);
 
 	try {
-		const result = await sendMail(email, token);
-		console.log(result);
+		await sendMail(email, token);
 		await interaction.editReply({
 			content: `Check the inbox of ${email} for your verification code: <https://webmail.kth.se/>\nSubmit your verification code using the \`/verify submit\` command.`,
 		});
