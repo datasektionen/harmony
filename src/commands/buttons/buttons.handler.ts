@@ -20,10 +20,7 @@ export const handleButtons = async (
 
 	const buttons = createAliasButtons(ButtonAliases);
 
-	await interaction.reply({
-		//ephemeral: true,
-		components: buttons,
-	});
+	await interaction.channel?.send({ components: buttons });
 };
 
 export const handleButtonInteraction = async (
