@@ -27,11 +27,11 @@ export const handlePeriodRoles = async (
 			.map((member) => updateMember(interaction, member, period))
 	);
 
-	// check not undefined nor APIInteractionGuildMember
-	if (interaction.member && "createDM" in interaction.member) {
-		const dm = await interaction.member.createDM();
-		await dm.send("Hey! I have finished updating all period roles!");
-	}
+	await interaction.channel?.send(
+		`Hey ${
+			interaction.member?.user ?? "friend"
+		}, I have finished updating all period roles!`
+	);
 };
 
 async function updateMember(
