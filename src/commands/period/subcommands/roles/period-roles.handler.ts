@@ -18,14 +18,20 @@ export const handlePeriodRoles = async (
 
 	await guild.members.fetch();
 
+	await interaction.editReply(
+		"On it boss! I'll let you know when I've successfully updated all period roles."
+	);
 	await Promise.all(
 		guild.members.cache
 			.filter((member) => !member.user.bot)
 			.map((member) => updateMember(interaction, member, period))
 	);
-	await interaction.editReply({
-		content: "Successfully updated all period roles!",
-	});
+
+	// check not undefined nor APIInteractionGuildMember
+	if (interaction.member && "createDM" in interaction.member) {
+		const dm = await interaction.member.createDM();
+		await dm.send("Hey! I have finished updating all period roles!");
+	}
 };
 
 async function updateMember(
