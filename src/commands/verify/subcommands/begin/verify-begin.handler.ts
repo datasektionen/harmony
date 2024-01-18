@@ -10,8 +10,8 @@ export const handleVerifyBegin = async (
 ): Promise<void> => {
 	const { user, options } = interaction;
 	await interaction.deferReply({ ephemeral: true });
-	const messageText = options.getString(VerifyBeginVariables.EMAIL, true);
-	if (!isKthEmail(messageText)) {
+	const email = options.getString(VerifyBeginVariables.EMAIL, true);
+	if (!isKthEmail(email)) {
 		await interaction.editReply({
 			content: "Please enter a valid KTH email address.",
 		});
@@ -20,13 +20,12 @@ export const handleVerifyBegin = async (
 	const token = generateToken(parseInt(process.env.TOKEN_SIZE as string));
 	const timeout = parseInt(process.env.TOKEN_TIMEOUT as string);
 	await tokenDiscord.set(token, user.id, timeout);
-	await tokenEmail.set(token, messageText, timeout);
+	await tokenEmail.set(token, email, timeout);
 
 	try {
-		const result = await sendMail(messageText, token);
-		console.log(`Email sent, received response: ${result}`);
+		await sendMail(email, token);
 		await interaction.editReply({
-			content: `Check the inbox of ${messageText} for your verification code: <https://webmail.kth.se/>\nSubmit your verification code using the \`/verify submit\` command.`,
+			content: `Check the inbox of ${email} for your verification code: <https://webmail.kth.se/>\nSubmit your verification code using the \`/verify submit\` command.\nNote that by submitting the verification code, you accept that Konglig Datasektionen may store your discord ID and name together with your email address. This will be stored in accordance with the chapter's [information processing policy](<https://styrdokument.datasektionen.se/pm_informationshantering>).`,
 		});
 	} catch (error) {
 		console.error(error);
