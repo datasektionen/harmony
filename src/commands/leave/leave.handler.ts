@@ -1,4 +1,5 @@
 import { AliasName } from "../../shared/alias-mappings";
+import { GuildButtonOrCommandInteraction } from "../../shared/types/GuildButtonOrCommandInteraction";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import {
 	CourseChannel,
@@ -22,9 +23,9 @@ export const handleLeave = async (
 	return await handleChannel(courseCode, interaction, leaveChannel);
 };
 
-const leaveChannel = async (
+export const leaveChannel = async (
 	channel: CourseChannel,
-	interaction: GuildChatInputCommandInteraction
+	interaction: GuildButtonOrCommandInteraction
 ): Promise<void> => {
 	await channel.permissionOverwrites.create(interaction.user, {
 		ViewChannel: false,

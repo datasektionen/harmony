@@ -8,6 +8,7 @@ import {
 } from "../../shared/utils/channel-utils";
 import { AliasName } from "../../shared/alias-mappings";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
+import { GuildButtonOrCommandInteraction } from "../../shared/types/GuildButtonOrCommandInteraction";
 import { ApplicationCommandOptionChoiceData, AutocompleteInteraction, User } from "discord.js";
 import { validCourseCode } from "../../shared/utils/valid-course-code";
 
@@ -28,7 +29,7 @@ export const handleJoin = async (
 
 export const joinChannel = async (
 	channel: CourseChannel,
-	interaction: GuildChatInputCommandInteraction,
+	interaction: GuildButtonOrCommandInteraction,
 	user?: User
 ): Promise<void> => {
 	await channel.permissionOverwrites.create(user ?? interaction.user, {
