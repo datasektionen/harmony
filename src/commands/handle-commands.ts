@@ -19,7 +19,6 @@ import {
 import { handleMottagningsmode } from "./mottagningsmode/mottagningsmode.handler";
 import { handleCommunity } from "./community/community.handler";
 import { handleTranslateMsg } from "./translate/translateMsg.handler";
-import { AutocompleteInteraction } from "discord.js";
 
 export const handleCommands = (): void => {
 	harmonyClient.on("interactionCreate", async (interaction) => {
