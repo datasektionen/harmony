@@ -1,6 +1,6 @@
 import { mappings } from "../../shared/alias-mappings";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
-import { isCourseChannel } from "../../shared/utils/channel-utils";
+import { getAllCourseChannels } from "../../shared/utils/channel-utils";
 import { validCourseCode } from "../../shared/utils/valid-course-code";
 
 export const handleCourses = async (
@@ -18,10 +18,7 @@ export const handleCourses = async (
 		lines.push("\n");
 	}
 
-	await interaction.guild.channels.fetch();
-	const nonIncludedChannelNames = interaction.guild.channels.cache
-		.filter(isCourseChannel)
-		.filter((channel) => validCourseCode(channel.name))
+	const nonIncludedChannelNames = (await getAllCourseChannels(interaction.guild))
 		.filter(
 			(channel) =>
 				!aliasedChannels.some((current) => channel.name.startsWith(current))

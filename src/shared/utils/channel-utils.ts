@@ -26,17 +26,13 @@ export const handleChannelAlias = async (
 	noInteraction = noInteraction ?? false;
 	updateVerbPastTense = updateVerbPastTense ?? "updated";
 
-	const channelNames = getAliasChannels(alias as AliasName);
-	if (channelNames.size === 0) {
-		return;
-	}
 	if (!noInteraction && !interaction.replied && !interaction.deferred) {
 		await interaction.deferReply({
 			ephemeral: true,
 		});
 	}
 
-	const channels = await getCourseChannelsByNameCached(interaction.guild, channelNames);
+	const channels = await getAliasChannels(interaction.guild, alias as AliasName);
 	if (!channels) {
 		return;
 	}
@@ -144,7 +140,7 @@ function channelNameToCourseCode(channelName: string): string {
 	return channelName.split("-")[0]
 }
 
-async function getCourseChannelsByNameCached(guild: Guild, names: Set<string>): Promise<Collection<string, CourseChannel>> {
+export async function getCourseChannelsByNameCached(guild: Guild, names: Set<string>): Promise<Collection<string, CourseChannel>> {
 	const courseCodeChannelCache = await courseCodeToChannelIdCache(guild, names);
 	const courseChannels = new Collection<string, CourseChannel>();
 	for (const name of names) {
@@ -175,12 +171,20 @@ function userCanViewChannel(userId: Snowflake, channel: CourseChannel): boolean 
 }
 
 export async function isMemberOfAlias(guild: Guild, userId: Snowflake, alias: AliasName): Promise<boolean> {
-	const aliasChannelNames = getAliasChannels(alias);
-	const aliasChannels = await getCourseChannelsByNameCached(guild, aliasChannelNames);
+	const aliasChannels = await getAliasChannels(guild, alias);
 	for (const channel of aliasChannels.values()) {
 		if (!userCanViewChannel(userId, channel)) {
 			return false;
 		}
 	}
 	return true;
+}
+
+export async function getAllCourseChannels(guild: Guild): Promise<Collection<string, CourseChannel>> {
+	await guild.channels.fetch();
+	const courseChannels = guild.channels.cache
+		.filter(isCourseChannel)
+		.filter((channel) => validCourseCode(channel.name))
+		.mapValues((channel) => channel as CourseChannel);
+	return courseChannels;
 }
