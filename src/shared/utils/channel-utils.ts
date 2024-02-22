@@ -52,7 +52,8 @@ export const handleChannelAlias = async (
 	await Promise.allSettled(promises);
 
 	let updateCount = 0;
-	for (const channel of channels.values()) {
+	for (let channel of channels.values()) {
+		channel = await channel.fetch();
 		const oldPermission = couldViewChannel.get(channel);
 		const newPermission = userCanViewChannel(interaction.user.id, channel);
 		if (oldPermission != newPermission) {
