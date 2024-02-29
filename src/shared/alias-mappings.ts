@@ -26,11 +26,12 @@ export enum AliasName {
 	Y5P3 = "y5p3",
 	Y5P4 = "y5p4",
 	CS_MASTER = "cs-master",
-	ALL = "all",
+	ALL_MANDATORY = "all-mandatory",
+	ALL_ELECTIVES = "all-electives",
 }
 
 export const mappings: Record<AliasName, string[]> = {
-  [AliasName.YEAR0]: [
+	[AliasName.YEAR0]: [
 		"sf0003",
 	],
 	[AliasName.YEAR1]: [
@@ -104,7 +105,7 @@ export const mappings: Record<AliasName, string[]> = {
 		"dd2440",
 		"ik2218",
 	],
-	[AliasName.ALL]: [
+	[AliasName.ALL_MANDATORY]: [
 		// Year 1
 		"dd1390",
 		"dd1348",
@@ -134,15 +135,6 @@ export const mappings: Record<AliasName, string[]> = {
 		"id1200",
 		"al1504",
 		"da150x",
-		// Elective
-		"da1700",
-		"sf1633",
-		"ep1100",
-		"me1003",
-		"sk180n",
-		"dd1420",
-		"dd1388",
-		"dd1386",
 		// CS master
 		"dd2300",
 		"da231x",
@@ -156,28 +148,8 @@ export const mappings: Record<AliasName, string[]> = {
 		"da233x",
 		"da2202",
 		"dd2334",
-		// Master elective
-		"dd2557",
-		"dd2497",
-		"dd2480",
-		"dd2477",
-		"dd2470",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
-		"",
 	],
+	[AliasName.ALL_ELECTIVES]: [],
 	// Old course code mappings
 	["dd1360" as AliasName]: ["dd1366"],
 	["dd1361" as AliasName]: ["dd1366"],

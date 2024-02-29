@@ -153,7 +153,7 @@ export async function getCourseChannelsByNameCached(guild: Guild, names: Set<str
 	return courseChannels;
 }
 
-async function getCourseChannelsByName(guild: Guild, names: Set<string>): Promise<Collection<string, CourseChannel>> {
+export async function getCourseChannelsByName(guild: Guild, names: Set<string>): Promise<Collection<string, CourseChannel>> {
 	await guild.channels.fetch();
 	const channels = guild.channels.cache
 		.filter((current) => names.has(channelNameToCourseCode(current.name)))
