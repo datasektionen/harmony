@@ -79,7 +79,7 @@ export const mappings: Record<AliasName, string[]> = {
 		"dd2301",
 		"da233x",
 		"da2205",
-		"dd2334",
+		"dd2434",
 		"dd2380",
 		"dd1420",
 	],
@@ -124,7 +124,8 @@ export const mappings: Record<AliasName, string[]> = {
 		"dd2301",
 		"da233x",
 		"da2205",
-		"dd2334",
+		"dd2434",
+		"dd1420",
 	],
 	[AliasName.ALL_ELECTIVES]: [],	// Custom logic
 	// Old course code mappings
