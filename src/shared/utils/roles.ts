@@ -1,6 +1,7 @@
 import { Guild, User } from "discord.js";
 import { getGuildMember } from "./guild";
 import { getHodisUser } from "./hodis";
+import { AliasName } from "../alias-mappings";
 
 export async function hasRole(
 	user: User,
@@ -134,6 +135,23 @@ export async function setExternRole(user: User, guild: Guild): Promise<void> {
 export async function setPingRoles(user: User, guild: Guild): Promise<void> {
 	const pingRoles = ["StudyInfo", "ChapterInfo", "SponsoredInfo"];
 	await Promise.all(pingRoles.map((role) => setRole(user, role, guild)));
+}
+
+export async function toggleYearCoursesRole(user: User, guild: Guild, alias: AliasName): Promise<void> {
+	const yearRoles = ["Åk 1", "Åk 2", "Åk 3"];
+	let selectedRole;
+	switch (alias) {
+		case AliasName.YEAR1: selectedRole = yearRoles[0]; break;
+		case AliasName.YEAR2: selectedRole = yearRoles[1]; break;
+		case AliasName.YEAR3: selectedRole = yearRoles[2]; break;
+	}
+	if (!selectedRole)	// Wrong alias supplied
+		return;
+
+	if (await hasRole(user, selectedRole, guild))
+		await removeRole(user, selectedRole, guild);
+	else
+		await setRole(user, selectedRole, guild);
 }
 
 /**
