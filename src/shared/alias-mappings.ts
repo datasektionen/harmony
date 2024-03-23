@@ -17,7 +17,6 @@ export enum AliasName {
 	Y3P4 = "y3p4",
 	CS_MASTER = "cs-master",
 	ML_MASTER = "ml-master",
-	ALL_MANDATORY = "all-mandatory",
 	ALL_ELECTIVES = "all-electives",
 }
 
@@ -81,50 +80,6 @@ export const mappings: Record<AliasName, string[]> = {
 		"da2205",
 		"dd2434",
 		"dd2380",
-		"dd1420",
-	],
-	[AliasName.ALL_MANDATORY]: [
-		// Year 1
-		"dd1348",
-		"da1600",
-		"dd1337",
-		"sf1671",
-		"dd1338",
-		"sf1624",
-		"dh1623",
-		"sf1625",
-		"dd1396",
-		"dd1349",
-		"sf1626",
-		// Year 2
-		"dd1351",
-		"is1500",
-		"me1010",
-		"dd1368",
-		"dd1367",
-		"dd1366",
-		"sf1547",
-		"sf1935",
-		"dd1354",
-		// Year 3
-		"sf1688",
-		"dd2350",
-		"id1200",
-		"al1504",
-		"da150x",
-		// CS master
-		"da2210",
-		"dd2300",
-		"dd2380",
-		"dd2395",
-		"dd2440",
-		"ik2218",
-		"da231x",
-		// ML master
-		"dd2301",
-		"da233x",
-		"da2205",
-		"dd2434",
 		"dd1420",
 	],
 	[AliasName.ALL_ELECTIVES]: [],	// Custom logic
