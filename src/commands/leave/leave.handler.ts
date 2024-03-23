@@ -27,7 +27,5 @@ export const leaveChannel = async (
 	channel: CourseChannel,
 	interaction: GuildButtonOrCommandInteraction
 ): Promise<void> => {
-	await channel.permissionOverwrites.create(interaction.user, {
-		ViewChannel: false,
-	});
+	await channel.permissionOverwrites.delete(interaction.user);
 };
