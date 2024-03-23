@@ -13,6 +13,5 @@ export const ButtonAliases = [
     AliasName.YEAR3,
     AliasName.CS_MASTER,
     AliasName.ML_MASTER,
-    AliasName.ALL_MANDATORY,
     AliasName.ALL_ELECTIVES,
 ];

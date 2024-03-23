@@ -9,13 +9,17 @@ export const aliasExists = (alias: AliasName): boolean => {
 export const getAliasChannels = async (guild: Guild, alias: AliasName): Promise<Collection<string, CourseChannel>> => {
 	// Logic for electives alias
 	if (alias === AliasName.ALL_ELECTIVES) {
-		const mandatories = await getAliasChannels(guild, AliasName.ALL_MANDATORY);
+		const cs_master = await getAliasChannels(guild, AliasName.CS_MASTER);
+		const ml_master = await getAliasChannels(guild, AliasName.ML_MASTER);
 
 		const elective_categories = ["elective courses", "master courses"];
 
 		const elective_channels = (await getAllCourseChannels(guild))
-			.difference(mandatories)
 			.filter(channel => 
+				// Exclude mandatory master courses
+				!cs_master.some(cs_channel => cs_channel === channel) &&
+				!ml_master.some(ml_channel => ml_channel === channel) &&
+				// Include only channels under categories with elective courses
 				elective_categories.some(category => 
 					channel.parent && // Not null
 					channel.parent.name.toLowerCase().includes(category)
