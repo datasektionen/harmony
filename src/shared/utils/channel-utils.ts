@@ -3,6 +3,7 @@ import { AliasName } from "../alias-mappings";
 import { GuildButtonOrCommandInteraction } from "../types/GuildButtonOrCommandInteraction";
 import { getAliasChannels } from "./read-alias-mappings";
 import { validCourseCode } from "./valid-course-code";
+import { toggleYearCoursesRole } from "./roles";
 
 export type CourseChannel = ForumChannel | TextChannel;
 
@@ -27,9 +28,15 @@ export const handleChannelAlias = async (
 	updateVerbPastTense = updateVerbPastTense ?? "updated";
 
 	if (!noInteraction && !interaction.replied && !interaction.deferred) {
-		await interaction.deferReply({
-			ephemeral: true,
+		await interaction.deferReply({ ephemeral: true });
+	}
+
+	if ([AliasName.YEAR1, AliasName.YEAR2, AliasName.YEAR3].includes(alias as AliasName)) {
+		toggleYearCoursesRole(interaction.user, interaction.guild, alias as AliasName);
+		await interaction.editReply({
+			content: `Successfully updated your visibility for \`${alias}\`!`,
 		});
+		return;
 	}
 
 	const channels = await getAliasChannels(interaction.guild, alias as AliasName);
@@ -99,8 +106,7 @@ export const handleChannel = async (
 	if (!isCourseChannel(channel)) {
 		if (!noInteraction) {
 			await interaction.editReply({
-				content:
-					"Channel not found, please contact a mod if you think this is a mistake",
+				content: "Channel not found, please contact a mod if you think this is a mistake",
 			});
 		}
 		return;
