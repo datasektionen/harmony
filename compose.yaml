@@ -1,0 +1,37 @@
+services:
+  app:
+    build:
+      context: .
+      target: src
+    command: npm run dev
+    environment:
+      - DATABASE_URL=postgres://harmony:harmony@db/harmony
+      - NODE_ENV=development
+    env_file:
+      - .env
+    volumes:
+      - ./src/shared/assets/state.json:/app/src/shared/assets/state.json:ro # TODO: remove when using darkmode for state
+    depends_on:
+      db:
+        condition: service_healthy
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /app
+        - action: rebuild
+          path: package-lock.json
+  db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_PASSWORD=harmony
+      - POSTGRES_USER=harmony
+      - POSTGRES_DB=harmony
+    healthcheck:
+      test:
+        - "CMD-SHELL"
+        - "sh -c 'pg_isready -d harmony -U harmony'"
+      interval: 1s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
