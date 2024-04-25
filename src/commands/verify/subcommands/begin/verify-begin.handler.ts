@@ -19,7 +19,7 @@ export const handleVerifyBegin = async (
 		return;
 	}
 
-	const kthid = email.split('@')[0];
+	const kthid = email.split("@")[0];
 	if (db.getDiscordIdByKthid(kthid) === null) {
 		await interaction.editReply({
 			content: "Verification unsuccessful, your KTH account has already been used to verify another Discord account."
