@@ -2,7 +2,7 @@ import { tokenDiscord, tokenEmail } from "../../../../database-config";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 import { generateToken } from "../../../../shared/utils/generate-token";
 import { sendMail } from "../../../../shared/utils/mail";
-import { isKthEmail } from "../util";
+import { isKthEmail, verifyUser } from "../util";
 import { VerifyBeginVariables } from "./verify-begin.variables";
 import * as db from "../../../../db/db";
 
@@ -20,12 +20,22 @@ export const handleVerifyBegin = async (
 	}
 
 	const kthid = email.split("@")[0];
-	if (db.getDiscordIdByKthid(kthid) === null) {
-		await interaction.editReply({
-			content: "Verification unsuccessful, your KTH account has already been used to verify another Discord account."
-		});
-		console.log(`Failed to verify user due to KTH ID already being used for another Discord account. email="${email}" user.id="${user.id}" user.username="${user.username}"`);
-		return;
+	const dbDiscordId = await db.getDiscordIdByKthid(kthid);
+
+	if (dbDiscordId !== null) { // KTH ID is stored in the DB
+		if (dbDiscordId === user.id) { // Same Discord account is verifying
+			await interaction.editReply({
+				content: "It seems you're already verified on another Konglig server. Welcome!"
+			});
+			verifyUser(interaction, email, user.id);
+			return;
+		} else {
+			await interaction.editReply({ // Another Discord is verifying
+				content: "Verification unsuccessful, your KTH account has already been used to verify another Discord account."
+			});
+			console.log(`Failed to verify user due to KTH ID already being used for another Discord account. email="${email}" user.id="${user.id}" user.username="${user.username}"`);
+			return;
+		}
 	}
 
 	const token = generateToken(parseInt(process.env.TOKEN_SIZE as string));
