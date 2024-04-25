@@ -51,15 +51,8 @@ export const handleVerifySubmit = async (
 
 	const kthId = emailAddress.split("@")[0];
 
-	const inserted = await db.insertUser(kthId, discordId);
-	if (!inserted) {
-		await interaction.reply({
-			content: "Verification unsuccessful, your kth account has already been used to verify another discord account.",
-			ephemeral: true,
-		});
-		console.log(`Failed to verify user due to kth id already used for another discord account. email="${emailAddress}" user.id="${user.id}" user.username="${user.username}"`);
-		return;
-	}
+	await db.insertUser(kthId, discordId);
+	
 	verifiedUsers.set(discordId, emailAddress);
 	console.log(`Verified user by kth email. email="${emailAddress}" user.id="${user.id}" user.username="${user.username}"`);
 	try {

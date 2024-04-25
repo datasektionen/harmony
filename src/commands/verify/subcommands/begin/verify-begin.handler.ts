@@ -4,6 +4,7 @@ import { generateToken } from "../../../../shared/utils/generate-token";
 import { sendMail } from "../../../../shared/utils/mail";
 import { isKthEmail } from "../util";
 import { VerifyBeginVariables } from "./verify-begin.variables";
+import * as db from "../../../../db/db";
 
 export const handleVerifyBegin = async (
 	interaction: GuildChatInputCommandInteraction
@@ -17,6 +18,16 @@ export const handleVerifyBegin = async (
 		});
 		return;
 	}
+
+	const kthid = email.split('@')[0];
+	if (db.getDiscordIdByKthid(kthid) === null) {
+		await interaction.editReply({
+			content: "Verification unsuccessful, your KTH account has already been used to verify another Discord account."
+		});
+		console.log(`Failed to verify user due to KTH ID already being used for another Discord account. email="${email}" user.id="${user.id}" user.username="${user.username}"`);
+		return;
+	}
+
 	const token = generateToken(parseInt(process.env.TOKEN_SIZE as string));
 	const timeout = parseInt(process.env.TOKEN_TIMEOUT as string);
 	await tokenDiscord.set(token, user.id, timeout);

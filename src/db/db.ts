@@ -23,12 +23,16 @@ export async function insertUser(kthId: string, discordId: string): Promise<bool
 	return true;
 }
 
-export async function getDiscordIdByKthid(kthId: string): Promise<string> {
-	const [{ discord_id: discordId }] = await sql`select discord_id from users where kth_id = ${kthId}`;
-	return discordId;
+export async function getDiscordIdByKthid(kthId: string): Promise<string | null> {
+	const users = await sql`select discord_id from users where kth_id = ${kthId}`;
+	if (!users.length)
+		return null;
+	return users[0].discord_id;
 }
 
-export async function getKthIdByUserId(discordId: string): Promise<string> {
-	const [{ kth_id: kthId }] = await sql`select kth_id from users where discord_id = ${discordId}`;
-	return kthId;
+export async function getKthIdByUserId(discordId: string): Promise<string | null> {
+	const users = await sql`select kth_id from users where discord_id = ${discordId}`;
+	if (!users.length)
+		return null;
+	return users[0].kth_id;
 }
