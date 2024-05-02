@@ -3,6 +3,7 @@ import { LightClient as LightDiscordClient } from "./shared/types/light-client";
 import { handleCommands } from "./commands/handle-commands";
 import { registerCommands } from "./commands/register-commands";
 import * as db from "./db/db";
+import { userJoined } from "./shared/utils/userJoined";
 
 /**p
  * Goes through all dotenv vars and checks if they are defined.
@@ -39,10 +40,14 @@ async function main(): Promise<void> {
 	if (process.env.DISCORD_BOT_TOKEN) {
 		harmonyClient.once("ready", () => console.log("Logged into Harmony"));
 		await harmonyClient.login(process.env.DISCORD_BOT_TOKEN);
+
+		harmonyClient.on("guildMemberAdd", (member) => userJoined(member));
 	}
 	if (process.env.DISCORD_LIGHT_BOT_TOKEN) {
 		harmonyLightClient.once("ready", () => console.log("Logged into Harmony Light"));
 		await harmonyLightClient.login(process.env.DISCORD_LIGHT_BOT_TOKEN);
+
+		harmonyLightClient.on("guildMemberAdd", (member) => userJoined(member));
 	}
 	handleCommands();
 	await registerCommands();

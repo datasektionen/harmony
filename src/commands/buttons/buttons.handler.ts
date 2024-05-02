@@ -26,8 +26,6 @@ export const handleButtons = async (
 export const handleButtonInteraction = async (
 	interaction: GuildButtonInteraction,
 ): Promise<void> => {
-	// Respond to the interaction,
-	// TODO: This message should inform the user about whether they're joining or leaving
 	const courseCode = interaction.customId;
 	const alias = courseCode as AliasName;
 	if (aliasExists(alias)) {
@@ -35,7 +33,11 @@ export const handleButtonInteraction = async (
 		const joining = !await isMemberOfAlias(interaction.guild, interaction.user.id, alias);
 		const action = joining ? joinChannel : leaveChannel;
 		const actionVerb = joining ? "joined" : "left";
-		await handleChannelAlias(alias, interaction, action, undefined, actionVerb);
+		const updateCount = await handleChannelAlias(interaction.guild, interaction.user, alias, action);
+		
+		await interaction.editReply({
+			content: `Successfully ${actionVerb} \`${alias}\`! (${updateCount}) channels updated`,
+		});
 	} else {
 		await handleChannel(courseCode, interaction, joinChannel);
 	}

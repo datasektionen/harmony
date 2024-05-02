@@ -30,8 +30,7 @@ export const handleVerifySubmit = async (
 
 	if (!emailAddress || !discordId || discordId !== interaction.user.id) {
 		await interaction.reply({
-			content:
-				"Verification unsuccessful, submit the code again or request a new code.",
+			content: "Verification unsuccessful, submit the code again or request a new code.",
 			ephemeral: true,
 		});
 		return;
@@ -41,7 +40,16 @@ export const handleVerifySubmit = async (
 
 	await db.insertUser(kthId, discordId);
 	
-	await verifyUser(interaction, emailAddress, discordId);
+	try {
+		await verifyUser(interaction.user, interaction.guild, emailAddress);
+	} catch (error) {
+		console.warn(error);
+		await interaction.reply({
+			content: "Something went wrong, please try again.",
+			ephemeral: true,
+		});
+	}
+
 	await interaction.reply({
 		content:
 			"You are now verified! You have been added to all course channels of your current year. \nYou can join or leave course channels with the `/join` and `/leave` command. \nFor more info, see: <#1020725853157593219>",

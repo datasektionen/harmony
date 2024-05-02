@@ -27,10 +27,18 @@ export const handleVerifyBegin = async (
 			await interaction.editReply({
 				content: "It seems you're already verified on another Konglig server. Welcome!"
 			});
-			verifyUser(interaction, email, user.id);
+			try {
+				verifyUser(interaction.user, interaction.guild, email);
+			} catch (error) {
+				console.warn(error);
+				await interaction.reply({
+					content: "Something went wrong, please try again.",
+					ephemeral: true,
+				});
+			}
 			return;
 		} else {
-			await interaction.editReply({ // Another Discord is verifying
+			await interaction.editReply({ // Another Discord account is verifying
 				content: "Verification unsuccessful, your KTH account has already been used to verify another Discord account."
 			});
 			console.log(`Failed to verify user due to KTH ID already being used for another Discord account. email="${email}" user.id="${user.id}" user.username="${user.username}"`);
