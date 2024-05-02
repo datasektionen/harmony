@@ -22,11 +22,6 @@ export const verifyUser = async (
 	console.log(`Verified user by kth email. email="${emailAddress}" user.id="${user.id}" user.username="${user.username}"`);
 	try {
 		await setRoleVerified(user, interaction.guild);
-		await interaction.reply({
-			content:
-				"You are now verified! You have been added to all course channels of your current year. \nYou can join or leave course channels with the `/join` and `/leave` command. \nFor more info, see: <#1020725853157593219>",
-			ephemeral: true,
-		});
 		const { year, yearRole } = await extractYearFromUser(emailAddress);
 		if (yearRole && year) {
 			await setYearRoles(user, yearRole, interaction.guild);

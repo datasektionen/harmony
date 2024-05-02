@@ -42,4 +42,9 @@ export const handleVerifySubmit = async (
 	await db.insertUser(kthId, discordId);
 	
 	await verifyUser(interaction, emailAddress, discordId);
+	await interaction.reply({
+		content:
+			"You are now verified! You have been added to all course channels of your current year. \nYou can join or leave course channels with the `/join` and `/leave` command. \nFor more info, see: <#1020725853157593219>",
+		ephemeral: true,
+	});
 };
