@@ -39,9 +39,9 @@ export const handleVerifySubmit = async (
 	const kthId = emailAddress.split("@")[0];
 
 	await db.insertUser(kthId, discordId);
-	
+
 	try {
-		await verifyUser(interaction.user, interaction.guild, emailAddress);
+		await verifyUser(interaction.user, interaction.guild, kthId);
 	} catch (error) {
 		console.warn(error);
 		await interaction.reply({

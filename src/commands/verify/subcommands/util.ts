@@ -14,13 +14,13 @@ export const messageIsToken = (messageText: string): RegExpMatchArray | null =>
 export const verifyUser = async (
 	user: User,
 	guild: Guild,
-	emailAddress: string,
+	kthId: string,
 ): Promise<void> => {
-	verifiedUsers.set(user.id, emailAddress);
-	console.log(`Verified user by kth email. email="${emailAddress}" user.id="${user.id}" user.username="${user.username}"`);
-	
+	verifiedUsers.set(user.id, kthId + "@kth.se");
+	console.log(`Verified user by kth email. kthid="${kthId}" user.id="${user.id}" user.username="${user.username}"`);
+
 	await setRoleVerified(user, guild);
-	const { year, yearRole } = await extractYearFromUser(emailAddress);
+	const { year, yearRole } = await extractYearFromUser(kthId);
 	if (yearRole && year) {
 		await setYearRoles(user, yearRole, guild);
 		const alias = mapYearToAlias(year);

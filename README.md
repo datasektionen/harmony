@@ -19,8 +19,8 @@ If you don't already have the npm packages installed: first run `npm install`.
 
 If you don't want to test any database functionality (i.e. user verification) you can simply run:
 
-`npm run bs`
+`npm run bs` <!-- stands for bullshit -->
 
-When testing database functionality, run the following with sudo/admin privs (+hot-reload as a bonus):
+When testing database functionality (or if you don't want to download node/npm), run the following (as root unless you're in the `docker` group) (also supports hot-reload):
 
 `docker compose up --watch`

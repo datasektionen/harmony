@@ -19,8 +19,8 @@ export const handleVerifyBegin = async (
 		return;
 	}
 
-	const kthid = email.split("@")[0];
-	const dbDiscordId = await db.getDiscordIdByKthid(kthid);
+	const kthId = email.split("@")[0];
+	const dbDiscordId = await db.getDiscordIdByKthid(kthId);
 
 	if (dbDiscordId !== null) { // KTH ID is stored in the DB
 		if (dbDiscordId === user.id) { // Same Discord account is verifying
@@ -28,7 +28,7 @@ export const handleVerifyBegin = async (
 				content: "It seems you're already verified on another Konglig server. Welcome!"
 			});
 			try {
-				verifyUser(interaction.user, interaction.guild, email);
+				verifyUser(interaction.user, interaction.guild, kthId);
 			} catch (error) {
 				console.warn(error);
 				await interaction.reply({
