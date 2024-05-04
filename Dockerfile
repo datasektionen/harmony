@@ -9,9 +9,10 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 COPY src/ src/
+COPY scripts/ scripts/
 COPY tsconfig.json ./
 
-FROM base AS build
+FROM src AS build
 
 RUN npm run build
 
