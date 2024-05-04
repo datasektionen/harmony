@@ -1,12 +1,10 @@
 import { harmonyClient, harmonyLightClient } from "..";
 import { CommandNotFoundError } from "../shared/errors/command-not-founder.error";
-import { handleAdd } from "./add/add.handler";
 import { CommandNames } from "./commands.names";
 import { handleCourses } from "./courses/courses.handler";
 import { handleJoin, handleJoinAutocomplete } from "./join/join.handler";
 import { handleKick } from "./kick/kick.handler";
 import { handleLeave } from "./leave/leave.handler";
-import { handlePing } from "./ping/ping.handler";
 import { handleVerify } from "./verify/verify.handler";
 import { hasRoleN0llan, hasRoleVerified } from "../shared/utils/roles";
 import type { GuildChatInputCommandInteraction } from "../shared/types/GuildChatInputCommandType";
@@ -98,12 +96,6 @@ const handleChatInputCommand = async (
 		// Checks which commands the user should have access to:
 		if (await hasRoleVerified(interaction.user, interaction.guild)) {
 			switch (interaction.commandName) {
-				case CommandNames.PING:
-					await handlePing(guildInteraction);
-					return;
-				case CommandNames.ADD:
-					await handleAdd(guildInteraction);
-					return;
 				case CommandNames.KICK:
 					await handleKick(guildInteraction);
 					break;
