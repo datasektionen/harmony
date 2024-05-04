@@ -93,11 +93,11 @@ export async function setN0llanRole(
 	await setRole(user, "nØllan", guild);
 }
 
-export async function extractYearFromUser(kthEmail: string): Promise<{
+export async function extractYearFromUser(kthId: string): Promise<{
 	yearRole: string | null;
 	year: number | null;
 }> {
-	const hodisUser = await getHodisUser(kthEmail.split("@")[0]);
+	const hodisUser = await getHodisUser(kthId);
 	const yearTag = hodisUser.tag
 		.split(",")
 		.find((tag) => tag.match(/^D\d{2}$/i));

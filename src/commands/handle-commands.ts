@@ -41,7 +41,7 @@ export const handleCommands = (): void => {
 				}
 			} else if (interaction.isButton()) {
 			  await handleButtonInteraction(interaction as GuildButtonInteraction);
-		  } else if (interaction.isAutocomplete()) {
+		  	} else if (interaction.isAutocomplete()) {
 				switch (interaction.commandName) {
 					case CommandNames.JOIN:
 						await handleJoinAutocomplete(interaction);

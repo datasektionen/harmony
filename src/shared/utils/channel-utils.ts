@@ -1,5 +1,5 @@
-import { Collection, ForumChannel, GuildBasedChannel, Snowflake, TextChannel, Guild, PermissionFlagsBits, } from "discord.js";
-import { AliasName } from "../alias-mappings";
+import { Collection, ForumChannel, GuildBasedChannel, Snowflake, TextChannel, Guild, PermissionFlagsBits, User, } from "discord.js";
+import { AliasName, mappings } from "../alias-mappings";
 import { GuildButtonOrCommandInteraction } from "../types/GuildButtonOrCommandInteraction";
 import { getAliasChannels } from "./read-alias-mappings";
 import { validCourseCode } from "./valid-course-code";
@@ -15,42 +15,31 @@ export const isCourseChannel = (channel?: GuildBasedChannel): boolean => {
 };
 
 export const handleChannelAlias = async (
+	guild: Guild,
+	user: User,
 	alias: string,
-	interaction: GuildButtonOrCommandInteraction,
 	actionCallback: (
 		channel: CourseChannel,
-		interaction: GuildButtonOrCommandInteraction,
+		user: User,
 	) => Promise<void>,
-	noInteraction?: boolean,
-	updateVerbPastTense?: string
-): Promise<void> => {
-	noInteraction = noInteraction ?? false;
-	updateVerbPastTense = updateVerbPastTense ?? "updated";
-
-	if (!noInteraction && !interaction.replied && !interaction.deferred) {
-		await interaction.deferReply({ ephemeral: true });
-	}
-
+): Promise<number> => {
 	if ([AliasName.YEAR1, AliasName.YEAR2, AliasName.YEAR3].includes(alias as AliasName)) {
-		toggleYearCoursesRole(interaction.user, interaction.guild, alias as AliasName);
-		await interaction.editReply({
-			content: `Successfully updated your visibility for \`${alias}\`!`,
-		});
-		return;
+		toggleYearCoursesRole(user, guild, alias as AliasName);
+		return mappings[alias as AliasName].length;
 	}
 
-	const channels = await getAliasChannels(interaction.guild, alias as AliasName);
-	if (!channels) {
-		return;
+	const channels = await getAliasChannels(guild, alias as AliasName);
+	if (channels.size === 0) {
+		return 0;
 	}
 
 	const couldViewChannel = new Collection<CourseChannel, boolean>();
 	for (const channel of channels.values()) {
-		couldViewChannel.set(channel, userCanViewChannel(interaction.user.id, channel));
+		couldViewChannel.set(channel, userCanViewChannel(user.id, channel));
 	}
 
 	const promises = channels.map((channel) =>
-		actionCallback(channel as CourseChannel, interaction)
+		actionCallback(channel as CourseChannel, user)
 	);
 	await Promise.allSettled(promises);
 
@@ -58,17 +47,12 @@ export const handleChannelAlias = async (
 	for (let channel of channels.values()) {
 		channel = await channel.fetch();
 		const oldPermission = couldViewChannel.get(channel);
-		const newPermission = userCanViewChannel(interaction.user.id, channel);
+		const newPermission = userCanViewChannel(user.id, channel);
 		if (oldPermission != newPermission) {
 			updateCount += 1;
 		}
 	}
-	if (!noInteraction && !interaction.replied) {
-		await interaction.editReply({
-			content: `Successfully updated your visibility for \`${alias}\`! (${updateCount}) channels ${updateVerbPastTense}`,
-		});
-	}
-	return;
+	return updateCount;
 };
 
 export const handleChannel = async (
@@ -76,7 +60,7 @@ export const handleChannel = async (
 	interaction: GuildButtonOrCommandInteraction,
 	actionCallback: (
 		channel: ForumChannel | TextChannel,
-		interaction: GuildButtonOrCommandInteraction
+		user: User
 	) => Promise<void>,
 	noInteraction?: boolean,
 	skipCheckingCourseCode?: boolean,
@@ -112,7 +96,7 @@ export const handleChannel = async (
 		return;
 	}
 
-	await actionCallback(channel as CourseChannel, interaction);
+	await actionCallback(channel as CourseChannel, interaction.user);
 
 	if (!noInteraction) {
 		await interaction.editReply({

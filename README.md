@@ -11,14 +11,14 @@ Harmony is a Bot developed for reducing discord on our Discord servers. Its main
 
 > The bot is written in TypeScript. Discord interaction is facilitated by [Discord.js](https://discord.js.org/), while e-mails are sent via [Spam](https://github.com/datasektionen/spam).
 
-## Goals
+## Run locally
 
-Ideally, Harmony should be able to do the following (in no particular order of precedence):
-- [x] Verify new users' access to some valid @kth.se address
-- [x] Mange course channels
-- [ ] Kick unverified users after some time
-- [ ] Make sure that newcomers, even if verified, only have limited access during their first hours/days on the server (this is to make sure that people who join are there to stay, not to parttake in a 10-minute argument and the leave)
-- [ ] Implement a reputation system where users can gain rep from competitions, bug bounties, voice chat etc.
-- [ ] Penalize users that violate server rules
-- [ ] Manage multiple servers at once
-- [ ] Manage dFunkt-roles through a check with [dfunkt.datasektionen.se](https://dfunkt.datasektionen.se/).
+Set the environment variables for the functionality you want to test, with `.env.example` containing a template for this.
+
+Run the following (as root unless you're in the `docker` group) (supports hot-reload):
+
+`docker compose up --watch`
+
+To interact with the database:
+
+`docker compose exec -it db psql -U harmony -d harmony`

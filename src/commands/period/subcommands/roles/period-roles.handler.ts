@@ -14,7 +14,6 @@ export const handlePeriodRoles = async (
 
 	// Get guild from interaction
 	const guild = interaction.guild;
-	// Iterate through all members in guild
 
 	await guild.members.fetch();
 
@@ -24,7 +23,7 @@ export const handlePeriodRoles = async (
 	await Promise.all(
 		guild.members.cache
 			.filter((member) => !member.user.bot)
-			.map((member) => updateMember(interaction, member, period))
+			.map((member) => updateMember(member, period))
 	);
 
 	await interaction.channel?.send(
@@ -35,7 +34,6 @@ export const handlePeriodRoles = async (
 };
 
 async function updateMember(
-	interaction: GuildChatInputCommandInteraction,
 	member: GuildMember,
 	period: number
 ): Promise<void> {
@@ -52,10 +50,5 @@ async function updateMember(
 	// Only manage periods for people in first to third year
 	if (memberYear < 1 || memberYear > 3) return;
 
-	await handleChannelAlias(
-		`y${memberYear}p${period}`,
-		interaction,
-		(channel, interaction) => joinChannel(channel, interaction, member.user),
-		true
-	);
+	await handleChannelAlias(member.guild, member.user, `y${memberYear}p${period}`, joinChannel);
 }
