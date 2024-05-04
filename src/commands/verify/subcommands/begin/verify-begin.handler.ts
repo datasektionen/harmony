@@ -37,8 +37,8 @@ export const handleVerifyBegin = async (
 				});
 			}
 			return;
-		} else {
-			await interaction.editReply({ // Another Discord account is verifying
+		} else { // Another Discord account is verifying
+			await interaction.editReply({
 				content: "Verification unsuccessful, your KTH account has already been used to verify another Discord account."
 			});
 			console.log(`Failed to verify user due to KTH ID already being used for another Discord account. email="${email}" user.id="${user.id}" user.username="${user.username}"`);

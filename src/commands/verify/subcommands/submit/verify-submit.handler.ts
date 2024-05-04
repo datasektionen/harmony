@@ -10,16 +10,15 @@ import { VerifySubmitVariables } from "./verify-submit.variables";
 export const handleVerifySubmit = async (
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
+	interaction.deferReply({ ephemeral: true });
+
 	const messageText = interaction.options.getString(
 		VerifySubmitVariables.VERIFICATION_CODE,
 		true
 	);
 
 	if (!messageIsToken(messageText)) {
-		await interaction.reply({
-			content: "Not a valid code",
-			ephemeral: true,
-		});
+		await interaction.editReply({ content: "Not a valid code" });
 		return;
 	}
 
@@ -29,9 +28,8 @@ export const handleVerifySubmit = async (
 	]);
 
 	if (!emailAddress || !discordId || discordId !== interaction.user.id) {
-		await interaction.reply({
-			content: "Verification unsuccessful, submit the code again or request a new code.",
-			ephemeral: true,
+		await interaction.editReply({
+			content: "Verification unsuccessful, submit the code again or request a new code."
 		});
 		return;
 	}
@@ -44,15 +42,12 @@ export const handleVerifySubmit = async (
 		await verifyUser(interaction.user, interaction.guild, kthId);
 	} catch (error) {
 		console.warn(error);
-		await interaction.reply({
-			content: "Something went wrong, please try again.",
-			ephemeral: true,
-		});
+		await interaction.editReply({ content: "Something went wrong, please try again." });
+		return;
 	}
 
-	await interaction.reply({
+	await interaction.editReply({
 		content:
-			"You are now verified! You have been added to all course channels of your current year. \nYou can join or leave course channels with the `/join` and `/leave` command. \nFor more info, see: <#1020725853157593219>",
-		ephemeral: true,
+			"You are now verified! You have been added to all course channels of your current year. \nYou can join or leave course channels with the `/join` and `/leave` command. \nFor more info, see: <#1020725853157593219>"
 	});
 };

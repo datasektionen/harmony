@@ -15,12 +15,10 @@ Harmony is a Bot developed for reducing discord on our Discord servers. Its main
 
 Set the environment variables for the functionality you want to test, with `.env.example` containing a template for this.
 
-If you don't already have the npm packages installed: first run `npm install`.
-
-If you don't want to test any database functionality (i.e. user verification) you can simply run:
-
-`npm run bs` <!-- stands for bullshit -->
-
-When testing database functionality (or if you don't want to download node/npm), run the following (as root unless you're in the `docker` group) (also supports hot-reload):
+Run the following (as root unless you're in the `docker` group) (supports hot-reload):
 
 `docker compose up --watch`
+
+To interact with the database:
+
+`docker compose exec -it db psql -U harmony -d harmony`
