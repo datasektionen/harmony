@@ -144,6 +144,7 @@ export async function toggleYearCoursesRole(user: User, guild: Guild, alias: Ali
 		case AliasName.YEAR1: selectedRole = yearRoles[0]; break;
 		case AliasName.YEAR2: selectedRole = yearRoles[1]; break;
 		case AliasName.YEAR3: selectedRole = yearRoles[2]; break;
+		default: selectedRole = undefined; break;
 	}
 	if (!selectedRole)	// Wrong alias supplied
 		return;

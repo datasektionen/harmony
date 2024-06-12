@@ -9,8 +9,6 @@ services:
       - NODE_ENV=development
     env_file:
       - .env
-    volumes:
-      - ./src/shared/assets/state.json:/app/src/shared/assets/state.json:ro # TODO: remove when using darkmode for state
     depends_on:
       db:
         condition: service_healthy
