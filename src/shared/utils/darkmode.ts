@@ -4,6 +4,8 @@ export const isDarkmode = async (): Promise<boolean> => {
 			"Content-Type": "application/json",
 		},
 	});
+	if (!response.ok)
+		return true;
 	const darkmode = await response.json();
 	return darkmode;
 }
