@@ -4,11 +4,11 @@ import { VerifyBeginVariables } from "./subcommands/begin/verify-begin.variables
 import { VerifySubmitVariables } from "./subcommands/submit/verify-submit.variables";
 import { VerifySubcommandNames } from "./verify-subcommands.names";
 import { VerifyNollanVariables } from "./subcommands/nollan/verify-nollan.variables"
-import { isMottagningsModeActive } from "../../shared/utils/state";
+import { isDarkmode } from "../../shared/utils/darkmode";
 
-export function createVerifyCommand(lightClient?: boolean): SlashCommandBuilder {
+export async function createVerifyCommand(lightClient?: boolean): Promise<SlashCommandBuilder> {
 	lightClient = lightClient ?? false
-	const mottagning = isMottagningsModeActive();
+	const mottagning = await isDarkmode();
 
 	const command = new SlashCommandBuilder()
 		.setName(CommandNames.VERIFY)

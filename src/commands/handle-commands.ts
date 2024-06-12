@@ -14,7 +14,6 @@ import {
 	handleButtons,
 	handleButtonInteraction,
 } from "./buttons/buttons.handler";
-import { handleMottagningsmode } from "./mottagningsmode/mottagningsmode.handler";
 import { handleCommunity } from "./community/community.handler";
 import { handleTranslateMsg } from "./translate/translateMsg.handler";
 import { handleClub } from "./club/club.handler";
@@ -38,8 +37,8 @@ export const handleCommands = (): void => {
 						throw new CommandNotFoundError(interaction.commandName);
 				}
 			} else if (interaction.isButton()) {
-			  await handleButtonInteraction(interaction as GuildButtonInteraction);
-		  	} else if (interaction.isAutocomplete()) {
+				await handleButtonInteraction(interaction as GuildButtonInteraction);
+			} else if (interaction.isAutocomplete()) {
 				switch (interaction.commandName) {
 					case CommandNames.JOIN:
 						await handleJoinAutocomplete(interaction);
@@ -62,7 +61,7 @@ export const handleCommands = (): void => {
 				throw new Error("Guild not found!");
 			}
 			if (interaction.isChatInputCommand()) {
-			const guildInteraction = interaction as GuildChatInputCommandInteraction;
+				const guildInteraction = interaction as GuildChatInputCommandInteraction;
 				switch (guildInteraction.commandName) {
 					case CommandNames.VERIFY:
 						await handleVerify(guildInteraction);
@@ -120,9 +119,6 @@ const handleChatInputCommand = async (
 				case CommandNames.BUTTONS:
 					await handleButtons(guildInteraction);
 					return;
-				case CommandNames.MOTTAGNINGSMODE:
-					await handleMottagningsmode(guildInteraction);
-					return;
 				case CommandNames.COMMUNITY:
 					await handleCommunity(guildInteraction);
 					return;
@@ -159,9 +155,9 @@ async function interaction_error_reply(interaction: BaseInteraction): Promise<vo
 	try {
 		if (interaction.isChatInputCommand()) {
 			if (interaction.deferred || interaction.replied) {
-				await interaction.editReply({content: message})
+				await interaction.editReply({ content: message })
 			} else {
-				await interaction.reply({content: message, ephemeral: true})
+				await interaction.reply({ content: message, ephemeral: true })
 			}
 		}
 	} catch (error) {
