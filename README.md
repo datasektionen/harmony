@@ -17,8 +17,9 @@ Set the environment variables for the functionality you want to test, with `.env
 
 Run the following (as root unless you're in the `docker` group) (supports hot-reload):
 
-`docker compose up --watch`
+`docker compose up --build --watch`
 
 To interact with the database:
 
 `docker compose exec -it db psql -U harmony -d harmony`
+

@@ -4,7 +4,7 @@ import { handleVerifyBegin } from "./subcommands/begin/verify-begin.handler";
 import { handleVerifyNollan } from "./subcommands/nollan/verify-nollan.handler";
 import { handleVerifySubmit } from "./subcommands/submit/verify-submit.handler";
 import { VerifySubcommandNames } from "./verify-subcommands.names";
-import { isMottagningsModeActive } from "../../shared/utils/state";
+import { isDarkmode } from "../../shared/utils/darkmode";
 import { clientIsLight } from "../../shared/types/light-client";
 
 export const handleVerify = async (
@@ -13,7 +13,7 @@ export const handleVerify = async (
 	const subCommandName = interaction.options.getSubcommand(true);
 	const light = clientIsLight(interaction.client)
 
-	if (isMottagningsModeActive()) {
+	if (await isDarkmode()) {
 		const validCommands = Object.values(VerifySubcommandNames) as string[]; // Get all valid command names
 		if (subCommandName === VerifySubcommandNames.NOLLAN && !light)
 			return await handleVerifyNollan(interaction);

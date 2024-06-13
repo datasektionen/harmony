@@ -5,7 +5,6 @@ import { leaveCommand } from "./leave/leave.command";
 import { periodCommand } from "./period/period.command";
 import { buttonsCommand } from "./buttons/buttons.command";
 import { createVerifyCommand } from "./verify/verify.command";
-import { mottagningsmodeCommand } from "./mottagningsmode/mottagningsmode.command";
 import { translateMsgCommand } from "./translate/translateMsg.command";
 import { clubCommand } from "./club/club.command";
 import { ContextMenuCommandBuilder, SlashCommandBuilder } from "discord.js";
@@ -14,20 +13,19 @@ type ApplicationCommandBuilder =
 	| SlashCommandBuilder
 	| ContextMenuCommandBuilder;
 
-export const getOfficialBotCommands = (): ApplicationCommandBuilder[] => [
+export const getOfficialBotCommands = async (): Promise<ApplicationCommandBuilder[]> => [
 	coursesCommand,
 	joinCommand,
 	leaveCommand,
-	createVerifyCommand(),
+	await createVerifyCommand(),
 	periodCommand,
 	buttonsCommand,
-	mottagningsmodeCommand,
 	communityCommand,
 	translateMsgCommand,
 	clubCommand,
 ];
 
-export const getLightBotCommands = (): ApplicationCommandBuilder[] => [
-	createVerifyCommand(true),
+export const getLightBotCommands = async (): Promise<ApplicationCommandBuilder[]> => [
+	await createVerifyCommand(true),
 	translateMsgCommand,
 ];
