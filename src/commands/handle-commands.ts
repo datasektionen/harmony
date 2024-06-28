@@ -3,7 +3,6 @@ import { CommandNotFoundError } from "../shared/errors/command-not-founder.error
 import { CommandNames } from "./commands.names";
 import { handleCourses } from "./courses/courses.handler";
 import { handleJoin, handleJoinAutocomplete } from "./join/join.handler";
-import { handleKick } from "./kick/kick.handler";
 import { handleLeave } from "./leave/leave.handler";
 import { handleVerify } from "./verify/verify.handler";
 import { hasRoleN0llan, hasRoleVerified } from "../shared/utils/roles";
@@ -17,6 +16,7 @@ import {
 import { handleCommunity } from "./community/community.handler";
 import { handleTranslateMsg } from "./translate/translateMsg.handler";
 import { handleClub } from "./club/club.handler";
+import { handleMessage } from "./message/message.handler";
 import { BaseInteraction } from "discord.js";
 
 export const handleCommands = (): void => {
@@ -95,9 +95,6 @@ const handleChatInputCommand = async (
 		// Checks which commands the user should have access to:
 		if (await hasRoleVerified(interaction.user, interaction.guild)) {
 			switch (interaction.commandName) {
-				case CommandNames.KICK:
-					await handleKick(guildInteraction);
-					break;
 				case CommandNames.VERIFY:
 					await guildInteraction.reply({
 						content: "You are already verified!",
@@ -124,6 +121,9 @@ const handleChatInputCommand = async (
 					return;
 				case CommandNames.CLUB:
 					await handleClub(guildInteraction);
+					return;
+				case CommandNames.MESSAGE:
+					await handleMessage(guildInteraction);
 					return;
 				default:
 					throw new CommandNotFoundError(guildInteraction.commandName);
