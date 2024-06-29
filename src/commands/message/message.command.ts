@@ -17,6 +17,7 @@ messageCommand
 		option
 			.setName(MessageCommandNames.MESSAGEID)
 			.setDescription("The ID of a message in this channel whose text to send")
+			.setRequired(true)
 	)
 	.setDMPermission(false)
 	.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild);

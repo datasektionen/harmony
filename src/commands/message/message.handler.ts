@@ -8,24 +8,29 @@ export const handleMessage = async (
 	const role = options.getRole("role", true);
 	const messageid = options.getString("messageid", false);
 
-	interaction.deferReply({ ephemeral: false });
+	interaction.deferReply({ ephemeral: true });
 
-	const message = await interaction.channel?.messages.fetch(messageid as Snowflake);
-
-	if (!message) {
+	let text = "";
+	try {
+		const message = await interaction.channel?.messages.fetch(messageid as Snowflake);
+		if (!message) {
+			interaction.editReply("A message with that ID does not exist in this channel");
+			return;
+		}
+		text = message.content;
+	} catch {
 		interaction.editReply("A message with that ID does not exist in this channel");
 		return;
 	}
-
-	const text = message.content;
-
+	
 	await interaction.guild.members.fetch();
+	
 	const targetMembers = interaction.guild.members.cache.filter(
 		(member) =>
 			member.roles.cache.some(r => r.name === role.name) && !member.user.bot
 	);
 
-	if (!targetMembers) {
+	if (targetMembers.size === 0) {
 		await interaction.editReply("No users with that role found");
 		return;
 	}
