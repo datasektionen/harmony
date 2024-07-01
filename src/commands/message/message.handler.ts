@@ -20,6 +20,7 @@ export const handleMessage = async (
 		return;
 	}
 
+	await interaction.channel?.messages.fetch(); // Update cache
 	const message = await interaction.channel?.messages.fetch(messageid as Snowflake)
 		.catch(() => undefined);
 	if (!message) {
