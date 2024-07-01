@@ -19,7 +19,8 @@ export const handleMessage = async (
 		await interaction.editReply("No users with that role found");
 		return;
 	}
-
+	
+	await interaction.channel?.messages.fetch();
 	const message = await interaction.channel?.messages.fetch(messageid as Snowflake)
 		.catch(() => undefined);
 	if (!message) {
