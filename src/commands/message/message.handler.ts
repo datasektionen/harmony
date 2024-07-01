@@ -29,15 +29,23 @@ export const handleMessage = async (
 
 	const content = message.content;
 	const files = Array.from(message.attachments.values());
+	let numFailed = 0;
 	await Promise.allSettled(
 		targetMembers.map(member =>
 			member
 				.createDM(true)
 				.then(dm => dm.send({ content, files }))
+				.catch(() => numFailed++)
 		)
 	);
 
-	await interaction.editReply(
-		`Messaged all with role \`${role.name}\` (${targetMembers.size} members)`
-	);
+	if (numFailed === 0) {
+		await interaction.editReply(
+			`Messaged all with role \`${role.name}\` (${targetMembers.size} members)`
+		);
+	} else {
+		await interaction.editReply(
+			`Messaged all with role \`${role.name}\` (${targetMembers.size - numFailed} members succeeded, but ${numFailed} failed)`
+		);
+	}
 };
