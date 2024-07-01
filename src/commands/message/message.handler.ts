@@ -1,12 +1,13 @@
 import { Role, Snowflake } from "discord.js";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
+import { MessageVariables } from "./message.variables";
 
 export const handleMessage = async (
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	const { options } = interaction;
-	const role = options.getRole("role", true) as Role;
-	const messageid = options.getString("messageid", true);
+	const role = options.getRole(MessageVariables.ROLE, true) as Role;
+	const messageid = options.getString(MessageVariables.MESSAGEID, true);
 
 	await interaction.deferReply({ ephemeral: true });
 

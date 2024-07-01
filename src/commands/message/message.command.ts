@@ -1,6 +1,6 @@
 import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
 import { CommandNames } from "../commands.names";
-import { MessageCommandNames } from "./message-command.names";
+import { MessageVariables } from "./message.variables";
 
 export const messageCommand = new SlashCommandBuilder()
 	.setName(CommandNames.MESSAGE)
@@ -9,13 +9,13 @@ export const messageCommand = new SlashCommandBuilder()
 messageCommand
 	.addRoleOption((option) =>
 		option
-			.setName(MessageCommandNames.ROLE)
+			.setName(MessageVariables.ROLE)
 			.setDescription("Specify what role to message")
 			.setRequired(true)
 	)
 	.addStringOption((option) =>
 		option
-			.setName(MessageCommandNames.MESSAGEID)
+			.setName(MessageVariables.MESSAGEID)
 			.setDescription("The ID of a message in this channel whose text to send")
 			.setRequired(true)
 	)
