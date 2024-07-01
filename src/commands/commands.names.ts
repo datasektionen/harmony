@@ -1,7 +1,7 @@
 export enum CommandNames {
 	COURSES = "courses",
 	JOIN = "join",
-	KICK = "kick",
+	MESSAGE = "message",
 	LEAVE = "leave",
 	PERIOD = "period",
 	VERIFY = "verify",

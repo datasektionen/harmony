@@ -7,6 +7,7 @@ import { buttonsCommand } from "./buttons/buttons.command";
 import { createVerifyCommand } from "./verify/verify.command";
 import { translateMsgCommand } from "./translate/translateMsg.command";
 import { clubCommand } from "./club/club.command";
+import { messageCommand } from "./message/message.command";
 import { ContextMenuCommandBuilder, SlashCommandBuilder } from "discord.js";
 
 type ApplicationCommandBuilder =
@@ -23,6 +24,7 @@ export const getOfficialBotCommands = async (): Promise<ApplicationCommandBuilde
 	communityCommand,
 	translateMsgCommand,
 	clubCommand,
+	messageCommand,
 ];
 
 export const getLightBotCommands = async (): Promise<ApplicationCommandBuilder[]> => [
