@@ -11,27 +11,21 @@ export const handleVerify = async (
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	const subCommandName = interaction.options.getSubcommand(true);
-	const light = clientIsLight(interaction.client)
+	const light = clientIsLight(interaction.client);
+	const darkmode = await isDarkmode();
 
-	if (await isDarkmode()) {
-		const validCommands = Object.values(VerifySubcommandNames) as string[]; // Get all valid command names
-		if (subCommandName === VerifySubcommandNames.NOLLAN && !light)
-			return await handleVerifyNollan(interaction);
-		else if (validCommands.includes(subCommandName))
-			interaction.reply({ content: "...!̵̾͌.̸͆̅.̷̊̈́.̵͛̋Ë̵̔R̴̓͝R̵̐OR come bẵ̴c̴̋̔k̷̽ 16 se͆͠p̸̀̐t̵̐͑e̶̓̌m̵ber...ERR̶̈́͋Ô̶͂R̷̾͝.̷̊́.̶̓͒.̵͊̑.̸̑ERROR...", ephemeral: true });
-		else
-			throw new CommandNotFoundError(interaction.commandName);
-	} else {
-		switch (subCommandName) {
-			case VerifySubcommandNames.BEGIN:
-				return await handleVerifyBegin(interaction);
-			case VerifySubcommandNames.SUBMIT:
-				return await handleVerifySubmit(interaction);
-			case VerifySubcommandNames.NOLLAN:
+	switch (subCommandName) {
+		case VerifySubcommandNames.BEGIN:
+			return await handleVerifyBegin(interaction, darkmode);
+		case VerifySubcommandNames.SUBMIT:
+			return await handleVerifySubmit(interaction);
+		case VerifySubcommandNames.NOLLAN:
+			if (darkmode && !light)
+				return await handleVerifyNollan(interaction);
+			else
 				interaction.reply({ content: "Nøllan has already been dealt with...", ephemeral: true });
-				return;
-			default:
-				throw new CommandNotFoundError(interaction.commandName);
-		}
+			return;
+		default:
+			throw new CommandNotFoundError(interaction.commandName);
 	}
 };

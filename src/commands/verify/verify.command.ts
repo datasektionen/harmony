@@ -7,7 +7,7 @@ import { VerifyNollanVariables } from "./subcommands/nollan/verify-nollan.variab
 import { isDarkmode } from "../../shared/utils/darkmode";
 
 export async function createVerifyCommand(lightClient?: boolean): Promise<SlashCommandBuilder> {
-	lightClient = lightClient ?? false
+	lightClient = lightClient ?? false;
 	const mottagning = await isDarkmode();
 
 	const command = new SlashCommandBuilder()
@@ -18,33 +18,31 @@ export async function createVerifyCommand(lightClient?: boolean): Promise<SlashC
 			"Verify that you are a KTH student via @kth.se email"
 		);
 
-	if (!mottagning || lightClient) {
-		command.addSubcommand((subcommand) =>
-			subcommand
-				.setName(VerifySubcommandNames.BEGIN)
-				.setDescription("Enter your @kth.se email address to receive a verification code")
-				.addStringOption((option) =>
-					option
-						.setName(VerifyBeginVariables.EMAIL)
-						.setDescription("Your @kth.se email address")
-						.setRequired(true)
-				)
-		);
-	}
+	command.addSubcommand((subcommand) =>
+		subcommand
+			.setName(VerifySubcommandNames.BEGIN)
+			.setDescription("Enter your @kth.se email address to receive a verification code")
+			.addStringOption((option) =>
+				option
+					.setName(VerifyBeginVariables.EMAIL)
+					.setDescription("Your @kth.se email address")
+					.setRequired(true)
+			)
+	);
 
-	if (!mottagning) {
-		command.addSubcommand((subcommand) =>
-			subcommand
-				.setName(VerifySubcommandNames.SUBMIT)
-				.setDescription("Complete verification using the verification code sent to your KTH email")
-				.addStringOption((option) =>
-					option
-						.setName(VerifySubmitVariables.VERIFICATION_CODE)
-						.setDescription("The code sent to your KTH email address")
-						.setRequired(true)
-				)
-		);
-	} else if (!lightClient) {
+	command.addSubcommand((subcommand) =>
+		subcommand
+			.setName(VerifySubcommandNames.SUBMIT)
+			.setDescription("Complete verification using the verification code sent to your KTH email")
+			.addStringOption((option) =>
+				option
+					.setName(VerifySubmitVariables.VERIFICATION_CODE)
+					.setDescription("The code sent to your KTH email address")
+					.setRequired(true)
+			)
+	);
+	
+	if (mottagning && !lightClient) {
 		// let clone: SlashCommandBuilder = Object.assign(Object.create(Object.getPrototypeOf(verifyCommand)), verifyCommand)
 		command.addSubcommand((subcommand) =>
 			subcommand

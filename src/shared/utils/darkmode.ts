@@ -1,5 +1,4 @@
-export const isDarkmode = async (): Promise<boolean> => {
-	return false;
+export const isDarkmode = async (): Promise<boolean> => {	
 	const response = await fetch("https://darkmode.datasektionen.se/");
 	if (!response.ok)
 		return true;
