@@ -1,6 +1,5 @@
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 import { addRolesOrRollback } from "../../../../shared/utils/atomic-roles";
-import { handleChannel } from "../../../../shared/utils/channel-utils";
 import {
 	setRole,
 	setN0llanRole,
@@ -10,7 +9,6 @@ import {
 	setIntisRoles,
 } from "../../../../shared/utils/roles";
 import { verifyNolleCode } from "../../../../shared/utils/verify_nolle_code";
-import { joinChannel } from "../../../join/join.handler";
 import { VerifyNollanVariables } from "./verify-nollan.variables";
 
 export const handleVerifyNollan = async (
