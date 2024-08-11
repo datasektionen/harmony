@@ -57,21 +57,6 @@ export const handleVerifyNollan = async (
 			await setRole(user, validNollegruppRoleName, guild); // Add n0llegrupp role
 		});
 
-		// Join all pre-NG courses
-		// sf0003n, sf1671n, dd1337n, da1600n, dd1390n
-		// n-suffix is nolle-version
-		const courseCodes = ["sf0003n", "sf1671n", "dd1337n", "da1600n", "dd1390n"];
-
-		await Promise.all(
-			courseCodes.map(async (code) => {
-				try {
-					await handleChannel(code, interaction, joinChannel, true, true);
-				} catch {
-					console.log("Couldn't join channel: " + code);
-				}
-			})
-		);
-
 		await interaction.editReply({
 			content: "Välkommen nøllan! Du har nu blivit tillagd i några kanaler, inklusive kanaler för de första kurserna. Ha kul med schlemandet!"
 		});
