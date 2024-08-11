@@ -10,7 +10,7 @@ import { VerifySubmitVariables } from "./verify-submit.variables";
 export const handleVerifySubmit = async (
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
-	interaction.deferReply({ ephemeral: true });
+	await interaction.deferReply({ ephemeral: true });
 
 	const messageText = interaction.options.getString(
 		VerifySubmitVariables.VERIFICATION_CODE,

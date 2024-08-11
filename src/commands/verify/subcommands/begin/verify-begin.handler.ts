@@ -5,9 +5,11 @@ import { sendMail } from "../../../../shared/utils/mail";
 import { isKthEmail, verifyUser } from "../util";
 import { VerifyBeginVariables } from "./verify-begin.variables";
 import * as db from "../../../../db/db";
+import { extractYearFromUser } from "../../../../shared/utils/roles";
 
 export const handleVerifyBegin = async (
-	interaction: GuildChatInputCommandInteraction
+	interaction: GuildChatInputCommandInteraction,
+	darkmode: boolean
 ): Promise<void> => {
 	const { user, options } = interaction;
 	await interaction.deferReply({ ephemeral: true });
@@ -20,6 +22,14 @@ export const handleVerifyBegin = async (
 	}
 
 	const kthId = email.split("@")[0];
+	const { year } = await extractYearFromUser(kthId);
+	const potentiallyNollan = !year || year >= new Date().getFullYear();
+
+	if (darkmode && potentiallyNollan) {
+		await interaction.editReply({ content: "...!̵̾͌.̸͆̅.̷̊̈́.̵͛̋Ë̵̔R̴̓͝R̵̐OR come bẵ̴c̴̋̔k̷̽ 16 se͆͠p̸̀̐t̵̐͑e̶̓̌m̵ber...ERR̶̈́͋Ô̶͂R̷̾͝.̷̊́.̶̓͒.̵͊̑.̸̑ERROR..." });
+		return;
+	}
+
 	const dbDiscordId = await db.getDiscordIdByKthid(kthId);
 
 	if (dbDiscordId !== null) { // KTH ID is stored in the DB

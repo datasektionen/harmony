@@ -1,7 +1,6 @@
 import { AliasName } from "../alias-mappings";
 
-export function mapYearToAlias(courseYear: number): AliasName | null {
-	const userYear = 2000 + courseYear;
+export function mapYearToAlias(userYear: number): AliasName | null {
 	const year = new Date().getFullYear() - (new Date().getMonth() < 7 ? 1 : 0);
 
 	const current = year - userYear;
