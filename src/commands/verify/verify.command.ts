@@ -17,33 +17,52 @@ export async function createVerifyCommand(lightClient?: boolean): Promise<SlashC
 			//       This description is therefore not show to users.
 			"Verify that you are a KTH student via @kth.se email"
 		);
-
-	command.addSubcommand((subcommand) =>
-		subcommand
-			.setName(VerifySubcommandNames.BEGIN)
-			.setDescription("Enter your @kth.se email address to receive a verification code")
-			.addStringOption((option) =>
-				option
-					.setName(VerifyBeginVariables.EMAIL)
-					.setDescription("Your @kth.se email address")
-					.setRequired(true)
-			)
-	);
+	
+	if (mottagning) {
+		command.addSubcommand((subcommand) =>
+			subcommand
+				.setName(VerifySubcommandNames.BEGIN)
+				.setDescription("Enter your @kth.se email address to receive a verification code")
+				.addStringOption((option) =>
+					option
+						.setName(VerifyBeginVariables.EMAIL)
+						.setDescription("Your @kth.se email address")
+						.setRequired(true)
+				)
+				.addStringOption((option) =>
+					option
+						.setName(VerifyBeginVariables.CODE)
+						.setDescription("If you have received a special code")
+						.setRequired(false)
+				)
+		);
+	} else {
+		command.addSubcommand((subcommand) =>
+			subcommand
+				.setName(VerifySubcommandNames.BEGIN)
+				.setDescription("Enter your @kth.se email address to receive a verification code")
+				.addStringOption((option) =>
+					option
+						.setName(VerifyBeginVariables.EMAIL)
+						.setDescription("Your @kth.se email address")
+						.setRequired(true)
+				)
+		);
+	}
 
 	command.addSubcommand((subcommand) =>
 		subcommand
 			.setName(VerifySubcommandNames.SUBMIT)
-			.setDescription("Complete verification using the verification code sent to your KTH email")
+			.setDescription("Complete verification using the verification code just sent to your KTH email")
 			.addStringOption((option) =>
 				option
 					.setName(VerifySubmitVariables.VERIFICATION_CODE)
-					.setDescription("The code sent to your KTH email address")
+					.setDescription("The code just sent to your KTH email address")
 					.setRequired(true)
 			)
 	);
 	
 	if (mottagning && !lightClient) {
-		// let clone: SlashCommandBuilder = Object.assign(Object.create(Object.getPrototypeOf(verifyCommand)), verifyCommand)
 		command.addSubcommand((subcommand) =>
 			subcommand
 				.setName(VerifySubcommandNames.NOLLAN)

@@ -1,4 +1,4 @@
-import { tokenDiscord, tokenEmail } from "../../../../database-config";
+import { tokenUser } from "../../../../database-config";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 import { generateToken } from "../../../../shared/utils/generate-token";
 import { sendMail } from "../../../../shared/utils/mail";
@@ -6,6 +6,7 @@ import { isKthEmail, verifyUser } from "../util";
 import { VerifyBeginVariables } from "./verify-begin.variables";
 import * as db from "../../../../db/db";
 import { extractYearFromUser } from "../../../../shared/utils/roles";
+import { VerifyingUser } from "../../../../shared/types/VerifyingUser";
 
 export const handleVerifyBegin = async (
 	interaction: GuildChatInputCommandInteraction,
@@ -21,11 +22,15 @@ export const handleVerifyBegin = async (
 		return;
 	}
 
+	// Bypass for international students
+	const code = options.getString(VerifyBeginVariables.CODE, false);
+	const isIntis = code === process.env.CODE_INTIS;
+
 	const kthId = email.split("@")[0];
 	const { year } = await extractYearFromUser(kthId);
 	const potentiallyNollan = !year || year >= new Date().getFullYear();
 
-	if (darkmode && potentiallyNollan) {
+	if (darkmode && potentiallyNollan && !isIntis) {
 		await interaction.editReply({ content: "...!̵̾͌.̸͆̅.̷̊̈́.̵͛̋Ë̵̔R̴̓͝R̵̐OR come bẵ̴c̴̋̔k̷̽ 16 se͆͠p̸̀̐t̵̐͑e̶̓̌m̵ber...ERR̶̈́͋Ô̶͂R̷̾͝.̷̊́.̶̓͒.̵͊̑.̸̑ERROR..." });
 		return;
 	}
@@ -58,8 +63,8 @@ export const handleVerifyBegin = async (
 
 	const token = generateToken(parseInt(process.env.TOKEN_SIZE as string));
 	const timeout = parseInt(process.env.TOKEN_TIMEOUT as string);
-	await tokenDiscord.set(token, user.id, timeout);
-	await tokenEmail.set(token, email, timeout);
+	const verifyingUser = new VerifyingUser(email, user.id, isIntis);
+	await tokenUser.set(token, verifyingUser, timeout);
 
 	try {
 		await sendMail(email, token);
