@@ -4,9 +4,6 @@ import {
 	setRole,
 	setN0llanRole,
 	hasRoleN0llan,
-	setRoleVerified,
-	setPingRoles,
-	setIntisRoles,
 } from "../../../../shared/utils/roles";
 import { verifyNolleCode } from "../../../../shared/utils/verify_nolle_code";
 import { VerifyNollanVariables } from "./verify-nollan.variables";
