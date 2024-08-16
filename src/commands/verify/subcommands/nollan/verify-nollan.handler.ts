@@ -4,9 +4,6 @@ import {
 	setRole,
 	setN0llanRole,
 	hasRoleN0llan,
-	setRoleVerified,
-	setPingRoles,
-	setIntisRoles,
 } from "../../../../shared/utils/roles";
 import { verifyNolleCode } from "../../../../shared/utils/verify_nolle_code";
 import { VerifyNollanVariables } from "./verify-nollan.variables";
@@ -27,20 +24,6 @@ export const handleVerifyNollan = async (
 	}
 
 	try {
-		// Handle roles for international students
-		if (code === process.env.CODE_INTIS) {
-			await addRolesOrRollback(user, interaction.guild, async (user, guild) => {
-				await setRoleVerified(user, guild);
-				await setIntisRoles(user, guild);
-				await setPingRoles(user, guild);
-			});
-			await interaction.editReply({
-				content: "You are now verified! \nYou can join or leave course channels with the `/join` and `/leave` command. \nFor more info, see: <#1020725853157593219>"
-			});
-			return;
-		}
-		// User is not international student
-
 		// Check if nolle-code is valid
 		const validNollegruppRoleName = verifyNolleCode(code);
 		if (!validNollegruppRoleName) {

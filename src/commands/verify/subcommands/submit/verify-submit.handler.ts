@@ -1,9 +1,8 @@
-import {
-	tokenDiscord,
-	tokenEmail,
-} from "../../../../database-config";
+import { tokenUser } from "../../../../database-config";
 import * as db from "../../../../db/db";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
+import { VerifyingUser } from "../../../../shared/types/VerifyingUser";
+import { setIntisRoles, setPingRoles, setRoleVerified } from "../../../../shared/utils/roles";
 import { messageIsToken, verifyUser } from "../util";
 import { VerifySubmitVariables } from "./verify-submit.variables";
 
@@ -12,39 +11,46 @@ export const handleVerifySubmit = async (
 ): Promise<void> => {
 	await interaction.deferReply({ ephemeral: true });
 
-	const messageText = interaction.options.getString(
+	const token = interaction.options.getString(
 		VerifySubmitVariables.VERIFICATION_CODE,
 		true
 	);
 
-	if (!messageIsToken(messageText)) {
+	if (!messageIsToken(token)) {
 		await interaction.editReply({ content: "Not a valid code" });
 		return;
 	}
 
-	const [discordId, emailAddress] = await Promise.all([
-		tokenDiscord.get(messageText) as Promise<string | undefined>,
-		tokenEmail.get(messageText) as Promise<string | undefined>,
-	]);
+	const verifyingUser = await tokenUser.get(token) as VerifyingUser | undefined;
 
-	if (!emailAddress || !discordId || discordId !== interaction.user.id) {
+	if (!verifyingUser || verifyingUser.discordId !== interaction.user.id) {
 		await interaction.editReply({
 			content: "Verification unsuccessful, submit the code again or request a new code."
 		});
 		return;
 	}
 
-	const kthId = emailAddress.split("@")[0];
+	const kthId = verifyingUser.email.split("@")[0];
 
-	await db.insertUser(kthId, discordId);
+	await db.insertUser(kthId, verifyingUser.discordId);
 
 	try {
-		await verifyUser(interaction.user, interaction.guild, kthId);
+		if (verifyingUser.isIntis) {
+			await Promise.all([
+				setRoleVerified(interaction.user, interaction.guild),
+				setIntisRoles(interaction.user, interaction.guild),
+				setPingRoles(interaction.user, interaction.guild)
+			]);
+		} else {
+			await verifyUser(interaction.user, interaction.guild, kthId);
+		}
 	} catch (error) {
 		console.warn(error);
 		await interaction.editReply({ content: "Something went wrong, please try again." });
 		return;
 	}
+	
+	await tokenUser.delete(token); // Remove temporary token-user pair
 
 	await interaction.editReply({
 		content:
