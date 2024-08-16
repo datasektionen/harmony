@@ -1,6 +1,5 @@
 import { Guild, User } from "discord.js";
 import { getGuildMember } from "./guild";
-import { getHodisUser } from "./hodis";
 import { AliasName } from "../alias-mappings";
 
 export async function hasRole(
@@ -91,24 +90,6 @@ export async function setN0llanRole(
 	guild: Guild
 ): Promise<void> {
 	await setRole(user, "nØllan", guild);
-}
-
-export async function extractYearFromUser(kthId: string): Promise<{
-	yearRole: string | null;
-	year: number | null;
-}> {
-	const hodisUser = await getHodisUser(kthId);
-	const yearTag = hodisUser.tag
-		.split(",")
-		.find((tag) => tag.match(/^D\d{2}$/i));
-	if (yearTag) {
-		const yearTagWithDash = `${yearTag
-			.slice(0, 1)
-			.toUpperCase()}-${yearTag.slice(1)}`;
-		return { yearRole: yearTagWithDash, year: hodisUser.year };
-	}
-
-	return { year: null, yearRole: null };
 }
 
 export async function setYearRoles(

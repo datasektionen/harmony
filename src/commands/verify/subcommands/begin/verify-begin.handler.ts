@@ -5,7 +5,7 @@ import { sendMail } from "../../../../shared/utils/mail";
 import { isKthEmail, verifyUser } from "../util";
 import { VerifyBeginVariables } from "./verify-begin.variables";
 import * as db from "../../../../db/db";
-import { extractYearFromUser } from "../../../../shared/utils/roles";
+import { isDangerOfNollan } from "../../../../shared/utils/hodis";
 import { VerifyingUser } from "../../../../shared/types/VerifyingUser";
 
 export const handleVerifyBegin = async (
@@ -27,10 +27,8 @@ export const handleVerifyBegin = async (
 	const isIntis = code === process.env.CODE_INTIS;
 
 	const kthId = email.split("@")[0];
-	const { year } = await extractYearFromUser(kthId);
-	const potentiallyNollan = !year || year >= new Date().getFullYear();
 
-	if (darkmode && potentiallyNollan && !isIntis) {
+	if (await isDangerOfNollan(kthId, darkmode) && !isIntis) {
 		await interaction.editReply({ content: "...!̵̾͌.̸͆̅.̷̊̈́.̵͛̋Ë̵̔R̴̓͝R̵̐OR come bẵ̴c̴̋̔k̷̽ 16 se͆͠p̸̀̐t̵̐͑e̶̓̌m̵ber...ERR̶̈́͋Ô̶͂R̷̾͝.̷̊́.̶̓͒.̵͊̑.̸̑ERROR..." });
 		return;
 	}

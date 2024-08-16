@@ -1,5 +1,6 @@
 import { Guild, User } from "discord.js";
-import { extractYearFromUser, setExternRole, setPingRoles, setRoleVerified, setYearRoles } from "../../../shared/utils/roles";
+import { setExternRole, setPingRoles, setRoleVerified, setYearRoles } from "../../../shared/utils/roles";
+import { extractYearFromUser } from "../../../shared/utils/hodis";
 import { mapYearToAlias } from "../../../shared/utils/alias_to_year_mapper";
 import { handleChannelAlias } from "../../../shared/utils/channel-utils";
 import { joinChannel } from "../../join/join.handler";
