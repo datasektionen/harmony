@@ -1,7 +1,8 @@
 name: Deploy
 
 on:
-  # Can be activated manually
+  push:
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
