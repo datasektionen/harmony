@@ -32,7 +32,8 @@ export async function insertUser(
 export async function getDiscordIdByKthid(
 	kthId: string
 ): Promise<string | null> {
-	const users = await sql`select discord_id from users where kth_id = ${kthId}`;
+	const users =
+		await sql`select discord_id from users where kth_id = ${kthId}`;
 	if (!users.length) return null;
 	return users[0].discord_id;
 }

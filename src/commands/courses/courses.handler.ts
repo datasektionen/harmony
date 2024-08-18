@@ -23,7 +23,9 @@ export const handleCourses = async (
 	)
 		.filter(
 			(channel) =>
-				!aliasedChannels.some((current) => channel.name.startsWith(current))
+				!aliasedChannels.some((current) =>
+					channel.name.startsWith(current)
+				)
 		)
 		.map((channel) => channel.name);
 

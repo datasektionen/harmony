@@ -20,7 +20,8 @@ export const handleVerify = async (
 		case VerifySubcommandNames.SUBMIT:
 			return await handleVerifySubmit(interaction);
 		case VerifySubcommandNames.NOLLAN:
-			if (darkmode && !light) return await handleVerifyNollan(interaction);
+			if (darkmode && !light)
+				return await handleVerifyNollan(interaction);
 			else
 				interaction.reply({
 					content: "Nøllan has already been dealt with...",

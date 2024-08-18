@@ -13,7 +13,8 @@ function validateEnvironment(): void {
 	if (
 		!process.env.SPAM_URL ||
 		!process.env.SPAM_API_TOKEN ||
-		(!process.env.DISCORD_BOT_TOKEN && !process.env.DISCORD_LIGHT_BOT_TOKEN) ||
+		(!process.env.DISCORD_BOT_TOKEN &&
+			!process.env.DISCORD_LIGHT_BOT_TOKEN) ||
 		!process.env.DATABASE_URL
 	) {
 		throw new Error("Missing proper configuration!");

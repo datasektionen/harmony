@@ -35,10 +35,14 @@ export const handleVerifyNollan = async (
 			return;
 		}
 
-		await addRolesOrRollback(user, interaction.guild, async (user, guild) => {
-			await setN0llanRole(user, guild);
-			await setRole(user, validNollegruppRoleName, guild); // Add n0llegrupp role
-		});
+		await addRolesOrRollback(
+			user,
+			interaction.guild,
+			async (user, guild) => {
+				await setN0llanRole(user, guild);
+				await setRole(user, validNollegruppRoleName, guild); // Add n0llegrupp role
+			}
+		);
 
 		await interaction.editReply({
 			content:

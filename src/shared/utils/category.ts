@@ -19,14 +19,16 @@ export const getChannelsInCategory = async (
 			channel?.name.includes(categoryName)
 	);
 	if (!category)
-		throw new Error("Sorry! Could not find the requested channel category.");
+		throw new Error(
+			"Sorry! Could not find the requested channel category."
+		);
 
 	const channels = allGuildChannels.filter(
 		(channel) =>
 			channel?.parentId === category.id &&
 			// Check channels to join if specified
 			(channelsFilter
-				? channelsFilter.some((name) => channel.name.includes(name))
+				? !channelsFilter.some((name) => channel.name.includes(name))
 				: true)
 	);
 

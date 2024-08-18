@@ -13,7 +13,10 @@ import {
 	handleButtons,
 	handleButtonInteraction,
 } from "./buttons/buttons.handler";
-import { handleCommunity } from "./community/community.handler";
+import {
+	handleCommunity,
+	handleCommunityAutocomplete,
+} from "./community/community.handler";
 import { handleTranslateMsg } from "./translate/translateMsg.handler";
 import { handleClub } from "./club/club.handler";
 import { handleMessage } from "./message/message.handler";
@@ -39,11 +42,16 @@ export const handleCommands = (): void => {
 						throw new CommandNotFoundError(interaction.commandName);
 				}
 			} else if (interaction.isButton()) {
-				await handleButtonInteraction(interaction as GuildButtonInteraction);
+				await handleButtonInteraction(
+					interaction as GuildButtonInteraction
+				);
 			} else if (interaction.isAutocomplete()) {
 				switch (interaction.commandName) {
 					case CommandNames.JOIN:
 						await handleJoinAutocomplete(interaction);
+						return;
+					case CommandNames.COMMUNITY:
+						await handleCommunityAutocomplete(interaction);
 						return;
 					default:
 						throw new CommandNotFoundError(interaction.commandName);
@@ -70,7 +78,9 @@ export const handleCommands = (): void => {
 						await handleVerify(guildInteraction);
 						return;
 					default:
-						throw new CommandNotFoundError(guildInteraction.commandName);
+						throw new CommandNotFoundError(
+							guildInteraction.commandName
+						);
 				}
 			} else if (interaction.isMessageContextMenuCommand()) {
 				switch (interaction.commandName) {
@@ -94,7 +104,8 @@ const handleChatInputCommand = async (
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	try {
-		const guildInteraction = interaction as GuildChatInputCommandInteraction;
+		const guildInteraction =
+			interaction as GuildChatInputCommandInteraction;
 		// Checks which commands the user should have access to:
 		if (await hasRoleVerified(interaction.user, interaction.guild)) {
 			switch (interaction.commandName) {
@@ -129,7 +140,9 @@ const handleChatInputCommand = async (
 					await handleMessage(guildInteraction);
 					return;
 				default:
-					throw new CommandNotFoundError(guildInteraction.commandName);
+					throw new CommandNotFoundError(
+						guildInteraction.commandName
+					);
 			}
 		} else {
 			const validCommands = Object.values(CommandNames) as string[]; // Get all valid command names

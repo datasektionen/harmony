@@ -18,7 +18,9 @@ messageCommand
 	.addStringOption((option) =>
 		option
 			.setName(MessageVariables.MESSAGEID)
-			.setDescription("The ID of a message in this channel whose text to send")
+			.setDescription(
+				"The ID of a message in this channel whose text to send"
+			)
 			.setRequired(true)
 	)
 	.setDMPermission(false)

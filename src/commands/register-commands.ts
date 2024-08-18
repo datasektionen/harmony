@@ -6,7 +6,9 @@ export const registerCommands = async (): Promise<void> => {
 		await Promise.all(
 			(
 				await getOfficialBotCommands()
-			).map((command) => harmonyClient.application?.commands?.create(command))
+			).map((command) =>
+				harmonyClient.application?.commands?.create(command)
+			)
 		);
 	}
 	if (process.env.DISCORD_LIGHT_BOT_TOKEN) {

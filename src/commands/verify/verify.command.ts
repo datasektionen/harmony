@@ -65,7 +65,9 @@ export async function createVerifyCommand(
 			.addStringOption((option) =>
 				option
 					.setName(VerifySubmitVariables.VERIFICATION_CODE)
-					.setDescription("The code just sent to your KTH email address")
+					.setDescription(
+						"The code just sent to your KTH email address"
+					)
 					.setRequired(true)
 			)
 	);
@@ -80,7 +82,9 @@ export async function createVerifyCommand(
 				.addStringOption((option) =>
 					option
 						.setName(VerifyNollanVariables.NOLLE_KOD)
-						.setDescription("Den hemliga koden du fått från din dadda")
+						.setDescription(
+							"Den hemliga koden du fått från din dadda"
+						)
 						.setRequired(true)
 				)
 		);

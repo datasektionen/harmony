@@ -14,19 +14,26 @@ export const communityCommand = new SlashCommandBuilder()
 communityCommand.addSubcommand((subcommand) =>
 	subcommand
 		.setName(CommunitySubcommandNames.JOIN)
-		.setDescription("Join a computer science class community channel category")
+		.setDescription(
+			"Join a computer science class community channel category"
+		)
 		.addStringOption((option) =>
 			option
 				.setName(CommunityVariables.COMMUNITY)
-				.setDescription("A valid computer science community (e.g. D-22, D-23)")
+				.setDescription(
+					"A valid computer science community (e.g. D-22, D-23)"
+				)
 				.setRequired(true)
+				.setAutocomplete(true)
 		)
 );
 
 communityCommand.addSubcommand((subcommand) =>
 	subcommand
 		.setName(CommunitySubcommandNames.LEAVE)
-		.setDescription("Leave a computer science class community channel category")
+		.setDescription(
+			"Leave a computer science class community channel category"
+		)
 		.addStringOption((option) =>
 			option
 				.setName(CommunityVariables.COMMUNITY)
@@ -34,5 +41,6 @@ communityCommand.addSubcommand((subcommand) =>
 					"A valid computer science class community (e.g. D-22, D-23)"
 				)
 				.setRequired(true)
+				.setAutocomplete(true)
 		)
 );

@@ -155,12 +155,17 @@ export async function getCourseChannelsByNameCached(
 	guild: Guild,
 	names: Set<string>
 ): Promise<Collection<string, CourseChannel>> {
-	const courseCodeChannelCache = await courseCodeToChannelIdCache(guild, names);
+	const courseCodeChannelCache = await courseCodeToChannelIdCache(
+		guild,
+		names
+	);
 	const courseChannels = new Collection<string, CourseChannel>();
 	for (const name of names) {
 		const channelId = courseCodeChannelCache.get(name);
 		if (channelId) {
-			const channel = guild.channels.cache.get(channelId) as CourseChannel;
+			const channel = guild.channels.cache.get(
+				channelId
+			) as CourseChannel;
 			courseChannels.set(channelId, channel);
 		}
 	}
@@ -195,7 +200,9 @@ export async function isMemberOfAlias(
 	alias: AliasName
 ): Promise<boolean> {
 	const aliasChannels = await getAliasChannels(guild, alias);
-	return !aliasChannels.some((channel) => !userCanViewChannel(userId, channel));
+	return !aliasChannels.some(
+		(channel) => !userCanViewChannel(userId, channel)
+	);
 }
 
 export async function getAllCourseChannels(
