@@ -31,17 +31,22 @@ export const handleVerifyBegin = async (
 
 	const kthId = email.split("@")[0];
 
-	if (await isDangerOfNollan(kthId, darkmode) && !isIntis) {
-		await interaction.editReply({ content: "...!̵̾͌.̸͆̅.̷̊̈́.̵͛̋Ë̵̔R̴̓͝R̵̐OR come bẵ̴c̴̋̔k̷̽ 16 se͆͠p̸̀̐t̵̐͑e̶̓̌m̵ber...ERR̶̈́͋Ô̶͂R̷̾͝.̷̊́.̶̓͒.̵͊̑.̸̑ERROR..." });
+	if ((await isDangerOfNollan(kthId, darkmode)) && !isIntis) {
+		await interaction.editReply({
+			content: "...!̵̾͌.̸͆̅.̷̊̈́.̵͛̋Ë̵̔R̴̓͝R̵̐OR come bẵ̴c̴̋̔k̷̽ 16 se͆͠p̸̀̐t̵̐͑e̶̓̌m̵ber...ERR̶̈́͋Ô̶͂R̷̾͝.̷̊́.̶̓͒.̵͊̑.̸̑ERROR...",
+		});
 		return;
 	}
 
 	const dbDiscordId = await db.getDiscordIdByKthid(kthId);
 
-	if (dbDiscordId !== null) { // KTH ID is stored in the DB
-		if (dbDiscordId === user.id) { // Same Discord account is verifying
+	if (dbDiscordId !== null) {
+		// KTH ID is stored in the DB
+		if (dbDiscordId === user.id) {
+			// Same Discord account is verifying
 			await interaction.editReply({
-				content: "It seems you're already verified on another Konglig server. Welcome!"
+				content:
+					"It seems you're already verified on another Konglig server. Welcome!",
 			});
 			try {
 				verifyUser(interaction.user, interaction.guild, kthId);
@@ -53,11 +58,15 @@ export const handleVerifyBegin = async (
 				});
 			}
 			return;
-		} else { // Another Discord account is verifying
+		} else {
+			// Another Discord account is verifying
 			await interaction.editReply({
-				content: "Verification unsuccessful, your KTH account has already been used to verify another Discord account."
+				content:
+					"Verification unsuccessful, your KTH account has already been used to verify another Discord account.",
 			});
-			console.log(`Failed to verify user due to KTH ID already being used for another Discord account. email="${email}" user.id="${user.id}" user.username="${user.username}"`);
+			console.log(
+				`Failed to verify user due to KTH ID already being used for another Discord account. email="${email}" user.id="${user.id}" user.username="${user.username}"`
+			);
 			return;
 		}
 	}

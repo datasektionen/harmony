@@ -29,7 +29,8 @@ clubCommand.addSubcommand((subcommand) =>
 							name: role,
 							value: role,
 						};
-					}))
+					})
+				)
 		)
 );
 
@@ -54,6 +55,7 @@ clubCommand.addSubcommand((subcommand) =>
 							name: role,
 							value: role,
 						};
-					}))
+					})
+				)
 		)
 );

@@ -1,25 +1,25 @@
 export const canBeGivenBy: { [key: string]: string[] } = {
-    "Näringslivsgruppen": ["Näringslivsansvarig"],
-    "METAdor": ["Konglig Lokalchef"],
-    "Prylmångleriet": ["Prylis"],
-    "Valberedningen": ["Valberedningens ordförande"],
-    "METAspexet": ["METAspexets Direqteur"],
-    "dJubileet": ["Jubileumsmarskalk"],
-    "METAcrafter": ["Herobrine"],
-    "dJul": ["Tomtemor/-far"],
-    "Storkuben": ["Qulturattaché", "DESCtop"],
-    "Announcer": ["dFunk"],
-    "dFunk": ["D-rek"],
-    "Titel": ["Storasyskon"],
-    "Mottagare": ["Titel"],
-    "Dadderiet": ["Titel"],
-    "Quisineriet": ["Titel"],
-    "Ekonomeriet": ["Titel"],
-    "Doqumenteriet": ["Titel"],
-    "IOR": ["D-SYS", "Kommunikatör"],
-    "Studienämnden": ["SNO", "SMA", "JNO", "Programansvarig"],
-    "dÅke": ["SNO", "SMA", "JNO", "Programansvarig"]
-}
+	Näringslivsgruppen: ["Näringslivsansvarig"],
+	METAdor: ["Konglig Lokalchef"],
+	Prylmångleriet: ["Prylis"],
+	Valberedningen: ["Valberedningens ordförande"],
+	METAspexet: ["METAspexets Direqteur"],
+	dJubileet: ["Jubileumsmarskalk"],
+	METAcrafter: ["Herobrine"],
+	dJul: ["Tomtemor/-far"],
+	Storkuben: ["Qulturattaché", "DESCtop"],
+	Announcer: ["dFunk"],
+	dFunk: ["D-rek"],
+	Titel: ["Storasyskon"],
+	Mottagare: ["Titel"],
+	Dadderiet: ["Titel"],
+	Quisineriet: ["Titel"],
+	Ekonomeriet: ["Titel"],
+	Doqumenteriet: ["Titel"],
+	IOR: ["D-SYS", "Kommunikatör"],
+	Studienämnden: ["SNO", "SMA", "JNO", "Programansvarig"],
+	dÅke: ["SNO", "SMA", "JNO", "Programansvarig"],
+};
 
 /**
  * Checks if a given role is valid.
@@ -27,8 +27,8 @@ export const canBeGivenBy: { [key: string]: string[] } = {
  * @returns True if the role is valid, false otherwise.
  */
 export const isRole = (role: string): boolean => {
-    return Object.keys(canBeGivenBy).includes(role) ?? false;
-}
+	return Object.keys(canBeGivenBy).includes(role) ?? false;
+};
 
 /**
  * Checks if a role can be given to another role.
@@ -37,5 +37,5 @@ export const isRole = (role: string): boolean => {
  * @returns A boolean indicating whether the role can give the target role.
  */
 export const canGiveRole = (role: string, targetRole: string): boolean => {
-    return canBeGivenBy[role]?.includes(targetRole) ?? false;
-}
+	return canBeGivenBy[role]?.includes(targetRole) ?? false;
+};

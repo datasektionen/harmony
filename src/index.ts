@@ -44,7 +44,9 @@ async function main(): Promise<void> {
 		harmonyClient.on("guildMemberAdd", (member) => userJoined(member));
 	}
 	if (process.env.DISCORD_LIGHT_BOT_TOKEN) {
-		harmonyLightClient.once("ready", () => console.log("Logged into Harmony Light"));
+		harmonyLightClient.once("ready", () =>
+			console.log("Logged into Harmony Light")
+		);
 		await harmonyLightClient.login(process.env.DISCORD_LIGHT_BOT_TOKEN);
 
 		harmonyLightClient.on("guildMemberAdd", (member) => userJoined(member));

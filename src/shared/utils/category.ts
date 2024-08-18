@@ -13,13 +13,13 @@ export const getChannelsInCategory = async (
 	const allGuildChannels = await guild.channels.fetch();
 	if (!allGuildChannels) throw new Error("No channels found!");
 
-	const category = allGuildChannels
-		.find(
-			(channel) =>
-				channel?.type === ChannelType.GuildCategory &&
-				channel?.name.includes(categoryName)
-		);
-	if (!category) throw new Error("Sorry! Could not find the requested channel category.");
+	const category = allGuildChannels.find(
+		(channel) =>
+			channel?.type === ChannelType.GuildCategory &&
+			channel?.name.includes(categoryName)
+	);
+	if (!category)
+		throw new Error("Sorry! Could not find the requested channel category.");
 
 	const channels = allGuildChannels.filter(
 		(channel) =>

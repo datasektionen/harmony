@@ -20,7 +20,12 @@ export const handleLeave = async (
 		.trim()
 		.toLowerCase();
 	if (aliasExists(courseCode as AliasName)) {
-		const updateCount = await handleChannelAlias(interaction.guild, interaction.user, courseCode, leaveChannel);
+		const updateCount = await handleChannelAlias(
+			interaction.guild,
+			interaction.user,
+			courseCode,
+			leaveChannel
+		);
 		await interaction.editReply({
 			content: `Successfully left \`${courseCode}\`! (${updateCount}) channels updated`,
 		});
