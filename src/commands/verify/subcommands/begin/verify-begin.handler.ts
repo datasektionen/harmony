@@ -5,7 +5,7 @@ import { sendMail } from "../../../../shared/utils/mail";
 import { isKthEmail, verifyUser } from "../util";
 import { VerifyBeginVariables } from "./verify-begin.variables";
 import * as db from "../../../../db/db";
-import { isDangerOfNollan } from "../../../../shared/utils/hodis";
+import { getHodisUser, isDangerOfNollan } from "../../../../shared/utils/hodis";
 import { VerifyingUser } from "../../../../shared/types/VerifyingUser";
 
 export const handleVerifyBegin = async (
@@ -15,7 +15,10 @@ export const handleVerifyBegin = async (
 	const { user, options } = interaction;
 	await interaction.deferReply({ ephemeral: true });
 	const email = options.getString(VerifyBeginVariables.EMAIL, true);
-	if (!isKthEmail(email)) {
+	if (
+		!isKthEmail(email) &&
+		(await getHodisUser(email.split("@")[0])) !== null
+	) {
 		await interaction.editReply({
 			content: "Please enter a valid KTH email address.",
 		});
