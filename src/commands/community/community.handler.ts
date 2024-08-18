@@ -4,8 +4,9 @@ import { handleCommunityJoin } from "./subcommands/join/community-join.handler";
 import { handleCommunityLeave } from "./subcommands/leave/community-leave.handler";
 import { CommunitySubcommandNames } from "./community-subcommands.names";
 import { CommunityVariables } from "./subcommands/community.variables";
-import { communityYear, getCommunityCategory, isMaster, isYear } from "./subcommands/utils";
+import { categoryIsMaster, categoryIsYear, getCommunityCategory, isMaster, isYear, masterRegex, yearRegex } from "./subcommands/utils";
 import { hasRole } from "../../shared/utils/roles";
+import { ApplicationCommandOptionChoiceData, AutocompleteInteraction, ChannelType } from "discord.js";
 
 export const handleCommunity = async (
 	interaction: GuildChatInputCommandInteraction
@@ -45,3 +46,27 @@ export const handleCommunity = async (
 			throw new CommandNotFoundError(interaction.commandName);
 	}
 };
+
+export const handleCommunityAutocomplete = async (
+	interaction: AutocompleteInteraction
+): Promise<void> => {
+	const community = interaction.options.getString(CommunityVariables.COMMUNITY, true).trim().toLowerCase();
+	if (!interaction.guild)
+		return;
+	const choices = interaction.guild.channels.cache.reduce<ApplicationCommandOptionChoiceData[]>((acc, channel) => {
+		if (
+			acc.length < 25 && 
+			channel.type === ChannelType.GuildCategory && 
+			channel.name.toLowerCase().includes(community) &&
+			(categoryIsYear(channel.name) || categoryIsMaster(channel.name))
+		) {
+			const suggestedCommunity = categoryIsYear(channel.name)
+				? channel.name.match(yearRegex)
+				: channel.name.match(masterRegex);
+			if (suggestedCommunity)
+				acc.push({ name: suggestedCommunity[0], value: suggestedCommunity[0] });
+		}
+		return acc;
+	}, []);
+	await interaction.respond(choices);
+}

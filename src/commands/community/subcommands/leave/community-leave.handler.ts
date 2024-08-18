@@ -1,4 +1,3 @@
-import { Guild, User } from "discord.js";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 import { joinLeaveCommunity } from "../utils";
 

@@ -20,6 +20,7 @@ communityCommand.addSubcommand((subcommand) =>
 				.setName(CommunityVariables.COMMUNITY)
 				.setDescription("A valid computer science community (e.g. D-22, D-23)")
 				.setRequired(true)
+				.setAutocomplete(true)
 		)
 );
 
@@ -32,5 +33,6 @@ communityCommand.addSubcommand((subcommand) =>
 				.setName(CommunityVariables.COMMUNITY)
 				.setDescription("A valid computer science class community (e.g. D-22, D-23)")
 				.setRequired(true)
+				.setAutocomplete(true)
 		)
 );

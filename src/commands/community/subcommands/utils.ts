@@ -2,15 +2,29 @@ import { Guild, User } from "discord.js";
 import { removeRole, setRole } from "../../../shared/utils/roles";
 import { getChannelsInCategory } from "../../../shared/utils/category";
 
+export const yearRegex = /[Dd]?-?([0-9]{2})?[0-9]{2}/;
+export const masterRegex = /[A-Za-z]{2}-master/;
+
+// Matches e.g. 2020, D2020, D-2020, 20, D20, and D-20
 export const isYear = (messageText: string): boolean =>
-	// Matches e.g. 2020, D2020, D-2020, 20, D20, and D-20
-	(new RegExp(/^[Dd]?-?([0-9]{2})?[0-9]{2}$/)).test(messageText);
+	(new RegExp(`^${yearRegex.source}$`)).test(messageText);
+
+// Matches e.g. 2020, D2020, D-2020, 20, D20, and D-20 with other stuff around
+export const categoryIsYear = (messageText: string): RegExpMatchArray | null =>
+	messageText.match(yearRegex);
 
 // Accepts e.g. "cs" or "cs-master"
 export const isMaster = (messageText: string): boolean =>
 	additionalCommunities.some(name => 
 		name === messageText.toLowerCase() ||
 		name + "-master" === messageText.toLowerCase()
+	);
+
+// Accepts e.g. "cs" or "cs-master" with other stuff around
+export const categoryIsMaster = (messageText: string): boolean =>
+	additionalCommunities.some(name => 
+		messageText.toLowerCase().includes(name) ||
+		messageText.toLowerCase().includes(name + "-master") 
 	);
 
 // Try joining channels under the community category with these names only

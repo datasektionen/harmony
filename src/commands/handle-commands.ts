@@ -13,7 +13,7 @@ import {
 	handleButtons,
 	handleButtonInteraction,
 } from "./buttons/buttons.handler";
-import { handleCommunity } from "./community/community.handler";
+import { handleCommunity, handleCommunityAutocomplete } from "./community/community.handler";
 import { handleTranslateMsg } from "./translate/translateMsg.handler";
 import { handleClub } from "./club/club.handler";
 import { handleMessage } from "./message/message.handler";
@@ -42,6 +42,9 @@ export const handleCommands = (): void => {
 				switch (interaction.commandName) {
 					case CommandNames.JOIN:
 						await handleJoinAutocomplete(interaction);
+						return;
+					case CommandNames.COMMUNITY:
+						await handleCommunityAutocomplete(interaction);
 						return;
 					default:
 						throw new CommandNotFoundError(interaction.commandName);
