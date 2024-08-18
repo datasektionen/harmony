@@ -4,7 +4,7 @@ import { AliasName } from "../alias-mappings";
 export async function hasRole(
 	user: User,
 	roleName: string,
-	guild: Guild,
+	guild: Guild
 ): Promise<boolean> {
 	const guildMember = await guild.members.fetch(user);
 	return !!guildMember.roles.cache.find((role) => role.name === roleName);
@@ -16,12 +16,12 @@ export async function hasRole(
  */
 export async function hasRoleVerified(
 	user: User,
-	guild: Guild,
+	guild: Guild
 ): Promise<boolean> {
 	return await hasRole(
 		user,
 		process.env.DISCORD_VERIFIED_ROLE as string,
-		guild,
+		guild
 	);
 }
 
@@ -31,7 +31,7 @@ export async function hasRoleVerified(
  */
 export async function hasRoleN0llan(
 	user: User,
-	guild: Guild,
+	guild: Guild
 ): Promise<boolean> {
 	return await hasRole(user, "nØllan", guild);
 }
@@ -39,7 +39,7 @@ export async function hasRoleN0llan(
 export async function setRole(
 	user: User,
 	roleName: string,
-	guild: Guild,
+	guild: Guild
 ): Promise<void> {
 	const role = guild.roles.cache.find((r) => r.name === roleName);
 	if (!role) {
@@ -59,7 +59,7 @@ export async function setRole(
 export async function removeRole(
 	user: User,
 	roleName: string,
-	guild: Guild,
+	guild: Guild
 ): Promise<void> {
 	const role = guild.roles.cache.find((r) => r.name === roleName);
 	if (!role) {
@@ -85,7 +85,7 @@ export async function setN0llanRole(user: User, guild: Guild): Promise<void> {
 export async function setYearRoles(
 	user: User,
 	yearTagWithDash: string,
-	guild: Guild,
+	guild: Guild
 ): Promise<void> {
 	await setRole(user, yearTagWithDash, guild);
 	await setRole(user, "Datasektionen", guild);
@@ -108,7 +108,7 @@ export async function setPingRoles(user: User, guild: Guild): Promise<void> {
 export async function toggleYearCoursesRole(
 	user: User,
 	guild: Guild,
-	alias: AliasName,
+	alias: AliasName
 ): Promise<void> {
 	const yearRoles = ["Åk 1", "Åk 2", "Åk 3"];
 	let selectedRole;

@@ -27,7 +27,7 @@ export async function translateText(text: string): Promise<string | undefined> {
 		const esc_value = value.replace(/</g, ""); // rough but easier
 		text = text.replace(
 			new RegExp(esc_key, "gi"),
-			`<as-is>${esc_value}</as-is>`,
+			`<as-is>${esc_value}</as-is>`
 		);
 	}
 
@@ -43,7 +43,7 @@ export async function translateText(text: string): Promise<string | undefined> {
 		s ? decode(s) : s;
 
 	return unescapeHtmlEntities(
-		result?.text.replace(/<as-is>([^<]+)<\/as-is>/g, (_, v) => v),
+		result?.text.replace(/<as-is>([^<]+)<\/as-is>/g, (_, v) => v)
 	);
 }
 
@@ -58,7 +58,7 @@ async function loadGlossary(): Promise<{ [k: string]: string }> {
 					(k === "__as-is" && Array.isArray(v)) ||
 					(k !== "" && k !== "__as-is" && typeof v === "string")
 						? v
-						: undefined, // ignore invalid values
+						: undefined // ignore invalid values
 			) ?? {};
 
 		for (const term of obj["__as-is"] ?? {}) {
@@ -69,7 +69,7 @@ async function loadGlossary(): Promise<{ [k: string]: string }> {
 		return obj;
 	} catch {
 		console.warn(
-			"WARNING: A translation glossary was provided, but it doesn't exist or has an invalid structure",
+			"WARNING: A translation glossary was provided, but it doesn't exist or has an invalid structure"
 		);
 		return {};
 	}

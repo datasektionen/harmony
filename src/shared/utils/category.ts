@@ -8,7 +8,7 @@ import {
 export const getChannelsInCategory = async (
 	guild: Guild,
 	categoryName: string,
-	channelsFilter?: string[],
+	channelsFilter?: string[]
 ): Promise<Collection<string, NonThreadGuildBasedChannel | null>> => {
 	const allGuildChannels = await guild.channels.fetch();
 	if (!allGuildChannels) throw new Error("No channels found!");
@@ -16,11 +16,11 @@ export const getChannelsInCategory = async (
 	const category = allGuildChannels.find(
 		(channel) =>
 			channel?.type === ChannelType.GuildCategory &&
-			channel?.name.includes(categoryName),
+			channel?.name.includes(categoryName)
 	);
 	if (!category)
 		throw new Error(
-			"Sorry! Could not find the requested channel category.",
+			"Sorry! Could not find the requested channel category."
 		);
 
 	const channels = allGuildChannels.filter(
@@ -29,7 +29,7 @@ export const getChannelsInCategory = async (
 			// Check channels to join if specified
 			(channelsFilter
 				? !channelsFilter.some((name) => channel.name.includes(name))
-				: true),
+				: true)
 	);
 
 	return channels;

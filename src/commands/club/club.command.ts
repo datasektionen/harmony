@@ -16,7 +16,7 @@ clubCommand.addSubcommand((subcommand) =>
 			option
 				.setName(ClubVariables.TARGET)
 				.setDescription("The user to give the role to")
-				.setRequired(true),
+				.setRequired(true)
 		)
 		.addStringOption((option) =>
 			option
@@ -29,9 +29,9 @@ clubCommand.addSubcommand((subcommand) =>
 							name: role,
 							value: role,
 						};
-					}),
-				),
-		),
+					})
+				)
+		)
 );
 
 clubCommand.addSubcommand((subcommand) =>
@@ -42,7 +42,7 @@ clubCommand.addSubcommand((subcommand) =>
 			option
 				.setName(ClubVariables.TARGET)
 				.setDescription("The user to remove the role from")
-				.setRequired(true),
+				.setRequired(true)
 		)
 		.addStringOption((option) =>
 			option
@@ -55,7 +55,7 @@ clubCommand.addSubcommand((subcommand) =>
 							name: role,
 							value: role,
 						};
-					}),
-				),
-		),
+					})
+				)
+		)
 );

@@ -12,7 +12,7 @@ export const aliasExists = (alias: AliasName): boolean => {
 
 export const getAliasChannels = async (
 	guild: Guild,
-	alias: AliasName,
+	alias: AliasName
 ): Promise<Collection<string, CourseChannel>> => {
 	// Logic for electives alias
 	if (alias === AliasName.ALL_ELECTIVES) {
@@ -30,8 +30,8 @@ export const getAliasChannels = async (
 				elective_categories.some(
 					(category) =>
 						channel.parent && // Not null
-						channel.parent.name.toLowerCase().includes(category),
-				),
+						channel.parent.name.toLowerCase().includes(category)
+				)
 		);
 		return elective_channels;
 	}
@@ -39,7 +39,7 @@ export const getAliasChannels = async (
 	const channelNames = mappings[alias];
 
 	const channelNamesSet = new Set(
-		channelNames.map((current) => current.toLowerCase()),
+		channelNames.map((current) => current.toLowerCase())
 	);
 
 	return await getCourseChannelsByNameCached(guild, channelNamesSet);

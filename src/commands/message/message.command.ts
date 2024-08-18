@@ -5,7 +5,7 @@ import { MessageVariables } from "./message.variables";
 export const messageCommand = new SlashCommandBuilder()
 	.setName(CommandNames.MESSAGE)
 	.setDescription(
-		"Direct message all members of a specific role from the server",
+		"Direct message all members of a specific role from the server"
 	);
 
 messageCommand
@@ -13,15 +13,15 @@ messageCommand
 		option
 			.setName(MessageVariables.ROLE)
 			.setDescription("Specify what role to message")
-			.setRequired(true),
+			.setRequired(true)
 	)
 	.addStringOption((option) =>
 		option
 			.setName(MessageVariables.MESSAGEID)
 			.setDescription(
-				"The ID of a message in this channel whose text to send",
+				"The ID of a message in this channel whose text to send"
 			)
-			.setRequired(true),
+			.setRequired(true)
 	)
 	.setDMPermission(false)
 	.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild);

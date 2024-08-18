@@ -16,7 +16,7 @@ import {
 import { validCourseCode } from "../../shared/utils/valid-course-code";
 
 export const handleJoin = async (
-	interaction: GuildChatInputCommandInteraction,
+	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	const { options } = interaction;
 	const courseCode = options
@@ -29,7 +29,7 @@ export const handleJoin = async (
 			interaction.guild,
 			interaction.user,
 			courseCode,
-			joinChannel,
+			joinChannel
 		);
 		await interaction.editReply({
 			content: `Successfully joined \`${courseCode}\`! (${updateCount}) channels updated`,
@@ -41,7 +41,7 @@ export const handleJoin = async (
 
 export const joinChannel = async (
 	channel: CourseChannel,
-	user: User,
+	user: User
 ): Promise<void> => {
 	await channel.permissionOverwrites.create(user, {
 		ViewChannel: true,
@@ -49,7 +49,7 @@ export const joinChannel = async (
 };
 
 export const handleJoinAutocomplete = async (
-	interaction: AutocompleteInteraction,
+	interaction: AutocompleteInteraction
 ): Promise<void> => {
 	const courseCode = interaction.options
 		.getString(JoinVariables.COURSE_CODE, true)

@@ -19,10 +19,10 @@ export const messageIsToken = (messageText: string): RegExpMatchArray | null =>
 export const verifyUser = async (
 	user: User,
 	guild: Guild,
-	kthId: string,
+	kthId: string
 ): Promise<void> => {
 	console.log(
-		`Verified user by kth email. kthid="${kthId}" user.id="${user.id}" user.username="${user.username}"`,
+		`Verified user by kth email. kthid="${kthId}" user.id="${user.id}" user.username="${user.username}"`
 	);
 
 	await setRoleVerified(user, guild);

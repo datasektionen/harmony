@@ -10,7 +10,7 @@ leaveCommand.addStringOption((option) =>
 	option
 		.setName(LeaveVariables.COURSE_CODE)
 		.setDescription(
-			"A valid KTH course code (e.g. DA2370, DA150X). It is case-insensitive.",
+			"A valid KTH course code (e.g. DA2370, DA150X). It is case-insensitive."
 		)
-		.setRequired(true),
+		.setRequired(true)
 );

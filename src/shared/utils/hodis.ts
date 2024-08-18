@@ -11,7 +11,7 @@ type HodisUser = {
 
 export async function getHodisUser(kthId: string): Promise<HodisUser | null> {
 	const body = await fetch(
-		`https://hodis.datasektionen.se/uid/${kthId.toLowerCase()}`,
+		`https://hodis.datasektionen.se/uid/${kthId.toLowerCase()}`
 	).then((res) => res.json());
 	return "error" in body ? null : body;
 }
@@ -36,7 +36,7 @@ export async function extractYearFromUser(kthId: string): Promise<{
 
 export async function isDangerOfNollan(
 	kthId: string,
-	darkmode: boolean,
+	darkmode: boolean
 ): Promise<boolean> {
 	const { year } = await extractYearFromUser(kthId);
 	const potentiallyNollan = !year || year >= new Date().getFullYear();

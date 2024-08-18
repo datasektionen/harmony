@@ -31,7 +31,7 @@ export const handleCommands = (): void => {
 
 			if (interaction.isChatInputCommand()) {
 				await handleChatInputCommand(
-					interaction as GuildChatInputCommandInteraction,
+					interaction as GuildChatInputCommandInteraction
 				);
 			} else if (interaction.isMessageContextMenuCommand()) {
 				switch (interaction.commandName) {
@@ -43,7 +43,7 @@ export const handleCommands = (): void => {
 				}
 			} else if (interaction.isButton()) {
 				await handleButtonInteraction(
-					interaction as GuildButtonInteraction,
+					interaction as GuildButtonInteraction
 				);
 			} else if (interaction.isAutocomplete()) {
 				switch (interaction.commandName) {
@@ -79,7 +79,7 @@ export const handleCommands = (): void => {
 						return;
 					default:
 						throw new CommandNotFoundError(
-							guildInteraction.commandName,
+							guildInteraction.commandName
 						);
 				}
 			} else if (interaction.isMessageContextMenuCommand()) {
@@ -101,7 +101,7 @@ export const handleCommands = (): void => {
 };
 
 const handleChatInputCommand = async (
-	interaction: GuildChatInputCommandInteraction,
+	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	try {
 		const guildInteraction =
@@ -141,7 +141,7 @@ const handleChatInputCommand = async (
 					return;
 				default:
 					throw new CommandNotFoundError(
-						guildInteraction.commandName,
+						guildInteraction.commandName
 					);
 			}
 		} else {
@@ -152,7 +152,7 @@ const handleChatInputCommand = async (
 			} else if (validCommands.includes(guildInteraction.commandName)) {
 				const permissionDeniedMessage = (await hasRoleN0llan(
 					guildInteraction.user,
-					guildInteraction.guild,
+					guildInteraction.guild
 				))
 					? "Du är allt för schleeemig, kom tillbaka senare."
 					: "Permission denied!\nYou first need to verify yourself using the '/verify' command.";
@@ -170,7 +170,7 @@ const handleChatInputCommand = async (
 };
 
 async function interaction_error_reply(
-	interaction: BaseInteraction,
+	interaction: BaseInteraction
 ): Promise<void> {
 	const message =
 		"This interaction could not be completed. Please contact an admin.";

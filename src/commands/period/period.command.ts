@@ -17,6 +17,6 @@ periodCommand
 				option
 					.setName(PeriodRolesVariables.PERIOD)
 					.setDescription("The period to execute role logic for")
-					.setRequired(true),
-			),
+					.setRequired(true)
+			)
 	);

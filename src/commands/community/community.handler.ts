@@ -21,14 +21,14 @@ import {
 } from "discord.js";
 
 export const handleCommunity = async (
-	interaction: GuildChatInputCommandInteraction,
+	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	const { options, user, guild } = interaction;
 	await interaction.deferReply({ ephemeral: true });
 
 	const communityParam = options.getString(
 		CommunityVariables.COMMUNITY,
-		true,
+		true
 	);
 	const paramIsMaster = isMaster(communityParam);
 	const paramIsYear = isYear(communityParam);
@@ -57,13 +57,13 @@ export const handleCommunity = async (
 			return await handleCommunityJoin(
 				interaction,
 				community,
-				paramIsMaster,
+				paramIsMaster
 			);
 		case CommunitySubcommandNames.LEAVE:
 			return await handleCommunityLeave(
 				interaction,
 				community,
-				paramIsMaster,
+				paramIsMaster
 			);
 		default:
 			throw new CommandNotFoundError(interaction.commandName);
@@ -71,7 +71,7 @@ export const handleCommunity = async (
 };
 
 export const handleCommunityAutocomplete = async (
-	interaction: AutocompleteInteraction,
+	interaction: AutocompleteInteraction
 ): Promise<void> => {
 	const community = interaction.options
 		.getString(CommunityVariables.COMMUNITY, true)

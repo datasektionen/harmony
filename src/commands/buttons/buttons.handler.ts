@@ -14,7 +14,7 @@ import {
 } from "../../shared/utils/channel-utils";
 
 export const handleButtons = async (
-	interaction: GuildChatInputCommandInteraction,
+	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	if (!interaction.isChatInputCommand()) return;
 
@@ -24,7 +24,7 @@ export const handleButtons = async (
 };
 
 export const handleButtonInteraction = async (
-	interaction: GuildButtonInteraction,
+	interaction: GuildButtonInteraction
 ): Promise<void> => {
 	const courseCode = interaction.customId;
 	const alias = courseCode as AliasName;
@@ -33,7 +33,7 @@ export const handleButtonInteraction = async (
 		const joining = !(await isMemberOfAlias(
 			interaction.guild,
 			interaction.user.id,
-			alias,
+			alias
 		));
 		const action = joining ? joinChannel : leaveChannel;
 		const actionVerb = joining ? "joined" : "left";
@@ -41,7 +41,7 @@ export const handleButtonInteraction = async (
 			interaction.guild,
 			interaction.user,
 			alias,
-			action,
+			action
 		);
 
 		await interaction.editReply({
@@ -53,7 +53,7 @@ export const handleButtonInteraction = async (
 };
 
 function createAliasButtons(
-	aliases: AliasName[],
+	aliases: AliasName[]
 ): ActionRowBuilder<ButtonBuilder>[] {
 	const BUTTONS_PER_ROW = 3;
 	const rows = [];
@@ -64,7 +64,7 @@ function createAliasButtons(
 			new ButtonBuilder()
 				.setCustomId(alias)
 				.setLabel(buttonLabel)
-				.setStyle(ButtonStyle.Primary),
+				.setStyle(ButtonStyle.Primary)
 		);
 		if (row.components.length == BUTTONS_PER_ROW) {
 			rows.push(row);

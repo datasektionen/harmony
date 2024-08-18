@@ -12,13 +12,13 @@ import { messageIsToken, verifyUser } from "../util";
 import { VerifySubmitVariables } from "./verify-submit.variables";
 
 export const handleVerifySubmit = async (
-	interaction: GuildChatInputCommandInteraction,
+	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	await interaction.deferReply({ ephemeral: true });
 
 	const token = interaction.options.getString(
 		VerifySubmitVariables.VERIFICATION_CODE,
-		true,
+		true
 	);
 
 	if (!messageIsToken(token)) {

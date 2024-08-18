@@ -8,7 +8,7 @@ import { isDarkmode } from "../../shared/utils/darkmode";
 import { clientIsLight } from "../../shared/types/light-client";
 
 export const handleVerify = async (
-	interaction: GuildChatInputCommandInteraction,
+	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	const subCommandName = interaction.options.getSubcommand(true);
 	const light = clientIsLight(interaction.client);

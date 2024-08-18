@@ -10,7 +10,7 @@ import { VerifyingUser } from "../../../../shared/types/VerifyingUser";
 
 export const handleVerifyBegin = async (
 	interaction: GuildChatInputCommandInteraction,
-	darkmode: boolean,
+	darkmode: boolean
 ): Promise<void> => {
 	const { user, options } = interaction;
 	await interaction.deferReply({ ephemeral: true });
@@ -65,7 +65,7 @@ export const handleVerifyBegin = async (
 					"Verification unsuccessful, your KTH account has already been used to verify another Discord account.",
 			});
 			console.log(
-				`Failed to verify user due to KTH ID already being used for another Discord account. email="${email}" user.id="${user.id}" user.username="${user.username}"`,
+				`Failed to verify user due to KTH ID already being used for another Discord account. email="${email}" user.id="${user.id}" user.username="${user.username}"`
 			);
 			return;
 		}

@@ -18,7 +18,7 @@ export const isMaster = (messageText: string): boolean =>
 	additionalCommunities.some(
 		(name) =>
 			name === messageText.toLowerCase() ||
-			name + "-master" === messageText.toLowerCase(),
+			name + "-master" === messageText.toLowerCase()
 	);
 
 // Accepts e.g. "cs" or "cs-master" with other stuff around
@@ -26,7 +26,7 @@ export const categoryIsMaster = (messageText: string): boolean =>
 	additionalCommunities.some(
 		(name) =>
 			messageText.toLowerCase().includes(name) ||
-			messageText.toLowerCase().includes(name + "-master"),
+			messageText.toLowerCase().includes(name + "-master")
 	);
 
 // Try joining channels under the community category with these names only
@@ -50,7 +50,7 @@ export const communityYear = (messageText: string): string | undefined => {
 // Converts community names accepted by isYear and isMaster to their correct category/role names
 export const getCommunityCategory = (
 	messageText: string,
-	paramIsYear: boolean,
+	paramIsYear: boolean
 ): string => {
 	if (paramIsYear) {
 		return "D-" + communityYear(messageText);
@@ -64,7 +64,7 @@ export const joinLeaveCommunity = async (
 	guild: Guild,
 	user: User,
 	isMasterCommunity: boolean,
-	join: boolean,
+	join: boolean
 ): Promise<void> => {
 	if (isMasterCommunity) {
 		// Handle master role
@@ -74,7 +74,7 @@ export const joinLeaveCommunity = async (
 		const channels = await getChannelsInCategory(
 			guild,
 			community,
-			unjoinableCommunityChannels,
+			unjoinableCommunityChannels
 		);
 
 		channels.forEach(async (channel) => {

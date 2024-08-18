@@ -4,7 +4,7 @@ import { getAllCourseChannels } from "../../shared/utils/channel-utils";
 import { validCourseCode } from "../../shared/utils/valid-course-code";
 
 export const handleCourses = async (
-	interaction: GuildChatInputCommandInteraction,
+	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	const lines = [];
 	const aliasedChannels: string[] = [];
@@ -24,8 +24,8 @@ export const handleCourses = async (
 		.filter(
 			(channel) =>
 				!aliasedChannels.some((current) =>
-					channel.name.startsWith(current),
-				),
+					channel.name.startsWith(current)
+				)
 		)
 		.map((channel) => channel.name);
 
@@ -35,7 +35,7 @@ export const handleCourses = async (
 			lines.push(
 				`${nonIncludedChannelNames[i].split("-")[0]}${
 					i === nonIncludedChannelNames.length - 1 ? "" : ", "
-				}`,
+				}`
 			);
 			aliasedChannels.push(nonIncludedChannelNames[i]);
 		}

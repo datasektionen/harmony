@@ -3,7 +3,7 @@ import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatIn
 import { MessageVariables } from "./message.variables";
 
 export const handleMessage = async (
-	interaction: GuildChatInputCommandInteraction,
+	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	const { options } = interaction;
 	const role = options.getRole(MessageVariables.ROLE, true) as Role;
@@ -26,7 +26,7 @@ export const handleMessage = async (
 		.catch(() => undefined);
 	if (!message) {
 		interaction.editReply(
-			"A message with that ID does not exist in this channel",
+			"A message with that ID does not exist in this channel"
 		);
 		return;
 	}
@@ -47,16 +47,16 @@ export const handleMessage = async (
 				console.error(err);
 				numFailed++;
 			}
-		}),
+		})
 	);
 
 	if (numFailed === 0) {
 		await interaction.editReply(
-			`Messaged all with role \`${role.name}\` (${numSent} members)`,
+			`Messaged all with role \`${role.name}\` (${numSent} members)`
 		);
 	} else {
 		await interaction.editReply(
-			`Messaged all with role \`${role.name}\` (${numSent} members succeeded, but ${numFailed} failed)`,
+			`Messaged all with role \`${role.name}\` (${numSent} members succeeded, but ${numFailed} failed)`
 		);
 	}
 };
