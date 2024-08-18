@@ -154,21 +154,12 @@ export async function getCourseChannelsByName(guild: Guild, names: Set<string>):
 }
 
 function userCanViewChannel(userId: Snowflake, channel: CourseChannel): boolean {
-	const permissions = channel.permissionsFor(userId);
-	if (permissions) {
-		return permissions.has(PermissionFlagsBits.ViewChannel);
-	}
-	return false;
+  return channel.permissionsFor(userId)?.has(PermissionFlagsBits.ViewChannel) ?? false
 }
 
 export async function isMemberOfAlias(guild: Guild, userId: Snowflake, alias: AliasName): Promise<boolean> {
 	const aliasChannels = await getAliasChannels(guild, alias);
-	for (const channel of aliasChannels.values()) {
-		if (!userCanViewChannel(userId, channel)) {
-			return false;
-		}
-	}
-	return true;
+  return !aliasChannels.some((channel) => !userCanViewChannel(userId, channel));
 }
 
 export async function getAllCourseChannels(guild: Guild): Promise<Collection<string, CourseChannel>> {
