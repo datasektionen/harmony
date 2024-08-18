@@ -27,11 +27,11 @@ export const handleChannelAlias = async (
 	guild: Guild,
 	user: User,
 	alias: string,
-	actionCallback: (channel: CourseChannel, user: User) => Promise<void>
+	actionCallback: (channel: CourseChannel, user: User) => Promise<void>,
 ): Promise<number> => {
 	if (
 		[AliasName.YEAR1, AliasName.YEAR2, AliasName.YEAR3].includes(
-			alias as AliasName
+			alias as AliasName,
 		)
 	) {
 		toggleYearCoursesRole(user, guild, alias as AliasName);
@@ -49,7 +49,7 @@ export const handleChannelAlias = async (
 	}
 
 	const promises = channels.map((channel) =>
-		actionCallback(channel as CourseChannel, user)
+		actionCallback(channel as CourseChannel, user),
 	);
 	await Promise.allSettled(promises);
 
@@ -70,10 +70,10 @@ export const handleChannel = async (
 	interaction: GuildButtonOrCommandInteraction,
 	actionCallback: (
 		channel: ForumChannel | TextChannel,
-		user: User
+		user: User,
 	) => Promise<void>,
 	noInteraction?: boolean,
-	skipCheckingCourseCode?: boolean
+	skipCheckingCourseCode?: boolean,
 ): Promise<void> => {
 	noInteraction = noInteraction ?? false;
 	if (!noInteraction) {
@@ -82,7 +82,7 @@ export const handleChannel = async (
 
 	await interaction.guild.channels.fetch();
 	const channel = interaction.guild.channels.cache.find(({ name }) =>
-		name.startsWith(courseCode + "-")
+		name.startsWith(courseCode + "-"),
 	);
 
 	// If no course was found, return with a message.
@@ -129,7 +129,7 @@ const cachesByGuildId = new Collection<
 
 async function courseCodeToChannelIdCache(
 	guild: Guild,
-	names: Set<string>
+	names: Set<string>,
 ): Promise<Collection<string, Snowflake>> {
 	const nameArray = Array.from(names);
 	let cache = cachesByGuildId.get(guild.id);
@@ -153,14 +153,19 @@ function channelNameToCourseCode(channelName: string): string {
 
 export async function getCourseChannelsByNameCached(
 	guild: Guild,
-	names: Set<string>
+	names: Set<string>,
 ): Promise<Collection<string, CourseChannel>> {
-	const courseCodeChannelCache = await courseCodeToChannelIdCache(guild, names);
+	const courseCodeChannelCache = await courseCodeToChannelIdCache(
+		guild,
+		names,
+	);
 	const courseChannels = new Collection<string, CourseChannel>();
 	for (const name of names) {
 		const channelId = courseCodeChannelCache.get(name);
 		if (channelId) {
-			const channel = guild.channels.cache.get(channelId) as CourseChannel;
+			const channel = guild.channels.cache.get(
+				channelId,
+			) as CourseChannel;
 			courseChannels.set(channelId, channel);
 		}
 	}
@@ -169,7 +174,7 @@ export async function getCourseChannelsByNameCached(
 
 export async function getCourseChannelsByName(
 	guild: Guild,
-	names: Set<string>
+	names: Set<string>,
 ): Promise<Collection<string, CourseChannel>> {
 	await guild.channels.fetch();
 	const channels = guild.channels.cache
@@ -181,7 +186,7 @@ export async function getCourseChannelsByName(
 
 function userCanViewChannel(
 	userId: Snowflake,
-	channel: CourseChannel
+	channel: CourseChannel,
 ): boolean {
 	return (
 		channel.permissionsFor(userId)?.has(PermissionFlagsBits.ViewChannel) ??
@@ -192,14 +197,16 @@ function userCanViewChannel(
 export async function isMemberOfAlias(
 	guild: Guild,
 	userId: Snowflake,
-	alias: AliasName
+	alias: AliasName,
 ): Promise<boolean> {
 	const aliasChannels = await getAliasChannels(guild, alias);
-	return !aliasChannels.some((channel) => !userCanViewChannel(userId, channel));
+	return !aliasChannels.some(
+		(channel) => !userCanViewChannel(userId, channel),
+	);
 }
 
 export async function getAllCourseChannels(
-	guild: Guild
+	guild: Guild,
 ): Promise<Collection<string, CourseChannel>> {
 	await guild.channels.fetch();
 	const courseChannels = guild.channels.cache

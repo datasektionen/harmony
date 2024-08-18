@@ -5,13 +5,13 @@ import {
 } from "../../shared/utils/translator";
 
 export const handleTranslateMsg = async (
-	interaction: MessageContextMenuCommandInteraction
+	interaction: MessageContextMenuCommandInteraction,
 ): Promise<void> => {
 	await interaction.deferReply({ ephemeral: true });
 
 	if (!isTranslationAvailable()) {
 		await interaction.editReply(
-			"Translation features are not currently available."
+			"Translation features are not currently available.",
 		);
 		return;
 	}
@@ -43,7 +43,7 @@ export const handleTranslateMsg = async (
 	} catch (e) {
 		console.warn(e);
 		await interaction.editReply(
-			"Something went wrong and therefore no translation is available."
+			"Something went wrong and therefore no translation is available.",
 		);
 	}
 };

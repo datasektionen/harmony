@@ -10,7 +10,7 @@ import { aliasExists } from "../../shared/utils/read-alias-mappings";
 import { LeaveVariables } from "./leave.variables";
 
 export const handleLeave = async (
-	interaction: GuildChatInputCommandInteraction
+	interaction: GuildChatInputCommandInteraction,
 ): Promise<void> => {
 	await interaction.deferReply({ ephemeral: true });
 
@@ -24,7 +24,7 @@ export const handleLeave = async (
 			interaction.guild,
 			interaction.user,
 			courseCode,
-			leaveChannel
+			leaveChannel,
 		);
 		await interaction.editReply({
 			content: `Successfully left \`${courseCode}\`! (${updateCount}) channels updated`,
@@ -36,7 +36,7 @@ export const handleLeave = async (
 
 export const leaveChannel = async (
 	channel: CourseChannel,
-	user: User
+	user: User,
 ): Promise<void> => {
 	await channel.permissionOverwrites.delete(user);
 };

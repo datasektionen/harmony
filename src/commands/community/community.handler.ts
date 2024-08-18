@@ -5,24 +5,31 @@ import { handleCommunityLeave } from "./subcommands/leave/community-leave.handle
 import { CommunitySubcommandNames } from "./community-subcommands.names";
 import { CommunityVariables } from "./subcommands/community.variables";
 import {
-  categoryIsMaster,
-  categoryIsYear,
-  getCommunityCategory,
-  isMaster,
-  isYear,
-  masterRegex,
-  yearRegex
+	categoryIsMaster,
+	categoryIsYear,
+	getCommunityCategory,
+	isMaster,
+	isYear,
+	masterRegex,
+	yearRegex,
 } from "./subcommands/utils";
 import { hasRole } from "../../shared/utils/roles";
-import { ApplicationCommandOptionChoiceData, AutocompleteInteraction, ChannelType } from "discord.js";
+import {
+	ApplicationCommandOptionChoiceData,
+	AutocompleteInteraction,
+	ChannelType,
+} from "discord.js";
 
 export const handleCommunity = async (
-	interaction: GuildChatInputCommandInteraction
+	interaction: GuildChatInputCommandInteraction,
 ): Promise<void> => {
 	const { options, user, guild } = interaction;
 	await interaction.deferReply({ ephemeral: true });
 
-	const communityParam = options.getString(CommunityVariables.COMMUNITY, true);
+	const communityParam = options.getString(
+		CommunityVariables.COMMUNITY,
+		true,
+	);
 	const paramIsMaster = isMaster(communityParam);
 	const paramIsYear = isYear(communityParam);
 
@@ -36,7 +43,7 @@ export const handleCommunity = async (
 	// Convert to a correct community category name
 	const community = getCommunityCategory(communityParam, paramIsYear);
 
-	if (paramIsYear && await hasRole(user, community, guild)) {
+	if (paramIsYear && (await hasRole(user, community, guild))) {
 		// Check if user is native member of the community (not applied to masters)
 		await interaction.editReply({
 			content: "You cannot join or leave your own class community!",
@@ -47,24 +54,36 @@ export const handleCommunity = async (
 	const subCommandName = interaction.options.getSubcommand(true);
 	switch (subCommandName) {
 		case CommunitySubcommandNames.JOIN:
-			return await handleCommunityJoin(interaction, community, paramIsMaster);
+			return await handleCommunityJoin(
+				interaction,
+				community,
+				paramIsMaster,
+			);
 		case CommunitySubcommandNames.LEAVE:
-			return await handleCommunityLeave(interaction, community, paramIsMaster);
+			return await handleCommunityLeave(
+				interaction,
+				community,
+				paramIsMaster,
+			);
 		default:
 			throw new CommandNotFoundError(interaction.commandName);
 	}
 };
 
 export const handleCommunityAutocomplete = async (
-	interaction: AutocompleteInteraction
+	interaction: AutocompleteInteraction,
 ): Promise<void> => {
-	const community = interaction.options.getString(CommunityVariables.COMMUNITY, true).trim().toLowerCase();
-	if (!interaction.guild)
-		return;
-	const choices = interaction.guild.channels.cache.reduce<ApplicationCommandOptionChoiceData[]>((acc, channel) => {
+	const community = interaction.options
+		.getString(CommunityVariables.COMMUNITY, true)
+		.trim()
+		.toLowerCase();
+	if (!interaction.guild) return;
+	const choices = interaction.guild.channels.cache.reduce<
+		ApplicationCommandOptionChoiceData[]
+	>((acc, channel) => {
 		if (
-			acc.length < 25 && 
-			channel.type === ChannelType.GuildCategory && 
+			acc.length < 25 &&
+			channel.type === ChannelType.GuildCategory &&
 			channel.name.toLowerCase().includes(community) &&
 			(categoryIsYear(channel.name) || categoryIsMaster(channel.name))
 		) {
@@ -72,9 +91,12 @@ export const handleCommunityAutocomplete = async (
 				? channel.name.match(yearRegex)
 				: channel.name.match(masterRegex);
 			if (suggestedCommunity)
-				acc.push({ name: suggestedCommunity[0], value: suggestedCommunity[0] });
+				acc.push({
+					name: suggestedCommunity[0],
+					value: suggestedCommunity[0],
+				});
 		}
 		return acc;
 	}, []);
 	await interaction.respond(choices);
-}
+};

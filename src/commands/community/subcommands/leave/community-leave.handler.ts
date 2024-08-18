@@ -4,11 +4,17 @@ import { joinLeaveCommunity } from "../utils";
 export const handleCommunityLeave = async (
 	interaction: GuildChatInputCommandInteraction,
 	community: string,
-	isMasterCommunity: boolean
+	isMasterCommunity: boolean,
 ): Promise<void> => {
 	const { guild, user } = interaction;
 	try {
-		await joinLeaveCommunity(community, guild, user, isMasterCommunity, false);
+		await joinLeaveCommunity(
+			community,
+			guild,
+			user,
+			isMasterCommunity,
+			false,
+		);
 		await interaction.editReply({
 			content: `Left community ${community}!`,
 		});

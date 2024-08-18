@@ -4,7 +4,7 @@ import { PeriodSubcommandNames } from "./period-subcommands.names";
 import { handlePeriodRoles } from "./subcommands/roles/period-roles.handler";
 
 export const handlePeriod = async (
-	interaction: GuildChatInputCommandInteraction
+	interaction: GuildChatInputCommandInteraction,
 ): Promise<void> => {
 	const subCommandName = interaction.options.getSubcommand(true);
 

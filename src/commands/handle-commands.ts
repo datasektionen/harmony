@@ -13,7 +13,10 @@ import {
 	handleButtons,
 	handleButtonInteraction,
 } from "./buttons/buttons.handler";
-import { handleCommunity, handleCommunityAutocomplete } from "./community/community.handler";
+import {
+	handleCommunity,
+	handleCommunityAutocomplete,
+} from "./community/community.handler";
 import { handleTranslateMsg } from "./translate/translateMsg.handler";
 import { handleClub } from "./club/club.handler";
 import { handleMessage } from "./message/message.handler";
@@ -28,7 +31,7 @@ export const handleCommands = (): void => {
 
 			if (interaction.isChatInputCommand()) {
 				await handleChatInputCommand(
-					interaction as GuildChatInputCommandInteraction
+					interaction as GuildChatInputCommandInteraction,
 				);
 			} else if (interaction.isMessageContextMenuCommand()) {
 				switch (interaction.commandName) {
@@ -39,7 +42,9 @@ export const handleCommands = (): void => {
 						throw new CommandNotFoundError(interaction.commandName);
 				}
 			} else if (interaction.isButton()) {
-				await handleButtonInteraction(interaction as GuildButtonInteraction);
+				await handleButtonInteraction(
+					interaction as GuildButtonInteraction,
+				);
 			} else if (interaction.isAutocomplete()) {
 				switch (interaction.commandName) {
 					case CommandNames.JOIN:
@@ -73,7 +78,9 @@ export const handleCommands = (): void => {
 						await handleVerify(guildInteraction);
 						return;
 					default:
-						throw new CommandNotFoundError(guildInteraction.commandName);
+						throw new CommandNotFoundError(
+							guildInteraction.commandName,
+						);
 				}
 			} else if (interaction.isMessageContextMenuCommand()) {
 				switch (interaction.commandName) {
@@ -94,10 +101,11 @@ export const handleCommands = (): void => {
 };
 
 const handleChatInputCommand = async (
-	interaction: GuildChatInputCommandInteraction
+	interaction: GuildChatInputCommandInteraction,
 ): Promise<void> => {
 	try {
-		const guildInteraction = interaction as GuildChatInputCommandInteraction;
+		const guildInteraction =
+			interaction as GuildChatInputCommandInteraction;
 		// Checks which commands the user should have access to:
 		if (await hasRoleVerified(interaction.user, interaction.guild)) {
 			switch (interaction.commandName) {
@@ -132,7 +140,9 @@ const handleChatInputCommand = async (
 					await handleMessage(guildInteraction);
 					return;
 				default:
-					throw new CommandNotFoundError(guildInteraction.commandName);
+					throw new CommandNotFoundError(
+						guildInteraction.commandName,
+					);
 			}
 		} else {
 			const validCommands = Object.values(CommandNames) as string[]; // Get all valid command names
@@ -142,7 +152,7 @@ const handleChatInputCommand = async (
 			} else if (validCommands.includes(guildInteraction.commandName)) {
 				const permissionDeniedMessage = (await hasRoleN0llan(
 					guildInteraction.user,
-					guildInteraction.guild
+					guildInteraction.guild,
 				))
 					? "Du är allt för schleeemig, kom tillbaka senare."
 					: "Permission denied!\nYou first need to verify yourself using the '/verify' command.";
@@ -160,7 +170,7 @@ const handleChatInputCommand = async (
 };
 
 async function interaction_error_reply(
-	interaction: BaseInteraction
+	interaction: BaseInteraction,
 ): Promise<void> {
 	const message =
 		"This interaction could not be completed. Please contact an admin.";

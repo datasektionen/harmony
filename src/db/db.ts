@@ -15,7 +15,7 @@ export async function init(): Promise<void> {
 
 export async function insertUser(
 	kthId: string,
-	discordId: string
+	discordId: string,
 ): Promise<boolean> {
 	try {
 		await sql`insert into users (kth_id, discord_id) values (${kthId}, ${discordId})`;
@@ -30,15 +30,16 @@ export async function insertUser(
 }
 
 export async function getDiscordIdByKthid(
-	kthId: string
+	kthId: string,
 ): Promise<string | null> {
-	const users = await sql`select discord_id from users where kth_id = ${kthId}`;
+	const users =
+		await sql`select discord_id from users where kth_id = ${kthId}`;
 	if (!users.length) return null;
 	return users[0].discord_id;
 }
 
 export async function getKthIdByUserId(
-	discordId: string
+	discordId: string,
 ): Promise<string | null> {
 	const users =
 		await sql`select kth_id from users where discord_id = ${discordId}`;

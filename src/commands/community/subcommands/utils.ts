@@ -7,7 +7,7 @@ export const masterRegex = /[A-Za-z]{2}-master/;
 
 // Matches e.g. 2020, D2020, D-2020, 20, D20, and D-20
 export const isYear = (messageText: string): boolean =>
-	(new RegExp(`^${yearRegex.source}$`)).test(messageText);
+	new RegExp(`^${yearRegex.source}$`).test(messageText);
 
 // Matches e.g. 2020, D2020, D-2020, 20, D20, and D-20 with other stuff around
 export const categoryIsYear = (messageText: string): RegExpMatchArray | null =>
@@ -15,29 +15,26 @@ export const categoryIsYear = (messageText: string): RegExpMatchArray | null =>
 
 // Accepts e.g. "cs" or "cs-master"
 export const isMaster = (messageText: string): boolean =>
-	additionalCommunities.some(name => 
-		name === messageText.toLowerCase() ||
-		name + "-master" === messageText.toLowerCase()
+	additionalCommunities.some(
+		(name) =>
+			name === messageText.toLowerCase() ||
+			name + "-master" === messageText.toLowerCase(),
 	);
 
 // Accepts e.g. "cs" or "cs-master" with other stuff around
 export const categoryIsMaster = (messageText: string): boolean =>
-	additionalCommunities.some(name => 
-		messageText.toLowerCase().includes(name) ||
-		messageText.toLowerCase().includes(name + "-master") 
+	additionalCommunities.some(
+		(name) =>
+			messageText.toLowerCase().includes(name) ||
+			messageText.toLowerCase().includes(name + "-master"),
 	);
 
 // Try joining channels under the community category with these names only
 // Note: these are the ends of channel names without the emoji prefix.
 //       Emoji prefixes might differ from community to community.
-export const unjoinableCommunityChannels = [
-	"mod",
-];
+export const unjoinableCommunityChannels = ["mod"];
 
-export const additionalCommunities = [
-	"cs",
-	"ml",
-];
+export const additionalCommunities = ["cs", "ml"];
 
 // Extract year from user input
 // Extracts a 2-digit number representing the year
@@ -51,7 +48,10 @@ export const communityYear = (messageText: string): string | undefined => {
 };
 
 // Converts community names accepted by isYear and isMaster to their correct category/role names
-export const getCommunityCategory = (messageText: string, paramIsYear: boolean): string => {
+export const getCommunityCategory = (
+	messageText: string,
+	paramIsYear: boolean,
+): string => {
 	if (paramIsYear) {
 		return "D-" + communityYear(messageText);
 	} else {
@@ -64,16 +64,18 @@ export const joinLeaveCommunity = async (
 	guild: Guild,
 	user: User,
 	isMasterCommunity: boolean,
-	join: boolean
+	join: boolean,
 ): Promise<void> => {
 	if (isMasterCommunity) {
 		// Handle master role
-		if (join)
-			setRole(user, community, guild);
-		else
-			removeRole(user, community, guild);
+		if (join) setRole(user, community, guild);
+		else removeRole(user, community, guild);
 	} else {
-		const channels = await getChannelsInCategory(guild, community, unjoinableCommunityChannels);
+		const channels = await getChannelsInCategory(
+			guild,
+			community,
+			unjoinableCommunityChannels,
+		);
 
 		channels.forEach(async (channel) => {
 			await channel?.permissionOverwrites.create(user, {

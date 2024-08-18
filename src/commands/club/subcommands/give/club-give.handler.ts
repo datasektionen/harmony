@@ -5,7 +5,7 @@ import { setRole, hasRole } from "../../../../shared/utils/roles";
 export const handleClubGive = async (
 	interaction: GuildChatInputCommandInteraction,
 	role: string,
-	targetUser: User
+	targetUser: User,
 ): Promise<void> => {
 	const { guild } = interaction;
 	if (await hasRole(targetUser, role, guild)) {

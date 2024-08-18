@@ -7,7 +7,7 @@ import { VerifyNollanVariables } from "./subcommands/nollan/verify-nollan.variab
 import { isDarkmode } from "../../shared/utils/darkmode";
 
 export async function createVerifyCommand(
-	lightClient?: boolean
+	lightClient?: boolean,
 ): Promise<SlashCommandBuilder> {
 	lightClient = lightClient ?? false;
 	const mottagning = await isDarkmode();
@@ -17,7 +17,7 @@ export async function createVerifyCommand(
 		.setDescription(
 			// Note: General command description is not shown if the command has sub command.
 			//       This description is therefore not show to users.
-			"Verify that you are a KTH student via @kth.se email"
+			"Verify that you are a KTH student via @kth.se email",
 		);
 
 	if (mottagning) {
@@ -25,34 +25,34 @@ export async function createVerifyCommand(
 			subcommand
 				.setName(VerifySubcommandNames.BEGIN)
 				.setDescription(
-					"Enter your @kth.se email address to receive a verification code"
+					"Enter your @kth.se email address to receive a verification code",
 				)
 				.addStringOption((option) =>
 					option
 						.setName(VerifyBeginVariables.EMAIL)
 						.setDescription("Your @kth.se email address")
-						.setRequired(true)
+						.setRequired(true),
 				)
 				.addStringOption((option) =>
 					option
 						.setName(VerifyBeginVariables.CODE)
 						.setDescription("If you have received a special code")
-						.setRequired(false)
-				)
+						.setRequired(false),
+				),
 		);
 	} else {
 		command.addSubcommand((subcommand) =>
 			subcommand
 				.setName(VerifySubcommandNames.BEGIN)
 				.setDescription(
-					"Enter your @kth.se email address to receive a verification code"
+					"Enter your @kth.se email address to receive a verification code",
 				)
 				.addStringOption((option) =>
 					option
 						.setName(VerifyBeginVariables.EMAIL)
 						.setDescription("Your @kth.se email address")
-						.setRequired(true)
-				)
+						.setRequired(true),
+				),
 		);
 	}
 
@@ -60,14 +60,16 @@ export async function createVerifyCommand(
 		subcommand
 			.setName(VerifySubcommandNames.SUBMIT)
 			.setDescription(
-				"Complete verification using the verification code just sent to your KTH email"
+				"Complete verification using the verification code just sent to your KTH email",
 			)
 			.addStringOption((option) =>
 				option
 					.setName(VerifySubmitVariables.VERIFICATION_CODE)
-					.setDescription("The code just sent to your KTH email address")
-					.setRequired(true)
-			)
+					.setDescription(
+						"The code just sent to your KTH email address",
+					)
+					.setRequired(true),
+			),
 	);
 
 	if (mottagning && !lightClient) {
@@ -75,14 +77,16 @@ export async function createVerifyCommand(
 			subcommand
 				.setName(VerifySubcommandNames.NOLLAN)
 				.setDescription(
-					"Verifiera dig på servern med den hemliga koden du fått från din dadda"
+					"Verifiera dig på servern med den hemliga koden du fått från din dadda",
 				)
 				.addStringOption((option) =>
 					option
 						.setName(VerifyNollanVariables.NOLLE_KOD)
-						.setDescription("Den hemliga koden du fått från din dadda")
-						.setRequired(true)
-				)
+						.setDescription(
+							"Den hemliga koden du fått från din dadda",
+						)
+						.setRequired(true),
+				),
 		);
 	}
 

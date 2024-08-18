@@ -6,7 +6,7 @@ import { joinChannel } from "../../../join/join.handler";
 import { PeriodRolesVariables } from "./period-roles.variables";
 
 export const handlePeriodRoles = async (
-	interaction: GuildChatInputCommandInteraction
+	interaction: GuildChatInputCommandInteraction,
 ): Promise<void> => {
 	const { options } = interaction;
 	await interaction.deferReply({ ephemeral: true });
@@ -18,24 +18,24 @@ export const handlePeriodRoles = async (
 	await guild.members.fetch();
 
 	await interaction.editReply(
-		"On it boss! I'll let you know when I've successfully updated all period roles."
+		"On it boss! I'll let you know when I've successfully updated all period roles.",
 	);
 	await Promise.all(
 		guild.members.cache
 			.filter((member) => !member.user.bot)
-			.map((member) => updateMember(member, period))
+			.map((member) => updateMember(member, period)),
 	);
 
 	await interaction.channel?.send(
 		`Hey ${
 			interaction.member?.user ?? "friend"
-		}, I have finished updating all period roles!`
+		}, I have finished updating all period roles!`,
 	);
 };
 
 async function updateMember(
 	member: GuildMember,
-	period: number
+	period: number,
 ): Promise<void> {
 	const regex = /^D-\d{2}$/;
 	const yearString = member?.roles.cache
@@ -54,6 +54,6 @@ async function updateMember(
 		member.guild,
 		member.user,
 		`y${memberYear}p${period}`,
-		joinChannel
+		joinChannel,
 	);
 }

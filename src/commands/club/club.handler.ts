@@ -9,7 +9,7 @@ import { canBeGivenBy, isRole } from "./subcommands/utils";
 import { User, Guild } from "discord.js";
 
 export const handleClub = async (
-	interaction: GuildChatInputCommandInteraction
+	interaction: GuildChatInputCommandInteraction,
 ): Promise<void> => {
 	const { options, user, guild } = interaction;
 	await interaction.deferReply({ ephemeral: true });
@@ -58,7 +58,7 @@ export const handleClub = async (
 const userCanGiveRole = async (
 	user: User,
 	role: string,
-	guild: Guild
+	guild: Guild,
 ): Promise<boolean> => {
 	if (await hasRole(user, "Admin", guild)) {
 		return true;

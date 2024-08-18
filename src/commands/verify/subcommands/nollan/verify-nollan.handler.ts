@@ -9,7 +9,7 @@ import { verifyNolleCode } from "../../../../shared/utils/verify_nolle_code";
 import { VerifyNollanVariables } from "./verify-nollan.variables";
 
 export const handleVerifyNollan = async (
-	interaction: GuildChatInputCommandInteraction
+	interaction: GuildChatInputCommandInteraction,
 ): Promise<void> => {
 	const { user, guild, options } = interaction;
 	await interaction.deferReply({ ephemeral: true });
@@ -35,10 +35,14 @@ export const handleVerifyNollan = async (
 			return;
 		}
 
-		await addRolesOrRollback(user, interaction.guild, async (user, guild) => {
-			await setN0llanRole(user, guild);
-			await setRole(user, validNollegruppRoleName, guild); // Add n0llegrupp role
-		});
+		await addRolesOrRollback(
+			user,
+			interaction.guild,
+			async (user, guild) => {
+				await setN0llanRole(user, guild);
+				await setRole(user, validNollegruppRoleName, guild); // Add n0llegrupp role
+			},
+		);
 
 		await interaction.editReply({
 			content:
