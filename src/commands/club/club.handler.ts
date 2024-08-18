@@ -8,7 +8,6 @@ import { handleClubRemove } from "./subcommands/remove/club-remove.handler";
 import { canBeGivenBy, isRole } from "./subcommands/utils";
 import { User, Guild } from "discord.js";
 
-
 export const handleClub = async (
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
@@ -20,18 +19,24 @@ export const handleClub = async (
 
 	if (!isRole(clubParam)) {
 		await interaction.editReply({
-			content: "Please enter a valid role: "+ Object.keys(canBeGivenBy).join(", ") + ".",
+			content:
+				"Please enter a valid role: " +
+				Object.keys(canBeGivenBy).join(", ") +
+				".",
 		});
 		return;
-	} else if (!await userCanGiveRole(user, clubParam, guild)) {
+	} else if (!(await userCanGiveRole(user, clubParam, guild))) {
 		await interaction.editReply({
-			content: `You cannot give or remove this role! ${clubParam} can only be administrated by users with the following roles: ` 
-			+ canBeGivenBy[clubParam]?.join(", ") + ". You have the following roles: " 
-			+ (await getRoles(user, guild)).join(", ") + ".",
+			content:
+				`You cannot give or remove this role! ${clubParam} can only be administrated by users with the following roles: ` +
+				canBeGivenBy[clubParam]?.join(", ") +
+				". You have the following roles: " +
+				(await getRoles(user, guild)).join(", ") +
+				".",
 		});
 		return;
 	}
-	
+
 	const subCommandName = interaction.options.getSubcommand(true);
 	switch (subCommandName) {
 		case ClubSubcommandNames.GIVE:
@@ -50,7 +55,11 @@ export const handleClub = async (
  * @param guild The guild to check in.
  * @returns A promise that resolves to a boolean indicating if the user can give the role.
  */
-const userCanGiveRole = async (user: User, role: string, guild: Guild): Promise<boolean> => {
+const userCanGiveRole = async (
+	user: User,
+	role: string,
+	guild: Guild
+): Promise<boolean> => {
 	if (await hasRole(user, "Admin", guild)) {
 		return true;
 	}
@@ -60,4 +69,4 @@ const userCanGiveRole = async (user: User, role: string, guild: Guild): Promise<
 		}
 	}
 	return false;
-}
+};

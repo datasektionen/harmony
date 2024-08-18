@@ -4,7 +4,11 @@ import { handleCommunityJoin } from "./subcommands/join/community-join.handler";
 import { handleCommunityLeave } from "./subcommands/leave/community-leave.handler";
 import { CommunitySubcommandNames } from "./community-subcommands.names";
 import { CommunityVariables } from "./subcommands/community.variables";
-import { communityCategoryHeader, communityYear, isCommunity } from "./subcommands/utils";
+import {
+	communityCategoryHeader,
+	communityYear,
+	isCommunity,
+} from "./subcommands/utils";
 import { hasRole } from "../../shared/utils/roles";
 
 export const handleCommunity = async (
@@ -21,9 +25,9 @@ export const handleCommunity = async (
 		});
 		return;
 	} else if (await hasRole(user, communityRole, guild)) {
-		// Check if user is native member of the community 
+		// Check if user is native member of the community
 		await interaction.editReply({
-			content: "You cannot join or leave your own class community!"
+			content: "You cannot join or leave your own class community!",
 		});
 		return;
 	}

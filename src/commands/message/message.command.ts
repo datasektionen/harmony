@@ -4,7 +4,9 @@ import { MessageVariables } from "./message.variables";
 
 export const messageCommand = new SlashCommandBuilder()
 	.setName(CommandNames.MESSAGE)
-	.setDescription("Direct message all members of a specific role from the server");
+	.setDescription(
+		"Direct message all members of a specific role from the server"
+	);
 
 messageCommand
 	.addRoleOption((option) =>

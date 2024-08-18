@@ -8,10 +8,10 @@ import { AliasName } from "../../shared/alias-mappings";
 //
 // Add or remove aliases below as needed:
 export const ButtonAliases = [
-    AliasName.YEAR1,
-    AliasName.YEAR2,
-    AliasName.YEAR3,
-    AliasName.CS_MASTER,
-    AliasName.ML_MASTER,
-    AliasName.ALL_ELECTIVES,
+	AliasName.YEAR1,
+	AliasName.YEAR2,
+	AliasName.YEAR3,
+	AliasName.CS_MASTER,
+	AliasName.ML_MASTER,
+	AliasName.ALL_ELECTIVES,
 ];

@@ -2,19 +2,18 @@ import { User } from "discord.js";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 import { setRole, hasRole } from "../../../../shared/utils/roles";
 
-
 export const handleClubGive = async (
 	interaction: GuildChatInputCommandInteraction,
 	role: string,
-    targetUser: User
+	targetUser: User
 ): Promise<void> => {
 	const { guild } = interaction;
-    if (await hasRole(targetUser, role, guild)) {
+	if (await hasRole(targetUser, role, guild)) {
 		await interaction.editReply({
 			content: `${targetUser} already has role ${role}!`,
 		});
 		return;
-    }
+	}
 	try {
 		await setRole(targetUser, role, guild);
 		await interaction.editReply({
@@ -32,6 +31,3 @@ export const handleClubGive = async (
 		}
 	}
 };
-
-
-
