@@ -27,7 +27,7 @@ export const getChannelsInCategory = async (
 			channel?.parentId === category.id &&
 			// Check channels to join if specified
 			(channelsFilter
-				? channelsFilter.some((name) => channel.name.includes(name))
+				? !channelsFilter.some((name) => channel.name.includes(name))
 				: true)
 	);
 
