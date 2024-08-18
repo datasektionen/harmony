@@ -1,4 +1,13 @@
-import { Collection, ForumChannel, GuildBasedChannel, Snowflake, TextChannel, Guild, PermissionFlagsBits, User, } from "discord.js";
+import {
+	Collection,
+	ForumChannel,
+	GuildBasedChannel,
+	Snowflake,
+	TextChannel,
+	Guild,
+	PermissionFlagsBits,
+	User,
+} from "discord.js";
 import { AliasName, mappings } from "../alias-mappings";
 import { GuildButtonOrCommandInteraction } from "../types/GuildButtonOrCommandInteraction";
 import { getAliasChannels } from "./read-alias-mappings";
@@ -18,12 +27,13 @@ export const handleChannelAlias = async (
 	guild: Guild,
 	user: User,
 	alias: string,
-	actionCallback: (
-		channel: CourseChannel,
-		user: User,
-	) => Promise<void>,
+	actionCallback: (channel: CourseChannel, user: User) => Promise<void>
 ): Promise<number> => {
-	if ([AliasName.YEAR1, AliasName.YEAR2, AliasName.YEAR3].includes(alias as AliasName)) {
+	if (
+		[AliasName.YEAR1, AliasName.YEAR2, AliasName.YEAR3].includes(
+			alias as AliasName
+		)
+	) {
 		toggleYearCoursesRole(user, guild, alias as AliasName);
 		return mappings[alias as AliasName].length;
 	}
@@ -63,7 +73,7 @@ export const handleChannel = async (
 		user: User
 	) => Promise<void>,
 	noInteraction?: boolean,
-	skipCheckingCourseCode?: boolean,
+	skipCheckingCourseCode?: boolean
 ): Promise<void> => {
 	noInteraction = noInteraction ?? false;
 	if (!noInteraction) {
@@ -78,7 +88,10 @@ export const handleChannel = async (
 	// If no course was found, return with a message.
 	// If we skip checking the course code (e.g. in verify-nollan) continue the function
 	// If the course code was invalid, return with a message.
-	if (channel == undefined || (!skipCheckingCourseCode && !validCourseCode(channel.name))) {
+	if (
+		channel == undefined ||
+		(!skipCheckingCourseCode && !validCourseCode(channel.name))
+	) {
 		if (!noInteraction) {
 			await interaction.editReply({
 				content: "The course code is not valid",
@@ -90,7 +103,8 @@ export const handleChannel = async (
 	if (!isCourseChannel(channel)) {
 		if (!noInteraction) {
 			await interaction.editReply({
-				content: "Channel not found, please contact a mod if you think this is a mistake",
+				content:
+					"Channel not found, please contact a mod if you think this is a mistake",
 			});
 		}
 		return;
@@ -108,9 +122,15 @@ export const handleChannel = async (
 	return;
 };
 
-const cachesByGuildId = new Collection<Snowflake, Collection<string, Snowflake>>();
+const cachesByGuildId = new Collection<
+	Snowflake,
+	Collection<string, Snowflake>
+>();
 
-async function courseCodeToChannelIdCache(guild: Guild, names: Set<string>): Promise<Collection<string, Snowflake>> {
+async function courseCodeToChannelIdCache(
+	guild: Guild,
+	names: Set<string>
+): Promise<Collection<string, Snowflake>> {
 	const nameArray = Array.from(names);
 	let cache = cachesByGuildId.get(guild.id);
 	if (!cache) {
@@ -128,50 +148,59 @@ async function courseCodeToChannelIdCache(guild: Guild, names: Set<string>): Pro
 }
 
 function channelNameToCourseCode(channelName: string): string {
-	return channelName.split("-")[0]
+	return channelName.split("-")[0];
 }
 
-export async function getCourseChannelsByNameCached(guild: Guild, names: Set<string>): Promise<Collection<string, CourseChannel>> {
+export async function getCourseChannelsByNameCached(
+	guild: Guild,
+	names: Set<string>
+): Promise<Collection<string, CourseChannel>> {
 	const courseCodeChannelCache = await courseCodeToChannelIdCache(guild, names);
 	const courseChannels = new Collection<string, CourseChannel>();
 	for (const name of names) {
 		const channelId = courseCodeChannelCache.get(name);
 		if (channelId) {
 			const channel = guild.channels.cache.get(channelId) as CourseChannel;
-			courseChannels.set(channelId, channel)
+			courseChannels.set(channelId, channel);
 		}
 	}
 	return courseChannels;
 }
 
-export async function getCourseChannelsByName(guild: Guild, names: Set<string>): Promise<Collection<string, CourseChannel>> {
+export async function getCourseChannelsByName(
+	guild: Guild,
+	names: Set<string>
+): Promise<Collection<string, CourseChannel>> {
 	await guild.channels.fetch();
 	const channels = guild.channels.cache
 		.filter((current) => names.has(channelNameToCourseCode(current.name)))
 		.filter(isCourseChannel)
 		.mapValues((channel) => channel as CourseChannel);
-	return channels
+	return channels;
 }
 
-function userCanViewChannel(userId: Snowflake, channel: CourseChannel): boolean {
-	const permissions = channel.permissionsFor(userId);
-	if (permissions) {
-		return permissions.has(PermissionFlagsBits.ViewChannel);
-	}
-	return false;
+function userCanViewChannel(
+	userId: Snowflake,
+	channel: CourseChannel
+): boolean {
+	return (
+		channel.permissionsFor(userId)?.has(PermissionFlagsBits.ViewChannel) ??
+		false
+	);
 }
 
-export async function isMemberOfAlias(guild: Guild, userId: Snowflake, alias: AliasName): Promise<boolean> {
+export async function isMemberOfAlias(
+	guild: Guild,
+	userId: Snowflake,
+	alias: AliasName
+): Promise<boolean> {
 	const aliasChannels = await getAliasChannels(guild, alias);
-	for (const channel of aliasChannels.values()) {
-		if (!userCanViewChannel(userId, channel)) {
-			return false;
-		}
-	}
-	return true;
+	return !aliasChannels.some((channel) => !userCanViewChannel(userId, channel));
 }
 
-export async function getAllCourseChannels(guild: Guild): Promise<Collection<string, CourseChannel>> {
+export async function getAllCourseChannels(
+	guild: Guild
+): Promise<Collection<string, CourseChannel>> {
 	await guild.channels.fetch();
 	const courseChannels = guild.channels.cache
 		.filter(isCourseChannel)

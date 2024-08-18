@@ -1,5 +1,5 @@
 export enum AliasName {
-    YEAR0 = "year0",
+	YEAR0 = "year0",
 	YEAR1 = "year1",
 	Y1P1 = "y1p1",
 	Y1P2 = "y1p2",
@@ -21,9 +21,7 @@ export enum AliasName {
 }
 
 export const mappings: Record<AliasName, string[]> = {
-	[AliasName.YEAR0]: [
-		"sf0003",
-	],
+	[AliasName.YEAR0]: ["sf0003"],
 	[AliasName.YEAR1]: [
 		"da1600",
 		"dd1337",
@@ -54,13 +52,7 @@ export const mappings: Record<AliasName, string[]> = {
 	[AliasName.Y2P2]: ["dd1368", "dd1367", "dd1351", "is1500"],
 	[AliasName.Y2P3]: ["dd1366", "sf1547", "dd1367"],
 	[AliasName.Y2P4]: ["dd1366", "dd1367", "sf1935"],
-	[AliasName.YEAR3]: [
-		"al1504",
-		"da150x",
-		"dd2350",
-		"id1200",
-		"sf1688",
-	],
+	[AliasName.YEAR3]: ["al1504", "da150x", "dd2350", "id1200", "sf1688"],
 	[AliasName.Y3P1]: ["sf1688", "dd2350", "id1200"],
 	[AliasName.Y3P2]: ["al1504", "dd2350", "id1200"],
 	[AliasName.Y3P3]: ["da150x"],
@@ -82,7 +74,7 @@ export const mappings: Record<AliasName, string[]> = {
 		"dd2380",
 		"dd1420",
 	],
-	[AliasName.ALL_ELECTIVES]: [],	// Custom logic
+	[AliasName.ALL_ELECTIVES]: [], // Custom logic
 	// Old course code mappings
 	["dd1360" as AliasName]: ["dd1366"],
 	["dd1361" as AliasName]: ["dd1366"],

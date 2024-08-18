@@ -5,15 +5,15 @@ import { User } from "discord.js";
 export const handleClubRemove = async (
 	interaction: GuildChatInputCommandInteraction,
 	role: string,
-    targetUser: User
+	targetUser: User
 ): Promise<void> => {
 	const { guild } = interaction;
-    if (!await hasRole(targetUser, role, guild)) {
+	if (!(await hasRole(targetUser, role, guild))) {
 		await interaction.editReply({
 			content: `${targetUser} does not have role ${role}!`,
 		});
 		return;
-    }
+	}
 	try {
 		await removeRole(targetUser, role, guild);
 		await interaction.editReply({

@@ -1,5 +1,10 @@
 import { Guild, User } from "discord.js";
-import { setExternRole, setPingRoles, setRoleVerified, setYearRoles } from "../../../shared/utils/roles";
+import {
+	setExternRole,
+	setPingRoles,
+	setRoleVerified,
+	setYearRoles,
+} from "../../../shared/utils/roles";
 import { extractYearFromUser } from "../../../shared/utils/hodis";
 import { mapYearToAlias } from "../../../shared/utils/alias_to_year_mapper";
 import { handleChannelAlias } from "../../../shared/utils/channel-utils";
@@ -14,18 +19,19 @@ export const messageIsToken = (messageText: string): RegExpMatchArray | null =>
 export const verifyUser = async (
 	user: User,
 	guild: Guild,
-	kthId: string,
+	kthId: string
 ): Promise<void> => {
-	console.log(`Verified user by kth email. kthid="${kthId}" user.id="${user.id}" user.username="${user.username}"`);
+	console.log(
+		`Verified user by kth email. kthid="${kthId}" user.id="${user.id}" user.username="${user.username}"`
+	);
 
 	await setRoleVerified(user, guild);
 	const { year, yearRole } = await extractYearFromUser(kthId);
 	if (yearRole && year) {
 		await setYearRoles(user, yearRole, guild);
 		const alias = mapYearToAlias(year);
-		if (alias)
-			await handleChannelAlias(guild, user, alias, joinChannel);
+		if (alias) await handleChannelAlias(guild, user, alias, joinChannel);
 	} else setExternRole(user, guild);
 
 	await setPingRoles(user, guild);
-}
+};

@@ -1,3 +1,3 @@
 export enum JoinVariables {
-	COURSE_CODE = "course-code"
+	COURSE_CODE = "course-code",
 }

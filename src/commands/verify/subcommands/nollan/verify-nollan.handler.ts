@@ -18,7 +18,8 @@ export const handleVerifyNollan = async (
 	// Check if n0llan already verified
 	if (await hasRoleN0llan(user, guild)) {
 		await interaction.editReply({
-			content: "Du är redan verifierad och schleeemig!\nOm du tror att det skett ett misstag, vänligen kontakta din Dadda.",
+			content:
+				"Du är redan verifierad och schleeemig!\nOm du tror att det skett ett misstag, vänligen kontakta din Dadda.",
 		});
 		return;
 	}
@@ -28,7 +29,8 @@ export const handleVerifyNollan = async (
 		const validNollegruppRoleName = verifyNolleCode(code);
 		if (!validNollegruppRoleName) {
 			await interaction.editReply({
-				content: "Error: Invalid code!\nVänligen skriv in den personliga kod du fått från din Dadda.\nOm du har problem, kontakta din Dadda!",
+				content:
+					"Error: Invalid code!\nVänligen skriv in den personliga kod du fått från din Dadda.\nOm du har problem, kontakta din Dadda!",
 			});
 			return;
 		}
@@ -39,7 +41,8 @@ export const handleVerifyNollan = async (
 		});
 
 		await interaction.editReply({
-			content: "Välkommen nøllan! Du har nu blivit tillagd i några kanaler, inklusive kanaler för de första kurserna. Ha kul med schlemandet!"
+			content:
+				"Välkommen nøllan! Du har nu blivit tillagd i några kanaler, inklusive kanaler för de första kurserna. Ha kul med schlemandet!",
 		});
 	} catch (error) {
 		console.warn(error);

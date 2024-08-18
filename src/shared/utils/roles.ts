@@ -1,5 +1,4 @@
 import { Guild, User } from "discord.js";
-import { getGuildMember } from "./guild";
 import { AliasName } from "../alias-mappings";
 
 export async function hasRole(
@@ -7,7 +6,7 @@ export async function hasRole(
 	roleName: string,
 	guild: Guild
 ): Promise<boolean> {
-	const guildMember = await getGuildMember(user, guild);
+	const guildMember = await guild.members.fetch(user);
 	return !!guildMember.roles.cache.find((role) => role.name === roleName);
 }
 
@@ -34,13 +33,8 @@ export async function hasRoleN0llan(
 	user: User,
 	guild: Guild
 ): Promise<boolean> {
-	return await hasRole(
-		user,
-		"nØllan",
-		guild
-	);
+	return await hasRole(user, "nØllan", guild);
 }
-
 
 export async function setRole(
 	user: User,
@@ -51,10 +45,9 @@ export async function setRole(
 	if (!role) {
 		throw new Error(`Role ${roleName} does not exist on the Server!`);
 	}
-	const guildMember = await getGuildMember(user, guild);
+	const guildMember = await guild.members.fetch(user);
 	await guildMember.roles.add(role);
 }
-
 
 /**
  * Removes a role from a user in a guild.
@@ -72,7 +65,7 @@ export async function removeRole(
 	if (!role) {
 		throw new Error(`Role ${roleName} does not exist on the Server!`);
 	}
-	const guildMember = await getGuildMember(user, guild);
+	const guildMember = await guild.members.fetch(user);
 	await guildMember.roles.remove(role);
 }
 
@@ -85,10 +78,7 @@ export async function setRoleVerified(user: User, guild: Guild): Promise<void> {
 }
 
 // Should spell with "o" instead of "0"
-export async function setN0llanRole(
-	user: User,
-	guild: Guild
-): Promise<void> {
+export async function setN0llanRole(user: User, guild: Guild): Promise<void> {
 	await setRole(user, "nØllan", guild);
 }
 
@@ -101,10 +91,7 @@ export async function setYearRoles(
 	await setRole(user, "Datasektionen", guild);
 }
 
-export async function setIntisRoles(
-	user: User,
-	guild: Guild
-): Promise<void> {
+export async function setIntisRoles(user: User, guild: Guild): Promise<void> {
 	await setRole(user, "D-intis", guild);
 	await setRole(user, "Datasektionen", guild);
 }
@@ -118,22 +105,34 @@ export async function setPingRoles(user: User, guild: Guild): Promise<void> {
 	await Promise.all(pingRoles.map((role) => setRole(user, role, guild)));
 }
 
-export async function toggleYearCoursesRole(user: User, guild: Guild, alias: AliasName): Promise<void> {
+export async function toggleYearCoursesRole(
+	user: User,
+	guild: Guild,
+	alias: AliasName
+): Promise<void> {
 	const yearRoles = ["Åk 1", "Åk 2", "Åk 3"];
 	let selectedRole;
 	switch (alias) {
-		case AliasName.YEAR1: selectedRole = yearRoles[0]; break;
-		case AliasName.YEAR2: selectedRole = yearRoles[1]; break;
-		case AliasName.YEAR3: selectedRole = yearRoles[2]; break;
-		default: selectedRole = undefined; break;
+		case AliasName.YEAR1:
+			selectedRole = yearRoles[0];
+			break;
+		case AliasName.YEAR2:
+			selectedRole = yearRoles[1];
+			break;
+		case AliasName.YEAR3:
+			selectedRole = yearRoles[2];
+			break;
+		default:
+			selectedRole = undefined;
+			break;
 	}
-	if (!selectedRole)	// Wrong alias supplied
+	if (!selectedRole)
+		// Wrong alias supplied
 		return;
 
 	if (await hasRole(user, selectedRole, guild))
 		await removeRole(user, selectedRole, guild);
-	else
-		await setRole(user, selectedRole, guild);
+	else await setRole(user, selectedRole, guild);
 }
 
 /**
@@ -143,6 +142,6 @@ export async function toggleYearCoursesRole(user: User, guild: Guild, alias: Ali
  * @returns A promise that resolves to an array of role names.
  */
 export async function getRoles(user: User, guild: Guild): Promise<string[]> {
-	const guildMember = await getGuildMember(user, guild);
+	const guildMember = await guild.members.fetch(user);
 	return guildMember.roles.cache.map((role) => role.name);
 }

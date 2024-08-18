@@ -14,7 +14,9 @@ type ApplicationCommandBuilder =
 	| SlashCommandBuilder
 	| ContextMenuCommandBuilder;
 
-export const getOfficialBotCommands = async (): Promise<ApplicationCommandBuilder[]> => [
+export const getOfficialBotCommands = async (): Promise<
+	ApplicationCommandBuilder[]
+> => [
 	coursesCommand,
 	joinCommand,
 	leaveCommand,
@@ -27,7 +29,6 @@ export const getOfficialBotCommands = async (): Promise<ApplicationCommandBuilde
 	messageCommand,
 ];
 
-export const getLightBotCommands = async (): Promise<ApplicationCommandBuilder[]> => [
-	await createVerifyCommand(true),
-	translateMsgCommand,
-];
+export const getLightBotCommands = async (): Promise<
+	ApplicationCommandBuilder[]
+> => [await createVerifyCommand(true), translateMsgCommand];

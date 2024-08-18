@@ -31,7 +31,9 @@ communityCommand.addSubcommand((subcommand) =>
 		.addStringOption((option) =>
 			option
 				.setName(CommunityVariables.COMMUNITY)
-				.setDescription("A valid computer science class community (e.g. D-22, D-23)")
+				.setDescription(
+					"A valid computer science class community (e.g. D-22, D-23)"
+				)
 				.setRequired(true)
 				.setAutocomplete(true)
 		)

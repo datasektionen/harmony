@@ -4,7 +4,15 @@ import { handleCommunityJoin } from "./subcommands/join/community-join.handler";
 import { handleCommunityLeave } from "./subcommands/leave/community-leave.handler";
 import { CommunitySubcommandNames } from "./community-subcommands.names";
 import { CommunityVariables } from "./subcommands/community.variables";
-import { categoryIsMaster, categoryIsYear, getCommunityCategory, isMaster, isYear, masterRegex, yearRegex } from "./subcommands/utils";
+import {
+  categoryIsMaster,
+  categoryIsYear,
+  getCommunityCategory,
+  isMaster,
+  isYear,
+  masterRegex,
+  yearRegex
+} from "./subcommands/utils";
 import { hasRole } from "../../shared/utils/roles";
 import { ApplicationCommandOptionChoiceData, AutocompleteInteraction, ChannelType } from "discord.js";
 
@@ -31,7 +39,7 @@ export const handleCommunity = async (
 	if (paramIsYear && await hasRole(user, community, guild)) {
 		// Check if user is native member of the community (not applied to masters)
 		await interaction.editReply({
-			content: "You cannot join or leave your own class community!"
+			content: "You cannot join or leave your own class community!",
 		});
 		return;
 	}

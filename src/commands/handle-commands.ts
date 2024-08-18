@@ -27,7 +27,9 @@ export const handleCommands = (): void => {
 			}
 
 			if (interaction.isChatInputCommand()) {
-				await handleChatInputCommand(interaction as GuildChatInputCommandInteraction);
+				await handleChatInputCommand(
+					interaction as GuildChatInputCommandInteraction
+				);
 			} else if (interaction.isMessageContextMenuCommand()) {
 				switch (interaction.commandName) {
 					case CommandNames.TRANSLATE_MSG:
@@ -64,7 +66,8 @@ export const handleCommands = (): void => {
 				throw new Error("Guild not found!");
 			}
 			if (interaction.isChatInputCommand()) {
-				const guildInteraction = interaction as GuildChatInputCommandInteraction;
+				const guildInteraction =
+					interaction as GuildChatInputCommandInteraction;
 				switch (guildInteraction.commandName) {
 					case CommandNames.VERIFY:
 						await handleVerify(guildInteraction);
@@ -137,7 +140,10 @@ const handleChatInputCommand = async (
 				await handleVerify(guildInteraction);
 				return;
 			} else if (validCommands.includes(guildInteraction.commandName)) {
-				const permissionDeniedMessage = await hasRoleN0llan(guildInteraction.user, guildInteraction.guild)
+				const permissionDeniedMessage = (await hasRoleN0llan(
+					guildInteraction.user,
+					guildInteraction.guild
+				))
 					? "Du är allt för schleeemig, kom tillbaka senare."
 					: "Permission denied!\nYou first need to verify yourself using the '/verify' command.";
 				await guildInteraction.reply({
@@ -153,17 +159,20 @@ const handleChatInputCommand = async (
 	}
 };
 
-async function interaction_error_reply(interaction: BaseInteraction): Promise<void> {
-	const message = "This interaction could not be completed. Please contact an admin.";
+async function interaction_error_reply(
+	interaction: BaseInteraction
+): Promise<void> {
+	const message =
+		"This interaction could not be completed. Please contact an admin.";
 	try {
 		if (interaction.isChatInputCommand()) {
 			if (interaction.deferred || interaction.replied) {
-				await interaction.editReply({ content: message })
+				await interaction.editReply({ content: message });
 			} else {
-				await interaction.reply({ content: message, ephemeral: true })
+				await interaction.reply({ content: message, ephemeral: true });
 			}
 		}
 	} catch (error) {
-		console.warn("Error when trying to send error message to user:", error)
+		console.warn("Error when trying to send error message to user:", error);
 	}
 }

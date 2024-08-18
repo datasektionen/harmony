@@ -1,15 +1,8 @@
-import { DateTime, Duration } from "luxon";
-
 export function getGradeYear(memberYear: number): number {
 	return (
 		Math.floor(
-			(DateTime.now().toMillis() -
-				DateTime.fromObject({
-					year: memberYear,
-					month: 8,
-					day: 1,
-				}).toMillis()) /
-				Duration.fromObject({ years: 1 }).toMillis()
+			(Date.now() - new Date(memberYear, 7).valueOf()) /
+				(1000 * 60 * 60 * 24 * 365.25)
 		) + 1
 	);
 }

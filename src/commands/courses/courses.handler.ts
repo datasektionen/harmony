@@ -18,7 +18,9 @@ export const handleCourses = async (
 		lines.push("\n");
 	}
 
-	const nonIncludedChannelNames = (await getAllCourseChannels(interaction.guild))
+	const nonIncludedChannelNames = (
+		await getAllCourseChannels(interaction.guild)
+	)
 		.filter(
 			(channel) =>
 				!aliasedChannels.some((current) => channel.name.startsWith(current))
