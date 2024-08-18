@@ -9,9 +9,11 @@ type HodisUser = {
 	tag: string;
 };
 
-export async function getHodisUser(kthId: string): Promise<HodisUser> {
-	const res = await fetch(`https://hodis.datasektionen.se/uid/${kthId.toLowerCase()}`);
-	return (await res.json()) as HodisUser;
+export async function getHodisUser(kthId: string): Promise<HodisUser | null> {
+	const body = await fetch(
+		`https://hodis.datasektionen.se/uid/${kthId.toLowerCase()}`
+	).then((res) => res.json());
+  return "error" in body ? null : body;
 }
 
 export async function extractYearFromUser(kthId: string): Promise<{
@@ -19,10 +21,10 @@ export async function extractYearFromUser(kthId: string): Promise<{
 	year: number | null;
 }> {
 	const hodisUser = await getHodisUser(kthId);
-	const yearTag = hodisUser.tag
+	const yearTag = hodisUser?.tag
 		.split(",")
 		.find((tag) => tag.match(/^D\d{2}$/i));
-	if (yearTag) {
+	if (yearTag && hodisUser) {
 		const yearTagWithDash = `${yearTag
 			.slice(0, 1)
 			.toUpperCase()}-${yearTag.slice(1)}`;
