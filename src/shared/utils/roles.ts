@@ -1,5 +1,4 @@
 import { Guild, User } from "discord.js";
-import { getGuildMember } from "./guild";
 import { AliasName } from "../alias-mappings";
 
 export async function hasRole(
@@ -7,7 +6,7 @@ export async function hasRole(
 	roleName: string,
 	guild: Guild
 ): Promise<boolean> {
-	const guildMember = await getGuildMember(user, guild);
+	const guildMember = await guild.members.fetch(user);
 	return !!guildMember.roles.cache.find((role) => role.name === roleName);
 }
 
@@ -51,7 +50,7 @@ export async function setRole(
 	if (!role) {
 		throw new Error(`Role ${roleName} does not exist on the Server!`);
 	}
-	const guildMember = await getGuildMember(user, guild);
+	const guildMember = await guild.members.fetch(user);
 	await guildMember.roles.add(role);
 }
 
@@ -72,7 +71,7 @@ export async function removeRole(
 	if (!role) {
 		throw new Error(`Role ${roleName} does not exist on the Server!`);
 	}
-	const guildMember = await getGuildMember(user, guild);
+	const guildMember = await guild.members.fetch(user);
 	await guildMember.roles.remove(role);
 }
 
@@ -143,6 +142,6 @@ export async function toggleYearCoursesRole(user: User, guild: Guild, alias: Ali
  * @returns A promise that resolves to an array of role names.
  */
 export async function getRoles(user: User, guild: Guild): Promise<string[]> {
-	const guildMember = await getGuildMember(user, guild);
+	const guildMember = await guild.members.fetch(user);
 	return guildMember.roles.cache.map((role) => role.name);
 }
