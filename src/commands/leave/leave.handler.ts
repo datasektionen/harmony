@@ -12,8 +12,6 @@ import { LeaveVariables } from "./leave.variables";
 export const handleLeave = async (
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
-	await interaction.deferReply({ ephemeral: true });
-
 	const { options } = interaction;
 	const courseCode = options
 		.getString(LeaveVariables.COURSE_CODE, true)
