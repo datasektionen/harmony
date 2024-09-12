@@ -19,19 +19,14 @@ export const getAliasChannels = async (
 		const cs_master = await getAliasChannels(guild, AliasName.CS_MASTER);
 		const ml_master = await getAliasChannels(guild, AliasName.ML_MASTER);
 
-		const elective_categories = ["elective courses", "master courses"];
-
 		const elective_channels = (await getAllCourseChannels(guild)).filter(
 			(channel) =>
 				// Exclude mandatory master courses
 				!cs_master.some((cs_channel) => cs_channel === channel) &&
 				!ml_master.some((ml_channel) => ml_channel === channel) &&
 				// Include only channels under categories with elective courses
-				elective_categories.some(
-					(category) =>
-						channel.parent && // Not null
-						channel.parent.name.toLowerCase().includes(category)
-				)
+				channel.parent && // Not null
+				channel.parent.name.toLowerCase().includes("courses")
 		);
 		return elective_channels;
 	}
