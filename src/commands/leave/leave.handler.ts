@@ -18,7 +18,7 @@ export const handleLeave = async (
 		.trim()
 		.toLowerCase();
 	if (aliasExists(courseCode as AliasName)) {
-		interaction.deferReply({ ephemeral: true });
+		await interaction.deferReply({ ephemeral: true });
 		const updateCount = await handleChannelAlias(
 			interaction.guild,
 			interaction.user,
