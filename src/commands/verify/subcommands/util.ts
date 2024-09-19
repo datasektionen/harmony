@@ -29,6 +29,7 @@ export const verifyUser = async (
 	);
 
 	await setRoleVerified(user, guild);
+	const { year, yearRole } = await extractYearFromUser(kthId);
 	const userHasYearRole = await hasAnyYearRole(user, guild);
 
 	if (yearRole && year || userHasYearRole) {
