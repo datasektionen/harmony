@@ -1,6 +1,7 @@
 import { Role, Snowflake } from "discord.js";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import { MessageVariables } from "./message.variables";
+import { sleep } from "../../shared/utils/channel-utils";
 
 export const handleMessage = async (
 	interaction: GuildChatInputCommandInteraction
@@ -36,19 +37,18 @@ export const handleMessage = async (
 	let numSent = 0;
 	let numFailed = 0;
 
-	await Promise.allSettled(
-		targetMembers.map(async (member) => {
-			try {
-				const dm = await member.createDM(true);
-				await dm.send({ content, files });
-				numSent++;
-				await interaction.editReply(`Amount of DMs sent: ${numSent}`);
-			} catch (err) {
-				console.error(err);
-				numFailed++;
-			}
-		})
-	);
+	targetMembers.forEach(async (member) => {
+		try {
+			const dm = await member.createDM(true);
+			await dm.send({ content, files });
+			numSent++;
+			await interaction.editReply(`Amount of DMs sent: ${numSent}`);
+			sleep(1000);
+		} catch (err) {
+			console.error(err);
+			numFailed++;
+		}
+	});
 
 	if (numFailed === 0) {
 		await interaction.editReply(

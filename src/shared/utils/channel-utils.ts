@@ -215,3 +215,6 @@ export async function getAllCourseChannels(
 		.mapValues((channel) => channel as CourseChannel);
 	return courseChannels;
 }
+
+export const sleep = (ms: number): Promise<NodeJS.Timeout> =>
+	new Promise((r) => setTimeout(r, ms));
