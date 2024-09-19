@@ -32,11 +32,12 @@ export const verifyUser = async (
 	const { year, yearRole } = await extractYearFromUser(kthId);
 	const userHasYearRole = await hasAnyYearRole(user, guild);
 
-	if (yearRole && year || userHasYearRole) {
+	if ((yearRole && year) || userHasYearRole) {
 		if (yearRole && year) {
 			await setYearRoles(user, yearRole, guild);
 			const alias = mapYearToAlias(year);
-			if (alias) await handleChannelAlias(guild, user, alias, joinChannel);
+			if (alias)
+				await handleChannelAlias(guild, user, alias, joinChannel);
 		}
 
 		if (await hasRole(user, "old verified", guild))

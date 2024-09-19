@@ -146,9 +146,15 @@ export async function getRoles(user: User, guild: Guild): Promise<string[]> {
 	return guildMember.roles.cache.map((role) => role.name);
 }
 
-export async function hasAnyYearRole(user: User, guild: Guild): Promise<boolean> {
+export async function hasAnyYearRole(
+	user: User,
+	guild: Guild
+): Promise<boolean> {
 	const member = await guild.members.fetch(user.id);
-	return !!member && member.roles.cache.some(role =>
-		new RegExp("^D-[0-9]{2}$").test(role.name)
+	return (
+		!!member &&
+		member.roles.cache.some((role) =>
+			new RegExp("^D-[0-9]{2}$").test(role.name)
+		)
 	);
 }
