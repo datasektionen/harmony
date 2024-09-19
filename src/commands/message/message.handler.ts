@@ -48,7 +48,7 @@ export const handleMessage = async (
 			console.error(err);
 			numFailed++;
 		}
-	})
+	});
 
 	if (numFailed === 0) {
 		await interaction.editReply(

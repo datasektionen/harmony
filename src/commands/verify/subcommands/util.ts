@@ -33,7 +33,7 @@ export const verifyUser = async (
 		await setYearRoles(user, yearRole, guild);
 		const alias = mapYearToAlias(year);
 		if (alias) await handleChannelAlias(guild, user, alias, joinChannel);
-		
+
 		if (await hasRole(user, "old verified", guild))
 			await removeRole(user, "old verified", guild);
 	} else setExternRole(user, guild);
