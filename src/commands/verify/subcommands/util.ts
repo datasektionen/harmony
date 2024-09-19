@@ -1,5 +1,6 @@
 import { Guild, User } from "discord.js";
 import {
+	hasAnyYearRole,
 	hasRole,
 	removeRole,
 	setExternRole,
@@ -29,10 +30,14 @@ export const verifyUser = async (
 
 	await setRoleVerified(user, guild);
 	const { year, yearRole } = await extractYearFromUser(kthId);
-	if (yearRole && year) {
-		await setYearRoles(user, yearRole, guild);
-		const alias = mapYearToAlias(year);
-		if (alias) await handleChannelAlias(guild, user, alias, joinChannel);
+	const userHasYearRole = await hasAnyYearRole(user, guild);
+
+	if (yearRole && year || userHasYearRole) {
+		if (yearRole && year) {
+			await setYearRoles(user, yearRole, guild);
+			const alias = mapYearToAlias(year);
+			if (alias) await handleChannelAlias(guild, user, alias, joinChannel);
+		}
 
 		if (await hasRole(user, "old verified", guild))
 			await removeRole(user, "old verified", guild);
