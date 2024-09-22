@@ -19,6 +19,7 @@ export const canBeGivenBy: { [key: string]: string[] } = {
 	IOR: ["D-SYS", "Kommunikatör"],
 	Studienämnden: ["SNO", "SMA", "JNO", "Programansvarig"],
 	dÅke: ["SNO", "SMA", "JNO", "Programansvarig"],
+	"D-Dagen": ["D-Dagenansvarig"],
 };
 
 /**
