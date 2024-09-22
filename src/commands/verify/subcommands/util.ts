@@ -32,17 +32,16 @@ export const verifyUser = async (
 	const { year, yearRole } = await extractYearFromUser(kthId);
 	const userHasYearRole = await hasAnyYearRole(user, guild);
 
-	if ((yearRole && year) || userHasYearRole) {
-		if (yearRole && year) {
-			await setYearRoles(user, yearRole, guild);
-			const alias = mapYearToAlias(year);
-			if (alias)
-				await handleChannelAlias(guild, user, alias, joinChannel);
-		}
-
-		if (await hasRole(user, "old verified", guild))
-			await removeRole(user, "old verified", guild);
-	} else setExternRole(user, guild);
+	if (yearRole && year) {
+		await setYearRoles(user, yearRole, guild);
+		const alias = mapYearToAlias(year);
+		if (alias)
+			await handleChannelAlias(guild, user, alias, joinChannel);
+	} else if (!userHasYearRole)
+		setExternRole(user, guild);
 
 	await setPingRoles(user, guild);
+
+	if (await hasRole(user, "old verified", guild))
+		await removeRole(user, "old verified", guild);
 };
