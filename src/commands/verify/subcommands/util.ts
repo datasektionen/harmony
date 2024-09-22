@@ -35,10 +35,8 @@ export const verifyUser = async (
 	if (yearRole && year) {
 		await setYearRoles(user, yearRole, guild);
 		const alias = mapYearToAlias(year);
-		if (alias)
-			await handleChannelAlias(guild, user, alias, joinChannel);
-	} else if (!userHasYearRole)
-		setExternRole(user, guild);
+		if (alias) await handleChannelAlias(guild, user, alias, joinChannel);
+	} else if (!userHasYearRole) setExternRole(user, guild);
 
 	await setPingRoles(user, guild);
 
