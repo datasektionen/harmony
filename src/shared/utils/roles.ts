@@ -110,7 +110,7 @@ export async function toggleYearCoursesRole(
 	guild: Guild,
 	alias: AliasName
 ): Promise<void> {
-	const yearRoles = ["Åk 1", "Åk 2", "Åk 3"];
+	const yearRoles = ["Kurser Åk 1", "Kurser Åk 2", "Kurser Åk 3"];
 	let selectedRole;
 	switch (alias) {
 		case AliasName.YEAR1:
