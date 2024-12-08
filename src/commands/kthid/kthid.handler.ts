@@ -8,12 +8,12 @@ export const handleKthId = async (
     const { options } = interaction;
     const user = options
         .getString(KthIdVariables.USER, true)
-        .replace(/[\D]/g, '');
+        .replace(/[\D]/g, "");
     const kthId = await getKthIdByUserId(user);
     await interaction.deferReply({ ephemeral: true });
     if (!kthId) {
         await interaction.editReply({
-            content: `Found no KTH ID mathing the provided Discord account`,
+            content: "Found no KTH ID mathing the provided Discord account",
         });
     } else {
         await interaction.editReply({
