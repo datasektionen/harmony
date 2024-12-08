@@ -1,3 +1,3 @@
 export enum KthIdVariables {
-    USER = "user"
+	USER = "user",
 }

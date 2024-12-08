@@ -10,8 +10,6 @@ export const kthIdCommand = new SlashCommandBuilder()
 kthIdCommand.addStringOption((option) =>
 	option
 		.setName(KthIdVariables.USER)
-		.setDescription(
-			"A valid user or user ID."
-		)
+		.setDescription("A valid user or user ID.")
 		.setRequired(true)
 );
