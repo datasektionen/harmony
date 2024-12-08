@@ -7,7 +7,7 @@ export const kthIdCommand = new SlashCommandBuilder()
 	.setDescription("Get the KTH ID of a user")
 	.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild);
 
-kthIdCommand.addStringOption((option) =>
+kthIdCommand.addUserOption((option) =>
 	option
 		.setName(KthIdVariables.USER)
 		.setDescription("A valid user or user ID.")
