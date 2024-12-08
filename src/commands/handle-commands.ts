@@ -21,6 +21,7 @@ import { handleTranslateMsg } from "./translate/translateMsg.handler";
 import { handleClub } from "./club/club.handler";
 import { handleMessage } from "./message/message.handler";
 import { BaseInteraction } from "discord.js";
+import { handleKthId } from "./kthid/kthid.handler";
 
 export const handleCommands = (): void => {
 	harmonyClient.on("interactionCreate", async (interaction) => {
@@ -138,6 +139,9 @@ const handleChatInputCommand = async (
 					return;
 				case CommandNames.MESSAGE:
 					await handleMessage(guildInteraction);
+					return;
+				case CommandNames.KTHID:
+					await handleKthId(guildInteraction);
 					return;
 				default:
 					throw new CommandNotFoundError(
