@@ -4,6 +4,7 @@ import { getRoles, hasRole } from "../../shared/utils/roles";
 import { ClubSubcommandNames } from "./club-subcommands.names";
 import { ClubVariables } from "./subcommands/club.variables";
 import { handleClubGive } from "./subcommands/give/club-give.handler";
+import { handleClubList } from "./subcommands/list/club-list.handler";
 import { handleClubRemove } from "./subcommands/remove/club-remove.handler";
 import { canBeGivenBy, isRole } from "./subcommands/utils";
 import { User, Guild } from "discord.js";
@@ -15,7 +16,6 @@ export const handleClub = async (
 	await interaction.deferReply({ ephemeral: true });
 
 	const clubParam = options.getString(ClubVariables.ROLE, true);
-	const targetUser = options.getUser(ClubVariables.TARGET, true);
 
 	if (!isRole(clubParam)) {
 		await interaction.editReply({
@@ -40,9 +40,11 @@ export const handleClub = async (
 	const subCommandName = interaction.options.getSubcommand(true);
 	switch (subCommandName) {
 		case ClubSubcommandNames.GIVE:
-			return await handleClubGive(interaction, clubParam, targetUser);
+			return await handleClubGive(interaction, clubParam);
 		case ClubSubcommandNames.REMOVE:
-			return await handleClubRemove(interaction, clubParam, targetUser);
+			return await handleClubRemove(interaction, clubParam);
+		case ClubSubcommandNames.LIST:
+			return await handleClubList(interaction, clubParam);
 		default:
 			throw new CommandNotFoundError(interaction.commandName);
 	}

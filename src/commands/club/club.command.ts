@@ -59,3 +59,23 @@ clubCommand.addSubcommand((subcommand) =>
 				)
 		)
 );
+
+clubCommand.addSubcommand((subcommand) =>
+	subcommand
+		.setName(ClubSubcommandNames.LIST)
+		.setDescription("Show a list of all users with the given role")
+		.addStringOption((option) =>
+			option
+				.setName(ClubVariables.ROLE)
+				.setDescription("The role to list the members of")
+				.setRequired(true)
+				.addChoices(
+					...Object.keys(canBeGivenBy).map((role) => {
+						return {
+							name: role,
+							value: role,
+						};
+					})
+				)
+		)
+);
