@@ -7,7 +7,7 @@ export const handleClubList = async (
 	const { guild } = interaction;
 	await guild.members.fetch();
 	const role = guild.roles.cache.find((role) => role.name === roleName);
-	const list = role?.members.map((m) => m.user).join(`\n`);
+	const list = role?.members.map((m) => m.user).join("\n");
 
 	if (list === "") {
 		await interaction.editReply({
