@@ -1,7 +1,7 @@
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 
 export const handleClubList = async (
-    interaction: GuildChatInputCommandInteraction, 
+    interaction: GuildChatInputCommandInteraction,
     roleName: string
 ): Promise<void> => {
     const { guild } = interaction;
