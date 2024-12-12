@@ -29,7 +29,7 @@ export async function extractYearFromUser(kthId: string): Promise<{
 			.slice(0, 1)
 			.toUpperCase()}-${yearTag.slice(1)}`;
 		const year = 2000 + parseInt(yearTag.slice(1));
-		return { yearRole: yearTagWithDash, year: year };
+		return { yearRole: yearTagWithDash, year };
 	}
 
 	return { year: null, yearRole: null };
