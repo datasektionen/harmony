@@ -1,13 +1,13 @@
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 import { removeRole, hasRole } from "../../../../shared/utils/roles";
-import { User } from "discord.js";
+import { ClubVariables } from "../club.variables";
 
 export const handleClubRemove = async (
 	interaction: GuildChatInputCommandInteraction,
-	role: string,
-	targetUser: User
+	role: string
 ): Promise<void> => {
 	const { guild } = interaction;
+	const targetUser = interaction.options.getUser(ClubVariables.TARGET, true);
 	if (!(await hasRole(targetUser, role, guild))) {
 		await interaction.editReply({
 			content: `${targetUser} does not have role ${role}!`,
