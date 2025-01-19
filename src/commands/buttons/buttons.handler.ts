@@ -2,7 +2,7 @@ import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatIn
 import { GuildButtonInteraction } from "../../shared/types/GuildButtonInteraction";
 import { joinChannel } from "../join/join.handler";
 import { leaveChannel } from "../leave/leave.handler";
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags } from "discord.js";
 import { AliasName } from "../../shared/alias-mappings";
 import { ButtonAliases } from "./buttons.properties";
 import { aliasExists } from "../../shared/utils/read-alias-mappings";
@@ -27,7 +27,7 @@ export async function handleButtons(
 		}
 	});
 	
-	await generateButtons(interaction, labels, 3);
+	await generateButtons(interaction, labels, 3, ButtonAliases);
 }
 
 export async function handleButtonInteraction(
@@ -36,7 +36,7 @@ export async function handleButtonInteraction(
 	const courseCode = interaction.customId;
 	const alias = courseCode as AliasName;
 	if (aliasExists(alias)) {
-		await interaction.deferReply({ ephemeral: true });
+		await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 		const joining = !(await isMemberOfAlias(
 			interaction.guild,
 			interaction.user.id,
@@ -62,11 +62,12 @@ export async function handleButtonInteraction(
 async function generateButtons(
 	interaction: GuildChatInputCommandInteraction,
 	labels: string[],
-	rowLength: Number
+	rowLength: Number,
+	customIds?: string[]
 ): Promise<void> {
 	if (!interaction.isChatInputCommand()) return;
 
-	const buttons = createButtonsFromLabels(labels, rowLength);
+	const buttons = createButtonsFromLabels(labels, rowLength, customIds);
 
 	// Old code broke due to lack of a check for whether or not
 	// channel is sendable.
@@ -76,17 +77,20 @@ async function generateButtons(
 	}
 }
 
+// labels.length must be equal to customIds.length for correct
+// behaviour, i.e. each button to be assigned the expected customId.
 function createButtonsFromLabels(
 	labels: string[],
-	rowLength: Number
+	rowLength: Number,
+	customIds?: string[]
 ): ActionRowBuilder<ButtonBuilder>[] {
 	let rows = [];
 	let row = new ActionRowBuilder<ButtonBuilder>();
 
-	labels.forEach((value, _) => {
+	labels.forEach((value, index) => {
 		row.addComponents(
 			new ButtonBuilder()
-				.setCustomId(value)
+				.setCustomId(typeof customIds === "undefined" ? value : customIds[index])
 				.setLabel(value)
 				.setStyle(ButtonStyle.Primary)
 		)
