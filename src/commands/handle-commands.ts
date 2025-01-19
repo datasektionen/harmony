@@ -124,6 +124,7 @@ const handleChatInputCommand = async (
 					return;
 				case CommandNames.COURSES:
 					await handleCourses(guildInteraction);
+					await handleButtons(guildInteraction);
 					return;
 				case CommandNames.PERIOD:
 					await handlePeriod(guildInteraction);

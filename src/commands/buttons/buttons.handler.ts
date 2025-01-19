@@ -3,7 +3,6 @@ import { GuildButtonInteraction } from "../../shared/types/GuildButtonInteractio
 import { joinChannel } from "../join/join.handler";
 import { leaveChannel } from "../leave/leave.handler";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
-
 import { AliasName } from "../../shared/alias-mappings";
 import { ButtonAliases } from "./buttons.properties";
 import { aliasExists } from "../../shared/utils/read-alias-mappings";
@@ -13,24 +12,27 @@ import {
 	isMemberOfAlias,
 } from "../../shared/utils/channel-utils";
 
-export const handleButtons = async (
+// Will be moved to the buttons-courses subcommand.
+// Basic logic identical to old code.
+export async function handleButtons(
 	interaction: GuildChatInputCommandInteraction
-): Promise<void> => {
-	if (!interaction.isChatInputCommand()) return;
+): Promise<void> {
+	const labels = ButtonAliases.map((alias, index) => {
 
-	// const buttons = createAliasButtons(ButtonAliases);
-	const buttons = createButtonsFromLabels(ButtonAliases, 3);
+		// Special formatting for CS and ML master aliases.
+		if (index == 3 || index == 4) {
+			return alias.charAt(0).toUpperCase() + alias.charAt(1).toUpperCase() + alias.slice(2);
+		} else {
+			return alias.charAt(0).toUpperCase() + alias.slice(1);
+		}
+	});
+	
+	await generateButtons(interaction, labels, 3);
+}
 
-	// Old code broke, maybe issue due to version differences?
-	// await interaction.channel?.send({ components: buttons });
-	if (interaction.channel?.isSendable()) {
-		await interaction.channel?.send({ components: buttons });
-	}
-};
-
-export const handleButtonInteraction = async (
+export async function handleButtonInteraction(
 	interaction: GuildButtonInteraction
-): Promise<void> => {
+): Promise<void> {
 	const courseCode = interaction.customId;
 	const alias = courseCode as AliasName;
 	if (aliasExists(alias)) {
@@ -57,32 +59,23 @@ export const handleButtonInteraction = async (
 	}
 };
 
-function createAliasButtons(
-	aliases: AliasName[]
-): ActionRowBuilder<ButtonBuilder>[] {
-	const BUTTONS_PER_ROW = 3;
-	const rows = [];
-	let row = new ActionRowBuilder<ButtonBuilder>();
-	for (const [, alias] of Object.entries(aliases)) {
-		const buttonLabel = alias.charAt(0).toUpperCase() + alias.slice(1);
-		row.addComponents(
-			new ButtonBuilder()
-				.setCustomId(alias)
-				.setLabel(buttonLabel)
-				.setStyle(ButtonStyle.Primary)
-		);
-		if (row.components.length == BUTTONS_PER_ROW) {
-			rows.push(row);
-			row = new ActionRowBuilder<ButtonBuilder>();
-		}
+async function generateButtons(
+	interaction: GuildChatInputCommandInteraction,
+	labels: string[],
+	rowLength: Number
+): Promise<void> {
+	if (!interaction.isChatInputCommand()) return;
+
+	const buttons = createButtonsFromLabels(labels, rowLength);
+
+	// Old code broke due to lack of a check for whether or not
+	// channel is sendable.
+	// await interaction.channel?.send({ components: buttons });
+	if (interaction.channel?.isSendable()) {
+		await interaction.channel?.send({ components: buttons });
 	}
-	if (row.components.length > 0) {
-		rows.push(row);
-	}
-	return rows;
 }
 
-// Attempt to generalise createAliasButtons() to arbitrary labels.
 function createButtonsFromLabels(
 	labels: string[],
 	rowLength: Number
