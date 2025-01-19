@@ -18,9 +18,14 @@ export const handleButtons = async (
 ): Promise<void> => {
 	if (!interaction.isChatInputCommand()) return;
 
-	const buttons = createAliasButtons(ButtonAliases);
+	// const buttons = createAliasButtons(ButtonAliases);
+	const buttons = createButtonsFromLabels(ButtonAliases, 3);
 
-	await interaction.channel?.send({ components: buttons });
+	// Old code broke, maybe issue due to version differences?
+	// await interaction.channel?.send({ components: buttons });
+	if (interaction.channel?.isSendable()) {
+		await interaction.channel?.send({ components: buttons });
+	}
 };
 
 export const handleButtonInteraction = async (
@@ -74,5 +79,34 @@ function createAliasButtons(
 	if (row.components.length > 0) {
 		rows.push(row);
 	}
+	return rows;
+}
+
+// Attempt to generalise createAliasButtons() to arbitrary labels.
+function createButtonsFromLabels(
+	labels: string[],
+	rowLength: Number
+): ActionRowBuilder<ButtonBuilder>[] {
+	let rows = [];
+	let row = new ActionRowBuilder<ButtonBuilder>();
+
+	labels.forEach((value, _) => {
+		row.addComponents(
+			new ButtonBuilder()
+				.setCustomId(value)
+				.setLabel(value)
+				.setStyle(ButtonStyle.Primary)
+		)
+
+		if (row.components.length == rowLength) {
+			rows.push(row);
+			row = new ActionRowBuilder<ButtonBuilder>();
+		}
+	});
+
+	if (row.components.length > 0) {
+		rows.push(row);
+	}
+
 	return rows;
 }

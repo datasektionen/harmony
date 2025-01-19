@@ -21,6 +21,7 @@ export const mappings: Record<AliasName, string[]> = {
 		"sf1625",
 		"sf1626",
 		"sf1671",
+		"testing changes showing up",
 	],
 	[AliasName.YEAR2]: [
 		"dd1351",
