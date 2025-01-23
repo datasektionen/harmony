@@ -1,10 +1,10 @@
+import { generateButtons, COURSE_BUTTON_LABELS } from "./subcommands/util";
+import { MessageFlags } from "discord.js";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import { GuildButtonInteraction } from "../../shared/types/GuildButtonInteraction";
 import { joinChannel } from "../join/join.handler";
 import { leaveChannel } from "../leave/leave.handler";
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags } from "discord.js";
 import { AliasName } from "../../shared/alias-mappings";
-import { ButtonAliases } from "./buttons.properties";
 import { aliasExists } from "../../shared/utils/read-alias-mappings";
 import {
 	handleChannel,
@@ -12,12 +12,10 @@ import {
 	isMemberOfAlias,
 } from "../../shared/utils/channel-utils";
 
-// Will be moved to the buttons-courses subcommand.
-// Basic logic identical to old code.
 export async function handleButtons(
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> {
-	const labels = ButtonAliases.map((alias, index) => {
+	const labels = COURSE_BUTTON_LABELS.map((alias, index) => {
 
 		// Special formatting for CS and ML master aliases.
 		if (index == 3 || index == 4) {
@@ -27,7 +25,7 @@ export async function handleButtons(
 		}
 	});
 	
-	await generateButtons(interaction, labels, 3, ButtonAliases);
+	await generateButtons(interaction, labels, 3, COURSE_BUTTON_LABELS);
 }
 
 export async function handleButtonInteraction(
@@ -57,53 +55,4 @@ export async function handleButtonInteraction(
 	} else {
 		await handleChannel(courseCode, interaction, joinChannel);
 	}
-};
-
-async function generateButtons(
-	interaction: GuildChatInputCommandInteraction,
-	labels: string[],
-	rowLength: Number,
-	customIds?: string[]
-): Promise<void> {
-	if (!interaction.isChatInputCommand()) return;
-
-	const buttons = createButtonsFromLabels(labels, rowLength, customIds);
-
-	// Old code broke due to lack of a check for whether or not
-	// channel is sendable.
-	// await interaction.channel?.send({ components: buttons });
-	if (interaction.channel?.isSendable()) {
-		await interaction.channel?.send({ components: buttons });
-	}
-}
-
-// labels.length must be equal to customIds.length for correct
-// behaviour, i.e. each button to be assigned the expected customId.
-function createButtonsFromLabels(
-	labels: string[],
-	rowLength: Number,
-	customIds?: string[]
-): ActionRowBuilder<ButtonBuilder>[] {
-	let rows = [];
-	let row = new ActionRowBuilder<ButtonBuilder>();
-
-	labels.forEach((value, index) => {
-		row.addComponents(
-			new ButtonBuilder()
-				.setCustomId(typeof customIds === "undefined" ? value : customIds[index])
-				.setLabel(value)
-				.setStyle(ButtonStyle.Primary)
-		)
-
-		if (row.components.length == rowLength) {
-			rows.push(row);
-			row = new ActionRowBuilder<ButtonBuilder>();
-		}
-	});
-
-	if (row.components.length > 0) {
-		rows.push(row);
-	}
-
-	return rows;
 }

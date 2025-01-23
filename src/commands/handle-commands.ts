@@ -13,6 +13,8 @@ import {
 	handleButtons,
 	handleButtonInteraction,
 } from "./buttons/buttons.handler";
+import { handleCourseButtonInteraction } from "./buttons/subcommands/courses/buttons-courses.handler";
+import { COURSE_BUTTON_LABELS, VERIFY_BUTTON_LABELS } from "./buttons/subcommands/util";
 import {
 	handleCommunity,
 	handleCommunityAutocomplete,
@@ -43,9 +45,21 @@ export const handleCommands = (): void => {
 						throw new CommandNotFoundError(interaction.commandName);
 				}
 			} else if (interaction.isButton()) {
-				await handleButtonInteraction(
-					interaction as GuildButtonInteraction
-				);
+				const buttonInteraction = interaction as GuildButtonInteraction;
+
+				const courseButtonIds = COURSE_BUTTON_LABELS.map((label, _) => label.toString());
+				const verifyButtonIds = VERIFY_BUTTON_LABELS.map((label, _) => label.toString());
+
+				// buttonInteraction originated from pressing a course button.
+				if (courseButtonIds.includes(buttonInteraction.customId)) {
+					await handleCourseButtonInteraction(buttonInteraction);
+				} 
+				// buttonInteraction originated from pressing a verify button.
+				else if (verifyButtonIds.includes(buttonInteraction.customId)) {
+
+				}
+				// Should be unreachable.
+				else {}
 			} else if (interaction.isAutocomplete()) {
 				switch (interaction.commandName) {
 					case CommandNames.JOIN:
@@ -124,12 +138,14 @@ const handleChatInputCommand = async (
 					return;
 				case CommandNames.COURSES:
 					await handleCourses(guildInteraction);
-					await handleButtons(guildInteraction);
 					return;
 				case CommandNames.PERIOD:
 					await handlePeriod(guildInteraction);
 					return;
 				case CommandNames.BUTTONS:
+
+					// Probably going to have to modify this to accommodate more
+					// button types for each /buttons subcommand.
 					await handleButtons(guildInteraction);
 					return;
 				case CommandNames.COMMUNITY:
