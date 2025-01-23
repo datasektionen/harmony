@@ -120,8 +120,9 @@ export const handleChannel = async (
 			});
 		} else {
 			await interaction.editReply({
-				content: `Successfully updated visibility for \`#${(channel as CourseChannel).name
-					}\``,
+				content: `Successfully updated visibility for \`#${
+					(channel as CourseChannel).name
+				}\``,
 			});
 		}
 	}
