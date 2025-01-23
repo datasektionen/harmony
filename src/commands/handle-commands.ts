@@ -50,9 +50,12 @@ export const handleCommands = (): void => {
 				const courseButtonIds = COURSE_BUTTON_LABELS.map((label, _) => label.toString());
 				const verifyButtonIds = VERIFY_BUTTON_LABELS.map((label, _) => label.toString());
 
+				console.log(courseButtonIds)
+
 				// buttonInteraction originated from pressing a course button.
 				if (courseButtonIds.includes(buttonInteraction.customId)) {
-					await handleCourseButtonInteraction(buttonInteraction);
+					console.log("wefhuhfwheufwehfhwe")
+					await handleButtonInteraction(buttonInteraction);
 				} 
 				// buttonInteraction originated from pressing a verify button.
 				else if (verifyButtonIds.includes(buttonInteraction.customId)) {
