@@ -54,12 +54,42 @@ export async function handleVerifyButtonInteraction(
             const actionRow = new ActionRowBuilder<TextInputBuilder>().addComponents(emailInput);
 
             modal.addComponents(actionRow);
+
+            break;
         }
         case VerifyButtonNames.NOLLAN: {
+            modal
+                .setCustomId("verifyNollan")
+                .setTitle("nØllan...");
 
+            const nollekodInput = new TextInputBuilder()
+                .setCustomId("VerifyNollanNollekod")
+                .setLabel("Vad är din nØllekod, nØllan?")
+                .setStyle(TextInputStyle.Short)
+                .setRequired(true);
+
+            const actionRow = new ActionRowBuilder<TextInputBuilder>().addComponents(nollekodInput);
+
+            modal.addComponents(actionRow);
+
+            break;
         }
         case VerifyButtonNames.SUBMIT: {
+            modal
+                .setCustomId("verifySubmit")
+                .setTitle("Submit Verification Code");
 
+            const verificationCodeInput = new TextInputBuilder()
+                .setCustomId("verifySubmitCode")
+                .setLabel("Enter your verification code")
+                .setStyle(TextInputStyle.Short)
+                .setRequired(true);
+
+            const actionRow = new ActionRowBuilder<TextInputBuilder>().addComponents(verificationCodeInput);
+
+            modal.addComponents(actionRow);
+
+            break;
         }
     }
 
