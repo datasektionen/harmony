@@ -1,5 +1,5 @@
 import { GuildChatInputCommandInteraction } from "../../../shared/types/GuildChatInputCommandType";
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import { AliasName } from "../../../shared/alias-mappings";
 
 // Labels for course buttons
