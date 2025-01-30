@@ -10,10 +10,10 @@ import { handleButtonsVerify, handleVerifyButtonInteraction } from "./subcommand
 export async function handleButtons(
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> {
-	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-
 	const subcommandName = interaction.options.getSubcommand(true);
 
+	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+	
 	switch (subcommandName) {
 		case ButtonsSubcommands.COURSES:
 			return await handleButtonsCourses(interaction);
@@ -32,11 +32,11 @@ export async function handleButtonInteraction(
 	
 	// interaction originated from pressing a course button.
 	if (courseButtonIds.includes(interaction.customId)) {
-		await handleCourseButtonInteraction(interaction);
+		return await handleCourseButtonInteraction(interaction);
 	} 
 	// buttonInteraction originated from pressing a verify button.
 	else if (verifyButtonIds.includes(interaction.customId)) {
-		await handleVerifyButtonInteraction(interaction);
+		return await handleVerifyButtonInteraction(interaction);
 	}
 	// Should be unreachable.
 	else {}
