@@ -27,8 +27,8 @@ export enum VerifyButtonNames {
 
 export const VERIFY_BUTTON_LABELS = [
     VerifyButtonNames.BEGIN,
-    VerifyButtonNames.NOLLAN,
     VerifyButtonNames.SUBMIT,
+    VerifyButtonNames.NOLLAN,
 ];
 
 export async function generateButtons(
