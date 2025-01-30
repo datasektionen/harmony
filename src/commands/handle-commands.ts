@@ -17,7 +17,7 @@ import {
 import { handleTranslateMsg } from "./translate/translateMsg.handler";
 import { handleClub } from "./club/club.handler";
 import { handleMessage } from "./message/message.handler";
-import { BaseInteraction, MessageFlags } from "discord.js";
+import { BaseInteraction } from "discord.js";
 import { handleKthId } from "./kthid/kthid.handler";
 
 export const handleCommands = (): void => {

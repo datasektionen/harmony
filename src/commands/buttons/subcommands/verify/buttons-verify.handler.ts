@@ -34,6 +34,8 @@ export async function handleVerifyButtonInteraction(
     interaction: GuildButtonInteraction
 ): Promise<void> {
 
+    const mottagning = await isDarkmode();
+
     // This will never fail.
     const buttonName = interaction.customId as VerifyButtonNames;
 
@@ -54,6 +56,18 @@ export async function handleVerifyButtonInteraction(
             const actionRow = new ActionRowBuilder<TextInputBuilder>().addComponents(emailInput);
 
             modal.addComponents(actionRow);
+
+            if (mottagning) {
+                const codeInput = new TextInputBuilder()
+                    .setCustomId("beginVerifyCode")
+                    .setLabel("Enter any special codes you may have received")
+                    .setStyle(TextInputStyle.Short)
+                    .setRequired(false);
+
+                const actionRow = new ActionRowBuilder<TextInputBuilder>().addComponents(codeInput);
+
+                modal.addComponents(actionRow);
+            }
 
             break;
         }
