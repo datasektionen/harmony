@@ -1,58 +1,43 @@
-import { generateButtons, COURSE_BUTTON_LABELS } from "./subcommands/util";
+import { COURSE_BUTTON_LABELS, VERIFY_BUTTON_LABELS } from "./subcommands/util";
 import { MessageFlags } from "discord.js";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import { GuildButtonInteraction } from "../../shared/types/GuildButtonInteraction";
-import { joinChannel } from "../join/join.handler";
-import { leaveChannel } from "../leave/leave.handler";
-import { AliasName } from "../../shared/alias-mappings";
-import { aliasExists } from "../../shared/utils/read-alias-mappings";
-import {
-	handleChannel,
-	handleChannelAlias,
-	isMemberOfAlias,
-} from "../../shared/utils/channel-utils";
+import { ButtonsSubcommands } from "./buttons-subcommands.names";
+import { CommandNotFoundError } from "../../shared/errors/command-not-founder.error";
+import { handleButtonsCourses, handleCourseButtonInteraction } from "./subcommands/courses/buttons-courses.handler";
+import { handleButtonsVerify, handleVerifyButtonInteraction } from "./subcommands/verify/buttons-verify.handler";
 
 export async function handleButtons(
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> {
-	const labels = COURSE_BUTTON_LABELS.map((alias, index) => {
+	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-		// Special formatting for CS and ML master aliases.
-		if (index == 3 || index == 4) {
-			return alias.charAt(0).toUpperCase() + alias.charAt(1).toUpperCase() + alias.slice(2);
-		} else {
-			return alias.charAt(0).toUpperCase() + alias.slice(1);
-		}
-	});
-	
-	await generateButtons(interaction, labels, 3, COURSE_BUTTON_LABELS);
+	const subcommandName = interaction.options.getSubcommand(true);
+
+	switch (subcommandName) {
+		case ButtonsSubcommands.COURSES:
+			return await handleButtonsCourses(interaction);
+		case ButtonsSubcommands.VERIFY:
+			return await handleButtonsVerify(interaction);
+		default:
+			throw new CommandNotFoundError(interaction.commandName);
+	}
 }
 
 export async function handleButtonInteraction(
 	interaction: GuildButtonInteraction
 ): Promise<void> {
-	const courseCode = interaction.customId;
-	const alias = courseCode as AliasName;
-	if (aliasExists(alias)) {
-		await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-		const joining = !(await isMemberOfAlias(
-			interaction.guild,
-			interaction.user.id,
-			alias
-		));
-		const action = joining ? joinChannel : leaveChannel;
-		const actionVerb = joining ? "joined" : "left";
-		const updateCount = await handleChannelAlias(
-			interaction.guild,
-			interaction.user,
-			alias,
-			action
-		);
-
-		await interaction.editReply({
-			content: `Successfully ${actionVerb} \`${alias}\`! (${updateCount}) channels updated`,
-		});
-	} else {
-		await handleChannel(courseCode, interaction, joinChannel);
+	const courseButtonIds = COURSE_BUTTON_LABELS.map((label, _) => label.toString());
+	const verifyButtonIds = VERIFY_BUTTON_LABELS.map((label, _) => label.toString());
+	
+	// interaction originated from pressing a course button.
+	if (courseButtonIds.includes(interaction.customId)) {
+		await handleCourseButtonInteraction(interaction);
+	} 
+	// buttonInteraction originated from pressing a verify button.
+	else if (verifyButtonIds.includes(interaction.customId)) {
+		await handleVerifyButtonInteraction(interaction);
 	}
+	// Should be unreachable.
+	else {}
 }

@@ -9,12 +9,7 @@ import { hasRoleN0llan, hasRoleVerified } from "../shared/utils/roles";
 import type { GuildChatInputCommandInteraction } from "../shared/types/GuildChatInputCommandType";
 import type { GuildButtonInteraction } from "../shared/types/GuildButtonInteraction";
 import { handlePeriod } from "./period/period.handler";
-import {
-	handleButtons,
-	handleButtonInteraction,
-} from "./buttons/buttons.handler";
-import { handleCourseButtonInteraction } from "./buttons/subcommands/courses/buttons-courses.handler";
-import { COURSE_BUTTON_LABELS, VERIFY_BUTTON_LABELS } from "./buttons/subcommands/util";
+import { handleButtonInteraction, handleButtons } from "./buttons/buttons.handler";
 import {
 	handleCommunity,
 	handleCommunityAutocomplete,
@@ -47,22 +42,7 @@ export const handleCommands = (): void => {
 			} else if (interaction.isButton()) {
 				const buttonInteraction = interaction as GuildButtonInteraction;
 
-				const courseButtonIds = COURSE_BUTTON_LABELS.map((label, _) => label.toString());
-				const verifyButtonIds = VERIFY_BUTTON_LABELS.map((label, _) => label.toString());
-
-				console.log(courseButtonIds)
-
-				// buttonInteraction originated from pressing a course button.
-				if (courseButtonIds.includes(buttonInteraction.customId)) {
-					console.log("wefhuhfwheufwehfhwe")
-					await handleButtonInteraction(buttonInteraction);
-				} 
-				// buttonInteraction originated from pressing a verify button.
-				else if (verifyButtonIds.includes(buttonInteraction.customId)) {
-
-				}
-				// Should be unreachable.
-				else {}
+				await handleButtonInteraction(buttonInteraction);
 			} else if (interaction.isAutocomplete()) {
 				switch (interaction.commandName) {
 					case CommandNames.JOIN:
@@ -146,9 +126,6 @@ const handleChatInputCommand = async (
 					await handlePeriod(guildInteraction);
 					return;
 				case CommandNames.BUTTONS:
-
-					// Probably going to have to modify this to accommodate more
-					// button types for each /buttons subcommand.
 					await handleButtons(guildInteraction);
 					return;
 				case CommandNames.COMMUNITY:
