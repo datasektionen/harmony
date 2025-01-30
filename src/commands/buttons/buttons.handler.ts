@@ -5,11 +5,13 @@ import { ButtonsSubcommands } from "./buttons-subcommands.names";
 import { CommandNotFoundError } from "../../shared/errors/command-not-founder.error";
 import { handleButtonsCourses, handleCourseButtonInteraction } from "./subcommands/courses/buttons-courses.handler";
 import { handleButtonsVerify, handleVerifyButtonInteraction } from "./subcommands/verify/buttons-verify.handler";
+import { MessageFlags } from "discord.js";
 
 export async function handleButtons(
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> {
 	const subcommandName = interaction.options.getSubcommand(true);
+	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 	
 	switch (subcommandName) {
 		case ButtonsSubcommands.COURSES:

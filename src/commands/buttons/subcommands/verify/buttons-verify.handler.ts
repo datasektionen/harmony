@@ -10,8 +10,10 @@ export async function handleButtonsVerify(
 ): Promise<void> {
     const mottagning = await isDarkmode();
 
+    let labels: string[];
+
     if (mottagning) {
-        const labels = VERIFY_BUTTON_LABELS.map((label, index) => {
+        labels = VERIFY_BUTTON_LABELS.map((label, index) => {
             if (index == 2) {
                 return "n" + "Ø" + label.slice(2);
             } else {
@@ -19,15 +21,15 @@ export async function handleButtonsVerify(
             }
         })
     } else {
-        const labels = VERIFY_BUTTON_LABELS.map((label, _) => {
+        labels = VERIFY_BUTTON_LABELS.map((label, _) => {
             return label.charAt(0).toUpperCase() + label.slice(1);
         })
 
         // Remove nØllan.
         labels.pop();
-
-        await generateButtons(interaction, labels, 2, VERIFY_BUTTON_LABELS);
     }
+
+    await generateButtons(interaction, labels, 2, VERIFY_BUTTON_LABELS);
 };
 
 export async function handleVerifyButtonInteraction(
