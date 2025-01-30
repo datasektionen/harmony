@@ -11,8 +11,6 @@ export async function handleButtons(
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> {
 	const subcommandName = interaction.options.getSubcommand(true);
-
-	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 	
 	switch (subcommandName) {
 		case ButtonsSubcommands.COURSES:
