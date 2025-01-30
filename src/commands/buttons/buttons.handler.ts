@@ -1,5 +1,4 @@
 import { COURSE_BUTTON_LABELS, VERIFY_BUTTON_LABELS } from "./subcommands/util";
-import { MessageFlags } from "discord.js";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import { GuildButtonInteraction } from "../../shared/types/GuildButtonInteraction";
 import { ButtonsSubcommands } from "./buttons-subcommands.names";
