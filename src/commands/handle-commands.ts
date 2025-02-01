@@ -22,6 +22,7 @@ import { handleKthId } from "./kthid/kthid.handler";
 import { VERIFY_MODAL_CUSTOM_IDS, VerifyModalCustomIds } from "./buttons/subcommands/util";
 import { handleVerifyBegin } from "./verify/subcommands/begin/verify-begin.handler";
 import { isDarkmode } from "../shared/utils/darkmode";
+import { handleVerifySubmit } from "./verify/subcommands/submit/verify-submit.handler";
 
 export const handleCommands = (): void => {
 	harmonyClient.on("interactionCreate", async (interaction) => {
@@ -64,8 +65,14 @@ export const handleCommands = (): void => {
 						case VerifyModalCustomIds.BEGIN:
 							await handleVerifyBegin(interaction, darkmode);
 							return;
+						case VerifyModalCustomIds.NOLLAN:
+							return;
+						case VerifyModalCustomIds.SUBMIT:
+							await handleVerifySubmit(interaction);
+							return;
 						default:
 							console.warn("Unexpected verify modal interaction")
+							return;
 					}
 				}
 				// Should be unreachable.

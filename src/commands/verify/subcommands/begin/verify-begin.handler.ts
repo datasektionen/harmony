@@ -19,9 +19,6 @@ export async function handleVerifyBeginBase(
 ): Promise<void> {
 	const user = interaction.user;
 
-	console.log(email);
-	console.log(email.length);
-
 	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 	
 	if (

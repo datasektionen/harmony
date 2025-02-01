@@ -1,3 +1,4 @@
+import { MessageFlags, ModalSubmitInteraction } from "discord.js";
 import { tokenUser } from "../../../../database-config";
 import * as db from "../../../../db/db";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
@@ -12,11 +13,90 @@ import { messageIsToken, verifyUser } from "../util";
 import { VerifySubmitVariables } from "./verify-submit.variables";
 
 export async function handleVerifySubmitBase(
-	
+	interaction: GuildChatInputCommandInteraction | ModalSubmitInteraction,
+	token: string
 ): Promise<void> {
+	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
+	let guild = undefined;
+
+	// Verify modals should only exist on the server,
+	// so calls via slash command should remain unaffected.
+	if (interaction.guild !== null) {
+		guild = interaction.guild;
+	} else {
+		console.warn("Verification failed due to guild being null (/verify submit has failed).")
+		await interaction.editReply({
+			content: "Something went wrong, please try again.",
+		});
+		return;
+	}
+
+	if (!messageIsToken(token)) {
+		await interaction.editReply({ content: "Not a valid code" });
+		return;
+	}
+
+	const verifyingUser = (await tokenUser.get(token)) as
+		| VerifyingUser
+		| undefined;
+
+	if (!verifyingUser || verifyingUser.discordId !== interaction.user.id) {
+		await interaction.editReply({
+			content:
+				"Verification unsuccessful, submit the code again or request a new code.",
+		});
+		return;
+	}
+
+	const kthId = verifyingUser.email.split("@")[0];
+
+	await db.insertUser(kthId, verifyingUser.discordId);
+
+	try {
+		if (verifyingUser.isIntis) {
+			await Promise.all([
+				setRoleVerified(interaction.user, guild),
+				setIntisRoles(interaction.user, guild),
+				setPingRoles(interaction.user, guild),
+			]);
+		} else {
+			await verifyUser(interaction.user, guild, kthId);
+		}
+	} catch (error) {
+		console.warn(error);
+		await interaction.editReply({
+			content: "Something went wrong, please try again.",
+		});
+		return;
+	}
+
+	await tokenUser.delete(token); // Remove temporary token-user pair
+
+	const content = clientIsLight(interaction.client)
+		? "You are now verified!"
+		: "You are now verified! You have been added to all course channels of your current year. \nYou can join or leave course channels with the `/join` and `/leave` command. \nFor more info, see: <#1020725853157593219>";
+	await interaction.editReply({
+		content: content,
+	});
 }
 
+export async function handleVerifySubmit(
+	interaction: GuildChatInputCommandInteraction | ModalSubmitInteraction
+): Promise<void> {
+	if (interaction.isModalSubmit()) {
+		const verificationCode = interaction.fields.getTextInputValue("verifySubmitCode");
+
+		await handleVerifySubmitBase(interaction, verificationCode);
+	} else {
+		const { options } = interaction;
+		const verificationCode = options.getString(VerifySubmitVariables.VERIFICATION_CODE, true);
+		
+		await handleVerifySubmitBase(interaction, verificationCode);
+	}
+}
+
+/*
 export const handleVerifySubmit = async (
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
@@ -75,3 +155,4 @@ export const handleVerifySubmit = async (
 		content: content,
 	});
 };
+*/
