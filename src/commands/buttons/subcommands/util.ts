@@ -31,6 +31,18 @@ export const VERIFY_BUTTON_LABELS = [
     VerifyButtonNames.NOLLAN,
 ];
 
+export enum VerifyModalCustomIds {
+    BEGIN = "beginVerify",
+    NOLLAN = "verifyNollan",
+    SUBMIT = "verifySubmit",
+}
+
+export const VERIFY_MODAL_CUSTOM_IDS = [
+    VerifyModalCustomIds.BEGIN,
+    VerifyModalCustomIds.NOLLAN,
+    VerifyModalCustomIds.SUBMIT,
+];
+
 export async function generateButtons(
     interaction: GuildChatInputCommandInteraction,
     labels: string[],

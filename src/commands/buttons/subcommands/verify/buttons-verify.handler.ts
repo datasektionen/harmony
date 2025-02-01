@@ -2,7 +2,7 @@ import { ModalBuilder, TextInputStyle } from "discord.js";
 import { GuildButtonInteraction } from "../../../../shared/types/GuildButtonInteraction";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 import { isDarkmode } from "../../../../shared/utils/darkmode";
-import { generateButtons, VERIFY_BUTTON_LABELS, VerifyButtonNames } from "../util";
+import { generateButtons, VERIFY_BUTTON_LABELS, VerifyButtonNames, VerifyModalCustomIds } from "../util";
 import { ActionRowBuilder, TextInputBuilder } from "@discordjs/builders";
 
 export async function handleButtonsVerify(
@@ -46,7 +46,7 @@ export async function handleVerifyButtonInteraction(
     switch (buttonName) {
         case VerifyButtonNames.BEGIN: {
             modal
-                .setCustomId("beginVerify")
+                .setCustomId(VerifyModalCustomIds.BEGIN)
                 .setTitle("Begin Verification");
 
             const emailInput = new TextInputBuilder()
@@ -75,7 +75,7 @@ export async function handleVerifyButtonInteraction(
         }
         case VerifyButtonNames.NOLLAN: {
             modal
-                .setCustomId("verifyNollan")
+                .setCustomId(VerifyModalCustomIds.NOLLAN)
                 .setTitle("nØllan...");
 
             const nollekodInput = new TextInputBuilder()
@@ -92,7 +92,7 @@ export async function handleVerifyButtonInteraction(
         }
         case VerifyButtonNames.SUBMIT: {
             modal
-                .setCustomId("verifySubmit")
+                .setCustomId(VerifyModalCustomIds.SUBMIT)
                 .setTitle("Submit Verification Code");
 
             const verificationCodeInput = new TextInputBuilder()

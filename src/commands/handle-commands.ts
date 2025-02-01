@@ -19,6 +19,9 @@ import { handleClub } from "./club/club.handler";
 import { handleMessage } from "./message/message.handler";
 import { BaseInteraction } from "discord.js";
 import { handleKthId } from "./kthid/kthid.handler";
+import { VERIFY_MODAL_CUSTOM_IDS, VerifyModalCustomIds } from "./buttons/subcommands/util";
+import { handleVerifyBegin } from "./verify/subcommands/begin/verify-begin.handler";
+import { isDarkmode } from "../shared/utils/darkmode";
 
 export const handleCommands = (): void => {
 	harmonyClient.on("interactionCreate", async (interaction) => {
@@ -43,6 +46,30 @@ export const handleCommands = (): void => {
 				const buttonInteraction = interaction as GuildButtonInteraction;
 
 				await handleButtonInteraction(buttonInteraction);
+			} else if (interaction.isModalSubmit()) {
+				const darkmode = await isDarkmode();
+				const verifyModalCustomIds = VERIFY_MODAL_CUSTOM_IDS.map((id, _) => id.toString());
+
+				// Add check for whether user has already been verified.
+				if (verifyModalCustomIds.includes(interaction.customId)) {
+					if (await hasRoleVerified(interaction.user, interaction.guild)) {
+						await interaction.reply({
+							content: "You are already verified!",
+							ephemeral: true,
+						});
+						return;
+					}
+
+					switch (interaction.customId) {
+						case VerifyModalCustomIds.BEGIN:
+							await handleVerifyBegin(interaction, darkmode);
+							return;
+						default:
+							console.warn("Unexpected verify modal interaction")
+					}
+				}
+				// Should be unreachable.
+				else {}
 			} else if (interaction.isAutocomplete()) {
 				switch (interaction.commandName) {
 					case CommandNames.JOIN:
