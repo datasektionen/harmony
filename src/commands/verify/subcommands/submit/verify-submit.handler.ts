@@ -11,6 +11,12 @@ import {
 import { messageIsToken, verifyUser } from "../util";
 import { VerifySubmitVariables } from "./verify-submit.variables";
 
+export async function handleVerifySubmitBase(
+	
+): Promise<void> {
+
+}
+
 export const handleVerifySubmit = async (
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
