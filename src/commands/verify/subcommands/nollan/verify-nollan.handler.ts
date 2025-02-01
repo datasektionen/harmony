@@ -1,3 +1,4 @@
+import { ModalSubmitInteraction } from "discord.js";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 import { addRolesOrRollback } from "../../../../shared/utils/atomic-roles";
 import {
@@ -8,14 +9,29 @@ import {
 import { verifyNolleCode } from "../../../../shared/utils/verify_nolle_code";
 import { VerifyNollanVariables } from "./verify-nollan.variables";
 
-export const handleVerifyNollan = async (
-	interaction: GuildChatInputCommandInteraction
-): Promise<void> => {
-	const { user, guild, options } = interaction;
-	await interaction.deferReply({ ephemeral: true });
-	const code = options.getString(VerifyNollanVariables.NOLLE_KOD, true);
+export async function handleVerifyNollanBase(
+	interaction: GuildChatInputCommandInteraction | ModalSubmitInteraction,
+	nolleKod: string
+): Promise<void> {
 
-	// Check if n0llan already verified
+	let guild = undefined;
+
+	// Verify modals should only exist on the server,
+	// so calls via slash command should remain unaffected.
+	if (interaction.guild !== null) {
+		guild = interaction.guild;
+	} else {
+		console.warn("Verification failed due to guild being null (/verify nollan has failed).")
+		await interaction.editReply({
+			content: "Something went wrong, please try again.",
+		});
+		return;
+	}
+
+	const { user } = interaction;
+	await interaction.deferReply({ ephemeral: true });
+
+	// Check if nØllan already verified
 	if (await hasRoleN0llan(user, guild)) {
 		await interaction.editReply({
 			content:
@@ -26,7 +42,7 @@ export const handleVerifyNollan = async (
 
 	try {
 		// Check if nolle-code is valid
-		const validNollegruppRoleName = verifyNolleCode(code);
+		const validNollegruppRoleName = verifyNolleCode(nolleKod);
 		if (!validNollegruppRoleName) {
 			await interaction.editReply({
 				content:
@@ -37,7 +53,7 @@ export const handleVerifyNollan = async (
 
 		await addRolesOrRollback(
 			user,
-			interaction.guild,
+			guild,
 			async (user, guild) => {
 				await setN0llanRole(user, guild);
 				await setRole(user, validNollegruppRoleName, guild); // Add n0llegrupp role
@@ -55,4 +71,19 @@ export const handleVerifyNollan = async (
 		});
 		return;
 	}
-};
+}
+
+export async function handleVerifyNollan(
+	interaction: GuildChatInputCommandInteraction | ModalSubmitInteraction
+): Promise<void> {
+	if (interaction.isModalSubmit()) {
+		const nolleKod = interaction.fields.getTextInputValue("VerifyNollanNollekod");
+	
+		await handleVerifyNollanBase(interaction, nolleKod);
+	} else {
+		const { options } = interaction;
+		const nolleKod = options.getString(VerifyNollanVariables.NOLLE_KOD, true);
+		
+		await handleVerifyNollanBase(interaction, nolleKod);
+	}
+}
