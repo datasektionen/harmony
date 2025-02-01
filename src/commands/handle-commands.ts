@@ -54,7 +54,7 @@ export const handleCommands = (): void => {
 
 				// Add check for whether user has already been verified.
 				if (verifyModalCustomIds.includes(interaction.customId)) {
-					if (await hasRoleVerified(interaction.user, interaction.guild)) {
+					if (await hasRoleVerified(interaction.user, interaction.guild) && !(await hasRoleN0llan(interaction.user, interaction.guild))) {
 						await interaction.reply({
 							content: "You are already verified!",
 							ephemeral: true,
