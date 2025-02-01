@@ -23,6 +23,7 @@ import { VERIFY_MODAL_CUSTOM_IDS, VerifyModalCustomIds } from "./buttons/subcomm
 import { handleVerifyBegin } from "./verify/subcommands/begin/verify-begin.handler";
 import { isDarkmode } from "../shared/utils/darkmode";
 import { handleVerifySubmit } from "./verify/subcommands/submit/verify-submit.handler";
+import { handleVerifyNollan } from "./verify/subcommands/nollan/verify-nollan.handler";
 
 export const handleCommands = (): void => {
 	harmonyClient.on("interactionCreate", async (interaction) => {
@@ -66,6 +67,7 @@ export const handleCommands = (): void => {
 							await handleVerifyBegin(interaction, darkmode);
 							return;
 						case VerifyModalCustomIds.NOLLAN:
+							await handleVerifyNollan(interaction);
 							return;
 						case VerifyModalCustomIds.SUBMIT:
 							await handleVerifySubmit(interaction);
