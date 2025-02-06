@@ -9,7 +9,10 @@ import { hasRoleN0llan, hasRoleVerified } from "../shared/utils/roles";
 import type { GuildChatInputCommandInteraction } from "../shared/types/GuildChatInputCommandType";
 import type { GuildButtonInteraction } from "../shared/types/GuildButtonInteraction";
 import { handlePeriod } from "./period/period.handler";
-import { handleButtonInteraction, handleButtons } from "./buttons/buttons.handler";
+import {
+	handleButtonInteraction,
+	handleButtons,
+} from "./buttons/buttons.handler";
 import {
 	handleCommunity,
 	handleCommunityAutocomplete,
@@ -19,7 +22,10 @@ import { handleClub } from "./club/club.handler";
 import { handleMessage } from "./message/message.handler";
 import { BaseInteraction } from "discord.js";
 import { handleKthId } from "./kthid/kthid.handler";
-import { VERIFY_MODAL_CUSTOM_IDS, VerifyModalCustomIds } from "./buttons/subcommands/util";
+import {
+	VERIFY_MODAL_CUSTOM_IDS,
+	VerifyModalCustomIds,
+} from "./buttons/subcommands/util";
 import { handleVerifyBegin } from "./verify/subcommands/begin/verify-begin.handler";
 import { isDarkmode } from "../shared/utils/darkmode";
 import { handleVerifySubmit } from "./verify/subcommands/submit/verify-submit.handler";
@@ -50,11 +56,22 @@ export const handleCommands = (): void => {
 				await handleButtonInteraction(buttonInteraction);
 			} else if (interaction.isModalSubmit()) {
 				const darkmode = await isDarkmode();
-				const verifyModalCustomIds = VERIFY_MODAL_CUSTOM_IDS.map((id) => id.toString());
+				const verifyModalCustomIds = VERIFY_MODAL_CUSTOM_IDS.map((id) =>
+					id.toString()
+				);
 
 				// Add check for whether user has already been verified.
 				if (verifyModalCustomIds.includes(interaction.customId)) {
-					if (await hasRoleVerified(interaction.user, interaction.guild) && !(await hasRoleN0llan(interaction.user, interaction.guild))) {
+					if (
+						(await hasRoleVerified(
+							interaction.user,
+							interaction.guild
+						)) &&
+						!(await hasRoleN0llan(
+							interaction.user,
+							interaction.guild
+						))
+					) {
 						await interaction.reply({
 							content: "You are already verified!",
 							ephemeral: true,
@@ -73,13 +90,15 @@ export const handleCommands = (): void => {
 							await handleVerifySubmit(interaction);
 							return;
 						default:
-							console.warn("Unexpected verify modal interaction")
+							console.warn("Unexpected verify modal interaction");
 							return;
 					}
 				}
 				// Should be unreachable.
 				else {
-					console.warn(`An unknown modal was interacted with (customId: ${interaction.customId})`)
+					console.warn(
+						`An unknown modal was interacted with (customId: ${interaction.customId})`
+					);
 				}
 			} else if (interaction.isAutocomplete()) {
 				switch (interaction.commandName) {

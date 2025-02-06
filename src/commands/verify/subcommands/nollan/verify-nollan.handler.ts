@@ -13,7 +13,6 @@ export async function handleVerifyNollanBase(
 	interaction: GuildChatInputCommandInteraction | ModalSubmitInteraction,
 	nolleKod: string
 ): Promise<void> {
-
 	let guild = undefined;
 
 	// Verify modals should only exist on the server,
@@ -21,7 +20,9 @@ export async function handleVerifyNollanBase(
 	if (interaction.guild !== null) {
 		guild = interaction.guild;
 	} else {
-		console.warn("Verification failed due to guild being null (/verify nollan has failed).")
+		console.warn(
+			"Verification failed due to guild being null (/verify nollan has failed)."
+		);
 		await interaction.editReply({
 			content: "Something went wrong, please try again.",
 		});
@@ -51,14 +52,10 @@ export async function handleVerifyNollanBase(
 			return;
 		}
 
-		await addRolesOrRollback(
-			user,
-			guild,
-			async (user, guild) => {
-				await setN0llanRole(user, guild);
-				await setRole(user, validNollegruppRoleName, guild); // Add n0llegrupp role
-			}
-		);
+		await addRolesOrRollback(user, guild, async (user, guild) => {
+			await setN0llanRole(user, guild);
+			await setRole(user, validNollegruppRoleName, guild); // Add n0llegrupp role
+		});
 
 		await interaction.editReply({
 			content:
@@ -77,13 +74,18 @@ export async function handleVerifyNollan(
 	interaction: GuildChatInputCommandInteraction | ModalSubmitInteraction
 ): Promise<void> {
 	if (interaction.isModalSubmit()) {
-		const nolleKod = interaction.fields.getTextInputValue("VerifyNollanNollekod");
-	
+		const nolleKod = interaction.fields.getTextInputValue(
+			"VerifyNollanNollekod"
+		);
+
 		await handleVerifyNollanBase(interaction, nolleKod);
 	} else {
 		const { options } = interaction;
-		const nolleKod = options.getString(VerifyNollanVariables.NOLLE_KOD, true);
-		
+		const nolleKod = options.getString(
+			VerifyNollanVariables.NOLLE_KOD,
+			true
+		);
+
 		await handleVerifyNollanBase(interaction, nolleKod);
 	}
 }

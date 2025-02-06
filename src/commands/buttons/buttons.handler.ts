@@ -3,8 +3,14 @@ import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatIn
 import { GuildButtonInteraction } from "../../shared/types/GuildButtonInteraction";
 import { ButtonsSubcommands } from "./buttons-subcommands.names";
 import { CommandNotFoundError } from "../../shared/errors/command-not-founder.error";
-import { handleButtonsCourses, handleCourseButtonInteraction } from "./subcommands/courses/buttons-courses.handler";
-import { handleButtonsVerify, handleVerifyButtonInteraction } from "./subcommands/verify/buttons-verify.handler";
+import {
+	handleButtonsCourses,
+	handleCourseButtonInteraction,
+} from "./subcommands/courses/buttons-courses.handler";
+import {
+	handleButtonsVerify,
+	handleVerifyButtonInteraction,
+} from "./subcommands/verify/buttons-verify.handler";
 import { MessageFlags } from "discord.js";
 
 export async function handleButtons(
@@ -12,7 +18,7 @@ export async function handleButtons(
 ): Promise<void> {
 	const subcommandName = interaction.options.getSubcommand(true);
 	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-	
+
 	switch (subcommandName) {
 		case ButtonsSubcommands.COURSES:
 			return await handleButtonsCourses(interaction);
@@ -26,19 +32,25 @@ export async function handleButtons(
 export async function handleButtonInteraction(
 	interaction: GuildButtonInteraction
 ): Promise<void> {
-	const courseButtonIds = COURSE_BUTTON_LABELS.map((label) => label.toString());
-	const verifyButtonIds = VERIFY_BUTTON_LABELS.map((label) => label.toString());
-	
+	const courseButtonIds = COURSE_BUTTON_LABELS.map((label) =>
+		label.toString()
+	);
+	const verifyButtonIds = VERIFY_BUTTON_LABELS.map((label) =>
+		label.toString()
+	);
+
 	// interaction originated from pressing a course button.
 	if (courseButtonIds.includes(interaction.customId)) {
 		return await handleCourseButtonInteraction(interaction);
-	} 
+	}
 	// buttonInteraction originated from pressing a verify button.
 	else if (verifyButtonIds.includes(interaction.customId)) {
 		return await handleVerifyButtonInteraction(interaction);
 	}
 	// Should be unreachable.
 	else {
-		console.warn(`An unknown button was interacted with (customId = ${interaction.customId}).`)
+		console.warn(
+			`An unknown button was interacted with (customId = ${interaction.customId}).`
+		);
 	}
 }

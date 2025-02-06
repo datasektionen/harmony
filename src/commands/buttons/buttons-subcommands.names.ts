@@ -1,4 +1,4 @@
 export enum ButtonsSubcommands {
-    COURSES = "courses",
-    VERIFY = "verify",
+	COURSES = "courses",
+	VERIFY = "verify",
 }

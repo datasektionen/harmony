@@ -7,10 +7,12 @@ const command = new SlashCommandBuilder()
 	.setDescription("Generate buttons")
 	.setDefaultMemberPermissions(PermissionFlagsBits.Administrator);
 
-command.addSubcommand((subCommand) => 
+command.addSubcommand((subCommand) =>
 	subCommand
 		.setName(ButtonsSubcommands.COURSES)
-		.setDescription("Generate buttons for joining or leaving courses belonging to e.g. a certain year or master")
+		.setDescription(
+			"Generate buttons for joining or leaving courses belonging to e.g. a certain year or master"
+		)
 );
 
 command.addSubcommand((subCommand) =>

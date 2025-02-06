@@ -20,7 +20,7 @@ export async function handleVerifyBeginBase(
 	const user = interaction.user;
 
 	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-	
+
 	if (
 		!isKthEmail(email) &&
 		(await getHodisUser(email.split("@")[0])) !== null
@@ -105,7 +105,8 @@ export async function handleVerifyBegin(
 		const email = interaction.fields.getTextInputValue("beginVerifyEmail");
 
 		if (darkmode) {
-			const code = interaction.fields.getTextInputValue("beginVerifyCode");
+			const code =
+				interaction.fields.getTextInputValue("beginVerifyCode");
 
 			await handleVerifyBeginBase(email, interaction, darkmode, code);
 		} else {
@@ -117,7 +118,12 @@ export async function handleVerifyBegin(
 		const code = options.getString(VerifyBeginVariables.CODE, false);
 
 		if (code === null) {
-			await handleVerifyBeginBase(email, interaction, darkmode, undefined);
+			await handleVerifyBeginBase(
+				email,
+				interaction,
+				darkmode,
+				undefined
+			);
 		} else {
 			await handleVerifyBeginBase(email, interaction, darkmode, code);
 		}

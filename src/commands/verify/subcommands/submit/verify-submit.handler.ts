@@ -25,7 +25,9 @@ export async function handleVerifySubmitBase(
 	if (interaction.guild !== null) {
 		guild = interaction.guild;
 	} else {
-		console.warn("Verification failed due to guild being null (/verify submit has failed).")
+		console.warn(
+			"Verification failed due to guild being null (/verify submit has failed)."
+		);
 		await interaction.editReply({
 			content: "Something went wrong, please try again.",
 		});
@@ -85,13 +87,17 @@ export async function handleVerifySubmit(
 	interaction: GuildChatInputCommandInteraction | ModalSubmitInteraction
 ): Promise<void> {
 	if (interaction.isModalSubmit()) {
-		const verificationCode = interaction.fields.getTextInputValue("verifySubmitCode");
+		const verificationCode =
+			interaction.fields.getTextInputValue("verifySubmitCode");
 
 		await handleVerifySubmitBase(interaction, verificationCode);
 	} else {
 		const { options } = interaction;
-		const verificationCode = options.getString(VerifySubmitVariables.VERIFICATION_CODE, true);
-		
+		const verificationCode = options.getString(
+			VerifySubmitVariables.VERIFICATION_CODE,
+			true
+		);
+
 		await handleVerifySubmitBase(interaction, verificationCode);
 	}
 }
