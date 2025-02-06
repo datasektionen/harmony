@@ -1,3 +1,4 @@
+import { MessageFlags, ModalSubmitInteraction } from "discord.js";
 import { tokenUser } from "../../../../database-config";
 import * as db from "../../../../db/db";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
@@ -11,15 +12,27 @@ import {
 import { messageIsToken, verifyUser } from "../util";
 import { VerifySubmitVariables } from "./verify-submit.variables";
 
-export const handleVerifySubmit = async (
-	interaction: GuildChatInputCommandInteraction
-): Promise<void> => {
-	await interaction.deferReply({ ephemeral: true });
+export async function handleVerifySubmitBase(
+	interaction: GuildChatInputCommandInteraction | ModalSubmitInteraction,
+	token: string
+): Promise<void> {
+	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-	const token = interaction.options.getString(
-		VerifySubmitVariables.VERIFICATION_CODE,
-		true
-	);
+	let guild = undefined;
+
+	// Verify modals should only exist on the server,
+	// so calls via slash command should remain unaffected.
+	if (interaction.guild !== null) {
+		guild = interaction.guild;
+	} else {
+		console.warn(
+			"Verification failed due to guild being null (/verify submit has failed)."
+		);
+		await interaction.editReply({
+			content: "Something went wrong, please try again.",
+		});
+		return;
+	}
 
 	if (!messageIsToken(token)) {
 		await interaction.editReply({ content: "Not a valid code" });
@@ -45,12 +58,12 @@ export const handleVerifySubmit = async (
 	try {
 		if (verifyingUser.isIntis) {
 			await Promise.all([
-				setRoleVerified(interaction.user, interaction.guild),
-				setIntisRoles(interaction.user, interaction.guild),
-				setPingRoles(interaction.user, interaction.guild),
+				setRoleVerified(interaction.user, guild),
+				setIntisRoles(interaction.user, guild),
+				setPingRoles(interaction.user, guild),
 			]);
 		} else {
-			await verifyUser(interaction.user, interaction.guild, kthId);
+			await verifyUser(interaction.user, guild, kthId);
 		}
 	} catch (error) {
 		console.warn(error);
@@ -68,4 +81,23 @@ export const handleVerifySubmit = async (
 	await interaction.editReply({
 		content: content,
 	});
-};
+}
+
+export async function handleVerifySubmit(
+	interaction: GuildChatInputCommandInteraction | ModalSubmitInteraction
+): Promise<void> {
+	if (interaction.isModalSubmit()) {
+		const verificationCode =
+			interaction.fields.getTextInputValue("verifySubmitCode");
+
+		await handleVerifySubmitBase(interaction, verificationCode);
+	} else {
+		const { options } = interaction;
+		const verificationCode = options.getString(
+			VerifySubmitVariables.VERIFICATION_CODE,
+			true
+		);
+
+		await handleVerifySubmitBase(interaction, verificationCode);
+	}
+}

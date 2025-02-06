@@ -26,11 +26,13 @@ export const handlePeriodRoles = async (
 			.map((member) => updateMember(member, period))
 	);
 
-	await interaction.channel?.send(
-		`Hey ${
-			interaction.member?.user ?? "friend"
-		}, I have finished updating all period roles!`
-	);
+	if (interaction.channel?.isSendable()) {
+		await interaction.channel?.send(
+			`Hey ${
+				interaction.member?.user ?? "friend"
+			}, I have finished updating all period roles!`
+		);
+	}
 };
 
 async function updateMember(

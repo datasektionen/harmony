@@ -7,14 +7,20 @@ import { VerifyBeginVariables } from "./verify-begin.variables";
 import * as db from "../../../../db/db";
 import { getHodisUser, isDangerOfNollan } from "../../../../shared/utils/hodis";
 import { VerifyingUser } from "../../../../shared/types/VerifyingUser";
+import { MessageFlags, ModalSubmitInteraction } from "discord.js";
 
-export const handleVerifyBegin = async (
-	interaction: GuildChatInputCommandInteraction,
-	darkmode: boolean
-): Promise<void> => {
-	const { user, options } = interaction;
-	await interaction.deferReply({ ephemeral: true });
-	const email = options.getString(VerifyBeginVariables.EMAIL, true);
+// The basic logic of handleVerifyBegin() implemented in an
+// "interaction-agnostic manner".
+export async function handleVerifyBeginBase(
+	email: string,
+	interaction: GuildChatInputCommandInteraction | ModalSubmitInteraction,
+	darkmode: boolean,
+	code?: string
+): Promise<void> {
+	const user = interaction.user;
+
+	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+
 	if (
 		!isKthEmail(email) &&
 		(await getHodisUser(email.split("@")[0])) !== null
@@ -26,7 +32,6 @@ export const handleVerifyBegin = async (
 	}
 
 	// Bypass for international students
-	const code = options.getString(VerifyBeginVariables.CODE, false);
 	const isIntis = code === process.env.CODE_INTIS;
 
 	const kthId = email.split("@")[0];
@@ -49,7 +54,10 @@ export const handleVerifyBegin = async (
 					"It seems you're already verified on another Konglig server. Welcome!",
 			});
 			try {
-				verifyUser(interaction.user, interaction.guild, kthId);
+				// Should always be true, so long as the command is only used in a guild.
+				if (interaction.guild !== null) {
+					verifyUser(user, interaction.guild, kthId);
+				}
 			} catch (error) {
 				console.warn(error);
 				await interaction.reply({
@@ -87,4 +95,37 @@ export const handleVerifyBegin = async (
 			content: "Something went wrong, please try again.",
 		});
 	}
-};
+}
+
+export async function handleVerifyBegin(
+	interaction: GuildChatInputCommandInteraction | ModalSubmitInteraction,
+	darkmode: boolean
+): Promise<void> {
+	if (interaction.isModalSubmit()) {
+		const email = interaction.fields.getTextInputValue("beginVerifyEmail");
+
+		if (darkmode) {
+			const code =
+				interaction.fields.getTextInputValue("beginVerifyCode");
+
+			await handleVerifyBeginBase(email, interaction, darkmode, code);
+		} else {
+			await handleVerifyBeginBase(email, interaction, darkmode);
+		}
+	} else {
+		const { options } = interaction;
+		const email = options.getString(VerifyBeginVariables.EMAIL, true);
+		const code = options.getString(VerifyBeginVariables.CODE, false);
+
+		if (code === null) {
+			await handleVerifyBeginBase(
+				email,
+				interaction,
+				darkmode,
+				undefined
+			);
+		} else {
+			await handleVerifyBeginBase(email, interaction, darkmode, code);
+		}
+	}
+}

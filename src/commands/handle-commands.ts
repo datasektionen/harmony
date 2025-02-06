@@ -10,8 +10,8 @@ import type { GuildChatInputCommandInteraction } from "../shared/types/GuildChat
 import type { GuildButtonInteraction } from "../shared/types/GuildButtonInteraction";
 import { handlePeriod } from "./period/period.handler";
 import {
-	handleButtons,
 	handleButtonInteraction,
+	handleButtons,
 } from "./buttons/buttons.handler";
 import {
 	handleCommunity,
@@ -22,6 +22,14 @@ import { handleClub } from "./club/club.handler";
 import { handleMessage } from "./message/message.handler";
 import { BaseInteraction } from "discord.js";
 import { handleKthId } from "./kthid/kthid.handler";
+import {
+	VERIFY_MODAL_CUSTOM_IDS,
+	VerifyModalCustomIds,
+} from "./buttons/subcommands/util";
+import { handleVerifyBegin } from "./verify/subcommands/begin/verify-begin.handler";
+import { isDarkmode } from "../shared/utils/darkmode";
+import { handleVerifySubmit } from "./verify/subcommands/submit/verify-submit.handler";
+import { handleVerifyNollan } from "./verify/subcommands/nollan/verify-nollan.handler";
 
 export const handleCommands = (): void => {
 	harmonyClient.on("interactionCreate", async (interaction) => {
@@ -43,9 +51,55 @@ export const handleCommands = (): void => {
 						throw new CommandNotFoundError(interaction.commandName);
 				}
 			} else if (interaction.isButton()) {
-				await handleButtonInteraction(
-					interaction as GuildButtonInteraction
+				const buttonInteraction = interaction as GuildButtonInteraction;
+
+				await handleButtonInteraction(buttonInteraction);
+			} else if (interaction.isModalSubmit()) {
+				const darkmode = await isDarkmode();
+				const verifyModalCustomIds = VERIFY_MODAL_CUSTOM_IDS.map((id) =>
+					id.toString()
 				);
+
+				// Add check for whether user has already been verified.
+				if (verifyModalCustomIds.includes(interaction.customId)) {
+					if (
+						(await hasRoleVerified(
+							interaction.user,
+							interaction.guild
+						)) &&
+						!(await hasRoleN0llan(
+							interaction.user,
+							interaction.guild
+						))
+					) {
+						await interaction.reply({
+							content: "You are already verified!",
+							ephemeral: true,
+						});
+						return;
+					}
+
+					switch (interaction.customId) {
+						case VerifyModalCustomIds.BEGIN:
+							await handleVerifyBegin(interaction, darkmode);
+							return;
+						case VerifyModalCustomIds.NOLLAN:
+							await handleVerifyNollan(interaction);
+							return;
+						case VerifyModalCustomIds.SUBMIT:
+							await handleVerifySubmit(interaction);
+							return;
+						default:
+							console.warn("Unexpected verify modal interaction");
+							return;
+					}
+				}
+				// Should be unreachable.
+				else {
+					console.warn(
+						`An unknown modal was interacted with (customId: ${interaction.customId})`
+					);
+				}
 			} else if (interaction.isAutocomplete()) {
 				switch (interaction.commandName) {
 					case CommandNames.JOIN:
