@@ -46,7 +46,7 @@ export const VERIFY_MODAL_CUSTOM_IDS = [
 export async function generateButtons(
     interaction: GuildChatInputCommandInteraction,
     labels: string[],
-    rowLength: Number,
+    rowLength: number,
     customIds?: string[]
 ): Promise<void> {
     if (!interaction.isChatInputCommand()) return;
@@ -65,10 +65,10 @@ export async function generateButtons(
 // behaviour, i.e. each button to be assigned the expected customId.
 function createButtonsFromLabels(
     labels: string[],
-    rowLength: Number,
+    rowLength: number,
     customIds?: string[]
 ): ActionRowBuilder<ButtonBuilder>[] {
-    let rows = [];
+    const rows = [];
     let row = new ActionRowBuilder<ButtonBuilder>();
 
     labels.forEach((value, index) => {

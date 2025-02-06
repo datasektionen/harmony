@@ -50,7 +50,7 @@ export const handleCommands = (): void => {
 				await handleButtonInteraction(buttonInteraction);
 			} else if (interaction.isModalSubmit()) {
 				const darkmode = await isDarkmode();
-				const verifyModalCustomIds = VERIFY_MODAL_CUSTOM_IDS.map((id, _) => id.toString());
+				const verifyModalCustomIds = VERIFY_MODAL_CUSTOM_IDS.map((id) => id.toString());
 
 				// Add check for whether user has already been verified.
 				if (verifyModalCustomIds.includes(interaction.customId)) {
@@ -78,7 +78,9 @@ export const handleCommands = (): void => {
 					}
 				}
 				// Should be unreachable.
-				else {}
+				else {
+					console.warn(`An unknown modal was interacted with (customId: ${interaction.customId})`)
+				}
 			} else if (interaction.isAutocomplete()) {
 				switch (interaction.commandName) {
 					case CommandNames.JOIN:

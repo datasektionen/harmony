@@ -21,7 +21,7 @@ export async function handleButtonsVerify(
             }
         })
     } else {
-        labels = VERIFY_BUTTON_LABELS.map((label, _) => {
+        labels = VERIFY_BUTTON_LABELS.map((label) => {
             return label.charAt(0).toUpperCase() + label.slice(1);
         })
 

@@ -26,8 +26,8 @@ export async function handleButtons(
 export async function handleButtonInteraction(
 	interaction: GuildButtonInteraction
 ): Promise<void> {
-	const courseButtonIds = COURSE_BUTTON_LABELS.map((label, _) => label.toString());
-	const verifyButtonIds = VERIFY_BUTTON_LABELS.map((label, _) => label.toString());
+	const courseButtonIds = COURSE_BUTTON_LABELS.map((label) => label.toString());
+	const verifyButtonIds = VERIFY_BUTTON_LABELS.map((label) => label.toString());
 	
 	// interaction originated from pressing a course button.
 	if (courseButtonIds.includes(interaction.customId)) {
@@ -38,5 +38,7 @@ export async function handleButtonInteraction(
 		return await handleVerifyButtonInteraction(interaction);
 	}
 	// Should be unreachable.
-	else {}
+	else {
+		console.warn(`An unknown button was interacted with (customId = ${interaction.customId}).`)
+	}
 }
