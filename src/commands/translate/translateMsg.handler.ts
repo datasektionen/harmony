@@ -1,4 +1,8 @@
-import { EmbedBuilder, MessageContextMenuCommandInteraction, MessageFlags } from "discord.js";
+import {
+	EmbedBuilder,
+	MessageContextMenuCommandInteraction,
+	MessageFlags,
+} from "discord.js";
 import {
 	isTranslationAvailable,
 	translateText,

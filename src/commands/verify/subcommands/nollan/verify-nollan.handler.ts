@@ -75,6 +75,8 @@ export async function handleVerifyNollan(
 
 		await handleVerifyNollanBase(interaction, nolleKod);
 	} else {
-		console.warn("Unexpected call to handleVerifyNollan(). Origin was neither a slash command, nor a modal submission.");
+		console.warn(
+			"Unexpected call to handleVerifyNollan(). Origin was neither a slash command, nor a modal submission."
+		);
 	}
 }

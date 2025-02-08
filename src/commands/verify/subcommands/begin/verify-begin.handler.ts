@@ -63,7 +63,7 @@ export async function handleVerifyBeginBase(
 				console.warn(error);
 				await interaction.reply({
 					content: "Something went wrong, please try again.",
-					flags: MessageFlags.Ephemeral
+					flags: MessageFlags.Ephemeral,
 				});
 			}
 			return;
@@ -129,6 +129,8 @@ export async function handleVerifyBegin(
 			await handleVerifyBeginBase(email, interaction, darkmode, code);
 		}
 	} else {
-		console.warn("Unexpected call to handleVerifyBegin(). Origin was neither a slash command, nor a modal submission.");
+		console.warn(
+			"Unexpected call to handleVerifyBegin(). Origin was neither a slash command, nor a modal submission."
+		);
 	}
 }

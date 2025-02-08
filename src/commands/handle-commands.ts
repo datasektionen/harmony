@@ -58,7 +58,8 @@ export const handleCommands = (): void => {
 			} else if (interaction.isModalSubmit()) {
 				const darkmode = await isDarkmode();
 
-				const guildModalSubmitInteraction = interaction as GuildModalSubmitInteraction;
+				const guildModalSubmitInteraction =
+					interaction as GuildModalSubmitInteraction;
 				const verifyModalCustomIds = VERIFY_MODAL_CUSTOM_IDS.map((id) =>
 					id.toString()
 				);
@@ -77,20 +78,27 @@ export const handleCommands = (): void => {
 					) {
 						await interaction.reply({
 							content: "You are already verified!",
-							flags: MessageFlags.Ephemeral
+							flags: MessageFlags.Ephemeral,
 						});
 						return;
 					}
 
 					switch (interaction.customId) {
 						case VerifyModalCustomIds.BEGIN:
-							await handleVerifyBegin(guildModalSubmitInteraction, darkmode);
+							await handleVerifyBegin(
+								guildModalSubmitInteraction,
+								darkmode
+							);
 							return;
 						case VerifyModalCustomIds.NOLLAN:
-							await handleVerifyNollan(guildModalSubmitInteraction);
+							await handleVerifyNollan(
+								guildModalSubmitInteraction
+							);
 							return;
 						case VerifyModalCustomIds.SUBMIT:
-							await handleVerifySubmit(guildModalSubmitInteraction);
+							await handleVerifySubmit(
+								guildModalSubmitInteraction
+							);
 							return;
 						default:
 							console.warn("Unexpected verify modal interaction");
@@ -170,7 +178,7 @@ const handleChatInputCommand = async (
 				case CommandNames.VERIFY:
 					await guildInteraction.reply({
 						content: "You are already verified!",
-						flags: MessageFlags.Ephemeral
+						flags: MessageFlags.Ephemeral,
 					});
 					return;
 				case CommandNames.JOIN:
@@ -219,7 +227,7 @@ const handleChatInputCommand = async (
 					: "Permission denied!\nYou first need to verify yourself using the '/verify' command.";
 				await guildInteraction.reply({
 					content: permissionDeniedMessage,
-					flags: MessageFlags.Ephemeral
+					flags: MessageFlags.Ephemeral,
 				});
 			} else {
 				throw new CommandNotFoundError(guildInteraction.commandName);
@@ -240,7 +248,10 @@ async function interaction_error_reply(
 			if (interaction.deferred || interaction.replied) {
 				await interaction.editReply({ content: message });
 			} else {
-				await interaction.reply({ content: message, flags: MessageFlags.Ephemeral });
+				await interaction.reply({
+					content: message,
+					flags: MessageFlags.Ephemeral,
+				});
 			}
 		}
 	} catch (error) {

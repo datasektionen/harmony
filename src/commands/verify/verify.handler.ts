@@ -26,7 +26,7 @@ export const handleVerify = async (
 			else
 				interaction.reply({
 					content: "Nøllan has already been dealt with...",
-					flags: MessageFlags.Ephemeral
+					flags: MessageFlags.Ephemeral,
 				});
 			return;
 		default:

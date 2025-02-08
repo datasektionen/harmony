@@ -44,7 +44,7 @@ export const handleCourses = async (
 
 	await interaction.reply({
 		content: lines.join(""),
-		flags: MessageFlags.Ephemeral
+		flags: MessageFlags.Ephemeral,
 	});
 	return;
 };
