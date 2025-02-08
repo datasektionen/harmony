@@ -11,6 +11,7 @@ import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatIn
 import {
 	ApplicationCommandOptionChoiceData,
 	AutocompleteInteraction,
+	MessageFlags,
 	User,
 } from "discord.js";
 import { validCourseCode } from "../../shared/utils/valid-course-code";
@@ -25,7 +26,7 @@ export const handleJoin = async (
 		.toLowerCase();
 
 	if (aliasExists(courseCode as AliasName)) {
-		await interaction.deferReply({ ephemeral: true });
+		await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 		const updateCount = await handleChannelAlias(
 			interaction.guild,
 			interaction.user,

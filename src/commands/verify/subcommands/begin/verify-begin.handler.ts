@@ -63,7 +63,7 @@ export async function handleVerifyBeginBase(
 				console.warn(error);
 				await interaction.reply({
 					content: "Something went wrong, please try again.",
-					ephemeral: true,
+					flags: MessageFlags.Ephemeral
 				});
 			}
 			return;

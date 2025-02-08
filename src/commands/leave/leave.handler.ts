@@ -1,4 +1,4 @@
-import { User } from "discord.js";
+import { MessageFlags, User } from "discord.js";
 import { AliasName } from "../../shared/alias-mappings";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import {
@@ -18,7 +18,7 @@ export const handleLeave = async (
 		.trim()
 		.toLowerCase();
 	if (aliasExists(courseCode as AliasName)) {
-		await interaction.deferReply({ ephemeral: true });
+		await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 		const updateCount = await handleChannelAlias(
 			interaction.guild,
 			interaction.user,

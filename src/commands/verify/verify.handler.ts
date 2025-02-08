@@ -6,6 +6,7 @@ import { handleVerifySubmit } from "./subcommands/submit/verify-submit.handler";
 import { VerifySubcommandNames } from "./verify-subcommands.names";
 import { isDarkmode } from "../../shared/utils/darkmode";
 import { clientIsLight } from "../../shared/types/light-client";
+import { MessageFlags } from "discord.js";
 
 export const handleVerify = async (
 	interaction: GuildChatInputCommandInteraction
@@ -25,7 +26,7 @@ export const handleVerify = async (
 			else
 				interaction.reply({
 					content: "Nøllan has already been dealt with...",
-					ephemeral: true,
+					flags: MessageFlags.Ephemeral
 				});
 			return;
 		default:

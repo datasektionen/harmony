@@ -8,6 +8,7 @@ import {
 } from "../../../../shared/utils/roles";
 import { verifyNolleCode } from "../../../../shared/utils/verify_nolle_code";
 import { VerifyNollanVariables } from "./verify-nollan.variables";
+import { MessageFlags } from "discord.js";
 
 export async function handleVerifyNollanBase(
 	interaction: GuildChatInputCommandInteraction | GuildModalSubmitInteraction,
@@ -16,7 +17,7 @@ export async function handleVerifyNollanBase(
 	let guild = interaction.guild;
 
 	const { user } = interaction;
-	await interaction.deferReply({ ephemeral: true });
+	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
 	// Check if nØllan already verified
 	if (await hasRoleN0llan(user, guild)) {

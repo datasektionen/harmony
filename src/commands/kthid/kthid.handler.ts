@@ -1,3 +1,4 @@
+import { MessageFlags } from "discord.js";
 import { getKthIdByUserId } from "../../db/db";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import { KthIdVariables } from "./kthid.variables";
@@ -7,7 +8,7 @@ export const handleKthId = async (
 ): Promise<void> => {
 	const { options } = interaction;
 	const user = options.getUser(KthIdVariables.USER, true);
-	await interaction.deferReply({ ephemeral: true });
+	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 	const kthId = await getKthIdByUserId(user.id);
 	if (!kthId) {
 		await interaction.editReply({

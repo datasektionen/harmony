@@ -7,6 +7,7 @@ import {
 	Guild,
 	PermissionFlagsBits,
 	User,
+	MessageFlags,
 } from "discord.js";
 import { AliasName, mappings } from "../alias-mappings";
 import { GuildButtonOrCommandInteraction } from "../types/GuildButtonOrCommandInteraction";
@@ -78,7 +79,7 @@ export const handleChannel = async (
 ): Promise<void> => {
 	noInteraction = noInteraction ?? false;
 	if (!noInteraction) {
-		await interaction.deferReply({ ephemeral: true });
+		await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 	}
 
 	await interaction.guild.channels.fetch();

@@ -1,4 +1,4 @@
-import { GuildMember } from "discord.js";
+import { GuildMember, MessageFlags } from "discord.js";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 import { handleChannelAlias } from "../../../../shared/utils/channel-utils";
 import { getGradeYear } from "../../../../shared/utils/year";
@@ -9,7 +9,7 @@ export const handlePeriodRoles = async (
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	const { options } = interaction;
-	await interaction.deferReply({ ephemeral: true });
+	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 	const period = options.getNumber(PeriodRolesVariables.PERIOD, true);
 
 	// Get guild from interaction

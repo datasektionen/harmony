@@ -20,7 +20,7 @@ import {
 import { handleTranslateMsg } from "./translate/translateMsg.handler";
 import { handleClub } from "./club/club.handler";
 import { handleMessage } from "./message/message.handler";
-import { BaseInteraction } from "discord.js";
+import { BaseInteraction, MessageFlags } from "discord.js";
 import { handleKthId } from "./kthid/kthid.handler";
 import {
 	VERIFY_MODAL_CUSTOM_IDS,
@@ -77,7 +77,7 @@ export const handleCommands = (): void => {
 					) {
 						await interaction.reply({
 							content: "You are already verified!",
-							ephemeral: true,
+							flags: MessageFlags.Ephemeral
 						});
 						return;
 					}
@@ -170,7 +170,7 @@ const handleChatInputCommand = async (
 				case CommandNames.VERIFY:
 					await guildInteraction.reply({
 						content: "You are already verified!",
-						ephemeral: true,
+						flags: MessageFlags.Ephemeral
 					});
 					return;
 				case CommandNames.JOIN:
@@ -219,7 +219,7 @@ const handleChatInputCommand = async (
 					: "Permission denied!\nYou first need to verify yourself using the '/verify' command.";
 				await guildInteraction.reply({
 					content: permissionDeniedMessage,
-					ephemeral: true,
+					flags: MessageFlags.Ephemeral
 				});
 			} else {
 				throw new CommandNotFoundError(guildInteraction.commandName);
@@ -240,7 +240,7 @@ async function interaction_error_reply(
 			if (interaction.deferred || interaction.replied) {
 				await interaction.editReply({ content: message });
 			} else {
-				await interaction.reply({ content: message, ephemeral: true });
+				await interaction.reply({ content: message, flags: MessageFlags.Ephemeral });
 			}
 		}
 	} catch (error) {
