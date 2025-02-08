@@ -1,4 +1,4 @@
-import { MessageFlags, ModalSubmitInteraction } from "discord.js";
+import { MessageFlags } from "discord.js";
 import { tokenUser } from "../../../../database-config";
 import * as db from "../../../../db/db";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
@@ -11,17 +11,19 @@ import {
 } from "../../../../shared/utils/roles";
 import { messageIsToken, verifyUser } from "../util";
 import { VerifySubmitVariables } from "./verify-submit.variables";
+import { GuildModalSubmitInteraction } from "../../../../shared/types/GuildModalSubmitInteraction";
 
 export async function handleVerifySubmitBase(
-	interaction: GuildChatInputCommandInteraction | ModalSubmitInteraction,
+	interaction: GuildChatInputCommandInteraction | GuildModalSubmitInteraction,
 	token: string
 ): Promise<void> {
 	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-	let guild = undefined;
+	let guild = interaction.guild;
 
 	// Verify modals should only exist on the server,
 	// so calls via slash command should remain unaffected.
+	/*
 	if (interaction.guild !== null) {
 		guild = interaction.guild;
 	} else {
@@ -33,6 +35,7 @@ export async function handleVerifySubmitBase(
 		});
 		return;
 	}
+	*/
 
 	if (!messageIsToken(token)) {
 		await interaction.editReply({ content: "Not a valid code" });
@@ -84,14 +87,14 @@ export async function handleVerifySubmitBase(
 }
 
 export async function handleVerifySubmit(
-	interaction: GuildChatInputCommandInteraction | ModalSubmitInteraction
+	interaction: GuildChatInputCommandInteraction | GuildModalSubmitInteraction
 ): Promise<void> {
 	if (interaction.isModalSubmit()) {
 		const verificationCode =
 			interaction.fields.getTextInputValue("verifySubmitCode");
 
 		await handleVerifySubmitBase(interaction, verificationCode);
-	} else {
+	} else if (interaction.isChatInputCommand()) {
 		const { options } = interaction;
 		const verificationCode = options.getString(
 			VerifySubmitVariables.VERIFICATION_CODE,
@@ -99,5 +102,7 @@ export async function handleVerifySubmit(
 		);
 
 		await handleVerifySubmitBase(interaction, verificationCode);
+	} else {
+		console.warn("Unexpected call to handleVerifyNollan(). Origin was neither a slash command, nor a modal submission.");
 	}
 }

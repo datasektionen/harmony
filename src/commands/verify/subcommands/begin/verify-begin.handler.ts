@@ -7,13 +7,14 @@ import { VerifyBeginVariables } from "./verify-begin.variables";
 import * as db from "../../../../db/db";
 import { getHodisUser, isDangerOfNollan } from "../../../../shared/utils/hodis";
 import { VerifyingUser } from "../../../../shared/types/VerifyingUser";
-import { MessageFlags, ModalSubmitInteraction } from "discord.js";
+import { MessageFlags } from "discord.js";
+import { GuildModalSubmitInteraction } from "../../../../shared/types/GuildModalSubmitInteraction";
 
 // The basic logic of handleVerifyBegin() implemented in an
 // "interaction-agnostic manner".
 export async function handleVerifyBeginBase(
 	email: string,
-	interaction: GuildChatInputCommandInteraction | ModalSubmitInteraction,
+	interaction: GuildChatInputCommandInteraction | GuildModalSubmitInteraction,
 	darkmode: boolean,
 	code?: string
 ): Promise<void> {
@@ -98,7 +99,7 @@ export async function handleVerifyBeginBase(
 }
 
 export async function handleVerifyBegin(
-	interaction: GuildChatInputCommandInteraction | ModalSubmitInteraction,
+	interaction: GuildChatInputCommandInteraction | GuildModalSubmitInteraction,
 	darkmode: boolean
 ): Promise<void> {
 	if (interaction.isModalSubmit()) {
@@ -112,7 +113,7 @@ export async function handleVerifyBegin(
 		} else {
 			await handleVerifyBeginBase(email, interaction, darkmode);
 		}
-	} else {
+	} else if (interaction.isChatInputCommand()) {
 		const { options } = interaction;
 		const email = options.getString(VerifyBeginVariables.EMAIL, true);
 		const code = options.getString(VerifyBeginVariables.CODE, false);
@@ -127,5 +128,7 @@ export async function handleVerifyBegin(
 		} else {
 			await handleVerifyBeginBase(email, interaction, darkmode, code);
 		}
+	} else {
+		console.warn("Unexpected call to handleVerifyBegin(). Origin was neither a slash command, nor a modal submission.");
 	}
 }

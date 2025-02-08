@@ -30,6 +30,7 @@ import { handleVerifyBegin } from "./verify/subcommands/begin/verify-begin.handl
 import { isDarkmode } from "../shared/utils/darkmode";
 import { handleVerifySubmit } from "./verify/subcommands/submit/verify-submit.handler";
 import { handleVerifyNollan } from "./verify/subcommands/nollan/verify-nollan.handler";
+import type { GuildModalSubmitInteraction } from "../shared/types/GuildModalSubmitInteraction";
 
 export const handleCommands = (): void => {
 	harmonyClient.on("interactionCreate", async (interaction) => {
@@ -56,6 +57,8 @@ export const handleCommands = (): void => {
 				await handleButtonInteraction(buttonInteraction);
 			} else if (interaction.isModalSubmit()) {
 				const darkmode = await isDarkmode();
+
+				const guildModalSubmitInteraction = interaction as GuildModalSubmitInteraction;
 				const verifyModalCustomIds = VERIFY_MODAL_CUSTOM_IDS.map((id) =>
 					id.toString()
 				);
@@ -81,13 +84,13 @@ export const handleCommands = (): void => {
 
 					switch (interaction.customId) {
 						case VerifyModalCustomIds.BEGIN:
-							await handleVerifyBegin(interaction, darkmode);
+							await handleVerifyBegin(guildModalSubmitInteraction, darkmode);
 							return;
 						case VerifyModalCustomIds.NOLLAN:
-							await handleVerifyNollan(interaction);
+							await handleVerifyNollan(guildModalSubmitInteraction);
 							return;
 						case VerifyModalCustomIds.SUBMIT:
-							await handleVerifySubmit(interaction);
+							await handleVerifySubmit(guildModalSubmitInteraction);
 							return;
 						default:
 							console.warn("Unexpected verify modal interaction");

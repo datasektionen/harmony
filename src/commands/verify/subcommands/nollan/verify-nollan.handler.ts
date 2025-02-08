@@ -1,4 +1,4 @@
-import { ModalSubmitInteraction } from "discord.js";
+import { GuildModalSubmitInteraction } from "../../../../shared/types/GuildModalSubmitInteraction";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 import { addRolesOrRollback } from "../../../../shared/utils/atomic-roles";
 import {
@@ -10,13 +10,14 @@ import { verifyNolleCode } from "../../../../shared/utils/verify_nolle_code";
 import { VerifyNollanVariables } from "./verify-nollan.variables";
 
 export async function handleVerifyNollanBase(
-	interaction: GuildChatInputCommandInteraction | ModalSubmitInteraction,
+	interaction: GuildChatInputCommandInteraction | GuildModalSubmitInteraction,
 	nolleKod: string
 ): Promise<void> {
-	let guild = undefined;
+	let guild = interaction.guild;
 
 	// Verify modals should only exist on the server,
 	// so calls via slash command should remain unaffected.
+	/*
 	if (interaction.guild !== null) {
 		guild = interaction.guild;
 	} else {
@@ -28,6 +29,7 @@ export async function handleVerifyNollanBase(
 		});
 		return;
 	}
+	*/
 
 	const { user } = interaction;
 	await interaction.deferReply({ ephemeral: true });
@@ -71,7 +73,7 @@ export async function handleVerifyNollanBase(
 }
 
 export async function handleVerifyNollan(
-	interaction: GuildChatInputCommandInteraction | ModalSubmitInteraction
+	interaction: GuildChatInputCommandInteraction | GuildModalSubmitInteraction
 ): Promise<void> {
 	if (interaction.isModalSubmit()) {
 		const nolleKod = interaction.fields.getTextInputValue(
@@ -79,7 +81,7 @@ export async function handleVerifyNollan(
 		);
 
 		await handleVerifyNollanBase(interaction, nolleKod);
-	} else {
+	} else if (interaction.isChatInputCommand()) {
 		const { options } = interaction;
 		const nolleKod = options.getString(
 			VerifyNollanVariables.NOLLE_KOD,
@@ -87,5 +89,7 @@ export async function handleVerifyNollan(
 		);
 
 		await handleVerifyNollanBase(interaction, nolleKod);
+	} else {
+		console.warn("Unexpected call to handleVerifyNollan(). Origin was neither a slash command, nor a modal submission.");
 	}
 }
