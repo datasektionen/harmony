@@ -14,7 +14,7 @@ export async function handleVerifyNollanBase(
 	interaction: GuildChatInputCommandInteraction | GuildModalSubmitInteraction,
 	nolleKod: string
 ): Promise<void> {
-	let guild = interaction.guild;
+	const guild = interaction.guild;
 
 	const { user } = interaction;
 	await interaction.deferReply({ flags: MessageFlags.Ephemeral });

@@ -19,7 +19,7 @@ export async function handleVerifySubmitBase(
 ): Promise<void> {
 	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-	let guild = interaction.guild;
+	const guild = interaction.guild;
 
 	if (!messageIsToken(token)) {
 		await interaction.editReply({ content: "Not a valid code" });
