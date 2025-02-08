@@ -15,22 +15,6 @@ export async function handleVerifyNollanBase(
 ): Promise<void> {
 	let guild = interaction.guild;
 
-	// Verify modals should only exist on the server,
-	// so calls via slash command should remain unaffected.
-	/*
-	if (interaction.guild !== null) {
-		guild = interaction.guild;
-	} else {
-		console.warn(
-			"Verification failed due to guild being null (/verify nollan has failed)."
-		);
-		await interaction.editReply({
-			content: "Something went wrong, please try again.",
-		});
-		return;
-	}
-	*/
-
 	const { user } = interaction;
 	await interaction.deferReply({ ephemeral: true });
 

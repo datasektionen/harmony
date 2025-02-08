@@ -21,22 +21,6 @@ export async function handleVerifySubmitBase(
 
 	let guild = interaction.guild;
 
-	// Verify modals should only exist on the server,
-	// so calls via slash command should remain unaffected.
-	/*
-	if (interaction.guild !== null) {
-		guild = interaction.guild;
-	} else {
-		console.warn(
-			"Verification failed due to guild being null (/verify submit has failed)."
-		);
-		await interaction.editReply({
-			content: "Something went wrong, please try again.",
-		});
-		return;
-	}
-	*/
-
 	if (!messageIsToken(token)) {
 		await interaction.editReply({ content: "Not a valid code" });
 		return;
