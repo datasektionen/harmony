@@ -87,7 +87,7 @@ export async function handleVerifyBeginBase(
 	try {
 		await sendMail(email, token);
 		await interaction.editReply({
-			content: `Check the inbox of ${email} for your verification code: <https://webmail.kth.se/>\nSubmit your verification code using the \`/verify submit\` command.\nNote that by submitting the verification code, you accept that Konglig Datasektionen may store your discord ID and name together with your email address. This will be stored in accordance with the chapter's [information processing policy](<https://styrdokument.datasektionen.se/pm_informationshantering>).`,
+			content: `Check the inbox of ${email} for your verification code: <https://webmail.kth.se/>\nSubmit your verification code by clicking the submit button above.\nNote that by submitting the verification code, you accept that Konglig Datasektionen may store your Discord ID and name together with your email address. This will be stored in accordance with the chapter's [information processing policy](<https://styrdokument.datasektionen.se/pm_informationshantering>).`,
 		});
 	} catch (error) {
 		console.error(error);
