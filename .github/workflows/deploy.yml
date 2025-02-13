@@ -8,17 +8,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Git checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-
-    - name: Push to medusa
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
-      # https://stackoverflow.com/a/2462357/16911837
-      run: |
-        chmod +x ./deploy.sh
-        ./deploy.sh
+      - name: Deploy to Nomad
+        uses: datasektionen/nomad-deploy@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          nomad-token: ${{ secrets.NOMAD_TOKEN }}
+          nomad-addr: ${{ vars.NOMAD_ADDR }}
