@@ -7,13 +7,13 @@ import { handleClubGive } from "./subcommands/give/club-give.handler";
 import { handleClubList } from "./subcommands/list/club-list.handler";
 import { handleClubRemove } from "./subcommands/remove/club-remove.handler";
 import { canBeGivenBy, isRole } from "./subcommands/utils";
-import { User, Guild } from "discord.js";
+import { User, Guild, MessageFlags } from "discord.js";
 
 export const handleClub = async (
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	const { options, user, guild } = interaction;
-	await interaction.deferReply({ ephemeral: true });
+	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
 	const clubParam = options.getString(ClubVariables.ROLE, true);
 

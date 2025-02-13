@@ -18,13 +18,14 @@ import {
 	ApplicationCommandOptionChoiceData,
 	AutocompleteInteraction,
 	ChannelType,
+	MessageFlags,
 } from "discord.js";
 
 export const handleCommunity = async (
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	const { options, user, guild } = interaction;
-	await interaction.deferReply({ ephemeral: true });
+	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
 	const communityParam = options.getString(
 		CommunityVariables.COMMUNITY,

@@ -1,3 +1,4 @@
+import { MessageFlags } from "discord.js";
 import { mappings } from "../../shared/alias-mappings";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import { getAllCourseChannels } from "../../shared/utils/channel-utils";
@@ -43,7 +44,7 @@ export const handleCourses = async (
 
 	await interaction.reply({
 		content: lines.join(""),
-		ephemeral: true,
+		flags: MessageFlags.Ephemeral,
 	});
 	return;
 };

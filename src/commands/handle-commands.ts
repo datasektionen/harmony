@@ -20,7 +20,7 @@ import {
 import { handleTranslateMsg } from "./translate/translateMsg.handler";
 import { handleClub } from "./club/club.handler";
 import { handleMessage } from "./message/message.handler";
-import { BaseInteraction } from "discord.js";
+import { BaseInteraction, MessageFlags } from "discord.js";
 import { handleKthId } from "./kthid/kthid.handler";
 import {
 	VERIFY_MODAL_CUSTOM_IDS,
@@ -30,6 +30,7 @@ import { handleVerifyBegin } from "./verify/subcommands/begin/verify-begin.handl
 import { isDarkmode } from "../shared/utils/darkmode";
 import { handleVerifySubmit } from "./verify/subcommands/submit/verify-submit.handler";
 import { handleVerifyNollan } from "./verify/subcommands/nollan/verify-nollan.handler";
+import type { GuildModalSubmitInteraction } from "../shared/types/GuildModalSubmitInteraction";
 
 export const handleCommands = (): void => {
 	harmonyClient.on("interactionCreate", async (interaction) => {
@@ -56,6 +57,9 @@ export const handleCommands = (): void => {
 				await handleButtonInteraction(buttonInteraction);
 			} else if (interaction.isModalSubmit()) {
 				const darkmode = await isDarkmode();
+
+				const guildModalSubmitInteraction =
+					interaction as GuildModalSubmitInteraction;
 				const verifyModalCustomIds = VERIFY_MODAL_CUSTOM_IDS.map((id) =>
 					id.toString()
 				);
@@ -74,20 +78,27 @@ export const handleCommands = (): void => {
 					) {
 						await interaction.reply({
 							content: "You are already verified!",
-							ephemeral: true,
+							flags: MessageFlags.Ephemeral,
 						});
 						return;
 					}
 
 					switch (interaction.customId) {
 						case VerifyModalCustomIds.BEGIN:
-							await handleVerifyBegin(interaction, darkmode);
+							await handleVerifyBegin(
+								guildModalSubmitInteraction,
+								darkmode
+							);
 							return;
 						case VerifyModalCustomIds.NOLLAN:
-							await handleVerifyNollan(interaction);
+							await handleVerifyNollan(
+								guildModalSubmitInteraction
+							);
 							return;
 						case VerifyModalCustomIds.SUBMIT:
-							await handleVerifySubmit(interaction);
+							await handleVerifySubmit(
+								guildModalSubmitInteraction
+							);
 							return;
 						default:
 							console.warn("Unexpected verify modal interaction");
@@ -167,7 +178,7 @@ const handleChatInputCommand = async (
 				case CommandNames.VERIFY:
 					await guildInteraction.reply({
 						content: "You are already verified!",
-						ephemeral: true,
+						flags: MessageFlags.Ephemeral,
 					});
 					return;
 				case CommandNames.JOIN:
@@ -216,7 +227,7 @@ const handleChatInputCommand = async (
 					: "Permission denied!\nYou first need to verify yourself using the '/verify' command.";
 				await guildInteraction.reply({
 					content: permissionDeniedMessage,
-					ephemeral: true,
+					flags: MessageFlags.Ephemeral,
 				});
 			} else {
 				throw new CommandNotFoundError(guildInteraction.commandName);
@@ -237,7 +248,10 @@ async function interaction_error_reply(
 			if (interaction.deferred || interaction.replied) {
 				await interaction.editReply({ content: message });
 			} else {
-				await interaction.reply({ content: message, ephemeral: true });
+				await interaction.reply({
+					content: message,
+					flags: MessageFlags.Ephemeral,
+				});
 			}
 		}
 	} catch (error) {
