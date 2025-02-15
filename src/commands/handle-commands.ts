@@ -57,7 +57,6 @@ export const handleCommands = (): void => {
 				await handleButtonInteraction(buttonInteraction);
 			} else if (interaction.isModalSubmit()) {
 				const darkmode = await isDarkmode();
-
 				const guildModalSubmitInteraction =
 					interaction as GuildModalSubmitInteraction;
 				const verifyModalCustomIds = VERIFY_MODAL_CUSTOM_IDS.map((id) =>

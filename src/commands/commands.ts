@@ -33,4 +33,4 @@ export const getOfficialBotCommands = async (): Promise<
 
 export const getLightBotCommands = async (): Promise<
 	ApplicationCommandBuilder[]
-> => [await createVerifyCommand(true), translateMsgCommand];
+> => [await createVerifyCommand(true), translateMsgCommand, buttonsCommand];
