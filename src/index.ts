@@ -1,6 +1,6 @@
 import { Client as DiscordClient, GatewayIntentBits } from "discord.js";
 import { LightClient as LightDiscordClient } from "./shared/types/light-client";
-import { handleCommands } from "./commands/handle-commands";
+import { setupHarmonyClientInteractionHandling, setupHarmonyLightClientInteractionHandling } from "./commands/handle-commands";
 import { registerCommands } from "./commands/register-commands";
 import * as db from "./db/db";
 import { userJoined } from "./shared/utils/userJoined";
@@ -43,6 +43,8 @@ async function main(): Promise<void> {
 		await harmonyClient.login(process.env.DISCORD_BOT_TOKEN);
 
 		harmonyClient.on("guildMemberAdd", (member) => userJoined(member));
+
+		setupHarmonyClientInteractionHandling(harmonyClient);
 	}
 	if (process.env.DISCORD_LIGHT_BOT_TOKEN) {
 		harmonyLightClient.once("ready", () =>
@@ -51,8 +53,10 @@ async function main(): Promise<void> {
 		await harmonyLightClient.login(process.env.DISCORD_LIGHT_BOT_TOKEN);
 
 		harmonyLightClient.on("guildMemberAdd", (member) => userJoined(member));
+
+		setupHarmonyLightClientInteractionHandling(harmonyLightClient);
 	}
-	handleCommands();
+	
 	await registerCommands();
 }
 
