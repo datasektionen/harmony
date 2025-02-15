@@ -20,7 +20,11 @@ import {
 import { handleTranslateMsg } from "./translate/translateMsg.handler";
 import { handleClub } from "./club/club.handler";
 import { handleMessage } from "./message/message.handler";
-import { BaseInteraction, MessageFlags, Client as DiscordClient } from "discord.js";
+import {
+	BaseInteraction,
+	MessageFlags,
+	Client as DiscordClient,
+} from "discord.js";
 import { handleKthId } from "./kthid/kthid.handler";
 import {
 	VERIFY_MODAL_CUSTOM_IDS,
@@ -32,7 +36,9 @@ import { handleVerifySubmit } from "./verify/subcommands/submit/verify-submit.ha
 import { handleVerifyNollan } from "./verify/subcommands/nollan/verify-nollan.handler";
 import { LightClient as LightDiscordClient } from "../shared/types/light-client";
 
-export function setupHarmonyClientInteractionHandling(client: DiscordClient): void {
+export function setupHarmonyClientInteractionHandling(
+	client: DiscordClient
+): void {
 	client.on("interactionCreate", async (interaction) => {
 		try {
 			if (!interaction.guild) {
@@ -58,8 +64,10 @@ export function setupHarmonyClientInteractionHandling(client: DiscordClient): vo
 			} else if (interaction.isModalSubmit()) {
 				const guildModalSubmitInteraction =
 					interaction as GuildModalSubmitInteraction;
-					
-				await modalSubmitInteractionHandler(guildModalSubmitInteraction);
+
+				await modalSubmitInteractionHandler(
+					guildModalSubmitInteraction
+				);
 			} else if (interaction.isAutocomplete()) {
 				switch (interaction.commandName) {
 					case CommandNames.JOIN:
@@ -81,7 +89,9 @@ export function setupHarmonyClientInteractionHandling(client: DiscordClient): vo
 	});
 }
 
-export function setupHarmonyLightClientInteractionHandling(client: LightDiscordClient): void {
+export function setupHarmonyLightClientInteractionHandling(
+	client: LightDiscordClient
+): void {
 	client.on("interactionCreate", async (interaction) => {
 		try {
 			if (!interaction.guild) {
@@ -114,8 +124,10 @@ export function setupHarmonyLightClientInteractionHandling(client: LightDiscordC
 			} else if (interaction.isModalSubmit()) {
 				const guildModalSubmitInteraction =
 					interaction as GuildModalSubmitInteraction;
-					
-				await modalSubmitInteractionHandler(guildModalSubmitInteraction);
+
+				await modalSubmitInteractionHandler(
+					guildModalSubmitInteraction
+				);
 			} else {
 				console.warn("Unknown interaction type");
 			}
@@ -219,7 +231,9 @@ async function interaction_error_reply(
 	}
 }
 
-async function modalSubmitInteractionHandler(interaction: GuildModalSubmitInteraction): Promise<void> {
+async function modalSubmitInteractionHandler(
+	interaction: GuildModalSubmitInteraction
+): Promise<void> {
 	const darkmode = await isDarkmode();
 	const verifyModalCustomIds = VERIFY_MODAL_CUSTOM_IDS.map((id) =>
 		id.toString()
@@ -228,14 +242,8 @@ async function modalSubmitInteractionHandler(interaction: GuildModalSubmitIntera
 	// Add check for whether user has already been verified.
 	if (verifyModalCustomIds.includes(interaction.customId)) {
 		if (
-			(await hasRoleVerified(
-				interaction.user,
-				interaction.guild
-			)) &&
-			!(await hasRoleN0llan(
-				interaction.user,
-				interaction.guild
-			))
+			(await hasRoleVerified(interaction.user, interaction.guild)) &&
+			!(await hasRoleN0llan(interaction.user, interaction.guild))
 		) {
 			await interaction.reply({
 				content: "You are already verified!",
@@ -246,20 +254,13 @@ async function modalSubmitInteractionHandler(interaction: GuildModalSubmitIntera
 
 		switch (interaction.customId) {
 			case VerifyModalCustomIds.BEGIN:
-				await handleVerifyBegin(
-					interaction,
-					darkmode
-				);
+				await handleVerifyBegin(interaction, darkmode);
 				return;
 			case VerifyModalCustomIds.NOLLAN:
-				await handleVerifyNollan(
-					interaction
-				);
+				await handleVerifyNollan(interaction);
 				return;
 			case VerifyModalCustomIds.SUBMIT:
-				await handleVerifySubmit(
-					interaction
-				);
+				await handleVerifySubmit(interaction);
 				return;
 			default:
 				console.warn("Unexpected verify modal interaction");

@@ -1,6 +1,9 @@
 import { Client as DiscordClient, GatewayIntentBits } from "discord.js";
 import { LightClient as LightDiscordClient } from "./shared/types/light-client";
-import { setupHarmonyClientInteractionHandling, setupHarmonyLightClientInteractionHandling } from "./commands/handle-commands";
+import {
+	setupHarmonyClientInteractionHandling,
+	setupHarmonyLightClientInteractionHandling,
+} from "./commands/handle-commands";
 import { registerCommands } from "./commands/register-commands";
 import * as db from "./db/db";
 import { userJoined } from "./shared/utils/userJoined";
@@ -56,7 +59,7 @@ async function main(): Promise<void> {
 
 		setupHarmonyLightClientInteractionHandling(harmonyLightClient);
 	}
-	
+
 	await registerCommands();
 }
 
