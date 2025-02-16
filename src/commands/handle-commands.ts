@@ -20,11 +20,7 @@ import {
 import { handleTranslateMsg } from "./translate/translateMsg.handler";
 import { handleClub } from "./club/club.handler";
 import { handleMessage } from "./message/message.handler";
-import {
-	BaseInteraction,
-	MessageFlags,
-	Interaction,
-} from "discord.js";
+import { BaseInteraction, MessageFlags, Interaction } from "discord.js";
 import { handleKthId } from "./kthid/kthid.handler";
 import {
 	VERIFY_MODAL_CUSTOM_IDS,
@@ -63,9 +59,7 @@ export async function handleInteractions(
 			const guildModalSubmitInteraction =
 				interaction as GuildModalSubmitInteraction;
 
-			await modalSubmitInteractionHandler(
-				guildModalSubmitInteraction
-			);
+			await modalSubmitInteractionHandler(guildModalSubmitInteraction);
 		} else if (interaction.isAutocomplete()) {
 			switch (interaction.commandName) {
 				case CommandNames.JOIN:
