@@ -1,4 +1,3 @@
-import { harmonyClient, harmonyLightClient } from "..";
 import { CommandNotFoundError } from "../shared/errors/command-not-founder.error";
 import { CommandNames } from "./commands.names";
 import { handleCourses } from "./courses/courses.handler";
@@ -8,6 +7,7 @@ import { handleVerify } from "./verify/verify.handler";
 import { hasRoleN0llan, hasRoleVerified } from "../shared/utils/roles";
 import type { GuildChatInputCommandInteraction } from "../shared/types/GuildChatInputCommandType";
 import type { GuildButtonInteraction } from "../shared/types/GuildButtonInteraction";
+import type { GuildModalSubmitInteraction } from "../shared/types/GuildModalSubmitInteraction";
 import { handlePeriod } from "./period/period.handler";
 import {
 	handleButtonInteraction,
@@ -20,7 +20,7 @@ import {
 import { handleTranslateMsg } from "./translate/translateMsg.handler";
 import { handleClub } from "./club/club.handler";
 import { handleMessage } from "./message/message.handler";
-import { BaseInteraction, MessageFlags } from "discord.js";
+import { BaseInteraction, MessageFlags, Interaction } from "discord.js";
 import { handleKthId } from "./kthid/kthid.handler";
 import {
 	VERIFY_MODAL_CUSTOM_IDS,
@@ -30,141 +30,99 @@ import { handleVerifyBegin } from "./verify/subcommands/begin/verify-begin.handl
 import { isDarkmode } from "../shared/utils/darkmode";
 import { handleVerifySubmit } from "./verify/subcommands/submit/verify-submit.handler";
 import { handleVerifyNollan } from "./verify/subcommands/nollan/verify-nollan.handler";
-import type { GuildModalSubmitInteraction } from "../shared/types/GuildModalSubmitInteraction";
 
-export const handleCommands = (): void => {
-	harmonyClient.on("interactionCreate", async (interaction) => {
-		try {
-			if (!interaction.guild) {
-				throw new Error("Guild not found!");
-			}
-
-			if (interaction.isChatInputCommand()) {
-				await handleChatInputCommand(
-					interaction as GuildChatInputCommandInteraction
-				);
-			} else if (interaction.isMessageContextMenuCommand()) {
-				switch (interaction.commandName) {
-					case CommandNames.TRANSLATE_MSG:
-						await handleTranslateMsg(interaction);
-						return;
-					default:
-						throw new CommandNotFoundError(interaction.commandName);
-				}
-			} else if (interaction.isButton()) {
-				const buttonInteraction = interaction as GuildButtonInteraction;
-
-				await handleButtonInteraction(buttonInteraction);
-			} else if (interaction.isModalSubmit()) {
-				const darkmode = await isDarkmode();
-
-				const guildModalSubmitInteraction =
-					interaction as GuildModalSubmitInteraction;
-				const verifyModalCustomIds = VERIFY_MODAL_CUSTOM_IDS.map((id) =>
-					id.toString()
-				);
-
-				// Add check for whether user has already been verified.
-				if (verifyModalCustomIds.includes(interaction.customId)) {
-					if (
-						(await hasRoleVerified(
-							interaction.user,
-							interaction.guild
-						)) &&
-						!(await hasRoleN0llan(
-							interaction.user,
-							interaction.guild
-						))
-					) {
-						await interaction.reply({
-							content: "You are already verified!",
-							flags: MessageFlags.Ephemeral,
-						});
-						return;
-					}
-
-					switch (interaction.customId) {
-						case VerifyModalCustomIds.BEGIN:
-							await handleVerifyBegin(
-								guildModalSubmitInteraction,
-								darkmode
-							);
-							return;
-						case VerifyModalCustomIds.NOLLAN:
-							await handleVerifyNollan(
-								guildModalSubmitInteraction
-							);
-							return;
-						case VerifyModalCustomIds.SUBMIT:
-							await handleVerifySubmit(
-								guildModalSubmitInteraction
-							);
-							return;
-						default:
-							console.warn("Unexpected verify modal interaction");
-							return;
-					}
-				}
-				// Should be unreachable.
-				else {
-					console.warn(
-						`An unknown modal was interacted with (customId: ${interaction.customId})`
-					);
-				}
-			} else if (interaction.isAutocomplete()) {
-				switch (interaction.commandName) {
-					case CommandNames.JOIN:
-						await handleJoinAutocomplete(interaction);
-						return;
-					case CommandNames.COMMUNITY:
-						await handleCommunityAutocomplete(interaction);
-						return;
-					default:
-						throw new CommandNotFoundError(interaction.commandName);
-				}
-			} else {
-				console.warn("Unknown interaction type");
-			}
-		} catch (error) {
-			await interaction_error_reply(interaction);
-			console.warn(error);
+export async function handleInteractions(
+	interaction: Interaction
+): Promise<void> {
+	try {
+		if (!interaction.guild) {
+			throw new Error("Guild not found!");
 		}
-	});
 
-	harmonyLightClient.on("interactionCreate", async (interaction) => {
-		try {
-			if (!interaction.guild) {
-				throw new Error("Guild not found!");
+		if (interaction.isChatInputCommand()) {
+			await handleChatInputCommand(
+				interaction as GuildChatInputCommandInteraction
+			);
+		} else if (interaction.isMessageContextMenuCommand()) {
+			switch (interaction.commandName) {
+				case CommandNames.TRANSLATE_MSG:
+					await handleTranslateMsg(interaction);
+					return;
+				default:
+					throw new CommandNotFoundError(interaction.commandName);
 			}
-			if (interaction.isChatInputCommand()) {
-				const guildInteraction =
-					interaction as GuildChatInputCommandInteraction;
-				switch (guildInteraction.commandName) {
-					case CommandNames.VERIFY:
-						await handleVerify(guildInteraction);
-						return;
-					default:
-						throw new CommandNotFoundError(
-							guildInteraction.commandName
-						);
-				}
-			} else if (interaction.isMessageContextMenuCommand()) {
-				switch (interaction.commandName) {
-					case CommandNames.TRANSLATE_MSG:
-						await handleTranslateMsg(interaction);
-						return;
-					default:
-						throw new CommandNotFoundError(interaction.commandName);
-				}
-			} else {
-				console.warn("Unknown interaction type");
+		} else if (interaction.isButton()) {
+			const buttonInteraction = interaction as GuildButtonInteraction;
+
+			await handleButtonInteraction(buttonInteraction);
+		} else if (interaction.isModalSubmit()) {
+			const guildModalSubmitInteraction =
+				interaction as GuildModalSubmitInteraction;
+
+			await modalSubmitInteractionHandler(guildModalSubmitInteraction);
+		} else if (interaction.isAutocomplete()) {
+			switch (interaction.commandName) {
+				case CommandNames.JOIN:
+					await handleJoinAutocomplete(interaction);
+					return;
+				case CommandNames.COMMUNITY:
+					await handleCommunityAutocomplete(interaction);
+					return;
+				default:
+					throw new CommandNotFoundError(interaction.commandName);
 			}
-		} catch (error) {
-			await interaction_error_reply(interaction);
-			console.warn(error);
+		} else {
+			console.warn("Unknown interaction type");
 		}
-	});
-};
+	} catch (error) {
+		await interaction_error_reply(interaction);
+		console.warn(error);
+	}
+}
+
+async function modalSubmitInteractionHandler(
+	interaction: GuildModalSubmitInteraction
+): Promise<void> {
+	const darkmode = await isDarkmode();
+	const verifyModalCustomIds = VERIFY_MODAL_CUSTOM_IDS.map((id) =>
+		id.toString()
+	);
+
+	// Add check for whether user has already been verified.
+	if (verifyModalCustomIds.includes(interaction.customId)) {
+		if (
+			(await hasRoleVerified(interaction.user, interaction.guild)) &&
+			!(await hasRoleN0llan(interaction.user, interaction.guild))
+		) {
+			await interaction.reply({
+				content: "You are already verified!",
+				flags: MessageFlags.Ephemeral,
+			});
+			return;
+		}
+
+		switch (interaction.customId) {
+			case VerifyModalCustomIds.BEGIN:
+				await handleVerifyBegin(interaction, darkmode);
+				return;
+			case VerifyModalCustomIds.NOLLAN:
+				await handleVerifyNollan(interaction);
+				return;
+			case VerifyModalCustomIds.SUBMIT:
+				await handleVerifySubmit(interaction);
+				return;
+			default:
+				console.warn("Unexpected verify modal interaction");
+				return;
+		}
+	}
+	// Should be unreachable.
+	else {
+		console.warn(
+			`An unknown modal was interacted with (customId: ${interaction.customId})`
+		);
+	}
+}
 
 const handleChatInputCommand = async (
 	interaction: GuildChatInputCommandInteraction
