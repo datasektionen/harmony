@@ -11,6 +11,16 @@ export async function init(): Promise<void> {
 			discord_id text unique not null
 		);
 	`;
+
+	// Initialise table for nØllegrupp variables such as the names and
+	// login codes for all the nØllegrupper during the Reception.
+	await sql`
+		create table if not exists nollegrupp_variables (
+			group_id text primary key,
+			group_name text unique not null,
+			group_code text unique not null
+		);
+	`;
 }
 
 export async function insertUser(
