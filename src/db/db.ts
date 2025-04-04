@@ -13,13 +13,13 @@ export async function init(): Promise<void> {
 	`;
 
 	// Initialise table for nØllegrupp variables such as the names and
-	// login codes for all the nØllegrupper during the Reception.
+	// verification codes for all the nØllegrupper during the Reception.
+	// Note 'name' corresponds to the nØllegrupp's Discord role.
 	await sql`
-		create table if not exists nollegrupp_variables (
-			group_id text primary key,
-			group_name text unique not null,
-			group_code text unique not null
-		);
+		create table if not exists nollegrupp_info (
+			name text primary key,
+			code text unique not null
+		)
 	`;
 }
 
@@ -55,4 +55,44 @@ export async function getKthIdByUserId(
 		await sql`select kth_id from users where discord_id = ${discordId}`;
 	if (!users.length) return null;
 	return users[0].kth_id;
+}
+
+// Return true on success, false if the group already exists.
+export async function insertNollegrupp(
+	name: string,
+	code: string
+): Promise<boolean> {
+	try {
+		await sql`insert into nollegrupp_info (name, code) values (${name}, ${code})`;
+	} catch (err) {
+		if (err instanceof PostgresError && err.code == "23505") {
+			// code for unique key violation
+			return false;
+		}
+		throw err;
+	}
+	return true;
+}
+
+// Return true on success.
+export async function deleteNollegrupp(
+	name: string
+): Promise<boolean> {
+	try {
+		await sql`delete from nollegrupp_info where name = ${name}`;
+	} catch (err) {
+		throw err;
+	}
+	return true;
+}
+
+export async function getNollegruppNameByCode(
+	code: string
+): Promise<string | null> {
+	const groups =
+		await sql`select name from nollegrupp_info where code = ${code}`;
+	if (!groups.length) return null;
+
+	// Group names and codes are unique.
+	return groups[0].name;
 }
