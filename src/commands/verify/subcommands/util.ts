@@ -32,8 +32,7 @@ export const verifyUser = async (
 
 	await setRoleVerified(user, guild);
 
-	if (clientIsLight(client))
-		return;
+	if (clientIsLight(client)) return;
 
 	const { year, yearRole } = await extractYearFromUser(kthId);
 	const userHasYearRole = await hasAnyYearRole(user, guild);

@@ -42,7 +42,9 @@ async function main(): Promise<void> {
 		harmonyClient.once("ready", () => console.log("Logged into Harmony"));
 		await harmonyClient.login(process.env.DISCORD_BOT_TOKEN);
 
-		harmonyClient.on("guildMemberAdd", (member) => userJoined(member, harmonyClient));
+		harmonyClient.on("guildMemberAdd", (member) =>
+			userJoined(member, harmonyClient)
+		);
 		harmonyClient.on("interactionCreate", async (interaction) => {
 			await handleInteractions(interaction);
 		});
@@ -53,7 +55,9 @@ async function main(): Promise<void> {
 		);
 		await harmonyLightClient.login(process.env.DISCORD_LIGHT_BOT_TOKEN);
 
-		harmonyLightClient.on("guildMemberAdd", (member) => userJoined(member, harmonyLightClient));
+		harmonyLightClient.on("guildMemberAdd", (member) =>
+			userJoined(member, harmonyLightClient)
+		);
 		harmonyLightClient.on("interactionCreate", async (interaction) => {
 			await handleInteractions(interaction);
 		});
