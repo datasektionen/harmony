@@ -79,7 +79,12 @@ export async function handleVerifyBeginBase(
 			try {
 				// Should always be true, so long as the command is only used in a guild.
 				if (interaction.guild !== null) {
-					verifyUser(user, interaction.guild, kthId);
+					verifyUser(
+						interaction.user,
+						interaction.guild,
+						kthId,
+						interaction.client
+					);
 				}
 			} catch (error) {
 				console.warn(error);
