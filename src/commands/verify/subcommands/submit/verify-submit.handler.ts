@@ -50,7 +50,7 @@ export async function handleVerifySubmitBase(
 				setPingRoles(interaction.user, guild),
 			]);
 		} else {
-			await verifyUser(interaction.user, guild, kthId);
+			await verifyUser(interaction.user, guild, kthId, interaction.client);
 		}
 	} catch (error) {
 		console.warn(error);
