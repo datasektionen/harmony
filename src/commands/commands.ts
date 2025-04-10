@@ -4,6 +4,7 @@ import { joinCommand } from "./join/join.command";
 import { leaveCommand } from "./leave/leave.command";
 import { periodCommand } from "./period/period.command";
 import { buttonsCommand } from "./buttons/buttons.command";
+import { nollegruppCommand } from "./nollegrupp/nollegrupp.command"
 import { createVerifyCommand } from "./verify/verify.command";
 import { translateMsgCommand } from "./translate/translateMsg.command";
 import { clubCommand } from "./club/club.command";
@@ -29,6 +30,7 @@ export const getOfficialBotCommands = async (): Promise<
 	clubCommand,
 	messageCommand,
 	kthIdCommand,
+	nollegruppCommand,
 ];
 
 export const getLightBotCommands = async (): Promise<

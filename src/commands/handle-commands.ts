@@ -30,6 +30,7 @@ import { handleVerifyBegin } from "./verify/subcommands/begin/verify-begin.handl
 import { isDarkmode } from "../shared/utils/darkmode";
 import { handleVerifySubmit } from "./verify/subcommands/submit/verify-submit.handler";
 import { handleVerifyNollan } from "./verify/subcommands/nollan/verify-nollan.handler";
+import { handleNollegrupp } from "./nollegrupp/nollegrupp.handler";
 
 export async function handleInteractions(
 	interaction: Interaction
@@ -165,6 +166,9 @@ const handleChatInputCommand = async (
 					return;
 				case CommandNames.KTHID:
 					await handleKthId(guildInteraction);
+					return;
+				case CommandNames.NOLLEGRUPP:
+					handleNollegrupp(guildInteraction);
 					return;
 				default:
 					throw new CommandNotFoundError(
