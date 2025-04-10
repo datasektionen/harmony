@@ -24,7 +24,7 @@ export const verifyUser = async (
 	user: User,
 	guild: Guild,
 	kthId: string,
-	client: Client
+	isLight: boolean
 ): Promise<void> => {
 	console.log(
 		`Verified user by kth email. kthid="${kthId}" user.id="${user.id}" user.username="${user.username}"`
@@ -32,7 +32,7 @@ export const verifyUser = async (
 
 	await setRoleVerified(user, guild);
 
-	if (clientIsLight(client)) return;
+	if (isLight) return;
 
 	const { year, yearRole } = await extractYearFromUser(kthId);
 	const userHasYearRole = await hasAnyYearRole(user, guild);

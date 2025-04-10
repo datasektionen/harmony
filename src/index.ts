@@ -43,7 +43,7 @@ async function main(): Promise<void> {
 		await harmonyClient.login(process.env.DISCORD_BOT_TOKEN);
 
 		harmonyClient.on("guildMemberAdd", (member) =>
-			userJoined(member, harmonyClient)
+			userJoined(member, false)
 		);
 		harmonyClient.on("interactionCreate", async (interaction) => {
 			await handleInteractions(interaction);
@@ -56,7 +56,7 @@ async function main(): Promise<void> {
 		await harmonyLightClient.login(process.env.DISCORD_LIGHT_BOT_TOKEN);
 
 		harmonyLightClient.on("guildMemberAdd", (member) =>
-			userJoined(member, harmonyLightClient)
+			userJoined(member, true)
 		);
 		harmonyLightClient.on("interactionCreate", async (interaction) => {
 			await handleInteractions(interaction);
