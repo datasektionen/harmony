@@ -6,14 +6,14 @@ import { isDarkmode } from "./darkmode";
 
 export const userJoined = async (
 	member: GuildMember,
-	client: Client
+	isLight: boolean
 ): Promise<void> => {
 	const kthId = await db.getKthIdByUserId(member.id);
 	const darkmode = await isDarkmode();
 
 	if (kthId !== null && !(await isDangerOfNollan(kthId, darkmode))) {
 		try {
-			verifyUser(member.user, member.guild, kthId, client);
+			verifyUser(member.user, member.guild, kthId, isLight);
 		} catch (error) {
 			console.warn(error);
 		}

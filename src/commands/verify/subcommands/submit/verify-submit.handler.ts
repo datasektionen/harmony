@@ -54,7 +54,7 @@ export async function handleVerifySubmitBase(
 				interaction.user,
 				guild,
 				kthId,
-				interaction.client
+				clientIsLight(interaction.client)
 			);
 		}
 	} catch (error) {
