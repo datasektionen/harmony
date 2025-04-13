@@ -1,4 +1,4 @@
-import { Client, Guild, User } from "discord.js";
+import { Guild, User } from "discord.js";
 import {
 	hasAnyYearRole,
 	hasRole,
@@ -12,7 +12,6 @@ import { extractYearFromUser } from "../../../shared/utils/hodis";
 import { mapYearToAlias } from "../../../shared/utils/alias_to_year_mapper";
 import { handleChannelAlias } from "../../../shared/utils/channel-utils";
 import { joinChannel } from "../../join/join.handler";
-import { clientIsLight } from "../../../shared/types/light-client";
 
 export const isKthEmail = (messageText: string): boolean =>
 	new RegExp(/^[a-zA-Z0-9]+@kth[.]se$/).test(messageText);
