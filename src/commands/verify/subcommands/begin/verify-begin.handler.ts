@@ -9,6 +9,7 @@ import { getHodisUser, isDangerOfNollan } from "../../../../shared/utils/hodis";
 import { VerifyingUser } from "../../../../shared/types/VerifyingUser";
 import { MessageFlags } from "discord.js";
 import { GuildModalSubmitInteraction } from "../../../../shared/types/GuildModalSubmitInteraction";
+import { clientIsLight } from "../../../../shared/types/light-client";
 
 // The basic logic of handleVerifyBegin() implemented in an
 // "interaction-agnostic manner".
@@ -57,11 +58,11 @@ export async function handleVerifyBeginBase(
 			try {
 				// Should always be true, so long as the command is only used in a guild.
 				if (interaction.guild !== null) {
-					verifyUser(
+					await verifyUser(
 						interaction.user,
 						interaction.guild,
 						kthId,
-						interaction.client
+						clientIsLight(interaction.client)
 					);
 				}
 			} catch (error) {
