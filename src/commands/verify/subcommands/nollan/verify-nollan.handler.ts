@@ -9,6 +9,7 @@ import {
 import { verifyNolleCode } from "../../../../shared/utils/verify_nolle_code";
 import { VerifyNollanVariables } from "./verify-nollan.variables";
 import { MessageFlags } from "discord.js";
+import { getNollegruppNameByCode } from "../../../../db/db";
 
 export async function handleVerifyNollanBase(
 	interaction: GuildChatInputCommandInteraction | GuildModalSubmitInteraction,
@@ -29,9 +30,9 @@ export async function handleVerifyNollanBase(
 	}
 
 	try {
-		// Check if nolle-code is valid
-		const validNollegruppRoleName = verifyNolleCode(nolleKod);
-		if (!validNollegruppRoleName) {
+		// Check if nolleKod is valid
+		const nollegruppRoleName = await getNollegruppNameByCode(nolleKod);
+		if (nollegruppRoleName == null) {
 			await interaction.editReply({
 				content:
 					"Error: Invalid code!\nVänligen skriv in den personliga kod du fått från din Dadda.\nOm du har problem, kontakta din Dadda!",
@@ -41,12 +42,12 @@ export async function handleVerifyNollanBase(
 
 		await addRolesOrRollback(user, guild, async (user, guild) => {
 			await setN0llanRole(user, guild);
-			await setRole(user, validNollegruppRoleName, guild); // Add n0llegrupp role
+			await setRole(user, nollegruppRoleName, guild); // Add n0llegrupp role
 		});
 
 		await interaction.editReply({
 			content:
-				"Välkommen nøllan! Du har nu blivit tillagd i några kanaler, inklusive kanaler för de första kurserna. Ha kul med schlemandet!",
+				"Välkommen nØllan! Du har nu blivit tillagd i några kanaler, inklusive kanaler för de första kurserna. Ha kul med schlemandet!",
 		});
 	} catch (error) {
 		console.warn(error);
