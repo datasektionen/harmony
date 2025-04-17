@@ -95,6 +95,17 @@ export async function getNollegruppNameByCode(
 	return groups[0].name;
 }
 
+export async function getNollegruppCodeByName(
+	name: string
+): Promise<string | null> {
+	const groups =
+		await sql`select code from nollegrupp_info where name = ${name}`;
+	if (!groups.length) return null;
+
+	// Group names and codes are unique.
+	return groups[0].code;
+}
+
 export async function formatNollegruppData(): Promise<string> {
 	const rows = await sql`select * from nollegrupp_info`;
 
