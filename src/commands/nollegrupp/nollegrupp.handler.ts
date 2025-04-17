@@ -7,20 +7,20 @@ import { handleNollegruppAdd } from "./subcommands/add/nollegrupp-add.handler";
 import { handleNollegruppRemove } from "./subcommands/remove/nollegrupp-remove.handler";
 
 export async function handleNollegrupp(
-    interaction: GuildChatInputCommandInteraction
+	interaction: GuildChatInputCommandInteraction
 ): Promise<void> {
-    const subcommandName = interaction.options.getSubcommand(true);
-    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+	const subcommandName = interaction.options.getSubcommand(true);
+	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-    // TODO
-    switch (subcommandName) {
-        case NollegruppSubcommands.ADD:
-            return handleNollegruppAdd(interaction);
-        case NollegruppSubcommands.LIST:
-            return handleNollegruppList(interaction);
-        case NollegruppSubcommands.REMOVE:
-            return handleNollegruppRemove(interaction);
-        default:
-            throw new CommandNotFoundError(interaction.commandName);
-    }
+	// TODO
+	switch (subcommandName) {
+		case NollegruppSubcommands.ADD:
+			return handleNollegruppAdd(interaction);
+		case NollegruppSubcommands.LIST:
+			return handleNollegruppList(interaction);
+		case NollegruppSubcommands.REMOVE:
+			return handleNollegruppRemove(interaction);
+		default:
+			throw new CommandNotFoundError(interaction.commandName);
+	}
 }

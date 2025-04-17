@@ -1,4 +1,4 @@
 export enum NollegruppAddVariables {
-    NAME = "name",
-    CODE = "code"
+	NAME = "name",
+	CODE = "code",
 }

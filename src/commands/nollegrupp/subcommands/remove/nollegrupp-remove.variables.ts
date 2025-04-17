@@ -1,3 +1,3 @@
 export enum NollegruppRemoveVariables {
-    NAME = "name"
+	NAME = "name",
 }

@@ -10,5 +10,5 @@ export enum CommandNames {
 	TRANSLATE_MSG = "Translate to English",
 	CLUB = "club",
 	KTHID = "kthid",
-	NOLLEGRUPP = "nollegrupp"
+	NOLLEGRUPP = "nollegrupp",
 }

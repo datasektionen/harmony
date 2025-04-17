@@ -75,9 +75,7 @@ export async function insertNollegrupp(
 }
 
 // Return true on success.
-export async function deleteNollegrupp(
-	name: string
-): Promise<boolean> {
+export async function deleteNollegrupp(name: string): Promise<boolean> {
 	try {
 		await sql`delete from nollegrupp_info where name = ${name}`;
 	} catch (err) {
@@ -98,14 +96,13 @@ export async function getNollegruppNameByCode(
 }
 
 export async function formatNollegruppData(): Promise<string> {
-	const rows =
-		await sql`select * from nollegrupp_info`;
+	const rows = await sql`select * from nollegrupp_info`;
 
 	let output = `Presently, there are ${rows.length} nØllegrupper (name, code):`;
 
 	rows.forEach((item) => {
 		output += `\n${item.name}, ${item.code}`;
-	})
+	});
 
 	return output;
 }

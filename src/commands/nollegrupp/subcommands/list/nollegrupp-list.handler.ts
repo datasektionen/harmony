@@ -2,11 +2,11 @@ import { formatNollegruppData } from "../../../../db/db";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 
 export async function handleNollegruppList(
-    interaction: GuildChatInputCommandInteraction
+	interaction: GuildChatInputCommandInteraction
 ): Promise<void> {
-    const content = await formatNollegruppData()
+	const content = await formatNollegruppData();
 
-    await interaction.editReply({
-        content: content
-    })
+	await interaction.editReply({
+		content: content,
+	});
 }
