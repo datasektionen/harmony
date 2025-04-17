@@ -105,7 +105,7 @@ export async function formatNollegruppData(): Promise<string | null> {
 	let output = `Presently, there are ${rows.length} nØllegrupper (name, code):`;
 
 	rows.forEach((item) => {
-		output.concat(`\n${item.name}, ${item.code}`)
+		output += `\n${item.name}, ${item.code}`
 	})
 
 	return output;
