@@ -2,6 +2,7 @@ import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatIn
 import { NollegruppSubcommands } from "./nollegrupp-subcommands.names";
 import { CommandNotFoundError } from "../../shared/errors/command-not-founder.error";
 import { MessageFlags } from "discord.js";
+import { handleNollegruppList } from "./subcommands/list/nollegrupp-list.handler";
 
 export async function handleNollegrupp(
     interaction: GuildChatInputCommandInteraction
@@ -9,14 +10,12 @@ export async function handleNollegrupp(
     const subcommandName = interaction.options.getSubcommand(true);
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-    console.log("Shikanokonokonokokoshitantan")
-
     // TODO
     switch (subcommandName) {
         case NollegruppSubcommands.ADD:
             return;
         case NollegruppSubcommands.LIST:
-            return;
+            return handleNollegruppList(interaction);
         case NollegruppSubcommands.REMOVE:
             return;
         default:

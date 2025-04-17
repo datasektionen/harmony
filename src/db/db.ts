@@ -97,15 +97,14 @@ export async function getNollegruppNameByCode(
 	return groups[0].name;
 }
 
-export async function formatNollegruppData(): Promise<string | null> {
+export async function formatNollegruppData(): Promise<string> {
 	const rows =
 		await sql`select * from nollegrupp_info`;
-	if (!rows.length) return null;
 
 	let output = `Presently, there are ${rows.length} nØllegrupper (name, code):`;
 
 	rows.forEach((item) => {
-		output += `\n${item.name}, ${item.code}`
+		output += `\n${item.name}, ${item.code}`;
 	})
 
 	return output;
