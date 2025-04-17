@@ -6,7 +6,6 @@ import {
 	setN0llanRole,
 	hasRoleN0llan,
 } from "../../../../shared/utils/roles";
-import { verifyNolleCode } from "../../../../shared/utils/verify_nolle_code";
 import { VerifyNollanVariables } from "./verify-nollan.variables";
 import { MessageFlags } from "discord.js";
 import { getNollegruppNameByCode } from "../../../../db/db";
