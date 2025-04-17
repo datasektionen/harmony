@@ -3,6 +3,8 @@ import { NollegruppSubcommands } from "./nollegrupp-subcommands.names";
 import { CommandNotFoundError } from "../../shared/errors/command-not-founder.error";
 import { MessageFlags } from "discord.js";
 import { handleNollegruppList } from "./subcommands/list/nollegrupp-list.handler";
+import { handleNollegruppAdd } from "./subcommands/add/nollegrupp-add.handler";
+import { handleNollegruppRemove } from "./subcommands/remove/nollegrupp-remove.handler";
 
 export async function handleNollegrupp(
     interaction: GuildChatInputCommandInteraction
@@ -13,11 +15,11 @@ export async function handleNollegrupp(
     // TODO
     switch (subcommandName) {
         case NollegruppSubcommands.ADD:
-            return;
+            return handleNollegruppAdd(interaction);
         case NollegruppSubcommands.LIST:
             return handleNollegruppList(interaction);
         case NollegruppSubcommands.REMOVE:
-            return;
+            return handleNollegruppRemove(interaction);
         default:
             throw new CommandNotFoundError(interaction.commandName);
     }
