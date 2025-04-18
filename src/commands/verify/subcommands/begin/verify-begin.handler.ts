@@ -10,8 +10,8 @@ import { MessageFlags } from "discord.js";
 import { GuildModalSubmitInteraction } from "../../../../shared/types/GuildModalSubmitInteraction";
 import { clientIsLight } from "../../../../shared/types/light-client";
 import {
-	getNollegruppCodeByName,
 	getDiscordIdByKthid,
+	getNollegruppCodeByName,
 } from "../../../../db/db";
 
 // The basic logic of handleVerifyBegin() implemented in an
