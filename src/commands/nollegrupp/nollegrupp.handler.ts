@@ -12,7 +12,6 @@ export async function handleNollegrupp(
 	const subcommandName = interaction.options.getSubcommand(true);
 	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-	// TODO
 	switch (subcommandName) {
 		case NollegruppSubcommands.ADD:
 			return handleNollegruppAdd(interaction);

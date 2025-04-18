@@ -16,7 +16,7 @@ export async function init(): Promise<void> {
 	// verification codes for all the nØllegrupper during the Reception.
 	// Note 'name' corresponds to the nØllegrupp's Discord role.
 	await sql`
-		create table if not exists nollegrupp_info (
+		create table if not exists nollegrupp (
 			name text primary key,
 			code text unique not null
 		)
@@ -63,7 +63,7 @@ export async function insertNollegrupp(
 	code: string
 ): Promise<boolean> {
 	try {
-		await sql`insert into nollegrupp_info (name, code) values (${name}, ${code})`;
+		await sql`insert into nollegrupp (name, code) values (${name}, ${code})`;
 	} catch (err) {
 		if (err instanceof PostgresError && err.code == "23505") {
 			// code for unique key violation
@@ -76,11 +76,7 @@ export async function insertNollegrupp(
 
 // Return true on success.
 export async function deleteNollegrupp(name: string): Promise<boolean> {
-	try {
-		await sql`delete from nollegrupp_info where name = ${name}`;
-	} catch (err) {
-		throw err;
-	}
+	await sql`delete from nollegrupp where name = ${name}`;
 	return true;
 }
 
@@ -88,7 +84,7 @@ export async function getNollegruppNameByCode(
 	code: string
 ): Promise<string | null> {
 	const groups =
-		await sql`select name from nollegrupp_info where code = ${code}`;
+		await sql`select name from nollegrupp where code = ${code}`;
 	if (!groups.length) return null;
 
 	// Group names and codes are unique.
@@ -99,7 +95,7 @@ export async function getNollegruppCodeByName(
 	name: string
 ): Promise<string | null> {
 	const groups =
-		await sql`select code from nollegrupp_info where name = ${name}`;
+		await sql`select code from nollegrupp where name = ${name}`;
 	if (!groups.length) return null;
 
 	// Group names and codes are unique.
@@ -107,7 +103,7 @@ export async function getNollegruppCodeByName(
 }
 
 export async function formatNollegruppData(): Promise<string> {
-	const rows = await sql`select * from nollegrupp_info`;
+	const rows = await sql`select * from nollegrupp`;
 
 	let output = `Presently, there are ${rows.length} nØllegrupper (name, code):`;
 
