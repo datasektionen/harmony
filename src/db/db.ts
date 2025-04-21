@@ -100,6 +100,11 @@ export async function getNollegruppCodeByName(
 	return groups[0].code;
 }
 
+export async function clearNollegrupp(): Promise<void> {
+	await sql`delete * from nollegrupp`;
+	return;
+}
+
 export async function formatNollegruppData(): Promise<string> {
 	const rows = await sql`select * from nollegrupp`;
 

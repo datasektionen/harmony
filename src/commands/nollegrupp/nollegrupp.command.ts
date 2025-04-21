@@ -29,6 +29,12 @@ command.addSubcommand((subCommand) =>
 
 command.addSubcommand((subCommand) =>
 	subCommand
+		.setName(NollegruppSubcommands.CLEAR)
+		.setDescription("Remove all nØllegrupper")
+);
+
+command.addSubcommand((subCommand) =>
+	subCommand
 		.setName(NollegruppSubcommands.LIST)
 		.setDescription("List all nØllegrupper")
 );
