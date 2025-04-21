@@ -101,7 +101,7 @@ export async function getNollegruppCodeByName(
 }
 
 export async function clearNollegrupper(): Promise<void> {
-	await sql`delete * from nollegrupp`;
+	await sql`delete from nollegrupp *`;
 	return;
 }
 
