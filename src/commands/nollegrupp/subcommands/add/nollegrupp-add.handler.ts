@@ -8,12 +8,20 @@ export async function handleNollegruppAdd(
 	const name = interaction.options.getString(NollegruppAddVariables.NAME);
 	const code = interaction.options.getString(NollegruppAddVariables.CODE);
 
+	let result = true;
+
 	// The options should never be null because name and code are required.
 	if (name != null && code != null) {
-		await insertNollegrupp(name, code);
+		result = await insertNollegrupp(name, code);
 	}
 
-	await interaction.editReply({
-		content: `Successfully added nØllegrupp ${name} with code ${code} to database.`,
-	});
+	if (!result) {
+		await interaction.editReply({
+			content: `Failed to add nØllegrupp ${name}. The cause of this error is that another nØllegrupp with name \"${name}\" or code \"${code}\" already exists in the database.`
+		});
+	} else {
+		await interaction.editReply({
+			content: `Successfully added nØllegrupp ${name} with code ${code} to database.`,
+		});
+	}
 }
