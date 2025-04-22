@@ -17,7 +17,7 @@ export async function handleNollegruppAdd(
 
 	if (!result) {
 		await interaction.editReply({
-			content: `Failed to add nØllegrupp ${name}. The cause of this error is that another nØllegrupp with name \"${name}\" or code \"${code}\" already exists in the database.`
+			content: `Failed to add nØllegrupp ${name}. The cause of this error is that another nØllegrupp with name \"${name}\" or code \"${code}\" already exists in the database.`,
 		});
 	} else {
 		await interaction.editReply({
