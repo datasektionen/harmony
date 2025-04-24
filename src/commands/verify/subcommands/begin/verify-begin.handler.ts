@@ -8,11 +8,8 @@ import { getHodisUser, isDangerOfNollan } from "../../../../shared/utils/hodis";
 import { VerifyingUser } from "../../../../shared/types/VerifyingUser";
 import { MessageFlags } from "discord.js";
 import { GuildModalSubmitInteraction } from "../../../../shared/types/GuildModalSubmitInteraction";
-import {
-	getDiscordIdByKthid,
-	getNollegruppCodeByName,
-} from "../../../../db/db";
 import { clientIsLight } from "../../../../shared/types/light-client";
+import { getNollegruppNameByCode, getDiscordIdByKthid } from "../../../../db/db";
 
 // The basic logic of handleVerifyBegin() implemented in an
 // "interaction-agnostic manner".
@@ -46,13 +43,16 @@ export async function handleVerifyBeginBase(
 		// In case the entry does not exist.
 		if (intisCode == null) {
 			interaction.editReply({
-				content: "Verification failed, please contact a server administrator to resolve the issue and complete your verification."
+				content:
+					"Verification failed, please contact a server administrator to resolve the issue and complete your verification.",
 			});
-			console.log("Entry (intis, intis code) missing from nollegrupp_info, please use the /nollegrupp command to add one.");
+			console.log(
+				"Entry (intis, intis code) missing from nollegrupp_info, please use the /nollegrupp command to add one."
+			);
 			return;
 		}
 
-		isIntis = (code == intisCode);
+		isIntis = code == intisCode;
 	}
 
 	const kthId = email.split("@")[0];
