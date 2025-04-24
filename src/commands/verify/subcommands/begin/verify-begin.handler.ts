@@ -40,22 +40,19 @@ export async function handleVerifyBeginBase(
 	let isIntis = false;
 
 	if (code != undefined) {
-		// Requires the entry (intis, intis code) to be present in the nollegrupp table.
-		const intisCode = await getNollegruppCodeByName("intis");
+		// Requires the entry (intis, intis code) to be present in the nollegrupp_info table.
+		const intisCode = await getNollegruppNameByCode("intis");
 
 		// In case the entry does not exist.
 		if (intisCode == null) {
 			interaction.editReply({
-				content:
-					"Verification failed, please contact a server administrator to resolve the issue and complete your verification.",
+				content: "Verification failed, please contact a server administrator to resolve the issue and complete your verification."
 			});
-			console.log(
-				"Entry (intis, intis code) missing from nollegrupp, please use the /nollegrupp command to add one."
-			);
+			console.log("Entry (intis, intis code) missing from nollegrupp_info, please use the /nollegrupp command to add one.");
 			return;
 		}
 
-		isIntis = code == intisCode;
+		isIntis = (code == intisCode);
 	}
 
 	const kthId = email.split("@")[0];
@@ -67,6 +64,7 @@ export async function handleVerifyBeginBase(
 		return;
 	}
 
+	const dbDiscordId = await getDiscordIdByKthid(kthId);
 	const dbDiscordId = await getDiscordIdByKthid(kthId);
 
 	if (dbDiscordId !== null) {
