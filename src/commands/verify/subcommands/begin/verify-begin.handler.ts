@@ -4,12 +4,15 @@ import { generateToken } from "../../../../shared/utils/generate-token";
 import { sendMail } from "../../../../shared/utils/mail";
 import { isKthEmail, verifyUser } from "../util";
 import { VerifyBeginVariables } from "./verify-begin.variables";
-import * as db from "../../../../db/db";
 import { getHodisUser, isDangerOfNollan } from "../../../../shared/utils/hodis";
 import { VerifyingUser } from "../../../../shared/types/VerifyingUser";
 import { MessageFlags } from "discord.js";
 import { GuildModalSubmitInteraction } from "../../../../shared/types/GuildModalSubmitInteraction";
 import { clientIsLight } from "../../../../shared/types/light-client";
+import {
+	getDiscordIdByKthid,
+	getNollegruppCodeByName,
+} from "../../../../db/db";
 
 // The basic logic of handleVerifyBegin() implemented in an
 // "interaction-agnostic manner".
@@ -33,8 +36,27 @@ export async function handleVerifyBeginBase(
 		return;
 	}
 
-	// Bypass for international students
-	const isIntis = code === process.env.CODE_INTIS;
+	// Bypass for international students.
+	let isIntis = false;
+
+	if (code != undefined) {
+		// Requires the entry (intis, intis code) to be present in the nollegrupp table.
+		const intisCode = await getNollegruppCodeByName("intis");
+
+		// In case the entry does not exist.
+		if (intisCode == null) {
+			interaction.editReply({
+				content:
+					"Verification failed, please contact a server administrator to resolve the issue and complete your verification.",
+			});
+			console.log(
+				"Entry (intis, intis code) missing from nollegrupp, please use the /nollegrupp command to add one."
+			);
+			return;
+		}
+
+		isIntis = code == intisCode;
+	}
 
 	const kthId = email.split("@")[0];
 
@@ -45,7 +67,7 @@ export async function handleVerifyBeginBase(
 		return;
 	}
 
-	const dbDiscordId = await db.getDiscordIdByKthid(kthId);
+	const dbDiscordId = await getDiscordIdByKthid(kthId);
 
 	if (dbDiscordId !== null) {
 		// KTH ID is stored in the DB
