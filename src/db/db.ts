@@ -83,7 +83,12 @@ export async function deleteNollegrupp(name: string): Promise<boolean> {
 export async function getNollegruppNameByCode(
 	code: string
 ): Promise<string | null> {
+<<<<<<< HEAD
 	const groups = await sql`select name from nollegrupp where code = ${code}`;
+=======
+	const groups =
+		await sql`select name from nollegrupp where code = ${code}`;
+>>>>>>> 5de74a6 (Resolved some code issues, testing underway.)
 	if (!groups.length) return null;
 
 	// Group names and codes are unique.
@@ -97,8 +102,12 @@ export async function getNollegruppCodeByName(
 	const groups = await sql`select code from nollegrupp where name = ${name}`;
 =======
 	const groups =
+<<<<<<< HEAD
 		await sql`select code from nollegrupp_info where name = ${name}`;
 >>>>>>> f064e3e (Finished handling of international students.)
+=======
+		await sql`select code from nollegrupp where name = ${name}`;
+>>>>>>> 5de74a6 (Resolved some code issues, testing underway.)
 	if (!groups.length) return null;
 
 	// Group names and codes are unique.

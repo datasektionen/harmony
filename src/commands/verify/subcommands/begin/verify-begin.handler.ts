@@ -37,8 +37,8 @@ export async function handleVerifyBeginBase(
 	let isIntis = false;
 
 	if (code != undefined) {
-		// Requires the entry (intis, intis code) to be present in the nollegrupp_info table.
-		const intisCode = await getNollegruppNameByCode("intis");
+		// Requires the entry (intis, intis code) to be present in the nollegrupp table.
+		const intisCode = await getNollegruppCodeByName("intis");
 
 		// In case the entry does not exist.
 		if (intisCode == null) {
@@ -47,7 +47,7 @@ export async function handleVerifyBeginBase(
 					"Verification failed, please contact a server administrator to resolve the issue and complete your verification.",
 			});
 			console.log(
-				"Entry (intis, intis code) missing from nollegrupp_info, please use the /nollegrupp command to add one."
+				"Entry (intis, intis code) missing from nollegrupp, please use the /nollegrupp command to add one."
 			);
 			return;
 		}
