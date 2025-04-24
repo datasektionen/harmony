@@ -8,7 +8,7 @@ export async function handleNollegruppAdd(
 	const name = interaction.options.getString(NollegruppAddVariables.NAME);
 	const code = interaction.options.getString(NollegruppAddVariables.CODE);
 
-	let result = true;
+	let result = false;
 
 	// The options should never be null because name and code are required.
 	if (name != null && code != null) {
@@ -17,7 +17,7 @@ export async function handleNollegruppAdd(
 
 	if (!result) {
 		await interaction.editReply({
-			content: `Failed to add nØllegrupp ${name}. The cause of this error is that another nØllegrupp with name "${name}" or code "${code}" already exists in the database.`,
+			content: `Failed to add nØllegrupp ${name}. The cause of this error may be that another nØllegrupp with name "${name}" or code "${code}" already exists in the database.`,
 		});
 	} else {
 		await interaction.editReply({
