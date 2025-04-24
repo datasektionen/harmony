@@ -102,26 +102,31 @@ export async function getNollegruppCodeByName(
 <<<<<<< HEAD
 		await sql`select code from nollegrupp_info where name = ${name}`;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> f251a6b (Finished handling of international students.)
 =======
 		await sql`select code from nollegrupp where name = ${name}`;
 >>>>>>> 80c8505 (Resolved some code issues, testing underway.)
+=======
+>>>>>>> 5ef943d (I literally do not even know anymore.)
 	if (!groups.length) return null;
 
 	// Group names and codes are unique.
 	return groups[0].code;
 }
 
-<<<<<<< HEAD
 export async function clearNollegrupper(): Promise<void> {
 	await sql`delete from nollegrupp`;
 	return;
 }
 
+<<<<<<< HEAD
 =======
 >>>>>>> f251a6b (Finished handling of international students.)
+=======
+>>>>>>> 5ef943d (I literally do not even know anymore.)
 export async function formatNollegruppData(): Promise<string> {
 	const rows = await sql`select * from nollegrupp`;
 
