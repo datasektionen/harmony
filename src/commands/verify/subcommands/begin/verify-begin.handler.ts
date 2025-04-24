@@ -13,6 +13,7 @@ import {
 	getDiscordIdByKthid,
 	getNollegruppCodeByName,
 } from "../../../../db/db";
+import { clientIsLight } from "../../../../shared/types/light-client";
 
 // The basic logic of handleVerifyBegin() implemented in an
 // "interaction-agnostic manner".
