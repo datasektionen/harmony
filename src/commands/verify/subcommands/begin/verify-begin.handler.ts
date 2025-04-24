@@ -9,7 +9,7 @@ import { VerifyingUser } from "../../../../shared/types/VerifyingUser";
 import { MessageFlags } from "discord.js";
 import { GuildModalSubmitInteraction } from "../../../../shared/types/GuildModalSubmitInteraction";
 import { clientIsLight } from "../../../../shared/types/light-client";
-import { getNollegruppNameByCode, getDiscordIdByKthid } from "../../../../db/db";
+import { getNollegruppCodeByName, getDiscordIdByKthid } from "../../../../db/db";
 
 // The basic logic of handleVerifyBegin() implemented in an
 // "interaction-agnostic manner".
@@ -64,7 +64,6 @@ export async function handleVerifyBeginBase(
 		return;
 	}
 
-	const dbDiscordId = await getDiscordIdByKthid(kthId);
 	const dbDiscordId = await getDiscordIdByKthid(kthId);
 
 	if (dbDiscordId !== null) {
