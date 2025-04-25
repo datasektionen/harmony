@@ -31,6 +31,9 @@ import { isDarkmode } from "../shared/utils/darkmode";
 import { handleVerifySubmit } from "./verify/subcommands/submit/verify-submit.handler";
 import { handleVerifyNollan } from "./verify/subcommands/nollan/verify-nollan.handler";
 import { handleNollegrupp } from "./nollegrupp/nollegrupp.handler";
+import { handleTest } from "./testMandate/test.handler";
+import { handleDfunkt } from "./dfunktUpdate/dfunkt.handler";
+import { BaseInteraction } from "discord.js";
 
 export async function handleInteractions(
 	interaction: Interaction
@@ -168,7 +171,13 @@ const handleChatInputCommand = async (
 					await handleKthId(guildInteraction);
 					return;
 				case CommandNames.NOLLEGRUPP:
-					handleNollegrupp(guildInteraction);
+					await handleNollegrupp(guildInteraction);
+					return
+				case CommandNames.TEST:
+					await handleTest(guildInteraction);
+					return;
+				case CommandNames.UPDATE_DFUNKT:
+					await handleDfunkt(guildInteraction);
 					return;
 				default:
 					throw new CommandNotFoundError(

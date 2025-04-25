@@ -11,4 +11,6 @@ export enum CommandNames {
 	CLUB = "club",
 	KTHID = "kthid",
 	NOLLEGRUPP = "nollegrupp",
+	TEST = "test",
+	UPDATE_DFUNKT = "dfunkt"
 }

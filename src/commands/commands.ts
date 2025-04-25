@@ -11,6 +11,8 @@ import { clubCommand } from "./club/club.command";
 import { messageCommand } from "./message/message.command";
 import { ContextMenuCommandBuilder, SlashCommandBuilder } from "discord.js";
 import { kthIdCommand } from "./kthid/kthid.command";
+import { testCommand } from "./testMandate/test.command";
+import { updateDfunktCommand } from "./dfunktUpdate/dfunkt.command";
 
 type ApplicationCommandBuilder =
 	| SlashCommandBuilder
@@ -31,6 +33,8 @@ export const getOfficialBotCommands = async (): Promise<
 	messageCommand,
 	kthIdCommand,
 	nollegruppCommand,
+	testCommand,
+	updateDfunktCommand,
 ];
 
 export const getLightBotCommands = async (): Promise<
