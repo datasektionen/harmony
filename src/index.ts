@@ -4,6 +4,8 @@ import { handleCommands } from "./commands/handle-commands";
 import { registerCommands } from "./commands/register-commands";
 import * as db from "./db/db";
 import { userJoined } from "./shared/utils/userJoined";
+import { initJobs } from "./jobs/jobs";
+import { CronJob } from "cron";
 
 /**p
  * Goes through all dotenv vars and checks if they are defined.
@@ -33,21 +35,28 @@ export const harmonyClient = new DiscordClient({ intents });
 
 export const harmonyLightClient = new LightDiscordClient({ intents });
 
+export let jobs: Map<string, {client: DiscordClient, job: CronJob}> = new Map();
+
 async function main(): Promise<void> {
 	validateEnvironment();
-
 	await db.init();
 	console.log("Initialized database");
 	if (process.env.DISCORD_BOT_TOKEN) {
-		harmonyClient.once("ready", () => console.log("Logged into Harmony"));
+		harmonyClient.once("ready", () => {
+			console.log("Logged into Harmony")
+			jobs = initJobs(harmonyClient);
+			console.log("Instantiated cron-jobs.")
+		});
 		await harmonyClient.login(process.env.DISCORD_BOT_TOKEN);
 
 		harmonyClient.on("guildMemberAdd", (member) => userJoined(member));
 	}
 	if (process.env.DISCORD_LIGHT_BOT_TOKEN) {
-		harmonyLightClient.once("ready", () =>
-			console.log("Logged into Harmony Light")
-		);
+		harmonyLightClient.once("ready", () => {
+			console.log("Logged into Harmony Light");
+			jobs = initJobs(harmonyLightClient);
+			console.log("Instantiated cron-jobs.");
+		});
 		await harmonyLightClient.login(process.env.DISCORD_LIGHT_BOT_TOKEN);
 
 		harmonyLightClient.on("guildMemberAdd", (member) => userJoined(member));

@@ -20,6 +20,8 @@ import {
 import { handleTranslateMsg } from "./translate/translateMsg.handler";
 import { handleClub } from "./club/club.handler";
 import { handleMessage } from "./message/message.handler";
+import { handleTest } from "./testMandate/test.handler";
+import { handleDfunkt } from "./dfunktUpdate/dfunkt.handler";
 import { BaseInteraction } from "discord.js";
 
 export const handleCommands = (): void => {
@@ -138,6 +140,12 @@ const handleChatInputCommand = async (
 					return;
 				case CommandNames.MESSAGE:
 					await handleMessage(guildInteraction);
+					return;
+				case CommandNames.TEST:
+					await handleTest(guildInteraction);
+					return;
+				case CommandNames.UPDATE_DFUNKT:
+					await handleDfunkt(guildInteraction);
 					return;
 				default:
 					throw new CommandNotFoundError(

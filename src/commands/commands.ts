@@ -9,6 +9,8 @@ import { translateMsgCommand } from "./translate/translateMsg.command";
 import { clubCommand } from "./club/club.command";
 import { messageCommand } from "./message/message.command";
 import { ContextMenuCommandBuilder, SlashCommandBuilder } from "discord.js";
+import { testCommand } from "./testMandate/test.command";
+import { updateDfunktCommand } from "./dfunktUpdate/dfunkt.command";
 
 type ApplicationCommandBuilder =
 	| SlashCommandBuilder
@@ -27,6 +29,8 @@ export const getOfficialBotCommands = async (): Promise<
 	translateMsgCommand,
 	clubCommand,
 	messageCommand,
+	testCommand,
+	updateDfunktCommand,
 ];
 
 export const getLightBotCommands = async (): Promise<

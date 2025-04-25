@@ -9,4 +9,6 @@ export enum CommandNames {
 	COMMUNITY = "community",
 	TRANSLATE_MSG = "Translate to English",
 	CLUB = "club",
+	TEST = "test",
+	UPDATE_DFUNKT = "dfunkt"
 }
