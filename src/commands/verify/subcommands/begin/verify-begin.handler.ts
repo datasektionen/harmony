@@ -4,17 +4,28 @@ import { generateToken } from "../../../../shared/utils/generate-token";
 import { sendMail } from "../../../../shared/utils/mail";
 import { isKthEmail, verifyUser } from "../util";
 import { VerifyBeginVariables } from "./verify-begin.variables";
-import * as db from "../../../../db/db";
 import { getHodisUser, isDangerOfNollan } from "../../../../shared/utils/hodis";
 import { VerifyingUser } from "../../../../shared/types/VerifyingUser";
+import { MessageFlags } from "discord.js";
+import { GuildModalSubmitInteraction } from "../../../../shared/types/GuildModalSubmitInteraction";
+import { clientIsLight } from "../../../../shared/types/light-client";
+import {
+	getDiscordIdByKthid,
+	getNollegruppCodeByName,
+} from "../../../../db/db";
 
-export const handleVerifyBegin = async (
-	interaction: GuildChatInputCommandInteraction,
-	darkmode: boolean
-): Promise<void> => {
-	const { user, options } = interaction;
-	await interaction.deferReply({ ephemeral: true });
-	const email = options.getString(VerifyBeginVariables.EMAIL, true);
+// The basic logic of handleVerifyBegin() implemented in an
+// "interaction-agnostic manner".
+export async function handleVerifyBeginBase(
+	email: string,
+	interaction: GuildChatInputCommandInteraction | GuildModalSubmitInteraction,
+	darkmode: boolean,
+	code?: string
+): Promise<void> {
+	const user = interaction.user;
+
+	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+
 	if (
 		!isKthEmail(email) &&
 		(await getHodisUser(email.split("@")[0])) !== null
@@ -25,9 +36,27 @@ export const handleVerifyBegin = async (
 		return;
 	}
 
-	// Bypass for international students
-	const code = options.getString(VerifyBeginVariables.CODE, false);
-	const isIntis = code === process.env.CODE_INTIS;
+	// Bypass for international students.
+	let isIntis = false;
+
+	if (code != undefined) {
+		// Requires the entry (intis, intis code) to be present in the nollegrupp table.
+		const intisCode = await getNollegruppCodeByName("intis");
+
+		// In case the entry does not exist.
+		if (intisCode == null) {
+			interaction.editReply({
+				content:
+					"Verification failed, please contact a server administrator to resolve the issue and complete your verification.",
+			});
+			console.log(
+				"Entry (intis, intis code) missing from nollegrupp, please use the /nollegrupp command to add one."
+			);
+			return;
+		}
+
+		isIntis = code == intisCode;
+	}
 
 	const kthId = email.split("@")[0];
 
@@ -38,7 +67,7 @@ export const handleVerifyBegin = async (
 		return;
 	}
 
-	const dbDiscordId = await db.getDiscordIdByKthid(kthId);
+	const dbDiscordId = await getDiscordIdByKthid(kthId);
 
 	if (dbDiscordId !== null) {
 		// KTH ID is stored in the DB
@@ -49,12 +78,20 @@ export const handleVerifyBegin = async (
 					"It seems you're already verified on another Konglig server. Welcome!",
 			});
 			try {
-				verifyUser(interaction.user, interaction.guild, kthId);
+				// Should always be true, so long as the command is only used in a guild.
+				if (interaction.guild !== null) {
+					await verifyUser(
+						interaction.user,
+						interaction.guild,
+						kthId,
+						clientIsLight(interaction.client)
+					);
+				}
 			} catch (error) {
 				console.warn(error);
 				await interaction.reply({
 					content: "Something went wrong, please try again.",
-					ephemeral: true,
+					flags: MessageFlags.Ephemeral,
 				});
 			}
 			return;
@@ -79,7 +116,7 @@ export const handleVerifyBegin = async (
 	try {
 		await sendMail(email, token);
 		await interaction.editReply({
-			content: `Check the inbox of ${email} for your verification code: <https://webmail.kth.se/>\nSubmit your verification code using the \`/verify submit\` command.\nNote that by submitting the verification code, you accept that Konglig Datasektionen may store your discord ID and name together with your email address. This will be stored in accordance with the chapter's [information processing policy](<https://styrdokument.datasektionen.se/pm_informationshantering>).`,
+			content: `Check the inbox of ${email} for your verification code: <https://webmail.kth.se/>\nSubmit your verification code by clicking the submit button above.\nNote that by submitting the verification code, you accept that Konglig Datasektionen may store your Discord ID and name together with your email address. This will be stored in accordance with the chapter's [information processing policy](<https://styrdokument.datasektionen.se/pm_informationshantering>).`,
 		});
 	} catch (error) {
 		console.error(error);
@@ -87,4 +124,41 @@ export const handleVerifyBegin = async (
 			content: "Something went wrong, please try again.",
 		});
 	}
-};
+}
+
+export async function handleVerifyBegin(
+	interaction: GuildChatInputCommandInteraction | GuildModalSubmitInteraction,
+	darkmode: boolean
+): Promise<void> {
+	if (interaction.isModalSubmit()) {
+		const email = interaction.fields.getTextInputValue("beginVerifyEmail");
+
+		if (darkmode) {
+			const code =
+				interaction.fields.getTextInputValue("beginVerifyCode");
+
+			await handleVerifyBeginBase(email, interaction, darkmode, code);
+		} else {
+			await handleVerifyBeginBase(email, interaction, darkmode);
+		}
+	} else if (interaction.isChatInputCommand()) {
+		const { options } = interaction;
+		const email = options.getString(VerifyBeginVariables.EMAIL, true);
+		const code = options.getString(VerifyBeginVariables.CODE, false);
+
+		if (code === null) {
+			await handleVerifyBeginBase(
+				email,
+				interaction,
+				darkmode,
+				undefined
+			);
+		} else {
+			await handleVerifyBeginBase(email, interaction, darkmode, code);
+		}
+	} else {
+		console.warn(
+			"Unexpected call to handleVerifyBegin(). Origin was neither a slash command, nor a modal submission."
+		);
+	}
+}

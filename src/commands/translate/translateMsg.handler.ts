@@ -1,4 +1,8 @@
-import { EmbedBuilder, MessageContextMenuCommandInteraction } from "discord.js";
+import {
+	EmbedBuilder,
+	MessageContextMenuCommandInteraction,
+	MessageFlags,
+} from "discord.js";
 import {
 	isTranslationAvailable,
 	translateText,
@@ -7,7 +11,7 @@ import {
 export const handleTranslateMsg = async (
 	interaction: MessageContextMenuCommandInteraction
 ): Promise<void> => {
-	await interaction.deferReply({ ephemeral: true });
+	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
 	if (!isTranslationAvailable()) {
 		await interaction.editReply(

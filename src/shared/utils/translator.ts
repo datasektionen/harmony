@@ -3,7 +3,7 @@ import { readFile } from "fs/promises";
 import { decode } from "he";
 
 const authKey = process.env.DEEPL_API_KEY;
-const glossaryPath = "./src/shared/assets/glossary.json";
+const glossaryPath = "./assets/glossary.json";
 
 const translator =
 	authKey === undefined || authKey === "-"

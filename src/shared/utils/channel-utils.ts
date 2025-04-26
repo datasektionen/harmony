@@ -7,12 +7,14 @@ import {
 	Guild,
 	PermissionFlagsBits,
 	User,
+	MessageFlags,
 } from "discord.js";
 import { AliasName, mappings } from "../alias-mappings";
 import { GuildButtonOrCommandInteraction } from "../types/GuildButtonOrCommandInteraction";
 import { getAliasChannels } from "./read-alias-mappings";
 import { validCourseCode } from "./valid-course-code";
 import { toggleYearCoursesRole } from "./roles";
+import { joinChannel } from "../../commands/join/join.handler";
 
 export type CourseChannel = ForumChannel | TextChannel;
 
@@ -77,7 +79,7 @@ export const handleChannel = async (
 ): Promise<void> => {
 	noInteraction = noInteraction ?? false;
 	if (!noInteraction) {
-		await interaction.deferReply({ ephemeral: true });
+		await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 	}
 
 	await interaction.guild.channels.fetch();
@@ -113,11 +115,17 @@ export const handleChannel = async (
 	await actionCallback(channel as CourseChannel, interaction.user);
 
 	if (!noInteraction) {
-		await interaction.editReply({
-			content: `Successfully updated visibility for \`#${
-				(channel as CourseChannel).name
-			}\``,
-		});
+		if (actionCallback === joinChannel) {
+			await interaction.editReply({
+				content: `Successfully updated visibility for ${channel}`,
+			});
+		} else {
+			await interaction.editReply({
+				content: `Successfully updated visibility for \`#${
+					(channel as CourseChannel).name
+				}\``,
+			});
+		}
 	}
 	return;
 };

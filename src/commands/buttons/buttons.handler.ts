@@ -1,78 +1,56 @@
+import { COURSE_BUTTON_LABELS, VERIFY_BUTTON_LABELS } from "./subcommands/util";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import { GuildButtonInteraction } from "../../shared/types/GuildButtonInteraction";
-import { joinChannel } from "../join/join.handler";
-import { leaveChannel } from "../leave/leave.handler";
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
-
-import { AliasName } from "../../shared/alias-mappings";
-import { ButtonAliases } from "./buttons.properties";
-import { aliasExists } from "../../shared/utils/read-alias-mappings";
+import { ButtonsSubcommands } from "./buttons-subcommands.names";
+import { CommandNotFoundError } from "../../shared/errors/command-not-founder.error";
 import {
-	handleChannel,
-	handleChannelAlias,
-	isMemberOfAlias,
-} from "../../shared/utils/channel-utils";
+	handleButtonsCourses,
+	handleCourseButtonInteraction,
+} from "./subcommands/courses/buttons-courses.handler";
+import {
+	handleButtonsVerify,
+	handleVerifyButtonInteraction,
+} from "./subcommands/verify/buttons-verify.handler";
+import { MessageFlags } from "discord.js";
 
-export const handleButtons = async (
+export async function handleButtons(
 	interaction: GuildChatInputCommandInteraction
-): Promise<void> => {
-	if (!interaction.isChatInputCommand()) return;
+): Promise<void> {
+	const subcommandName = interaction.options.getSubcommand(true);
+	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-	const buttons = createAliasButtons(ButtonAliases);
+	switch (subcommandName) {
+		case ButtonsSubcommands.COURSES:
+			return await handleButtonsCourses(interaction);
+		case ButtonsSubcommands.VERIFY:
+			return await handleButtonsVerify(interaction);
+		default:
+			throw new CommandNotFoundError(interaction.commandName);
+	}
+}
 
-	await interaction.channel?.send({ components: buttons });
-};
-
-export const handleButtonInteraction = async (
+export async function handleButtonInteraction(
 	interaction: GuildButtonInteraction
-): Promise<void> => {
-	const courseCode = interaction.customId;
-	const alias = courseCode as AliasName;
-	if (aliasExists(alias)) {
-		await interaction.deferReply({ ephemeral: true });
-		const joining = !(await isMemberOfAlias(
-			interaction.guild,
-			interaction.user.id,
-			alias
-		));
-		const action = joining ? joinChannel : leaveChannel;
-		const actionVerb = joining ? "joined" : "left";
-		const updateCount = await handleChannelAlias(
-			interaction.guild,
-			interaction.user,
-			alias,
-			action
-		);
+): Promise<void> {
+	const courseButtonIds = COURSE_BUTTON_LABELS.map((label) =>
+		label.toString()
+	);
+	const verifyButtonIds = VERIFY_BUTTON_LABELS.map((label) =>
+		label.toString()
+	);
 
-		await interaction.editReply({
-			content: `Successfully ${actionVerb} \`${alias}\`! (${updateCount}) channels updated`,
-		});
-	} else {
-		await handleChannel(courseCode, interaction, joinChannel);
+	// interaction originated from pressing a course button.
+	if (courseButtonIds.includes(interaction.customId)) {
+		return await handleCourseButtonInteraction(interaction);
 	}
-};
-
-function createAliasButtons(
-	aliases: AliasName[]
-): ActionRowBuilder<ButtonBuilder>[] {
-	const BUTTONS_PER_ROW = 3;
-	const rows = [];
-	let row = new ActionRowBuilder<ButtonBuilder>();
-	for (const [, alias] of Object.entries(aliases)) {
-		const buttonLabel = alias.charAt(0).toUpperCase() + alias.slice(1);
-		row.addComponents(
-			new ButtonBuilder()
-				.setCustomId(alias)
-				.setLabel(buttonLabel)
-				.setStyle(ButtonStyle.Primary)
+	// buttonInteraction originated from pressing a verify button.
+	else if (verifyButtonIds.includes(interaction.customId)) {
+		return await handleVerifyButtonInteraction(interaction);
+	}
+	// Should be unreachable.
+	else {
+		console.warn(
+			`An unknown button was interacted with (customId = ${interaction.customId}).`
 		);
-		if (row.components.length == BUTTONS_PER_ROW) {
-			rows.push(row);
-			row = new ActionRowBuilder<ButtonBuilder>();
-		}
 	}
-	if (row.components.length > 0) {
-		rows.push(row);
-	}
-	return rows;
 }

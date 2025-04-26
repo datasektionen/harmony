@@ -1,4 +1,4 @@
-import { Role, Snowflake } from "discord.js";
+import { MessageFlags, Role, Snowflake } from "discord.js";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import { MessageVariables } from "./message.variables";
 import { sleep } from "../../shared/utils/channel-utils";
@@ -10,7 +10,7 @@ export const handleMessage = async (
 	const role = options.getRole(MessageVariables.ROLE, true) as Role;
 	const messageid = options.getString(MessageVariables.MESSAGEID, true);
 
-	await interaction.deferReply({ ephemeral: true });
+	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
 	await interaction.guild.members.fetch();
 

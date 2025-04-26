@@ -1,3 +1,4 @@
+import { MessageFlags } from "discord.js";
 import { tokenUser } from "../../../../database-config";
 import * as db from "../../../../db/db";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
@@ -10,16 +11,15 @@ import {
 } from "../../../../shared/utils/roles";
 import { messageIsToken, verifyUser } from "../util";
 import { VerifySubmitVariables } from "./verify-submit.variables";
+import { GuildModalSubmitInteraction } from "../../../../shared/types/GuildModalSubmitInteraction";
 
-export const handleVerifySubmit = async (
-	interaction: GuildChatInputCommandInteraction
-): Promise<void> => {
-	await interaction.deferReply({ ephemeral: true });
+export async function handleVerifySubmitBase(
+	interaction: GuildChatInputCommandInteraction | GuildModalSubmitInteraction,
+	token: string
+): Promise<void> {
+	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-	const token = interaction.options.getString(
-		VerifySubmitVariables.VERIFICATION_CODE,
-		true
-	);
+	const guild = interaction.guild;
 
 	if (!messageIsToken(token)) {
 		await interaction.editReply({ content: "Not a valid code" });
@@ -45,12 +45,17 @@ export const handleVerifySubmit = async (
 	try {
 		if (verifyingUser.isIntis) {
 			await Promise.all([
-				setRoleVerified(interaction.user, interaction.guild),
-				setIntisRoles(interaction.user, interaction.guild),
-				setPingRoles(interaction.user, interaction.guild),
+				setRoleVerified(interaction.user, guild),
+				setIntisRoles(interaction.user, guild),
+				setPingRoles(interaction.user, guild),
 			]);
 		} else {
-			await verifyUser(interaction.user, interaction.guild, kthId);
+			await verifyUser(
+				interaction.user,
+				guild,
+				kthId,
+				clientIsLight(interaction.client)
+			);
 		}
 	} catch (error) {
 		console.warn(error);
@@ -68,4 +73,27 @@ export const handleVerifySubmit = async (
 	await interaction.editReply({
 		content: content,
 	});
-};
+}
+
+export async function handleVerifySubmit(
+	interaction: GuildChatInputCommandInteraction | GuildModalSubmitInteraction
+): Promise<void> {
+	if (interaction.isModalSubmit()) {
+		const verificationCode =
+			interaction.fields.getTextInputValue("verifySubmitCode");
+
+		await handleVerifySubmitBase(interaction, verificationCode);
+	} else if (interaction.isChatInputCommand()) {
+		const { options } = interaction;
+		const verificationCode = options.getString(
+			VerifySubmitVariables.VERIFICATION_CODE,
+			true
+		);
+
+		await handleVerifySubmitBase(interaction, verificationCode);
+	} else {
+		console.warn(
+			"Unexpected call to handleVerifyNollan(). Origin was neither a slash command, nor a modal submission."
+		);
+	}
+}

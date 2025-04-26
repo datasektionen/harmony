@@ -22,13 +22,17 @@ export const messageIsToken = (messageText: string): RegExpMatchArray | null =>
 export const verifyUser = async (
 	user: User,
 	guild: Guild,
-	kthId: string
+	kthId: string,
+	isLight: boolean
 ): Promise<void> => {
 	console.log(
 		`Verified user by kth email. kthid="${kthId}" user.id="${user.id}" user.username="${user.username}"`
 	);
 
 	await setRoleVerified(user, guild);
+
+	if (isLight) return;
+
 	const { year, yearRole } = await extractYearFromUser(kthId);
 	const userHasYearRole = await hasAnyYearRole(user, guild);
 

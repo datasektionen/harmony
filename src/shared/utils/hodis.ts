@@ -28,7 +28,8 @@ export async function extractYearFromUser(kthId: string): Promise<{
 		const yearTagWithDash = `${yearTag
 			.slice(0, 1)
 			.toUpperCase()}-${yearTag.slice(1)}`;
-		return { yearRole: yearTagWithDash, year: hodisUser.year };
+		const year = 2000 + parseInt(yearTag.slice(1));
+		return { yearRole: yearTagWithDash, year };
 	}
 
 	return { year: null, yearRole: null };
