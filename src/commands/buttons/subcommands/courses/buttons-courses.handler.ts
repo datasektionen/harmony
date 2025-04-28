@@ -11,6 +11,7 @@ import {
 	handleChannelAlias,
 	isMemberOfAlias,
 } from "../../../../shared/utils/channel-utils";
+import { hasRoleVerified } from "../../../../shared/utils/roles";
 
 export async function handleButtonsCourses(
 	interaction: GuildChatInputCommandInteraction
@@ -34,10 +35,22 @@ export async function handleButtonsCourses(
 export async function handleCourseButtonInteraction(
 	interaction: GuildButtonInteraction
 ): Promise<void> {
+	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+
+	const isVerified: boolean = await hasRoleVerified(
+		interaction.user,
+		interaction.guild
+	);
+	if (!isVerified) {
+		await interaction.editReply({
+			content: "Only verified users can join courses.",
+		});
+		return;
+	}
+
 	const courseCode = interaction.customId;
 	const alias = courseCode as AliasName;
 	if (aliasExists(alias)) {
-		await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 		const joining = !(await isMemberOfAlias(
 			interaction.guild,
 			interaction.user.id,
