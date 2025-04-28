@@ -13,7 +13,6 @@ import {
 } from "../../../../shared/utils/channel-utils";
 import { hasRoleVerified } from "../../../../shared/utils/roles";
 
-
 export async function handleButtonsCourses(
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> {
@@ -38,10 +37,13 @@ export async function handleCourseButtonInteraction(
 ): Promise<void> {
 	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-	const isVerified: boolean = await hasRoleVerified(interaction.user, interaction.guild);
+	const isVerified: boolean = await hasRoleVerified(
+		interaction.user,
+		interaction.guild
+	);
 	if (!isVerified) {
 		await interaction.editReply({
-			content: "Only verified users can join courses."
+			content: "Only verified users can join courses.",
 		});
 		return;
 	}
