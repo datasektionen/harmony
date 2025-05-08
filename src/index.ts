@@ -35,7 +35,8 @@ export const harmonyClient = new DiscordClient({ intents });
 
 export const harmonyLightClient = new LightDiscordClient({ intents });
 
-export let jobs: Map<string, {client: DiscordClient, job: CronJob}> = new Map();
+export let jobs: Map<string, { client: DiscordClient; job: CronJob }> =
+	new Map();
 
 async function main(): Promise<void> {
 	validateEnvironment();
@@ -43,9 +44,9 @@ async function main(): Promise<void> {
 	console.log("Initialized database");
 	if (process.env.DISCORD_BOT_TOKEN) {
 		harmonyClient.once("ready", () => {
-			console.log("Logged into Harmony")
+			console.log("Logged into Harmony");
 			jobs = initJobs(harmonyClient);
-			console.log("Instantiated cron-jobs.")
+			console.log("Instantiated cron-jobs.");
 		});
 		await harmonyClient.login(process.env.DISCORD_BOT_TOKEN);
 
