@@ -51,8 +51,8 @@ export async function updateDiscordDfunktRoles(
 	};
 	processedDiscordData: {
 		toAddToRole: Map<string, string[]>;
-    	toRemoveFromRole: Map<string, string[]>;
-	}
+		toRemoveFromRole: Map<string, string[]>;
+	};
 }> {
 	// Dfunkt
 	// GET
@@ -74,16 +74,24 @@ export async function updateDiscordDfunktRoles(
 	);
 	// POST
 	const modifiedUsers: Set<string> = new Set();
-	processedDiscordData.toAddToRole.forEach((roles,user) => modifiedUsers.add(user));
-	processedDiscordData.toRemoveFromRole.forEach((roles,user) => modifiedUsers.add(user));
+	processedDiscordData.toAddToRole.forEach((roles, user) =>
+		modifiedUsers.add(user)
+	);
+	processedDiscordData.toRemoveFromRole.forEach((roles, user) =>
+		modifiedUsers.add(user)
+	);
 	for (const userId of modifiedUsers) {
 		const member = await guild.members.fetch({ user: userId, force: true });
-		const finalRoles = new Set(member.roles.cache.map(role => role.id));
-		processedDiscordData.toAddToRole.has(userId) 
-			? processedDiscordData.toAddToRole.get(userId)!.forEach(role => finalRoles.add(role))
+		const finalRoles = new Set(member.roles.cache.map((role) => role.id));
+		processedDiscordData.toAddToRole.has(userId)
+			? processedDiscordData.toAddToRole
+					.get(userId)!
+					.forEach((role) => finalRoles.add(role))
 			: 1;
-		processedDiscordData.toRemoveFromRole.has(userId) 
-			? processedDiscordData.toRemoveFromRole.get(userId)!.forEach(role => finalRoles.delete(role))
+		processedDiscordData.toRemoveFromRole.has(userId)
+			? processedDiscordData.toRemoveFromRole
+					.get(userId)!
+					.forEach((role) => finalRoles.delete(role))
 			: 1;
 		await member.roles.set([...finalRoles]);
 	}
@@ -93,7 +101,7 @@ export async function updateDiscordDfunktRoles(
 			processedDfunktdata: processedDfunktdata,
 			dbUsers: dbUsers,
 			discordData: discordData,
-			processedDiscordData: processedDiscordData, 
+			processedDiscordData: processedDiscordData,
 		};
 }
 
@@ -197,9 +205,11 @@ function processDiscordData(
 	// These are already given in dfunkt-roles-mappings.ts as mappings from dfunkt role identifiers to Discord role Ids.
 	const fetchFailed: Set<string> = new Set();
 	// Functionary roles to add
-	
-	const usedDfunktToDiscordRoleMappings = testing ? testDfunktToDiscordRoleMappings : dfunktToDiscordRoleMappings;
-	
+
+	const usedDfunktToDiscordRoleMappings = testing
+		? testDfunktToDiscordRoleMappings
+		: dfunktToDiscordRoleMappings;
+
 	dfunktProcessedData.currentMandates.forEach(
 		(roles: DfunktRole[], kthid: string) => {
 			roles.forEach((role: DfunktRole) => {
@@ -212,20 +222,19 @@ function processDiscordData(
 										role.identifier
 									)!
 								)
-						: toAddToRole.set(
-								dfunktKthDiscordUsers.get(kthid)!,
-								[
-									usedDfunktToDiscordRoleMappings.get(
-										role.identifier
-									)!,
-								]
-							)
+						: toAddToRole.set(dfunktKthDiscordUsers.get(kthid)!, [
+								usedDfunktToDiscordRoleMappings.get(
+									role.identifier
+								)!,
+						  ])
 					: fetchFailed.add(kthid); // This should never happen
 			});
 		}
 	);
 
-	const usedDfunktGroupToDiscordRoleMapping = testing ? testDfunktGroupToDiscordRoleMapping : dfunktGroupToDiscordRoleMapping;
+	const usedDfunktGroupToDiscordRoleMapping = testing
+		? testDfunktGroupToDiscordRoleMapping
+		: dfunktGroupToDiscordRoleMapping;
 
 	// Group roles to add
 	dfunktProcessedData.currentGroups.forEach(
@@ -240,38 +249,37 @@ function processDiscordData(
 										groupIdentifier
 									)!
 								)
-						: toAddToRole.set(
-								dfunktKthDiscordUsers.get(kthid)!,
-								[
-									usedDfunktGroupToDiscordRoleMapping.get(
-										groupIdentifier
-									)!,
-								]
-							)
+						: toAddToRole.set(dfunktKthDiscordUsers.get(kthid)!, [
+								usedDfunktGroupToDiscordRoleMapping.get(
+									groupIdentifier
+								)!,
+						  ])
 					: fetchFailed.add(kthid); // This should never happen
 			});
 		}
 	);
 
-	const usedTestDiscordDfunktRole = testing ? testDiscordDfunktRole : discordDfunktRole;
+	const usedTestDiscordDfunktRole = testing
+		? testDiscordDfunktRole
+		: discordDfunktRole;
 
 	// 'dFunkt' role to add
-	dfunktProcessedData.dfunktDiscordRoleLegible.forEach(
-		(kthid: string) => {
-			dfunktKthDiscordUsers.has(kthid)
-				? toAddToRole.has(dfunktKthDiscordUsers.get(kthid)!)
-					? toAddToRole
-							.get(dfunktKthDiscordUsers.get(kthid)!)!
-							.push(usedTestDiscordDfunktRole)
-					: toAddToRole.set(dfunktKthDiscordUsers.get(kthid)!, [
+	dfunktProcessedData.dfunktDiscordRoleLegible.forEach((kthid: string) => {
+		dfunktKthDiscordUsers.has(kthid)
+			? toAddToRole.has(dfunktKthDiscordUsers.get(kthid)!)
+				? toAddToRole
+						.get(dfunktKthDiscordUsers.get(kthid)!)!
+						.push(usedTestDiscordDfunktRole)
+				: toAddToRole.set(dfunktKthDiscordUsers.get(kthid)!, [
 						usedTestDiscordDfunktRole,
-						])
-				: fetchFailed.add(kthid); // This should never happen
-		}
-	);
-	
-	const usedDiscordDfunktRolesIds = testing ? testDiscordDfunktRolesIds : discordDfunktRolesIds;
-	
+				  ])
+			: fetchFailed.add(kthid); // This should never happen
+	});
+
+	const usedDiscordDfunktRolesIds = testing
+		? testDiscordDfunktRolesIds
+		: discordDfunktRolesIds;
+
 	// Only have the relevant roles
 	const retainedRoles = discordData.guildRoles.filter((role, key) =>
 		usedDiscordDfunktRolesIds.includes(key)

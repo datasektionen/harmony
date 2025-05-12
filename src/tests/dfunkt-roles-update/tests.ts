@@ -46,8 +46,8 @@ export async function executeTestCase(
 	};
 	processedDiscordData: {
 		toAddToRole: Map<string, string[]>;
-    	toRemoveFromRole: Map<string, string[]>;
-	}
+		toRemoveFromRole: Map<string, string[]>;
+	};
 }> {
 	console.log(
 		"Test " + testCaseNr + " on Discord user ID " + testUserDiscordId
@@ -67,7 +67,7 @@ export async function executeTestCase(
 	let testDiscordMember = await guild.members.fetch({
 		user: testUserDiscordId,
 		force: true,
-	  });
+	});
 	let testUserRoleCache = await testDiscordMember.roles.cache;
 	// Remove the test user from the db
 	await removeUserFromDb(testUserDiscordId);
