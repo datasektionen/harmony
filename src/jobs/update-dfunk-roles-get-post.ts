@@ -38,7 +38,22 @@ import { getDiscordIdByKthid } from "../db/db";
 export async function updateDiscordDfunktRoles(
 	guild: Guild,
 	testing: boolean = false // For testing purposes only, remove after ensuring correctness
-): Promise<void> {
+): Promise<void | {
+	processedDfunktdata: {
+		currentMandates: Map<string, DfunktRole[]>;
+		currentGroups: Map<string, string[]>;
+		dfunktDiscordRoleLegible: Set<string>;
+	};
+	dbUsers: Map<string, string>;
+	discordData: {
+		guildRoles: Collection<string, DiscordRole>;
+		guildMembers: Collection<string, DiscordGuildMember>;
+	};
+	processedDiscordData: {
+		toAddToRole: Map<string, string[]>;
+    	toRemoveFromRole: Map<string, string[]>;
+	}
+}> {
 	// Dfunkt
 	// GET
 	const dfunktData = await fetchFromDfunktAPI();
@@ -63,6 +78,14 @@ export async function updateDiscordDfunktRoles(
 
 	for (const [userId, roleIds] of processedDiscordData.toRemoveFromRole)
 		await discordData.guildMembers.get(userId)!.roles.remove(roleIds);
+
+	if (testing)
+		return {
+			processedDfunktdata: processedDfunktdata,
+			dbUsers: dbUsers,
+			discordData: discordData,
+			processedDiscordData: processedDiscordData, 
+		};
 }
 
 /**
@@ -163,163 +186,87 @@ function processDiscordData(
 	const toAddToRole: Map<string, string[]> = new Map();
 	// Divide the task into functionary roles, group roles, and the 'dFunkt' role.
 	// These are already given in dfunkt-roles-mappings.ts as mappings from dfunkt role identifiers to Discord role Ids.
-
+	const fetchFailed: Set<string> = new Set();
 	// Functionary roles to add
-	if (testing) {
-		dfunktProcessedData.currentMandates.forEach(
-			(roles: DfunktRole[], kthid: string) => {
-				roles.forEach((role: DfunktRole) => {
-					dfunktKthDiscordUsers.has(kthid)
-						? toAddToRole.has(dfunktKthDiscordUsers.get(kthid)!)
-							? toAddToRole
-									.get(dfunktKthDiscordUsers.get(kthid)!)!
-									.push(
-										testDfunktToDiscordRoleMappings.get(
-											role.identifier
-										)!
-									)
-							: toAddToRole.set(
-									dfunktKthDiscordUsers.get(kthid)!,
-									[
-										testDfunktToDiscordRoleMappings.get(
-											role.identifier
-										)!,
-									]
-							  )
-						: console.log(
-								"Error fetching user with KTH ID " + kthid
-						  ); // This should never happen
-				});
-			}
-		);
-	} else {
-		dfunktProcessedData.currentMandates.forEach(
-			(roles: DfunktRole[], kthid: string) => {
-				roles.forEach((role: DfunktRole) => {
-					dfunktKthDiscordUsers.has(kthid)
-						? toAddToRole.has(dfunktKthDiscordUsers.get(kthid)!)
-							? toAddToRole
-									.get(dfunktKthDiscordUsers.get(kthid)!)!
-									.push(
-										dfunktToDiscordRoleMappings.get(
-											role.identifier
-										)!
-									)
-							: toAddToRole.set(
-									dfunktKthDiscordUsers.get(kthid)!,
-									[
-										dfunktToDiscordRoleMappings.get(
-											role.identifier
-										)!,
-									]
-							  )
-						: console.log(
-								"Error fetching user with KTH ID " + kthid
-						  ); // This should never happen
-				});
-			}
-		);
-	}
+	
+	const usedDfunktToDiscordRoleMappings = testing ? testDfunktToDiscordRoleMappings : dfunktToDiscordRoleMappings;
+	
+	dfunktProcessedData.currentMandates.forEach(
+		(roles: DfunktRole[], kthid: string) => {
+			roles.forEach((role: DfunktRole) => {
+				dfunktKthDiscordUsers.has(kthid)
+					? toAddToRole.has(dfunktKthDiscordUsers.get(kthid)!)
+						? toAddToRole
+								.get(dfunktKthDiscordUsers.get(kthid)!)!
+								.push(
+									usedDfunktToDiscordRoleMappings.get(
+										role.identifier
+									)!
+								)
+						: toAddToRole.set(
+								dfunktKthDiscordUsers.get(kthid)!,
+								[
+									usedDfunktToDiscordRoleMappings.get(
+										role.identifier
+									)!,
+								]
+							)
+					: fetchFailed.add(kthid); // This should never happen
+			});
+		}
+	);
+
+	const usedDfunktGroupToDiscordRoleMapping = testing ? testDfunktGroupToDiscordRoleMapping : dfunktGroupToDiscordRoleMapping;
 
 	// Group roles to add
-	if (testing) {
-		dfunktProcessedData.currentGroups.forEach(
-			(kthids: string[], groupIdentifier: string) => {
-				kthids.forEach((kthid: string) => {
-					dfunktKthDiscordUsers.has(kthid)
-						? toAddToRole.has(dfunktKthDiscordUsers.get(kthid)!)
-							? toAddToRole
-									.get(dfunktKthDiscordUsers.get(kthid)!)!
-									.push(
-										testDfunktGroupToDiscordRoleMapping.get(
-											groupIdentifier
-										)!
-									)
-							: toAddToRole.set(
-									dfunktKthDiscordUsers.get(kthid)!,
-									[
-										testDfunktGroupToDiscordRoleMapping.get(
-											groupIdentifier
-										)!,
-									]
-							  )
-						: console.log(
-								"Error fetching user with KTH ID " + kthid
-						  ); // This should never happen
-				});
-			}
-		);
-	} else {
-		dfunktProcessedData.currentGroups.forEach(
-			(kthids: string[], groupIdentifier: string) => {
-				kthids.forEach((kthid: string) => {
-					dfunktKthDiscordUsers.has(kthid)
-						? toAddToRole.has(dfunktKthDiscordUsers.get(kthid)!)
-							? toAddToRole
-									.get(dfunktKthDiscordUsers.get(kthid)!)!
-									.push(
-										dfunktGroupToDiscordRoleMapping.get(
-											groupIdentifier
-										)!
-									)
-							: toAddToRole.set(
-									dfunktKthDiscordUsers.get(kthid)!,
-									[
-										dfunktGroupToDiscordRoleMapping.get(
-											groupIdentifier
-										)!,
-									]
-							  )
-						: console.log(
-								"Error fetching user with KTH ID " + kthid
-						  ); // This should never happen
-				});
-			}
-		);
-	}
+	dfunktProcessedData.currentGroups.forEach(
+		(kthids: string[], groupIdentifier: string) => {
+			kthids.forEach((kthid: string) => {
+				dfunktKthDiscordUsers.has(kthid)
+					? toAddToRole.has(dfunktKthDiscordUsers.get(kthid)!)
+						? toAddToRole
+								.get(dfunktKthDiscordUsers.get(kthid)!)!
+								.push(
+									usedDfunktGroupToDiscordRoleMapping.get(
+										groupIdentifier
+									)!
+								)
+						: toAddToRole.set(
+								dfunktKthDiscordUsers.get(kthid)!,
+								[
+									usedDfunktGroupToDiscordRoleMapping.get(
+										groupIdentifier
+									)!,
+								]
+							)
+					: fetchFailed.add(kthid); // This should never happen
+			});
+		}
+	);
+
+	const usedTestDiscordDfunktRole = testing ? testDiscordDfunktRole : discordDfunktRole;
 
 	// 'dFunkt' role to add
-	if (testing) {
-		dfunktProcessedData.dfunktDiscordRoleLegible.forEach(
-			(kthid: string) => {
-				dfunktKthDiscordUsers.has(kthid)
-					? toAddToRole.has(dfunktKthDiscordUsers.get(kthid)!)
-						? toAddToRole
-								.get(dfunktKthDiscordUsers.get(kthid)!)!
-								.push(testDiscordDfunktRole)
-						: toAddToRole.set(dfunktKthDiscordUsers.get(kthid)!, [
-								testDiscordDfunktRole,
-						  ])
-					: console.log("Error fetching user with KTH ID " + kthid); // This should never happen
-			}
-		);
-	} else {
-		dfunktProcessedData.dfunktDiscordRoleLegible.forEach(
-			(kthid: string) => {
-				dfunktKthDiscordUsers.has(kthid)
-					? toAddToRole.has(dfunktKthDiscordUsers.get(kthid)!)
-						? toAddToRole
-								.get(dfunktKthDiscordUsers.get(kthid)!)!
-								.push(discordDfunktRole)
-						: toAddToRole.set(dfunktKthDiscordUsers.get(kthid)!, [
-								discordDfunktRole,
-						  ])
-					: console.log("Error fetching user with KTH ID " + kthid); // This should never happen
-			}
-		);
-	}
-
-	let retainedRoles;
+	dfunktProcessedData.dfunktDiscordRoleLegible.forEach(
+		(kthid: string) => {
+			dfunktKthDiscordUsers.has(kthid)
+				? toAddToRole.has(dfunktKthDiscordUsers.get(kthid)!)
+					? toAddToRole
+							.get(dfunktKthDiscordUsers.get(kthid)!)!
+							.push(usedTestDiscordDfunktRole)
+					: toAddToRole.set(dfunktKthDiscordUsers.get(kthid)!, [
+						usedTestDiscordDfunktRole,
+						])
+				: fetchFailed.add(kthid); // This should never happen
+		}
+	);
+	
+	const usedDiscordDfunktRolesIds = testing ? testDiscordDfunktRolesIds : discordDfunktRolesIds;
+	
 	// Only have the relevant roles
-	if (testing) {
-		retainedRoles = discordData.guildRoles.filter((role, key) =>
-			testDiscordDfunktRolesIds.includes(key)
-		);
-	} else {
-		retainedRoles = discordData.guildRoles.filter((role, key) =>
-			discordDfunktRolesIds.includes(key)
-		);
-	}
+	const retainedRoles = discordData.guildRoles.filter((role, key) =>
+		usedDiscordDfunktRolesIds.includes(key)
+	);
 
 	// Go through the members of each role and add them to be removed from the role if they do not
 	// appear in the list associated with them in toAddToRole as the user will have the role iff they should.
@@ -363,30 +310,24 @@ async function fetchFromDb(
 	// over either of them, and the set dfunktDiscordRoleLegible should be disjoint from the keysets of
 	// currentMandates and currentGroups.
 	const dfunktKthDiscordUsers: Map<string, string> = new Map();
+	const ignored: Set<string> = new Set();
 	for (const [kthid] of processedDfunktData.currentMandates) {
 		const resolvedDiscordId = await getDiscordIdByKthid(kthid);
 		if (resolvedDiscordId != null)
 			dfunktKthDiscordUsers.set(kthid, resolvedDiscordId);
-		else {
-			console.warn(
-				"Error fetching Discord ID for user with kthid " +
-					kthid +
-					", they will be ignored during the update."
-			);
-		}
+		else ignored.add(kthid);
 	}
 	for (const kthid of processedDfunktData.dfunktDiscordRoleLegible) {
 		const resolvedDiscordId = await getDiscordIdByKthid(kthid);
 		if (resolvedDiscordId != null)
 			dfunktKthDiscordUsers.set(kthid, resolvedDiscordId);
-		else {
-			console.warn(
-				"Error fetching Discord ID for user with kthid " +
-					kthid +
-					", they will be ignored during the update."
-			);
-		}
+		else ignored.add(kthid);
 	}
+	// console.warn(
+	// 	"Error fetching Discord ID for users with kthid: " +
+	// 		Array.from(ignored).join(", ") +
+	// 		"; they will be ignored during the update."
+	// );
 	return dfunktKthDiscordUsers;
 }
 
