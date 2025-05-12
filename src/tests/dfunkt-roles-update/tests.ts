@@ -64,7 +64,10 @@ export async function executeTestCase(
 				)
 	);
 	// Setup phase
-	let testDiscordMember = await guild.members.fetch(testUserDiscordId);
+	let testDiscordMember = await guild.members.fetch({
+		user: testUserDiscordId,
+		force: true,
+	  });
 	let testUserRoleCache = await testDiscordMember.roles.cache;
 	// Remove the test user from the db
 	await removeUserFromDb(testUserDiscordId);
@@ -74,7 +77,10 @@ export async function executeTestCase(
 	for (const roleId of testRoles) {
 		await testDiscordMember.roles.remove(roleId);
 	}
-	testDiscordMember = await guild.members.fetch(testUserDiscordId);
+	testDiscordMember = await guild.members.fetch({
+		user: testUserDiscordId,
+		force: true,
+	});
 	testUserRoleCache = await testDiscordMember.roles.cache;
 
 	console.log(
@@ -89,7 +95,10 @@ export async function executeTestCase(
 	for (const roleId of testCase.roles) {
 		await testDiscordMember.roles.add(roleId);
 	}
-	testDiscordMember = await guild.members.fetch(testUserDiscordId);
+	testDiscordMember = await guild.members.fetch({
+		user: testUserDiscordId,
+		force: true,
+	});
 	testUserRoleCache = await testDiscordMember.roles.cache;
 
 	console.log(
@@ -103,7 +112,10 @@ export async function executeTestCase(
 	// Execution
 	const testResults = await updateDiscordDfunktRoles(guild, true);
 	// Evaluation
-	testDiscordMember = await guild.members.fetch(testUserDiscordId);
+	testDiscordMember = await guild.members.fetch({
+		user: testUserDiscordId,
+		force: true,
+	});
 	testUserRoleCache = await testDiscordMember.roles.cache;
 	console.log(
 		"Roles for user " +
