@@ -1,4 +1,11 @@
-import { Guild, Client as DiscordClient } from "discord.js";
+import {
+	Guild,
+	Client as DiscordClient,
+	Collection,
+	Role as DiscordRole,
+	GuildMember as DiscordGuildMember,
+} from "discord.js";
+import { Role as DfunktRole } from "../../shared/utils/dfunkt-interfaces";
 import postgres, { PostgresError } from "postgres";
 import { insertUser } from "../../db/db";
 import { expectedResults, testCases, testRoles } from "./test_cases";
@@ -25,7 +32,23 @@ export async function executeTestCase(
 		roles: string[];
 	},
 	testCaseNr: number = 0
-): Promise<boolean> {
+): Promise<{
+	result: boolean;
+	processedDfunktdata: {
+		currentMandates: Map<string, DfunktRole[]>;
+		currentGroups: Map<string, string[]>;
+		dfunktDiscordRoleLegible: Set<string>;
+	};
+	dbUsers: Map<string, string>;
+	discordData: {
+		guildRoles: Collection<string, DiscordRole>;
+		guildMembers: Collection<string, DiscordGuildMember>;
+	};
+	processedDiscordData: {
+		toAddToRole: Map<string, string[]>;
+    	toRemoveFromRole: Map<string, string[]>;
+	}
+}> {
 	console.log(
 		"Test " + testCaseNr + " on Discord user ID " + testUserDiscordId
 	);
@@ -78,7 +101,7 @@ export async function executeTestCase(
 		console.log(role.id + " -> " + role.name);
 	}
 	// Execution
-	await updateDiscordDfunktRoles(guild, true);
+	const testResults = await updateDiscordDfunktRoles(guild, true);
 	// Evaluation
 	testDiscordMember = await guild.members.fetch(testUserDiscordId);
 	testUserRoleCache = await testDiscordMember.roles.cache;
@@ -96,7 +119,13 @@ export async function executeTestCase(
 	if (expected === undefined) {
 		console.error("Unexpected error: Error fetching expected test result.");
 		console.log("=========================");
-		return false;
+		return {
+			result: false,
+			processedDfunktdata: testResults!.processedDfunktdata,
+			dbUsers: testResults!.dbUsers,
+			discordData: testResults!.discordData,
+			processedDiscordData: testResults!.processedDiscordData,
+		};
 	} else {
 		const e = expected;
 		const hasAllRolesShouldHave = e.shouldHave.every((roleId) =>
@@ -119,11 +148,23 @@ export async function executeTestCase(
 						") has roles they should not have."
 				);
 			console.log("=========================");
-			return false;
+			return {
+				result: false,
+				processedDfunktdata: testResults!.processedDfunktdata,
+				dbUsers: testResults!.dbUsers,
+				discordData: testResults!.discordData,
+				processedDiscordData: testResults!.processedDiscordData,
+			};
 		} else {
 			console.log("Test passed");
 			console.log("=========================");
-			return true;
+			return {
+				result: true,
+				processedDfunktdata: testResults!.processedDfunktdata,
+				dbUsers: testResults!.dbUsers,
+				discordData: testResults!.discordData,
+				processedDiscordData: testResults!.processedDiscordData,
+			};
 		}
 	}
 }
