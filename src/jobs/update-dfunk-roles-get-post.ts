@@ -73,11 +73,20 @@ export async function updateDiscordDfunktRoles(
 		testing
 	);
 	// POST
-	for (const [userId, roleIds] of processedDiscordData.toAddToRole)
-		await discordData.guildMembers.get(userId)!.roles.add(roleIds);
-
-	for (const [userId, roleIds] of processedDiscordData.toRemoveFromRole)
-		await discordData.guildMembers.get(userId)!.roles.remove(roleIds);
+	const modifiedUsers: Set<string> = new Set();
+	processedDiscordData.toAddToRole.forEach((roles,user) => modifiedUsers.add(user));
+	processedDiscordData.toRemoveFromRole.forEach((roles,user) => modifiedUsers.add(user));
+	for (const userId of modifiedUsers) {
+		const member = await guild.members.fetch({ user: userId, force: true });
+		const finalRoles = new Set(member.roles.cache.map(role => role.id));
+		processedDiscordData.toAddToRole.has(userId) 
+			? processedDiscordData.toAddToRole.get(userId)!.forEach(role => finalRoles.add(role))
+			: 1;
+		processedDiscordData.toRemoveFromRole.has(userId) 
+			? processedDiscordData.toRemoveFromRole.get(userId)!.forEach(role => finalRoles.delete(role))
+			: 1;
+		await member.roles.set([...finalRoles]);
+	}
 
 	if (testing)
 		return {
@@ -181,7 +190,7 @@ function processDiscordData(
 	// This is already given in dfunkt-roles-mappings.ts
 	// Which users should be removed from the roles
 	// Which users should be added to the roles
-	// Map Discord role IDs to a list of user Discord Ids for both
+	// Map user Discord Ids to a list of Discord role IDs for both
 	const toRemoveFromRole: Map<string, string[]> = new Map();
 	const toAddToRole: Map<string, string[]> = new Map();
 	// Divide the task into functionary roles, group roles, and the 'dFunkt' role.
