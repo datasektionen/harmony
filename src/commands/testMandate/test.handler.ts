@@ -93,8 +93,8 @@ export const handleTest = async (
 				caseData.discordData.guildRoles.each(role => console.log("Users having " + role.name + ": " + role.members.map(member => member.displayName).join(", ")));
 				console.log("Users fetched: " + caseData.discordData.guildMembers.map(member => member.displayName).join(", "));	
 				caseData.discordData.guildMembers.each(member => console.log("(Cached) Roles of user " + member.displayName + ": " + member.roles.cache.map(role => role.name).join(", ")));
-				caseData.processedDiscordData.toAddToRole.forEach((users, role) => console.log("Add to role " + role + " users: " + users.join(", ")))
-				caseData.processedDiscordData.toRemoveFromRole.forEach((users, role) => console.log("Remove from role " + role + " users: " + users.join(", ")))
+				caseData.processedDiscordData.toAddToRole.forEach((roles, user) => console.log("To user " + user + " add roles: "  + roles.join(", ")))
+				caseData.processedDiscordData.toRemoveFromRole.forEach((roles, user) => console.log("To user " + user + " remove roles: " + roles.join(", ")))
 			}
 		)
 };
