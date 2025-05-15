@@ -10,6 +10,8 @@ import { translateMsgCommand } from "./translate/translateMsg.command";
 import { clubCommand } from "./club/club.command";
 import { messageCommand } from "./message/message.command";
 import { ContextMenuCommandBuilder, SlashCommandBuilder } from "discord.js";
+import { testCommand } from "./testMandate/test.command";
+import { updateDfunktCommand } from "./dfunktUpdate/dfunkt.command";
 import { kthIdCommand } from "./kthid/kthid.command";
 import { testCommand } from "./testMandate/test.command";
 import { updateDfunktCommand } from "./dfunktUpdate/dfunkt.command";
@@ -31,6 +33,8 @@ export const getOfficialBotCommands = async (): Promise<
 	translateMsgCommand,
 	clubCommand,
 	messageCommand,
+	testCommand,
+	updateDfunktCommand,
 	kthIdCommand,
 	nollegruppCommand,
 	testCommand,

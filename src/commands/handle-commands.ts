@@ -20,6 +20,8 @@ import {
 import { handleTranslateMsg } from "./translate/translateMsg.handler";
 import { handleClub } from "./club/club.handler";
 import { handleMessage } from "./message/message.handler";
+import { handleTest } from "./testMandate/test.handler";
+import { handleDfunkt } from "./dfunktUpdate/dfunkt.handler";
 import { BaseInteraction, MessageFlags, Interaction } from "discord.js";
 import { handleKthId } from "./kthid/kthid.handler";
 import {
@@ -166,6 +168,12 @@ const handleChatInputCommand = async (
 					return;
 				case CommandNames.MESSAGE:
 					await handleMessage(guildInteraction);
+					return;
+				case CommandNames.TEST:
+					await handleTest(guildInteraction);
+					return;
+				case CommandNames.UPDATE_DFUNKT:
+					await handleDfunkt(guildInteraction);
 					return;
 				case CommandNames.KTHID:
 					await handleKthId(guildInteraction);
