@@ -1,4 +1,3 @@
-// import { testCases } from "../../../tests/dfunkt-roles-update/test_cases";
 import { testCases } from "../../tests/dfunkt-roles-update/test_cases";
 import { executeTestCase } from "../../tests/dfunkt-roles-update/tests";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
