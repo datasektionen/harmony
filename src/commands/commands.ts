@@ -13,8 +13,6 @@ import { ContextMenuCommandBuilder, SlashCommandBuilder } from "discord.js";
 import { testCommand } from "./testMandate/test.command";
 import { updateDfunktCommand } from "./dfunktUpdate/dfunkt.command";
 import { kthIdCommand } from "./kthid/kthid.command";
-import { testCommand } from "./testMandate/test.command";
-import { updateDfunktCommand } from "./dfunktUpdate/dfunkt.command";
 
 type ApplicationCommandBuilder =
 	| SlashCommandBuilder
