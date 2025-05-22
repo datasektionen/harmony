@@ -1,13 +1,13 @@
-import { testCases } from "../../tests/dfunkt-roles-update/test_cases";
-import { executeTestCase } from "../../tests/dfunkt-roles-update/tests";
-import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
-import { Role as DfunktRole } from "../../shared/utils/dfunkt-interfaces";
+import { testCases } from "../../../../tests/dfunkt-roles-update/test_cases";
+import { executeTestCase } from "../../../../tests/dfunkt-roles-update/tests";
+import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
+import { Role as DfunktRole } from "../../../../shared/utils/dfunkt-interfaces";
 import {
 	Role as DiscordRole,
 	Collection,
 	GuildMember as DiscordGuildMember,
 } from "discord.js";
-export const handleTest = async (
+export const handleDfunkTest = async (
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	// const failed: number[] = [];
