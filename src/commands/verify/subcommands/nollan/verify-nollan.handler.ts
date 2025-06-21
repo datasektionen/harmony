@@ -8,9 +8,11 @@ import {
 } from "../../../../shared/utils/roles";
 import { VerifyNollanVariables } from "./verify-nollan.variables";
 import { MessageFlags } from "discord.js";
-import { getNollegruppNameByCode } from "../../../../db/db";
+import { getNollegruppNameByCode, insertNollan } from "../../../../db/db";
+import { isKthEmail } from "../util";
 
 export async function handleVerifyNollanBase(
+	email: string,
 	interaction: GuildChatInputCommandInteraction | GuildModalSubmitInteraction,
 	nolleKod: string
 ): Promise<void> {
@@ -28,8 +30,16 @@ export async function handleVerifyNollanBase(
 		return;
 	}
 
+	// Hopefully nØllan knows how to activate their mail address.
+	if (!isKthEmail(email)) {
+		await interaction.editReply({
+			content: "Var vänlig och skriv in en *riktig* KTH-mejladress, nØllan.",
+		});
+		return;
+	}
+
 	try {
-		// Check if nolleKod is valid
+		// Check if nolleKod is valid.
 		const nollegruppRoleName = await getNollegruppNameByCode(nolleKod);
 		if (nollegruppRoleName == null) {
 			await interaction.editReply({
@@ -48,6 +58,10 @@ export async function handleVerifyNollanBase(
 			content:
 				"Välkommen nØllan! Du har nu blivit tillagd i några kanaler, inklusive kanaler för de första kurserna. Ha kul med schlemandet!",
 		});
+
+		// Add nØllan to database.
+		const kthId = email.split("@")[0];
+		insertNollan(kthId, user.id);
 	} catch (error) {
 		console.warn(error);
 		await interaction.editReply({
@@ -62,18 +76,25 @@ export async function handleVerifyNollan(
 ): Promise<void> {
 	if (interaction.isModalSubmit()) {
 		const nolleKod = interaction.fields.getTextInputValue(
-			"VerifyNollanNollekod"
+			"verifyNollanNollekod"
+		);
+		const email = interaction.fields.getTextInputValue(
+			"verifyNollanEmail"
 		);
 
-		await handleVerifyNollanBase(interaction, nolleKod);
+		await handleVerifyNollanBase(email, interaction, nolleKod);
 	} else if (interaction.isChatInputCommand()) {
 		const { options } = interaction;
 		const nolleKod = options.getString(
 			VerifyNollanVariables.NOLLE_KOD,
 			true
 		);
+		const email = options.getString(
+			VerifyNollanVariables.EMAIL,
+			true
+		);
 
-		await handleVerifyNollanBase(interaction, nolleKod);
+		await handleVerifyNollanBase(email, interaction, nolleKod);
 	} else {
 		console.warn(
 			"Unexpected call to handleVerifyNollan(). Origin was neither a slash command, nor a modal submission."
