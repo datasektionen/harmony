@@ -14,7 +14,6 @@ export async function handleButtonsVerify(
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> {
 	const mottagning = await isDarkmode();
-
 	let labels: string[];
 
 	if (mottagning) {
@@ -88,13 +87,26 @@ export async function handleVerifyButtonInteraction(
 				.setCustomId(VerifyModalCustomIds.NOLLAN)
 				.setTitle("nØllan...");
 
+			const emailInput = new TextInputBuilder()
+				.setCustomId("verifyNollanEmail")
+				.setLabel("Vad är din KTH-mejladress, nØllan?")
+				.setStyle(TextInputStyle.Short)
+				.setRequired(true);
+
+			var actionRow =
+				new ActionRowBuilder<TextInputBuilder>().addComponents(
+					emailInput
+				);
+
+			modal.addComponents(actionRow);
+
 			const nollekodInput = new TextInputBuilder()
-				.setCustomId("VerifyNollanNollekod")
+				.setCustomId("verifyNollanNollekod")
 				.setLabel("Vad är din nØllekod, nØllan?")
 				.setStyle(TextInputStyle.Short)
 				.setRequired(true);
 
-			const actionRow =
+			var actionRow =
 				new ActionRowBuilder<TextInputBuilder>().addComponents(
 					nollekodInput
 				);

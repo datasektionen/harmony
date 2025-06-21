@@ -33,7 +33,8 @@ export async function handleVerifyNollanBase(
 	// Hopefully nØllan knows how to activate their mail address.
 	if (!isKthEmail(email)) {
 		await interaction.editReply({
-			content: "Var vänlig och skriv in en *riktig* KTH-mejladress, nØllan.",
+			content:
+				"Var vänlig och skriv in en *riktig* KTH-mejladress, nØllan.",
 		});
 		return;
 	}
@@ -78,9 +79,7 @@ export async function handleVerifyNollan(
 		const nolleKod = interaction.fields.getTextInputValue(
 			"verifyNollanNollekod"
 		);
-		const email = interaction.fields.getTextInputValue(
-			"verifyNollanEmail"
-		);
+		const email = interaction.fields.getTextInputValue("verifyNollanEmail");
 
 		await handleVerifyNollanBase(email, interaction, nolleKod);
 	} else if (interaction.isChatInputCommand()) {
@@ -89,10 +88,7 @@ export async function handleVerifyNollan(
 			VerifyNollanVariables.NOLLE_KOD,
 			true
 		);
-		const email = options.getString(
-			VerifyNollanVariables.EMAIL,
-			true
-		);
+		const email = options.getString(VerifyNollanVariables.EMAIL, true);
 
 		await handleVerifyNollanBase(email, interaction, nolleKod);
 	} else {

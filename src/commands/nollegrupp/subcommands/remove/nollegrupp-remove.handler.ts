@@ -5,7 +5,10 @@ import { NollegruppRemoveVariables } from "./nollegrupp-remove.variables";
 export async function handleNollegruppRemove(
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> {
-	const name = interaction.options.getString(NollegruppRemoveVariables.NAME, true);
+	const name = interaction.options.getString(
+		NollegruppRemoveVariables.NAME,
+		true
+	);
 
 	// name is never null.
 	if (name != null) {

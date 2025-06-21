@@ -125,10 +125,7 @@ export async function formatNollegruppData(): Promise<string> {
 	return output;
 }
 
-export async function insertNollan(
-	kthId: string,
-	discordId: string
-) {
+export async function insertNollan(kthId: string, discordId: string) {
 	try {
 		await sql`insert into nollan (kth_id, discord_id) values (${kthId}, ${discordId})`;
 	} catch (err) {

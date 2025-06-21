@@ -3,6 +3,7 @@ import * as db from "../../db/db";
 import { verifyUser } from "../../commands/verify/subcommands/util";
 import { isDangerOfNollan } from "./hodis";
 import { isDarkmode } from "./darkmode";
+import { setN0llanRole } from "./roles";
 
 export const userJoined = async (
 	member: GuildMember,
@@ -16,6 +17,17 @@ export const userJoined = async (
 			verifyUser(member.user, member.guild, kthId, isLight);
 		} catch (error) {
 			console.warn(error);
+		}
+	}
+
+	if (darkmode) {
+		let kthId = await db.getKthIdByNolleId(member.id);
+		if (kthId !== null && !isLight) {
+			try {
+				setN0llanRole(member.user, member.guild);
+			} catch (error) {
+				console.warn(error);
+			}
 		}
 	}
 };
