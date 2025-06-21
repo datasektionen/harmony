@@ -21,7 +21,7 @@ export const userJoined = async (
 	}
 
 	if (darkmode) {
-		let kthId = await db.getKthIdByNolleId(member.id);
+		const kthId = await db.getKthIdByNolleId(member.id);
 		if (kthId !== null && !isLight) {
 			try {
 				setN0llanRole(member.user, member.guild);

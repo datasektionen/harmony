@@ -93,12 +93,12 @@ export async function handleVerifyButtonInteraction(
 				.setStyle(TextInputStyle.Short)
 				.setRequired(true);
 
-			var actionRow =
+			const actionRow1 =
 				new ActionRowBuilder<TextInputBuilder>().addComponents(
 					emailInput
 				);
 
-			modal.addComponents(actionRow);
+			modal.addComponents(actionRow1);
 
 			const nollekodInput = new TextInputBuilder()
 				.setCustomId("verifyNollanNollekod")
@@ -106,12 +106,12 @@ export async function handleVerifyButtonInteraction(
 				.setStyle(TextInputStyle.Short)
 				.setRequired(true);
 
-			var actionRow =
+			const actionRow2 =
 				new ActionRowBuilder<TextInputBuilder>().addComponents(
 					nollekodInput
 				);
 
-			modal.addComponents(actionRow);
+			modal.addComponents(actionRow2);
 
 			break;
 		}
