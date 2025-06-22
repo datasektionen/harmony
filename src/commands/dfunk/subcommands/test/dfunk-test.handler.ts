@@ -1,7 +1,6 @@
 import { testCases } from "../../../../tests/dfunkt-roles-update/test_cases";
 import { executeTestCase } from "../../../../tests/dfunkt-roles-update/tests";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
-import { Role as DfunktRole } from "../../../../shared/utils/dfunkt-interfaces";
 import {
 	Role as DiscordRole,
 	Collection,
@@ -10,23 +9,22 @@ import {
 export const handleDfunkTest = async (
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
-	// const failed: number[] = [];
 	const failedData: Map<
 		number,
 		{
 			processedDfunktdata: {
-				currentMandates: Map<string, DfunktRole[]>;
 				currentGroups: Map<string, string[]>;
-				dfunktDiscordRoleLegible: Set<string>;
+				specialRoles: [
+					{
+						roleName: string;
+						specialRoleLegibles: Set<string>;
+					}
+				];
 			};
 			dbUsers: Map<string, string>;
 			discordData: {
 				guildRoles: Collection<string, DiscordRole>;
 				guildMembers: Collection<string, DiscordGuildMember>;
-			};
-			processedDiscordData: {
-				toAddToRole: Map<string, string[]>;
-				toRemoveFromRole: Map<string, string[]>;
 			};
 		}
 	> = new Map();
@@ -38,12 +36,10 @@ export const handleDfunkTest = async (
 			index + 1
 		);
 		if (!testResult.result) {
-			// failed.push(index + 1);
 			failedData.set(index + 1, {
 				processedDfunktdata: testResult.processedDfunktdata,
 				dbUsers: testResult.dbUsers,
 				discordData: testResult.discordData,
-				processedDiscordData: testResult.processedDiscordData,
 			});
 			break;
 		}
@@ -55,41 +51,23 @@ export const handleDfunkTest = async (
 		(
 			caseData: {
 				processedDfunktdata: {
-					currentMandates: Map<string, DfunktRole[]>;
 					currentGroups: Map<string, string[]>;
-					dfunktDiscordRoleLegible: Set<string>;
+					specialRoles: [
+						{
+							roleName: string;
+							specialRoleLegibles: Set<string>;
+						}
+					];
 				};
 				dbUsers: Map<string, string>;
 				discordData: {
 					guildRoles: Collection<string, DiscordRole>;
 					guildMembers: Collection<string, DiscordGuildMember>;
 				};
-				processedDiscordData: {
-					toAddToRole: Map<string, string[]>;
-					toRemoveFromRole: Map<string, string[]>;
-				};
 			},
 			caseNumber: number
 		) => {
 			console.log("Test case " + caseNumber + ": ");
-			console.log(
-				"Data from dfunkt:\n" +
-					caseData.processedDfunktdata.currentMandates.forEach(
-						(roles: DfunktRole[], kthid: string) => {
-							console.log(
-								"User with kthid " +
-									kthid +
-									" should have roles: " +
-									roles
-										.map(
-											(role: DfunktRole) =>
-												role.identifier
-										)
-										.join(", ")
-							);
-						}
-					)
-			);
 			console.log(
 				caseData.processedDfunktdata.currentGroups.forEach(
 					(users: string[], group: string) => {
@@ -101,12 +79,6 @@ export const handleDfunkTest = async (
 						);
 					}
 				)
-			);
-			console.log(
-				"The following users should have no current, but previous mandates (dfunkt role elegibles): " +
-					Array.from(
-						caseData.processedDfunktdata.dfunktDiscordRoleLegible
-					).join(", ")
 			);
 			console.log(
 				"Users fetched from database: " +
@@ -142,17 +114,6 @@ export const handleDfunkTest = async (
 						": " +
 						member.roles.cache.map((role) => role.name).join(", ")
 				)
-			);
-			caseData.processedDiscordData.toAddToRole.forEach((roles, user) =>
-				console.log(
-					"To user " + user + " add roles: " + roles.join(", ")
-				)
-			);
-			caseData.processedDiscordData.toRemoveFromRole.forEach(
-				(roles, user) =>
-					console.log(
-						"To user " + user + " remove roles: " + roles.join(", ")
-					)
 			);
 		}
 	);
