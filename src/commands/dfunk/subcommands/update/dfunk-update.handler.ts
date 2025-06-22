@@ -2,7 +2,7 @@ import { updateDiscordDfunkRoles } from "../../../../jobs/update-dfunk-roles-get
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 
 export const handleDfunkUpdate = async (
-    interaction: GuildChatInputCommandInteraction
+	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
-    await updateDiscordDfunkRoles(interaction.guild);
+	await updateDiscordDfunkRoles(interaction.guild);
 };

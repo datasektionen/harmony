@@ -37,11 +37,11 @@ const createUpdateDfunkRolesJob = (client: DiscordClient): CronJob => {
 
 	const onTick = async (): Promise<void> => {
 		try {
-			// Execute the update on each guild the bot is in 
+			// Execute the update on each guild the bot is in
 			// Is it a good idea to always make the bot do this no matter the server it is in?
 			// const guild = await client.guilds.fetch("687747877736546335"); // Konglig Datasektionen
 			const oAuthGuilds = await client.guilds.fetch();
-			for(const [, oAuthGuild] of oAuthGuilds){
+			for (const [, oAuthGuild] of oAuthGuilds) {
 				const guild = await oAuthGuild.fetch();
 				await updateDiscordDfunkRoles(guild);
 			}

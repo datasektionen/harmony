@@ -32,12 +32,14 @@ export async function executeTestCase(
 	testCaseNr: number = 0
 ): Promise<{
 	result: boolean;
-	processedDfunkData:{ 
-    	currentGroups: Map<string, string[]>;
-    	specialRoles: [{
-        	roleName: string;
-        	specialRoleLegibles: Set<string>;
-    	}];
+	processedDfunkData: {
+		currentGroups: Map<string, string[]>;
+		specialRoles: [
+			{
+				roleName: string;
+				specialRoleLegibles: Set<string>;
+			}
+		];
 	};
 	dbUsers: Map<string, string>;
 	discordData: {
@@ -49,10 +51,7 @@ export async function executeTestCase(
 		"Test " + testCaseNr + " on Discord user ID " + testUserDiscordId
 	);
 	console.log(
-		"KTH-ID: " +
-			testCase.kthid +
-			"; Initial Roles: " +
-			testCase.roles
+		"KTH-ID: " + testCase.kthid + "; Initial Roles: " + testCase.roles
 	);
 	// Setup phase
 	let testDiscordMember = await guild.members.fetch({

@@ -1,7 +1,4 @@
-import {
-	Guild,
-	Role as DiscordRole,
-} from "discord.js";
+import { Guild, Role as DiscordRole } from "discord.js";
 import {
 	Roles as DfunkRoles,
 	Role as DfunkRole,
@@ -11,16 +8,10 @@ import { getAllRoles } from "../shared/utils/dfunk";
 import { getDiscordIdByKthid } from "../db/db";
 import { getHiveGroupMembers, getHiveGroups } from "../shared/utils/hive";
 
-
 // List group and special dfunk-related roles (names), expand these lists accordingly if more special
 // roles are added in the future
-const groupRoleNames = [
-	"dFunk",
-	"D-rek",
-];
-const specialRoleNames = [
-	"dFunkt",
-];
+const groupRoleNames = ["dFunk", "D-rek"];
+const specialRoleNames = ["dFunkt"];
 // Map dfunk group identifiers to their corresponding Discord role's name
 const dfunkGroupToDiscordRoleMapping = new Map([
 	["dfunk", "dFunk"],
@@ -41,18 +32,22 @@ export async function updateDiscordDfunkRoles(
 	guild: Guild,
 	testing: boolean = false // For testing purposes only, remove after ensuring correctness
 ): Promise<void | {
-	processedDfunkData: Awaited<ReturnType<typeof processDfunkData>>,
-	dbUsers: typeof dfunkDiscordUsers,
-	discordData: { //ReturnType<Awaited<typeof fetchDiscordData>>
-		guildRoles: typeof guildRoles,
-		guildMembers: typeof guildMembers,
-	},
-	modifiedUsersMap: { //ReturnType<typeof processDiscordData>
-		toAddToRole: typeof toAdd,
-		toRemoveFromRole: typeof toRemove,
-	}
+	processedDfunkData: Awaited<ReturnType<typeof processDfunkData>>;
+	dbUsers: typeof dfunkDiscordUsers;
+	discordData: {
+		//ReturnType<Awaited<typeof fetchDiscordData>>
+		guildRoles: typeof guildRoles;
+		guildMembers: typeof guildMembers;
+	};
+	modifiedUsersMap: {
+		//ReturnType<typeof processDiscordData>
+		toAddToRole: typeof toAdd;
+		toRemoveFromRole: typeof toRemove;
+	};
 }> {
-	console.log("Running update on server " + guild.name + " (" + guild.id + ")");
+	console.log(
+		"Running update on server " + guild.name + " (" + guild.id + ")"
+	);
 	// Data
 	// Variables containing log info
 	const failedDatabaseKthIdQueries: Set<string> = new Set();
@@ -63,28 +58,30 @@ export async function updateDiscordDfunkRoles(
 	const toRemove: Map<string, string[]> = new Map();
 	// Fetch current Discord Role data
 	const guildRoles = await guild.roles.fetch();
-	const guildMembers = await guild.members.fetch();	
-	// Map of dfunk-related Discord roles' names to the roles themselves, useful to avoid 
+	const guildMembers = await guild.members.fetch();
+	// Map of dfunk-related Discord roles' names to the roles themselves, useful to avoid
 	// creation of duplicate roles in the case that these do not exist
 	const dfunkDiscordRoles: Map<string, DiscordRole> = new Map();
-	// Map of dfunk-related users' kthids to their Discord ID, useful to cache queries from database. 
+	// Map of dfunk-related users' kthids to their Discord ID, useful to cache queries from database.
 	const dfunkDiscordUsers: Map<string, string> = new Map();
 
 	// Helper functions
 	/**
 	 * Try finding a role in the guild with a given name **roleName** among the cached roles in
-	 * `guildRoles`, if no such role is found, create a new one with that name. As a side-effect, 
-	 * add this role to the scope structure `createdDiscordRoles` if created.  
+	 * `guildRoles`, if no such role is found, create a new one with that name. As a side-effect,
+	 * add this role to the scope structure `createdDiscordRoles` if created.
 	 * @param roleName The name of the role to search in the guild.
 	 * @returns The role if found on the server, or a new created role in the guild with said name .
 	 */
-	async function findRoleCreateByName(roleName: string): Promise<DiscordRole> {
-		let role = guildRoles.find(role => role.name === roleName);
+	async function findRoleCreateByName(
+		roleName: string
+	): Promise<DiscordRole> {
+		let role = guildRoles.find((role) => role.name === roleName);
 		if (role === undefined) {
 			role = await guild.roles.create({
 				name: roleName,
-  				color: "#ee2a7b",
-  				reason: "Role not found during dfunk update."
+				color: "#ee2a7b",
+				reason: "Role not found during dfunk update.",
 			});
 			createdDiscordRoles.add(roleName);
 		}
@@ -93,20 +90,24 @@ export async function updateDiscordDfunkRoles(
 	/**
 	 * Given a user's Kth-ID, try querying the database for its Discord ID and return it. If the query fails,
 	 * return null and store the kthid in `failedDatabaseKthIdQueries`, representing a query to a user kthid
-	 * not registered in the database. If the kthid was already cached in the `dfunkDiscordUsers` map, return 
+	 * not registered in the database. If the kthid was already cached in the `dfunkDiscordUsers` map, return
 	 * the value associated with the kthid in said map.
 	 * @param kthid Kth-ID of user to query
 	 * @returns The Discord ID of the user associated with the input Kth-ID, if it is registered in the
 	 * database. Otherwise return null.
 	 */
-	async function fetchUserFromDbCache(kthid: string) : Promise<string | null>{
-		if(!dfunkDiscordUsers.has(kthid)) {
+	async function fetchUserFromDbCache(kthid: string): Promise<string | null> {
+		if (!dfunkDiscordUsers.has(kthid)) {
 			const queryResult = await getDiscordIdByKthid(kthid);
-			if(queryResult !== null) { dfunkDiscordUsers.set(kthid, queryResult);}
-			else { failedDatabaseKthIdQueries.add(kthid);}
+			if (queryResult !== null) {
+				dfunkDiscordUsers.set(kthid, queryResult);
+			} else {
+				failedDatabaseKthIdQueries.add(kthid);
+			}
 			return queryResult;
+		} else {
+			return dfunkDiscordUsers.get(kthid)!;
 		}
-		else {return dfunkDiscordUsers.get(kthid)!;}
 	}
 
 	// Main Code
@@ -114,35 +115,42 @@ export async function updateDiscordDfunkRoles(
 	// Fetch kthid of users and mandate roles these should currently have from Hive,
 	// Construct a list of roles relevant to the update
 	const hiveTagGroups = await getHiveGroups("discord-role");
-	
+
 	for (const tagGroup of hiveTagGroups) {
 		// kthids of users with this mandate
-		const groupMembers = await getHiveGroupMembers(tagGroup.group_id, tagGroup.group_domain);
+		const groupMembers = await getHiveGroupMembers(
+			tagGroup.group_id,
+			tagGroup.group_domain
+		);
 		// Find role by name
-		const dfunkDiscordRole = await findRoleCreateByName(tagGroup.tag_content);
+		const dfunkDiscordRole = await findRoleCreateByName(
+			tagGroup.tag_content
+		);
 		// Add role to the mapping for unique roles
 		!dfunkDiscordRoles.has(tagGroup.tag_content)
-			? dfunkDiscordRoles.set(tagGroup.tag_content,dfunkDiscordRole)
+			? dfunkDiscordRoles.set(tagGroup.tag_content, dfunkDiscordRole)
 			: 1;
 		// If user in database, update the ´toAdd´ map, use/update `dfunkDiscordUsers` for caching
 		for (const memberKthId of groupMembers) {
 			const memberDiscordId = await fetchUserFromDbCache(memberKthId);
-			if(memberDiscordId === null) {continue;} // Skip user if not found in database
+			if (memberDiscordId === null) {
+				continue;
+			} // Skip user if not found in database
 			toAdd.has(memberDiscordId)
 				? toAdd.get(memberDiscordId)!.push(dfunkDiscordRole.name)
-				: toAdd.set(memberDiscordId,[dfunkDiscordRole.name]);
+				: toAdd.set(memberDiscordId, [dfunkDiscordRole.name]);
 		}
 	}
 	// Check that the group and special roles exist in the server, else create them; add them
 	// to `dfunkDiscordRoles`.
-	for(const groupRoleName of groupRoleNames){
+	for (const groupRoleName of groupRoleNames) {
 		const role = await findRoleCreateByName(groupRoleName);
 		// Assumption: role names for dfunk-related roles are unique
 		!dfunkDiscordRoles.has(groupRoleName)
 			? dfunkDiscordRoles.set(groupRoleName, role)
 			: 1;
 	}
-	for(const specialRoleName of specialRoleNames){
+	for (const specialRoleName of specialRoleNames) {
 		const role = await findRoleCreateByName(specialRoleName);
 		// Assumption: role names for dfunk-related roles are unique
 		!dfunkDiscordRoles.has(specialRoleName)
@@ -154,64 +162,84 @@ export async function updateDiscordDfunkRoles(
 	const processedDfunkData = await processDfunkData();
 
 	// Update `toAdd` for dfunk group roles
-	for(const [dfunkRoleIdentifier, userKthids] of processedDfunkData.currentGroups) {
+	for (const [
+		dfunkRoleIdentifier,
+		userKthids,
+	] of processedDfunkData.currentGroups) {
 		// Check if some dfunk group is not represented in `dfunkGroupToDiscordRoleMapping`
-		if(!dfunkGroupToDiscordRoleMapping.has(dfunkRoleIdentifier)) {
+		if (!dfunkGroupToDiscordRoleMapping.has(dfunkRoleIdentifier)) {
 			dfunkGroupRolesNotUpdated.add(dfunkRoleIdentifier);
 			continue;
 		}
 		for (const kthid of userKthids) {
 			const memberDiscordId = await fetchUserFromDbCache(kthid);
-			if(memberDiscordId === null) {continue;} // Skip user if not found in database
+			if (memberDiscordId === null) {
+				continue;
+			} // Skip user if not found in database
 			toAdd.has(memberDiscordId)
-				? toAdd.get(memberDiscordId)!.push(dfunkGroupToDiscordRoleMapping.get(dfunkRoleIdentifier)!)
-				: toAdd.set(memberDiscordId,[dfunkGroupToDiscordRoleMapping.get(dfunkRoleIdentifier)!]);	
+				? toAdd
+						.get(memberDiscordId)!
+						.push(
+							dfunkGroupToDiscordRoleMapping.get(
+								dfunkRoleIdentifier
+							)!
+						)
+				: toAdd.set(memberDiscordId, [
+						dfunkGroupToDiscordRoleMapping.get(
+							dfunkRoleIdentifier
+						)!,
+				  ]);
 		}
 	}
 
 	// Update `toAdd` for dfunk special roles
-	for(const specialRole of processedDfunkData.specialRoles) {
+	for (const specialRole of processedDfunkData.specialRoles) {
 		for (const kthid of specialRole.specialRoleLegibles) {
 			const memberDiscordId = await fetchUserFromDbCache(kthid);
-			if(memberDiscordId === null) {continue;} // Skip user if not found in database
+			if (memberDiscordId === null) {
+				continue;
+			} // Skip user if not found in database
 			toAdd.has(memberDiscordId)
 				? toAdd.get(memberDiscordId)!.push(specialRole.roleName)
-				: toAdd.set(memberDiscordId,[specialRole.roleName]);	
+				: toAdd.set(memberDiscordId, [specialRole.roleName]);
 		}
 	}
 	// Update the `toRemove` map by checking all members of roles in `dfunkDiscordRoles` and marking
 	// those that should not have a role
-	for(const [roleName, role] of dfunkDiscordRoles) {
-		role
-			.members
+	for (const [roleName, role] of dfunkDiscordRoles) {
+		role.members
 			// Key either not existing or the role's name not in the key's associated list.
-			.filter((member, memberId) => !toAdd.has(memberId) || !toAdd.get(memberId)!.includes(roleName)) 
+			.filter(
+				(member, memberId) =>
+					!toAdd.has(memberId) ||
+					!toAdd.get(memberId)!.includes(roleName)
+			)
 			.forEach((member, memberId) => {
 				toRemove.has(memberId)
 					? toRemove.get(memberId)!.push(roleName)
-					: toRemove.set(memberId,[roleName]);
-			})
+					: toRemove.set(memberId, [roleName]);
+			});
 	}
 	// POST
 	const modifiedUsers: Set<string> = new Set();
-	toAdd.forEach((roles, user) =>
-		modifiedUsers.add(user)
-	);
-	toRemove.forEach((roles, user) =>
-		modifiedUsers.add(user)
-	);
+	toAdd.forEach((roles, user) => modifiedUsers.add(user));
+	toRemove.forEach((roles, user) => modifiedUsers.add(user));
 	for (const userId of modifiedUsers) {
 		const member = await guild.members.fetch({ user: userId, force: true });
 		const finalRoles = new Set(member.roles.cache.map((role) => role.id));
 		toAdd.has(userId)
 			? toAdd
-				.get(userId)!
-				.forEach((roleName) => finalRoles.add(dfunkDiscordRoles.get(roleName)!.id))
+					.get(userId)!
+					.forEach((roleName) =>
+						finalRoles.add(dfunkDiscordRoles.get(roleName)!.id)
+					)
 			: 1;
 		toRemove.has(userId)
 			? toRemove
-				.get(userId)!
-				.forEach((roleName) => finalRoles.delete(dfunkDiscordRoles.get(roleName)!.id))
+					.get(userId)!
+					.forEach((roleName) =>
+						finalRoles.delete(dfunkDiscordRoles.get(roleName)!.id)
+					)
 			: 1;
 		await member.roles.set([...finalRoles]);
 	}
@@ -219,26 +247,29 @@ export async function updateDiscordDfunkRoles(
 	// Print log data
 	console.log(
 		"Users (kthid) not updated (were not present in database): " +
-		Array.from(failedDatabaseKthIdQueries).join(", ") +
-		"."
+			Array.from(failedDatabaseKthIdQueries).join(", ") +
+			"."
 	);
 	console.log(
 		"Dfunk group roles (identifiers) not updated (they were not in `dfunkGroupToDiscordRoleMapping`): " +
-		Array.from(dfunkGroupRolesNotUpdated).join(", ") +
-		"."
+			Array.from(dfunkGroupRolesNotUpdated).join(", ") +
+			"."
 	);
 	console.log(
 		"Roles created during update (roles with names specified by Hive not in server during update): " +
-		Array.from(createdDiscordRoles).join(", ") +
-		"."
+			Array.from(createdDiscordRoles).join(", ") +
+			"."
 	);
 
 	if (testing)
 		return {
 			processedDfunkData: processedDfunkData,
 			dbUsers: dfunkDiscordUsers, //dbUsers,
-			discordData: {guildMembers:guildMembers, guildRoles:guildRoles}, // discordData,
-			modifiedUsersMap: {toAddToRole: toAdd, toRemoveFromRole: toRemove}, // processedDiscordData,
+			discordData: { guildMembers: guildMembers, guildRoles: guildRoles }, // discordData,
+			modifiedUsersMap: {
+				toAddToRole: toAdd,
+				toRemoveFromRole: toRemove,
+			}, // processedDiscordData,
 		};
 }
 /**
@@ -257,7 +288,7 @@ async function processDfunkData(): Promise<{
 		}
 	];
 }> {
-	const dfunkData = await fetchFromDfunkAPI();  
+	const dfunkData = await fetchFromDfunkAPI();
 	const currentGroups = getGroupsUpdate(dfunkData);
 	const specialRoles = getSpecialRolesUpdate(dfunkData);
 
@@ -270,10 +301,9 @@ async function processDfunkData(): Promise<{
  * Process the data fetched from the dfunk API to determine the role updates, more specifically those concerning
  * current functionary groups.
  * @param dfunkData The data fetched from the dfunk API by the **fetchFromDfunkAPI()** function
- * @returns A map of which users (kthid) are in which dfunk groups (list of dfunk groups' identifiers). 
+ * @returns A map of which users (kthid) are in which dfunk groups (list of dfunk groups' identifiers).
  */
 function getGroupsUpdate(dfunkData: DfunkRoles): Map<string, string[]> {
-	
 	// What is/are their functionary group?
 	// Make this as a map from functionary group identifiers to a list of kthids. Only those with current mandates
 	// are expected to be in this map
@@ -302,15 +332,13 @@ function getGroupsUpdate(dfunkData: DfunkRoles): Map<string, string[]> {
  * special discord roles. Expand this function if more special roles are to be considered in the future.
  * @param dfunkData The data fetched from the dfunk API by the **fetchFromDfunkAPI()** function
  * @returns A list of objects, each with two attributes each:
- *  - **roleName**: The name of the special role on Discord, containing different structures relevant to the assignment of special roles. 
- *  - **specialRoleLegibles**: A set of users (kthids) of the users that should have the special role. 
+ *  - **roleName**: The name of the special role on Discord, containing different structures relevant to the assignment of special roles.
+ *  - **specialRoleLegibles**: A set of users (kthids) of the users that should have the special role.
  */
-function getSpecialRolesUpdate(
-	dfunkData: DfunkRoles, 
-): [
+function getSpecialRolesUpdate(dfunkData: DfunkRoles): [
 	{
 		roleName: string;
-		specialRoleLegibles: Set<string>; 
+		specialRoleLegibles: Set<string>;
 	}
 ] {
 	// 'dFunkt' role
@@ -341,7 +369,7 @@ function getSpecialRolesUpdate(
 	return [
 		{
 			roleName: "dFunkt",
-			specialRoleLegibles: dfunkDiscordRoleLegible
+			specialRoleLegibles: dfunkDiscordRoleLegible,
 		},
 	];
 }
@@ -349,9 +377,11 @@ function getSpecialRolesUpdate(
  * Process the data fetched from the dfunk API to determine the current dfunk mandates, for the purposes
  * of determining the users that should have special roles (like 'dFunkt').
  * @param dfunkData The data fetched from the dfunk API by the **fetchFromDfunkAPI()** function
- * @returns A map of which users (kthid) have which dfunk mandate roles (list of dfunk roles). 
+ * @returns A map of which users (kthid) have which dfunk mandate roles (list of dfunk roles).
  */
-function getCurrentDfunkMandates(dfunkData: DfunkRoles): Map<string, DfunkRoles> {
+function getCurrentDfunkMandates(
+	dfunkData: DfunkRoles
+): Map<string, DfunkRoles> {
 	// Who has which functionary role currently?
 	// Make this as a map from kthids to a list of roles. Only those who have some mandate currently are
 	// expected to show up as keys of this mapping. Those with no current mandates should have an empty list associated.

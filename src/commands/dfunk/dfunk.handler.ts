@@ -4,7 +4,6 @@ import { DfunkSubcommands } from "./dfunk-subcommands";
 import { handleDfunkTest } from "./subcommands/test/dfunk-test.handler";
 import { handleDfunkUpdate } from "./subcommands/update/dfunk-update.handler";
 
-
 export async function handleDfunk(
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> {

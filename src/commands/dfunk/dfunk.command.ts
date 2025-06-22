@@ -10,17 +10,13 @@ const command = new SlashCommandBuilder()
 command.addSubcommand((subCommand) =>
 	subCommand
 		.setName(DfunkSubcommands.UPDATE)
-		.setDescription(
-			"Manually start the dfunk role update routine."
-		)
+		.setDescription("Manually start the dfunk role update routine.")
 );
 
 command.addSubcommand((subCommand) =>
 	subCommand
 		.setName(DfunkSubcommands.TEST)
-		.setDescription(
-			"Start the dfunk role update test routine."
-		)
+		.setDescription("Start the dfunk role update test routine.")
 );
 
 export const dfunkCommand = command;
