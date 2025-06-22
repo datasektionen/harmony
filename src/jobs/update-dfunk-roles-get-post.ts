@@ -41,7 +41,7 @@ export async function updateDiscordDfunkRoles(
 	guild: Guild,
 	testing: boolean = false // For testing purposes only, remove after ensuring correctness
 ): Promise<void | {
-	processedDfunkdata: Awaited<ReturnType<typeof processDfunkData>>,
+	processedDfunkData: Awaited<ReturnType<typeof processDfunkData>>,
 	dbUsers: typeof dfunkDiscordUsers,
 	discordData: { //ReturnType<Awaited<typeof fetchDiscordData>>
 		guildRoles: typeof guildRoles,
@@ -234,7 +234,7 @@ export async function updateDiscordDfunkRoles(
 
 	if (testing)
 		return {
-			processedDfunkdata: processedDfunkData,
+			processedDfunkData: processedDfunkData,
 			dbUsers: dfunkDiscordUsers, //dbUsers,
 			discordData: {guildMembers:guildMembers, guildRoles:guildRoles}, // discordData,
 			modifiedUsersMap: {toAddToRole: toAdd, toRemoveFromRole: toRemove}, // processedDiscordData,

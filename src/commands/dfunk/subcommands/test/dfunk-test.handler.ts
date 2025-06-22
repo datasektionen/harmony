@@ -12,7 +12,7 @@ export const handleDfunkTest = async (
 	const failedData: Map<
 		number,
 		{
-			processedDfunkdata: {
+			processedDfunkData: {
 				currentGroups: Map<string, string[]>;
 				specialRoles: [
 					{
@@ -37,7 +37,7 @@ export const handleDfunkTest = async (
 		);
 		if (!testResult.result) {
 			failedData.set(index + 1, {
-				processedDfunkdata: testResult.processedDfunkdata,
+				processedDfunkData: testResult.processedDfunkData,
 				dbUsers: testResult.dbUsers,
 				discordData: testResult.discordData,
 			});
@@ -50,7 +50,7 @@ export const handleDfunkTest = async (
 	failedData.forEach(
 		(
 			caseData: {
-				processedDfunkdata: {
+				processedDfunkData: {
 					currentGroups: Map<string, string[]>;
 					specialRoles: [
 						{
@@ -69,7 +69,7 @@ export const handleDfunkTest = async (
 		) => {
 			console.log("Test case " + caseNumber + ": ");
 			console.log(
-				caseData.processedDfunkdata.currentGroups.forEach(
+				caseData.processedDfunkData.currentGroups.forEach(
 					(users: string[], group: string) => {
 						console.log(
 							"The group " +
