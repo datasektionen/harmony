@@ -52,6 +52,7 @@ export async function updateDiscordDfunkRoles(
 		toRemoveFromRole: typeof toRemove,
 	}
 }> {
+	console.log("Running update on server " + guild.name + " (" + guild.id + ")");
 	// Data
 	// Variables containing log info
 	const failedDatabaseKthIdQueries: Set<string> = new Set();

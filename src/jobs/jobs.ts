@@ -1,7 +1,7 @@
 import { CronJob } from "cron";
 // import { testCases } from "../tests/dfunk-roles-update/test_cases"; // For testing purposes
 // import { createTestUpdateDfunkRolesJob} from "../tests/dfunk-roles-update/tests"; // For testing purposes
-import { Client as DiscordClient } from "discord.js";
+import { Client as DiscordClient, FetchGuildOptions } from "discord.js";
 import { updateDiscordDfunkRoles } from "./update-dfunk-roles-get-post";
 
 export function initJobs(
@@ -30,13 +30,21 @@ const createUpdateDfunkRolesJob = (client: DiscordClient): CronJob => {
 	let retryCount = 0;
 	let job: CronJob;
 
-	const originalCronTime = "0 0 * * 6"; // Saturday 12:00 AM
+	// const originalCronTime = "0 0 * * 6"; // Saturday 12:00 AM
+
+	const originalCronTime = "*/3 * * * *"; // Every 3 minutes
 	const retryCronTime = "* * * * *"; // every minute
 
 	const onTick = async (): Promise<void> => {
 		try {
-			const guild = await client.guilds.fetch("687747877736546335"); // Konglig Datasektionen
-			await updateDiscordDfunkRoles(guild);
+			// Execute the update on each guild the bot is in 
+			// Is it a good idea to always make the bot do this no matter the server it is in?
+			// const guild = await client.guilds.fetch("687747877736546335"); // Konglig Datasektionen
+			const oAuthGuilds = await client.guilds.fetch();
+			for(const [, oAuthGuild] of oAuthGuilds){
+				const guild = await oAuthGuild.fetch();
+				await updateDiscordDfunkRoles(guild);
+			}
 			retryCount = 0; // Reset on success
 		} catch (err) {
 			console.error("Job error:", err);
