@@ -17,7 +17,8 @@ function validateEnvironment(): void {
 		!process.env.SPAM_API_TOKEN ||
 		(!process.env.DISCORD_BOT_TOKEN &&
 			!process.env.DISCORD_LIGHT_BOT_TOKEN) ||
-		!process.env.DATABASE_URL
+		!process.env.DATABASE_URL ||
+		!process.env.HIVE
 	) {
 		throw new Error("Missing proper configuration!");
 	}
@@ -72,7 +73,6 @@ async function main(): Promise<void> {
 			await handleInteractions(interaction);
 		});
 	}
-
 	await registerCommands();
 }
 
