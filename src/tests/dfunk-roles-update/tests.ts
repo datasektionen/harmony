@@ -5,12 +5,10 @@ import {
 	Role as DiscordRole,
 	GuildMember as DiscordGuildMember,
 } from "discord.js";
-// import { Role as DfunktRole } from "../../shared/utils/dfunkt-interfaces";
 import postgres, { PostgresError } from "postgres";
 import { insertUser } from "../../db/db";
 import { expectedResults, testCases, testRoles } from "./test_cases";
-import { updateDiscordDfunktRoles } from "../../jobs/update-dfunk-roles-get-post";
-import { testDiscordRoleToDfunktMapping } from "./test-dfunkt-roles-mapping";
+import { updateDiscordDfunkRoles } from "../../jobs/update-dfunk-roles-get-post";
 import { CronJob } from "cron";
 
 const sql = postgres(process.env.DATABASE_URL!, {
@@ -34,7 +32,7 @@ export async function executeTestCase(
 	testCaseNr: number = 0
 ): Promise<{
 	result: boolean;
-	processedDfunktdata:{ 
+	processedDfunkData:{ 
     	currentGroups: Map<string, string[]>;
     	specialRoles: [{
         	roleName: string;
@@ -55,11 +53,6 @@ export async function executeTestCase(
 			testCase.kthid +
 			"; Initial Roles: " +
 			testCase.roles
-				.map((roleId) => testDiscordRoleToDfunktMapping.get(roleId))
-				.filter(
-					(roleIdentifier): roleIdentifier is string[] =>
-						roleIdentifier !== undefined
-				)
 	);
 	// Setup phase
 	let testDiscordMember = await guild.members.fetch({
@@ -108,7 +101,7 @@ export async function executeTestCase(
 		console.log(role.id + " -> " + role.name);
 	}
 	// Execution
-	const testResults = await updateDiscordDfunktRoles(guild, true);
+	const testResults = await updateDiscordDfunkRoles(guild, true);
 	// Evaluation
 	testDiscordMember = await guild.members.fetch({
 		user: testUserDiscordId,
@@ -131,7 +124,7 @@ export async function executeTestCase(
 		console.log("=========================");
 		return {
 			result: false,
-			processedDfunktdata: testResults!.processedDfunktdata,
+			processedDfunkData: testResults!.processedDfunkData,
 			dbUsers: testResults!.dbUsers,
 			discordData: testResults!.discordData,
 		};
@@ -159,7 +152,7 @@ export async function executeTestCase(
 			console.log("=========================");
 			return {
 				result: false,
-				processedDfunktdata: testResults!.processedDfunktdata,
+				processedDfunkData: testResults!.processedDfunkData,
 				dbUsers: testResults!.dbUsers,
 				discordData: testResults!.discordData,
 			};
@@ -168,7 +161,7 @@ export async function executeTestCase(
 			console.log("=========================");
 			return {
 				result: true,
-				processedDfunktdata: testResults!.processedDfunktdata,
+				processedDfunkData: testResults!.processedDfunkData,
 				dbUsers: testResults!.dbUsers,
 				discordData: testResults!.discordData,
 			};
@@ -226,4 +219,4 @@ export const createTestUpdateDfunktRolesJob = (
 	return job;
 };
 
-export { updateDiscordDfunktRoles };
+export { updateDiscordDfunkRoles };
