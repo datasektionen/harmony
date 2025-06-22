@@ -1,4 +1,4 @@
-import { UserMandates, RoleMandates, Roles, Users } from "./dfunkt-interfaces";
+import { UserMandates, RoleMandates, Roles, Users } from "./dfunk-interfaces";
 
 const dfunktEndpoint: string = "https://dfunkt.datasektionen.se/";
 

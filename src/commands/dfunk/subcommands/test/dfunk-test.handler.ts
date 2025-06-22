@@ -1,5 +1,5 @@
-import { testCases } from "../../../../tests/dfunkt-roles-update/test_cases";
-import { executeTestCase } from "../../../../tests/dfunkt-roles-update/tests";
+import { testCases } from "../../../../tests/dfunk-roles-update/test_cases";
+import { executeTestCase } from "../../../../tests/dfunk-roles-update/tests";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 import {
 	Role as DiscordRole,
@@ -12,7 +12,7 @@ export const handleDfunkTest = async (
 	const failedData: Map<
 		number,
 		{
-			processedDfunktdata: {
+			processedDfunkdata: {
 				currentGroups: Map<string, string[]>;
 				specialRoles: [
 					{
@@ -37,7 +37,7 @@ export const handleDfunkTest = async (
 		);
 		if (!testResult.result) {
 			failedData.set(index + 1, {
-				processedDfunktdata: testResult.processedDfunktdata,
+				processedDfunkdata: testResult.processedDfunkdata,
 				dbUsers: testResult.dbUsers,
 				discordData: testResult.discordData,
 			});
@@ -50,7 +50,7 @@ export const handleDfunkTest = async (
 	failedData.forEach(
 		(
 			caseData: {
-				processedDfunktdata: {
+				processedDfunkdata: {
 					currentGroups: Map<string, string[]>;
 					specialRoles: [
 						{
@@ -69,7 +69,7 @@ export const handleDfunkTest = async (
 		) => {
 			console.log("Test case " + caseNumber + ": ");
 			console.log(
-				caseData.processedDfunktdata.currentGroups.forEach(
+				caseData.processedDfunkdata.currentGroups.forEach(
 					(users: string[], group: string) => {
 						console.log(
 							"The group " +

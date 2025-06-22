@@ -11,7 +11,7 @@ command.addSubcommand((subCommand) =>
 	subCommand
 		.setName(DfunkSubcommands.UPDATE)
 		.setDescription(
-			"Manually start the dfunkt role update routine."
+			"Manually start the dfunk role update routine."
 		)
 );
 
@@ -19,7 +19,7 @@ command.addSubcommand((subCommand) =>
 	subCommand
 		.setName(DfunkSubcommands.TEST)
 		.setDescription(
-			"Start the dfunkt role update test routine."
+			"Start the dfunk role update test routine."
 		)
 );
 

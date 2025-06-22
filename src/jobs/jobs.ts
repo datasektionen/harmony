@@ -1,8 +1,8 @@
 import { CronJob } from "cron";
-// import { testCases } from "../tests/dfunkt-roles-update/test_cases"; // For testing purposes
-// import { createTestUpdateDfunktRolesJob} from "../tests/dfunkt-roles-update/tests"; // For testing purposes
+// import { testCases } from "../tests/dfunk-roles-update/test_cases"; // For testing purposes
+// import { createTestUpdateDfunkRolesJob} from "../tests/dfunk-roles-update/tests"; // For testing purposes
 import { Client as DiscordClient } from "discord.js";
-import { updateDiscordDfunktRoles } from "./update-dfunk-roles-get-post";
+import { updateDiscordDfunkRoles } from "./update-dfunk-roles-get-post";
 
 export function initJobs(
 	client: DiscordClient
@@ -11,22 +11,22 @@ export function initJobs(
 	const jobs: Map<string, { client: DiscordClient; job: CronJob }> =
 		new Map();
 
-	// const testUpdateDfunktRolesJob: CronJob<any, any> = createTestUpdateDfunktRolesJob(client); // For testing purposes only
-	const updateDfunktRolesJob: CronJob = createUpdateDfunktRolesJob(client);
+	// const testUpdateDfunkRolesJob: CronJob<any, any> = createTestUpdateDfunkRolesJob(client); // For testing purposes only
+	const updateDfunkRolesJob: CronJob = createUpdateDfunkRolesJob(client);
 
-	// jobs.set("testUpdateDfunktRoles", {client: client, job: testUpdateDfunktRolesJob}); // For testing purposes only
-	jobs.set("updateDfunktRoles", {
+	// jobs.set("testUpdateDfunkRoles", {client: client, job: testUpdateDfunkRolesJob}); // For testing purposes only
+	jobs.set("updateDfunkRoles", {
 		client: client,
-		job: updateDfunktRolesJob,
+		job: updateDfunkRolesJob,
 	});
 	return jobs;
 }
 
 /**
- * Create Cronjob that updates the dfunkt roles on Discord.
+ * Create Cronjob that updates the dfunk roles on Discord.
  * @param client The Discord client (bot) that will be running this CronJob
  * */
-const createUpdateDfunktRolesJob = (client: DiscordClient): CronJob => {
+const createUpdateDfunkRolesJob = (client: DiscordClient): CronJob => {
 	let retryCount = 0;
 	let job: CronJob;
 
@@ -36,7 +36,7 @@ const createUpdateDfunktRolesJob = (client: DiscordClient): CronJob => {
 	const onTick = async (): Promise<void> => {
 		try {
 			const guild = await client.guilds.fetch("687747877736546335"); // Konglig Datasektionen
-			await updateDiscordDfunktRoles(guild);
+			await updateDiscordDfunkRoles(guild);
 			retryCount = 0; // Reset on success
 		} catch (err) {
 			console.error("Job error:", err);
@@ -51,12 +51,12 @@ const createUpdateDfunktRolesJob = (client: DiscordClient): CronJob => {
 				);
 				retryCount = 0;
 				await sendWebHookError(
-					"Harmony Error: Error during Discord dfunkt role update. Please take manual action by using the '/dfunkt' command on Discord."
+					"Harmony Error: Error during Discord dfunk role update. Please take manual action by using the '/dfunk update' command on Discord."
 				).then((res) => {
 					console.log("Got response:", res);
 				});
 				job.stop();
-				job = createUpdateDfunktRolesJob(client); // recreate the job
+				job = createUpdateDfunkRolesJob(client); // recreate the job
 				job.start();
 			}
 		}

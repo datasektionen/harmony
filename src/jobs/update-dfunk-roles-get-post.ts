@@ -3,11 +3,11 @@ import {
 	Role as DiscordRole,
 } from "discord.js";
 import {
-	Roles as DfunktRoles,
-	Role as DfunktRole,
-	Mandate as DfunktMandate,
-} from "../shared/utils/dfunkt-interfaces";
-import { getAllRoles } from "../shared/utils/dfunkt";
+	Roles as DfunkRoles,
+	Role as DfunkRole,
+	Mandate as DfunkMandate,
+} from "../shared/utils/dfunk-interfaces";
+import { getAllRoles } from "../shared/utils/dfunk";
 import { getDiscordIdByKthid } from "../db/db";
 import { getHiveGroupMembers, getHiveGroups } from "../shared/utils/hive";
 
@@ -33,15 +33,15 @@ const dfunkGroupToDiscordRoleMapping = new Map([
  * dfunkt.datasektionen.se. It updates the dFunk and dRek roles, giving/retaining them for those who have it
  * and should have it, removing the roles from those users which should not have it, and add roles to the new users.
  * @param guild The guild to make the update on, it is assumed to be the 'Konglig Datasektionen' server, or at least
- * that said server have the mappings between functionary roles and the Discord roles defined in **dfunkt-roles-mapping**.
- * @param testing A flag to turn on 'test mode', using different mappings than those in **dfunkt-roles-mapping.ts**.
+ * that said server have the mappings between functionary roles and the Discord roles defined in **dfunk-roles-mapping**.
+ * @param testing A flag to turn on 'test mode', using different mappings than those in **dfunk-roles-mapping.ts**.
  * This is to be removed eventually when the correctness of the routine is [mostly] guaranteed.
  */
-export async function updateDiscordDfunktRoles(
+export async function updateDiscordDfunkRoles(
 	guild: Guild,
 	testing: boolean = false // For testing purposes only, remove after ensuring correctness
 ): Promise<void | {
-	processedDfunktdata: Awaited<ReturnType<typeof processDfunkData>>,
+	processedDfunkdata: Awaited<ReturnType<typeof processDfunkData>>,
 	dbUsers: typeof dfunkDiscordUsers,
 	discordData: { //ReturnType<Awaited<typeof fetchDiscordData>>
 		guildRoles: typeof guildRoles,
@@ -234,18 +234,17 @@ export async function updateDiscordDfunktRoles(
 
 	if (testing)
 		return {
-			processedDfunktdata: processedDfunkData,
+			processedDfunkdata: processedDfunkData,
 			dbUsers: dfunkDiscordUsers, //dbUsers,
 			discordData: {guildMembers:guildMembers, guildRoles:guildRoles}, // discordData,
 			modifiedUsersMap: {toAddToRole: toAdd, toRemoveFromRole: toRemove}, // processedDiscordData,
 		};
 }
 /**
- * Processes the data fetched from the dfunkt API to be later used for the role updates.
- * @param dfunktData The data fetched from the dfunkt API by the **fetchFromDfunktAPI()** function
+ * Processes the data fetched from the dfunk API to be later used for the role updates.
  * @returns An object of processed data relevant for the update. Includes:
  *  - A mapping of kthid of users currently having mandates to the roles they have mandates on.
- *  - A mapping of dfunkt functionary group identifiers to a list of kthid of users currently in this group
+ *  - A mapping of dfunk functionary group identifiers to a list of kthid of users currently in this group
  *  - A list of objects representing special dfunk Discord roles and the users that should have them.
  */
 async function processDfunkData(): Promise<{
@@ -272,25 +271,25 @@ async function processDfunkData(): Promise<{
  * @param dfunkData The data fetched from the dfunk API by the **fetchFromDfunkAPI()** function
  * @returns A map of which users (kthid) are in which dfunk groups (list of dfunk groups' identifiers). 
  */
-function getGroupsUpdate(dfunkData: DfunktRoles): Map<string, string[]> {
+function getGroupsUpdate(dfunkData: DfunkRoles): Map<string, string[]> {
 	
 	// What is/are their functionary group?
 	// Make this as a map from functionary group identifiers to a list of kthids. Only those with current mandates
 	// are expected to be in this map
 	const currentGroups: Map<string, string[]> = new Map();
 
-	dfunkData.forEach((role: DfunktRole) => {
-		const dfunktroleGroupId: string = role.Group!.identifier;
-		role.Mandates!.forEach((mandate: DfunktMandate) => {
+	dfunkData.forEach((role: DfunkRole) => {
+		const dfunkRoleGroupId: string = role.Group!.identifier;
+		role.Mandates!.forEach((mandate: DfunkMandate) => {
 			const userKthiId: string = mandate.User!.kthid;
 			if (
 				new Date(mandate.start) <= new Date() &&
 				new Date() <= new Date(mandate.end)
 			) {
 				// Add the user's kthid to the map of current groups
-				currentGroups.has(dfunktroleGroupId)
-					? currentGroups.get(dfunktroleGroupId)!.push(userKthiId)
-					: currentGroups.set(dfunktroleGroupId, [userKthiId]);
+				currentGroups.has(dfunkRoleGroupId)
+					? currentGroups.get(dfunkRoleGroupId)!.push(userKthiId)
+					: currentGroups.set(dfunkRoleGroupId, [userKthiId]);
 			}
 		});
 	});
@@ -306,25 +305,25 @@ function getGroupsUpdate(dfunkData: DfunktRoles): Map<string, string[]> {
  *  - **specialRoleLegibles**: A set of users (kthids) of the users that should have the special role. 
  */
 function getSpecialRolesUpdate(
-	dfunktData: DfunktRoles, 
+	dfunkData: DfunkRoles, 
 ): [
 	{
 		roleName: string;
 		specialRoleLegibles: Set<string>; 
 	}
 ] {
-	// // 'dFunkt' role
+	// 'dFunkt' role
 
 	// Who has had mandates before but not now?
 	// First make a set kthids of those who has or have had some mandate, then find the difference with those that
 	// currently have mandates
 	const hasHadMandates: Set<string> = new Set();
-	const dfunktDiscordRoleLegible: Set<string> = new Set();
+	const dfunkDiscordRoleLegible: Set<string> = new Set();
 	// Get current mandates
-	const currentMandates = getCurrentDfunkMandates(dfunktData);
+	const currentMandates = getCurrentDfunkMandates(dfunkData);
 
-	dfunktData.forEach((role: DfunktRole) => {
-		role.Mandates!.forEach((mandate: DfunktMandate) => {
+	dfunkData.forEach((role: DfunkRole) => {
+		role.Mandates!.forEach((mandate: DfunkMandate) => {
 			// Add user's kthid to the set of those that have had some mandate ever.
 			hasHadMandates.add(mandate.User!.kthid);
 		});
@@ -333,7 +332,7 @@ function getSpecialRolesUpdate(
 	// Find the difference of the set hasHadMandates w.r.t. to the keyset of currentMandates.
 	// Too bad the .difference() method is not available in this project.
 	hasHadMandates.forEach((kthid: string) => {
-		if (!currentMandates.has(kthid)) dfunktDiscordRoleLegible.add(kthid);
+		if (!currentMandates.has(kthid)) dfunkDiscordRoleLegible.add(kthid);
 	});
 
 	// // Next special role...
@@ -341,7 +340,7 @@ function getSpecialRolesUpdate(
 	return [
 		{
 			roleName: "dFunkt",
-			specialRoleLegibles: dfunktDiscordRoleLegible
+			specialRoleLegibles: dfunkDiscordRoleLegible
 		},
 	];
 }
@@ -351,13 +350,13 @@ function getSpecialRolesUpdate(
  * @param dfunkData The data fetched from the dfunk API by the **fetchFromDfunkAPI()** function
  * @returns A map of which users (kthid) have which dfunk mandate roles (list of dfunk roles). 
  */
-function getCurrentDfunkMandates(dfunkData: DfunktRoles): Map<string, DfunktRoles> {
+function getCurrentDfunkMandates(dfunkData: DfunkRoles): Map<string, DfunkRoles> {
 	// Who has which functionary role currently?
 	// Make this as a map from kthids to a list of roles. Only those who have some mandate currently are
 	// expected to show up as keys of this mapping. Those with no current mandates should have an empty list associated.
-	const currentMandates: Map<string, DfunktRole[]> = new Map();
-	dfunkData.forEach((role: DfunktRole) => {
-		role.Mandates!.forEach((mandate: DfunktMandate) => {
+	const currentMandates: Map<string, DfunkRole[]> = new Map();
+	dfunkData.forEach((role: DfunkRole) => {
+		role.Mandates!.forEach((mandate: DfunkMandate) => {
 			const userKthiId: string = mandate.User!.kthid;
 
 			if (
@@ -375,13 +374,13 @@ function getCurrentDfunkMandates(dfunkData: DfunktRoles): Map<string, DfunktRole
 	return currentMandates;
 }
 /**
- * Fetch data from the dfunkt API that is needed for the main update.
- * @returns A promise of a list of dfunkt functionary roles, more specifically one containing all roles
+ * Fetch data from the dfunk API that is needed for the main update.
+ * @returns A promise of a list of dfunk functionary roles, more specifically one containing all roles
  * and all mandates on these ever.
  */
-async function fetchFromDfunkAPI(): Promise<DfunktRoles> {
+async function fetchFromDfunkAPI(): Promise<DfunkRoles> {
 	// It is enough to have the data of all roles and all of their mandates ever to get the relevant data
 	// Question: Would this be too much (unnecesary) data at some point?
-	const data: DfunktRoles = await getAllRoles();
+	const data: DfunkRoles = await getAllRoles();
 	return data;
 }
