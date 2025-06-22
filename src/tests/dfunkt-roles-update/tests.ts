@@ -5,7 +5,7 @@ import {
 	Role as DiscordRole,
 	GuildMember as DiscordGuildMember,
 } from "discord.js";
-import { Role as DfunktRole } from "../../shared/utils/dfunkt-interfaces";
+// import { Role as DfunktRole } from "../../shared/utils/dfunkt-interfaces";
 import postgres, { PostgresError } from "postgres";
 import { insertUser } from "../../db/db";
 import { expectedResults, testCases, testRoles } from "./test_cases";
@@ -34,19 +34,17 @@ export async function executeTestCase(
 	testCaseNr: number = 0
 ): Promise<{
 	result: boolean;
-	processedDfunktdata: {
-		currentMandates: Map<string, DfunktRole[]>;
-		currentGroups: Map<string, string[]>;
-		dfunktDiscordRoleLegible: Set<string>;
+	processedDfunktdata:{ 
+    	currentGroups: Map<string, string[]>;
+    	specialRoles: [{
+        	roleName: string;
+        	specialRoleLegibles: Set<string>;
+    	}];
 	};
 	dbUsers: Map<string, string>;
 	discordData: {
 		guildRoles: Collection<string, DiscordRole>;
 		guildMembers: Collection<string, DiscordGuildMember>;
-	};
-	processedDiscordData: {
-		toAddToRole: Map<string, string[]>;
-		toRemoveFromRole: Map<string, string[]>;
 	};
 }> {
 	console.log(
@@ -136,7 +134,6 @@ export async function executeTestCase(
 			processedDfunktdata: testResults!.processedDfunktdata,
 			dbUsers: testResults!.dbUsers,
 			discordData: testResults!.discordData,
-			processedDiscordData: testResults!.processedDiscordData,
 		};
 	} else {
 		const e = expected;
@@ -165,7 +162,6 @@ export async function executeTestCase(
 				processedDfunktdata: testResults!.processedDfunktdata,
 				dbUsers: testResults!.dbUsers,
 				discordData: testResults!.discordData,
-				processedDiscordData: testResults!.processedDiscordData,
 			};
 		} else {
 			console.log("Test passed");
@@ -175,7 +171,6 @@ export async function executeTestCase(
 				processedDfunktdata: testResults!.processedDfunktdata,
 				dbUsers: testResults!.dbUsers,
 				discordData: testResults!.discordData,
-				processedDiscordData: testResults!.processedDiscordData,
 			};
 		}
 	}
@@ -190,7 +185,6 @@ async function removeUserFromDb(discordId: string): Promise<boolean> {
 		await sql`delete from users where discord_id = ${discordId}`;
 	} catch (err) {
 		if (err instanceof PostgresError && err.code == "23505") {
-			// code for unique key violation
 			return false;
 		}
 		throw err;
