@@ -5,7 +5,6 @@ services:
       target: src
     command: npm run dev
     environment:
-      - DATABASE_URL=postgres://harmony:harmony@db/harmony
       - NODE_ENV=development
     env_file:
       - .env

@@ -91,7 +91,7 @@ export const handleChannel = async (
 	// If we skip checking the course code (e.g. in verify-nollan) continue the function
 	// If the course code was invalid, return with a message.
 	if (
-		channel == undefined ||
+		channel === undefined ||
 		(!skipCheckingCourseCode && !validCourseCode(channel.name))
 	) {
 		if (!noInteraction) {
