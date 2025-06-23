@@ -102,7 +102,7 @@ export async function handleVerifyButtonInteraction(
 
 			const nollekodInput = new TextInputBuilder()
 				.setCustomId("verifyNollanNollekod")
-				.setLabel("Vad är din nØllekod, nØllan?")
+				.setLabel("Vad är koden du har fått från din Dadda, nØllan?")
 				.setStyle(TextInputStyle.Short)
 				.setRequired(true);
 

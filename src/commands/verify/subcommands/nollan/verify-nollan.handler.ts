@@ -8,7 +8,7 @@ import {
 } from "../../../../shared/utils/roles";
 import { VerifyNollanVariables } from "./verify-nollan.variables";
 import { MessageFlags } from "discord.js";
-import { getNollegruppNameByCode, insertNollan } from "../../../../db/db";
+import * as db from "../../../../db/db";
 import { isKthEmail } from "../util";
 
 export async function handleVerifyNollanBase(
@@ -41,7 +41,7 @@ export async function handleVerifyNollanBase(
 
 	try {
 		// Check if nolleKod is valid.
-		const nollegruppRoleName = await getNollegruppNameByCode(nolleKod);
+		const nollegruppRoleName = await db.getNollegruppNameByCode(nolleKod);
 		if (nollegruppRoleName == null) {
 			await interaction.editReply({
 				content:
@@ -62,7 +62,7 @@ export async function handleVerifyNollanBase(
 
 		// Add nØllan to database.
 		const kthId = email.split("@")[0];
-		insertNollan(kthId, user.id);
+		db.insertNollan(kthId, user.id);
 	} catch (error) {
 		console.warn(error);
 		await interaction.editReply({
