@@ -81,6 +81,12 @@ export async function createVerifyCommand(
 				)
 				.addStringOption((option) =>
 					option
+						.setName(VerifyNollanVariables.EMAIL)
+						.setDescription("Din KTH-mejladress")
+						.setRequired(true)
+				)
+				.addStringOption((option) =>
+					option
 						.setName(VerifyNollanVariables.NOLLE_KOD)
 						.setDescription(
 							"Den hemliga koden du fått från din dadda"

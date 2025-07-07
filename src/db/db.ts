@@ -19,7 +19,15 @@ export async function init(): Promise<void> {
 		create table if not exists nollegrupp (
 			name text primary key,
 			code text unique not null
-		)
+		);
+	`;
+
+	// Initialise table table for nØllan's KTH-ids and Discord ids.
+	await sql`
+		create table if not exists nollan (
+			kth_id text primary key,
+			discord_id text unique not null
+		);
 	`;
 }
 
@@ -115,4 +123,30 @@ export async function formatNollegruppData(): Promise<string> {
 	});
 
 	return output;
+}
+
+export async function insertNollan(
+	kthId: string,
+	discordId: string
+): Promise<boolean> {
+	try {
+		await sql`insert into nollan (kth_id, discord_id) values (${kthId}, ${discordId})`;
+	} catch (err) {
+		if (err instanceof PostgresError && err.code == "23505") {
+			// code for unique key violation
+			return false;
+		}
+		throw err;
+	}
+	return true;
+}
+
+// nØllan is "special"...
+export async function getKthIdByNolleId(
+	discordId: string
+): Promise<string | null> {
+	const users =
+		await sql`select kth_id from nollan where discord_id = ${discordId}`;
+	if (!users.length) return null;
+	return users[0].kth_id;
 }

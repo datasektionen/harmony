@@ -5,8 +5,14 @@ import { NollegruppAddVariables } from "./nollegrupp-add.variables";
 export async function handleNollegruppAdd(
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> {
-	const name = interaction.options.getString(NollegruppAddVariables.NAME);
-	const code = interaction.options.getString(NollegruppAddVariables.CODE);
+	const name = interaction.options.getString(
+		NollegruppAddVariables.NAME,
+		true
+	);
+	const code = interaction.options.getString(
+		NollegruppAddVariables.CODE,
+		true
+	);
 
 	let result = false;
 
