@@ -17,8 +17,8 @@ export const canBeGivenBy: { [key: string]: string[] } = {
 	Ekonomeriet: ["Titel"],
 	Doqumenteriet: ["Titel"],
 	IOR: ["D-SYS", "Kommunikatör"],
-	Studienämnden: ["SNO", "SMA", "JNO", "Programansvarig"],
-	dÅke: ["SNO", "SMA", "JNO", "Programansvarig"],
+	Studienämnden: ["SNO", "SMA", "Programansvarig"],
+	dÅke: ["SNO", "SMA", "Programansvarig"],
 	"D-Dagen": ["D-Dagenansvarig"],
 };
 
