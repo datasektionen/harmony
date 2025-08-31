@@ -21,6 +21,7 @@ export const canBeGivenBy: { [key: string]: string[] } = {
 	dÅke: ["SNO", "SMA", "Programansvarig"],
 	"D-Dagen": ["D-Dagenansvarig"],
 	"Carl/Karl": ["Konglig Karlnalchef"],
+	"Konglig Karlnalchef": ["Konglig Karlnalchef"],
 };
 
 /**
