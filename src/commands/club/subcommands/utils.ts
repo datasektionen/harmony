@@ -20,6 +20,7 @@ export const canBeGivenBy: { [key: string]: string[] } = {
 	Studienämnden: ["SNO", "SMA", "Programansvarig"],
 	dÅke: ["SNO", "SMA", "Programansvarig"],
 	"D-Dagen": ["D-Dagenansvarig"],
+	"Carl/Karl": ["Konglig Karlnalchef"],
 };
 
 /**
