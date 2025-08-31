@@ -62,7 +62,8 @@ export async function handleVerifyBeginBase(
 
 	if ((await isDangerOfNollan(kthId, darkmode)) && !isIntis) {
 		await interaction.editReply({
-			content: "...!̵̾͌.̸͆̅.̷̊̈́.̵͛̋Ë̵̔R̴̓͝R̵̐OR come bẵ̴c̴̋̔k̷̽ 16 se͆͠p̸̀̐t̵̐͑e̶̓̌m̵ber...ERR̶̈́͋Ô̶͂R̷̾͝.̷̊́.̶̓͒.̵͊̑.̸̑ERROR...",
+			content: "The verification system is currently restricted until mid-September."
+			+ "\nIf you are a newly admitted student, check your KTH email inbox to see if you have received any information about how to verify. If you have not received any such information, please contact a server administrator.",
 		});
 		return;
 	}

@@ -68,7 +68,7 @@ export async function handleVerifyButtonInteraction(
 			if (mottagning) {
 				const codeInput = new TextInputBuilder()
 					.setCustomId("beginVerifyCode")
-					.setLabel("Enter any special codes you may have received")
+					.setLabel("Enter a valid verification code")
 					.setStyle(TextInputStyle.Short)
 					.setRequired(false);
 
@@ -89,7 +89,7 @@ export async function handleVerifyButtonInteraction(
 
 			const emailInput = new TextInputBuilder()
 				.setCustomId("verifyNollanEmail")
-				.setLabel("Vad är din KTH-mejladress, nØllan?")
+				.setLabel("Vad är din KTH-mejladress?")
 				.setStyle(TextInputStyle.Short)
 				.setRequired(true);
 
