@@ -185,7 +185,7 @@ const handleChatInputCommand = async (
 					guildInteraction.user,
 					guildInteraction.guild
 				))
-					? "Du är allt för schleeemig, kom tillbaka senare."
+					? "Endast en *teknolog* får använda det kommandot, nØllan."
 					: "Permission denied!\nYou first need to verify yourself using the '/verify' command.";
 				await guildInteraction.reply({
 					content: permissionDeniedMessage,
