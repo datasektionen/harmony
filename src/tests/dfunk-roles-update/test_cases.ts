@@ -480,7 +480,7 @@ export const expectedResults: Map<
 		{
 			shouldHave: [
 				"Valberedningen",
-				"KF-suppleant",
+				"Kårfullmäktige",
 				"dFunk",
 			],
 			shouldNotHave: [
@@ -491,7 +491,6 @@ export const expectedResults: Map<
 				"Kommunikatör",
 				"Vice ordförande",
 				"dFunkt",
-				"Kårfullmäktige",
 			],
 		},
 	],
