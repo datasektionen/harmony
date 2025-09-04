@@ -420,7 +420,7 @@ async function fetchFromDfunkAPI(): Promise<DfunkRoles> {
 /**
  * Uses data from Hive to check and create missing dfunk-related roles on the Discord server
  */
-export async function createDfunkDiscordRoles(guild: Guild): Promise<void>{
+export async function createDfunkDiscordRoles(guild: Guild): Promise<void> {
 	// Fetch all tag groups on Hive related to Discord
 	const hiveTagGroups = await getHiveGroups("discord-role");
 	// Fetch Discord roles
@@ -443,7 +443,7 @@ export async function createDfunkDiscordRoles(guild: Guild): Promise<void>{
  * Uses data from Hive to remove all dfunk-related roles on the Discord server based on their names.
  * It only removes one role of each name.
  */
-export async function removeDfunkDiscordRoles(guild: Guild): Promise<boolean>{
+export async function removeDfunkDiscordRoles(guild: Guild): Promise<boolean> {
 	let removedRole = false;
 	// Fetch all tag groups on Hive related to Discord
 	const hiveTagGroups = await getHiveGroups("discord-role");

@@ -65,8 +65,10 @@ export async function executeTestCase(
 	await insertUser(testCase.kthid, testUserDiscordId);
 	// Remove all test roles from the user (cleanup from previous test)
 	for (const roleName of testRoles) {
-		const userRole = await testUserRoleCache.find((role) => role.name === roleName);
-		if (userRole !== undefined){
+		const userRole = await testUserRoleCache.find(
+			(role) => role.name === roleName
+		);
+		if (userRole !== undefined) {
 			await testDiscordMember.roles.remove(userRole);
 		}
 	}
@@ -86,8 +88,10 @@ export async function executeTestCase(
 	}
 	// Add the roles that are in the test case
 	for (const roleName of testCase.roles) {
-		const roleToAdd = await testUserRoleCache.find((role) => role.name === roleName);
-		if (roleToAdd !== undefined){
+		const roleToAdd = await testUserRoleCache.find(
+			(role) => role.name === roleName
+		);
+		if (roleToAdd !== undefined) {
 			await testDiscordMember.roles.remove(roleToAdd);
 		}
 	}

@@ -6,7 +6,9 @@ import {
 	Collection,
 	GuildMember as DiscordGuildMember,
 } from "discord.js";
-import { createDfunkDiscordRoles, /*removeDfunkDiscordRoles,*/  } from "../../../../jobs/update-dfunk-roles-get-post"
+import {
+	createDfunkDiscordRoles /*removeDfunkDiscordRoles,*/,
+} from "../../../../jobs/update-dfunk-roles-get-post";
 export const handleDfunkTest = async (
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {

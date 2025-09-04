@@ -31,92 +31,51 @@ export const testCases: { kthid: string; roles: string[] }[] = [
 	{ kthid: "mrmhm", roles: ["KF-suppleant"] }, // Invalid case, role KF-suppleant (Valberedare (Läsår)) not on Hive
 	{
 		kthid: "mrmhm",
-		roles: [
-			"KF-suppleant",
-			"D-NOK",
-		],
+		roles: ["KF-suppleant", "D-NOK"],
 	},
 	{ kthid: "mrmhm", roles: ["Kommunikatör"] },
 	{ kthid: "mrmhm", roles: ["Kommunikatör", "dFunkt"] },
 	{
 		kthid: "mrmhm",
-		roles: [
-			"Kommunikatör",
-			"Bakis",
-			"Valberedningen",
-		],
+		roles: ["Kommunikatör", "Bakis", "Valberedningen"],
 	},
 	{ kthid: "mrmhm", roles: ["dFunk", "Kommunikatör"] },
 	{
 		kthid: "mrmhm",
-		roles: [
-			"dFunk",
-			"Kommunikatör",
-			"Vice ordförande",
-		],
+		roles: ["dFunk", "Kommunikatör", "Vice ordförande"],
 	},
 	{
 		kthid: "mrmhm",
-		roles: [
-			"dFunk",
-			"Kommunikatör",
-			"dFunkt",
-			"KF-suppleant",
-		],
+		roles: ["dFunk", "Kommunikatör", "dFunkt", "KF-suppleant"],
 	},
 	{ kthid: "olofbm", roles: [] },
 	{ kthid: "olofbm", roles: ["Bakis"] },
 	{ kthid: "olofbm", roles: ["Kårfullmäktige", "Bakis"] },
 	{
 		kthid: "olofbm",
-		roles: [
-			"Kårfullmäktige",
-			"Kommunikatör",
-			"D-rek",
-		],
+		roles: ["Kårfullmäktige", "Kommunikatör", "D-rek"],
 	},
 	{ kthid: "olofbm", roles: ["Valberedningen"] },
 	{ kthid: "olofbm", roles: ["Valberedningen", "D-NOK"] },
 	{
 		kthid: "olofbm",
-		roles: [
-			"Valberedningen",
-			"Bakis",
-			"D-rek",
-		],
+		roles: ["Valberedningen", "Bakis", "D-rek"],
 	},
 	{
 		kthid: "olofbm",
-		roles: [
-			"Valberedningen",
-			"D-rek",
-			"Vice ordförande",
-			"Bakis",
-		],
+		roles: ["Valberedningen", "D-rek", "Vice ordförande", "Bakis"],
 	},
 	{
 		kthid: "olofbm",
-		roles: [
-			"Valberedningen",
-			"KF-suppleant"
-		],
+		roles: ["Valberedningen", "KF-suppleant"],
 	},
 	{
 		kthid: "olofbm",
-		roles: [
-			"Valberedningen",
-			"KF-suppleant",
-			"D-NOK",
-		],
+		roles: ["Valberedningen", "KF-suppleant", "D-NOK"],
 	},
 	{
 		kthid: "olofbm",
-		roles: [
-			"Valberedningen",
-			"KF-suppleant",
-			"Kårfullmäktige",
-			"D-rek",
-		],
+		roles: ["Valberedningen", "KF-suppleant", "Kårfullmäktige", "D-rek"],
 	},
 	{
 		kthid: "olofbm",
@@ -130,20 +89,11 @@ export const testCases: { kthid: string; roles: string[] }[] = [
 	},
 	{
 		kthid: "olofbm",
-		roles: [
-			"Valberedningen",
-			"KF-suppleant",
-			"dFunk",
-		],
+		roles: ["Valberedningen", "KF-suppleant", "dFunk"],
 	},
 	{
 		kthid: "olofbm",
-		roles: [
-			"Valberedningen",
-			"KF-suppleant",
-			"dFunk",
-			"Vice ordförande",
-		],
+		roles: ["Valberedningen", "KF-suppleant", "dFunk", "Vice ordförande"],
 	},
 	{
 		kthid: "olofbm",
@@ -173,68 +123,37 @@ export const testCases: { kthid: string; roles: string[] }[] = [
 	{ kthid: "sakao", roles: ["D-NOK", "Kårfullmäktige"] },
 	{
 		kthid: "sakao",
-		roles: [
-			"D-NOK",
-			"KF-suppleant",
-			"dFunk",
-		],
+		roles: ["D-NOK", "KF-suppleant", "dFunk"],
 	},
 	{ kthid: "sakao", roles: ["D-NOK", "D-rek"] },
 	{
 		kthid: "sakao",
-		roles: [
-			"D-NOK",
-			"D-rek",
-			"Ordförande",
-		],
+		roles: ["D-NOK", "D-rek", "Ordförande"],
 	},
 	{
 		kthid: "sakao",
-		roles: [
-			"D-NOK",
-			"D-rek",
-			"Kommunikatör",
-			"dFunkt",
-		],
+		roles: ["D-NOK", "D-rek", "Kommunikatör", "dFunkt"],
 	},
 	{ kthid: "sieric", roles: [] },
 	{ kthid: "sieric", roles: ["dFunkt"] },
 	{ kthid: "sieric", roles: ["D-NOK", "Bakis"] },
 	{
 		kthid: "sieric",
-		roles: [
-			"Bakis",
-			"KF-suppleant",
-			"Valberedningen",
-		],
+		roles: ["Bakis", "KF-suppleant", "Valberedningen"],
 	},
 	{
 		kthid: "sieric",
-		roles: [
-			"Ordförande",
-			"D-NOK",
-			"dFunkt",
-			"Kommunikatör",
-		],
+		roles: ["Ordförande", "D-NOK", "dFunkt", "Kommunikatör"],
 	},
 	{ kthid: "sieric", roles: ["D-rek"] },
 	{ kthid: "sieric", roles: ["D-rek", "Bakis"] },
 	{
 		kthid: "sieric",
-		roles: [
-			"D-rek",
-			"Bakis",
-			"Kommunikatör",
-		],
+		roles: ["D-rek", "Bakis", "Kommunikatör"],
 	},
 	{
 		kthid: "sieric",
-		roles: [
-			"D-rek",
-			"KF-suppleant",
-			"D-NOK",
-			"Ordförande",
-		],
+		roles: ["D-rek", "KF-suppleant", "D-NOK", "Ordförande"],
 	},
 	{
 		kthid: "sieric",
@@ -249,20 +168,11 @@ export const testCases: { kthid: string; roles: string[] }[] = [
 	{ kthid: "sieric", roles: ["Kårfullmäktige", "Vice ordförande"] },
 	{
 		kthid: "sieric",
-		roles: [
-			"Kårfullmäktige",
-			"Vice ordförande",
-			"Bakis",
-		],
+		roles: ["Kårfullmäktige", "Vice ordförande", "Bakis"],
 	},
 	{
 		kthid: "sieric",
-		roles: [
-			"Kårfullmäktige",
-			"Vice ordförande",
-			"D-NOK",
-			"dFunkt",
-		],
+		roles: ["Kårfullmäktige", "Vice ordförande", "D-NOK", "dFunkt"],
 	},
 	{
 		kthid: "sieric",
@@ -287,30 +197,15 @@ export const testCases: { kthid: string; roles: string[] }[] = [
 	},
 	{
 		kthid: "sieric",
-		roles: [
-			"D-rek",
-			"Kårfullmäktige",
-			"Vice ordförande",
-		],
+		roles: ["D-rek", "Kårfullmäktige", "Vice ordförande"],
 	},
 	{
 		kthid: "sieric",
-		roles: [
-			"D-rek",
-			"Kårfullmäktige",
-			"Vice ordförande",
-			"KF-suppleant",
-		],
+		roles: ["D-rek", "Kårfullmäktige", "Vice ordförande", "KF-suppleant"],
 	},
 	{
 		kthid: "sieric",
-		roles: [
-			"D-rek",
-			"Kårfullmäktige",
-			"Vice ordförande",
-			"D-NOK",
-			"Bakis",
-		],
+		roles: ["D-rek", "Kårfullmäktige", "Vice ordförande", "D-NOK", "Bakis"],
 	},
 	{
 		kthid: "sieric",
@@ -337,12 +232,7 @@ export const testCases: { kthid: string; roles: string[] }[] = [
 	},
 	{
 		kthid: "sieric",
-		roles: [
-			"dFunk",
-			"D-rek",
-			"Kårfullmäktige",
-			"Vice ordförande",
-		],
+		roles: ["dFunk", "D-rek", "Kårfullmäktige", "Vice ordförande"],
 	},
 	{
 		kthid: "sieric",
@@ -403,11 +293,7 @@ export const testCases: { kthid: string; roles: string[] }[] = [
 	},
 	{
 		kthid: "asalamon",
-		roles: [
-			"dFunkt",
-			"Kommunikatör",
-			"Valberedningen",
-		],
+		roles: ["dFunkt", "Kommunikatör", "Valberedningen"],
 	},
 ];
 /**
@@ -478,11 +364,7 @@ export const expectedResults: Map<
 	[
 		"olofbm",
 		{
-			shouldHave: [
-				"Valberedningen",
-				"Kårfullmäktige",
-				"dFunk",
-			],
+			shouldHave: ["Valberedningen", "Kårfullmäktige", "dFunk"],
 			shouldNotHave: [
 				"Ordförande",
 				"Bakis",
@@ -514,12 +396,7 @@ export const expectedResults: Map<
 	[
 		"sieric",
 		{
-			shouldHave: [
-				"dFunk",
-				"D-rek",
-				"Kårfullmäktige",
-				"Vice ordförande",
-			],
+			shouldHave: ["dFunk", "D-rek", "Kårfullmäktige", "Vice ordförande"],
 			shouldNotHave: [
 				"Valberedningen",
 				"Ordförande",
