@@ -64,8 +64,11 @@ export async function executeTestCase(
 	// Reinsert the test user into the db with the new kthid from the test case
 	await insertUser(testCase.kthid, testUserDiscordId);
 	// Remove all test roles from the user (cleanup from previous test)
-	for (const roleId of testRoles) {
-		await testDiscordMember.roles.remove(roleId);
+	for (const roleName of testRoles) {
+		const userRole = await testUserRoleCache.find(role => role.name = roleName);
+		if (userRole !== undefined){
+			await testDiscordMember.roles.remove(userRole);
+		}
 	}
 	testDiscordMember = await guild.members.fetch({
 		user: testUserDiscordId,
@@ -82,8 +85,11 @@ export async function executeTestCase(
 		console.log(role.id + " -> " + role.name);
 	}
 	// Add the roles that are in the test case
-	for (const roleId of testCase.roles) {
-		await testDiscordMember.roles.add(roleId);
+	for (const roleName of testCase.roles) {
+		const roleToAdd = await testUserRoleCache.find(role => role.name = roleName);
+		if (roleToAdd !== undefined){
+			await testDiscordMember.roles.remove(roleToAdd);
+		}
 	}
 	testDiscordMember = await guild.members.fetch({
 		user: testUserDiscordId,
