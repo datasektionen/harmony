@@ -135,11 +135,11 @@ export async function executeTestCase(
 		};
 	} else {
 		const e = expected;
-		const hasAllRolesShouldHave = e.shouldHave.every((roleId) =>
-			testUserRoleCache.has(roleId)
+		const hasAllRolesShouldHave = e.shouldHave.every((roleName) =>
+			testUserRoleCache.find((role) => role.name === roleName)
 		);
-		const hasSomeRolesShouldNotHave = e.shouldNotHave.some((roleId) =>
-			testUserRoleCache.has(roleId)
+		const hasSomeRolesShouldNotHave = e.shouldNotHave.some((roleName) =>
+			testUserRoleCache.find((role) => role.name === roleName)
 		);
 		if (!hasAllRolesShouldHave || hasSomeRolesShouldNotHave) {
 			if (!hasAllRolesShouldHave)
