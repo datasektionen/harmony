@@ -115,6 +115,7 @@ export async function updateDiscordDfunkRoles(
 	// Fetch kthid of users and mandate roles these should currently have from Hive,
 	// Construct a list of roles relevant to the update
 	const hiveTagGroups = await getHiveGroups("discord-role");
+	// console.log(hiveTagGroups);
 
 	for (const tagGroup of hiveTagGroups) {
 		// kthids of users with this mandate
@@ -122,6 +123,9 @@ export async function updateDiscordDfunkRoles(
 			tagGroup.group_id,
 			tagGroup.group_domain
 		);
+		// if(tagGroup.tag_content == "Valberedningen") {
+		// 	console.log(groupMembers);
+		// }
 		// Find role by name
 		const dfunkDiscordRole = await findRoleCreateByName(
 			tagGroup.tag_content
@@ -414,4 +418,48 @@ async function fetchFromDfunkAPI(): Promise<DfunkRoles> {
 	// Question: Would this be too much (unnecesary) data at some point?
 	const data: DfunkRoles = await getAllRoles();
 	return data;
+}
+
+/**
+ * Uses data from Hive to check and create missing dfunk-related roles on the Discord server
+ */
+export async function createDfunkDiscordRoles(guild: Guild): Promise<void>{
+	// Fetch all tag groups on Hive related to Discord
+	const hiveTagGroups = await getHiveGroups("discord-role");
+	// Fetch Discord roles
+	const guildRoles = await guild.roles.fetch();
+	// For each group, try finding its 'tag_content' field value as a role name on the server
+	for (const hiveTagGroup of hiveTagGroups) {
+		const roleName = hiveTagGroup.tag_content;
+		let role = guildRoles.find((role) => role.name === roleName);
+		if (role === undefined) {
+			role = await guild.roles.create({
+				name: roleName,
+				color: "#ee2a7b",
+				reason: "Role not found during dfunk update.",
+			});
+		}
+	}
+}
+
+/**
+ * Uses data from Hive to remove all dfunk-related roles on the Discord server based on their names.
+ * It only removes one role of each name.
+ */
+export async function removeDfunkDiscordRoles(guild: Guild): Promise<boolean>{
+	let removedRole = false;
+	// Fetch all tag groups on Hive related to Discord
+	const hiveTagGroups = await getHiveGroups("discord-role");
+	// Fetch Discord roles
+	const guildRoles = await guild.roles.fetch();
+	// For each group, try finding its 'tag_content' field value as a role name on the server
+	for (const hiveTagGroup of hiveTagGroups) {
+		const roleName = hiveTagGroup.tag_content;
+		const role = guildRoles.find((role) => role.name === roleName);
+		if (role !== undefined) {
+			await guild.roles.delete(role);
+			removedRole = true;
+		}
+	}
+	return removedRole;
 }

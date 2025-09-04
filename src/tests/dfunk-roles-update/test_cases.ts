@@ -28,11 +28,11 @@ export const testCases: { kthid: string; roles: string[] }[] = [
 	{ kthid: "dummy", roles: ["Kommunikatör"] },
 	{ kthid: "dummy", roles: ["Valberedningen", "Vice ordförande"] },
 	{ kthid: "mrmhm", roles: [] },
-	// { kthid: "mrmhm", roles: ["KF-suppleant"] }, // Invalid case, role KF-suppleant (Valberedare (Läsår)) not on Hive
+	{ kthid: "mrmhm", roles: ["KF-suppleant"] }, // Invalid case, role KF-suppleant (Valberedare (Läsår)) not on Hive
 	{
 		kthid: "mrmhm",
 		roles: [
-			//"KF-suppleant",
+			"KF-suppleant",
 			"D-NOK",
 		],
 	},
@@ -61,7 +61,7 @@ export const testCases: { kthid: string; roles: string[] }[] = [
 			"dFunk",
 			"Kommunikatör",
 			"dFunkt",
-			// "KF-suppleant",
+			"KF-suppleant",
 		],
 	},
 	{ kthid: "olofbm", roles: [] },
@@ -98,14 +98,14 @@ export const testCases: { kthid: string; roles: string[] }[] = [
 		kthid: "olofbm",
 		roles: [
 			"Valberedningen",
-			// "KF-suppleant"
+			"KF-suppleant"
 		],
 	},
 	{
 		kthid: "olofbm",
 		roles: [
 			"Valberedningen",
-			// "KF-suppleant",
+			"KF-suppleant",
 			"D-NOK",
 		],
 	},
@@ -113,7 +113,7 @@ export const testCases: { kthid: string; roles: string[] }[] = [
 		kthid: "olofbm",
 		roles: [
 			"Valberedningen",
-			// "KF-suppleant",
+			"KF-suppleant",
 			"Kårfullmäktige",
 			"D-rek",
 		],
@@ -122,7 +122,7 @@ export const testCases: { kthid: string; roles: string[] }[] = [
 		kthid: "olofbm",
 		roles: [
 			"Valberedningen",
-			// "KF-suppleant",
+			"KF-suppleant",
 			"Kommunikatör",
 			"D-NOK",
 			"Kårfullmäktige",
@@ -132,7 +132,7 @@ export const testCases: { kthid: string; roles: string[] }[] = [
 		kthid: "olofbm",
 		roles: [
 			"Valberedningen",
-			// "KF-suppleant",
+			"KF-suppleant",
 			"dFunk",
 		],
 	},
@@ -140,7 +140,7 @@ export const testCases: { kthid: string; roles: string[] }[] = [
 		kthid: "olofbm",
 		roles: [
 			"Valberedningen",
-			// "KF-suppleant",
+			"KF-suppleant",
 			"dFunk",
 			"Vice ordförande",
 		],
@@ -149,7 +149,7 @@ export const testCases: { kthid: string; roles: string[] }[] = [
 		kthid: "olofbm",
 		roles: [
 			"Valberedningen",
-			// "KF-suppleant",
+			"KF-suppleant",
 			"dFunk",
 			"dFunkt",
 			"Vice ordförande",
@@ -159,7 +159,7 @@ export const testCases: { kthid: string; roles: string[] }[] = [
 		kthid: "olofbm",
 		roles: [
 			"Valberedningen",
-			// "KF-suppleant",
+			"KF-suppleant",
 			"dFunk",
 			"dFunkt",
 			"D-rek",
@@ -175,7 +175,7 @@ export const testCases: { kthid: string; roles: string[] }[] = [
 		kthid: "sakao",
 		roles: [
 			"D-NOK",
-			// "KF-suppleant",
+			"KF-suppleant",
 			"dFunk",
 		],
 	},
@@ -204,7 +204,7 @@ export const testCases: { kthid: string; roles: string[] }[] = [
 		kthid: "sieric",
 		roles: [
 			"Bakis",
-			// "KF-suppleant",
+			"KF-suppleant",
 			"Valberedningen",
 		],
 	},
@@ -231,7 +231,7 @@ export const testCases: { kthid: string; roles: string[] }[] = [
 		kthid: "sieric",
 		roles: [
 			"D-rek",
-			// "KF-suppleant",
+			"KF-suppleant",
 			"D-NOK",
 			"Ordförande",
 		],
@@ -243,7 +243,7 @@ export const testCases: { kthid: string; roles: string[] }[] = [
 			"dFunkt",
 			"Kommunikatör",
 			"Valberedningen",
-			// "KF-suppleant",
+			"KF-suppleant",
 		],
 	},
 	{ kthid: "sieric", roles: ["Kårfullmäktige", "Vice ordförande"] },
@@ -282,7 +282,7 @@ export const testCases: { kthid: string; roles: string[] }[] = [
 			"Ordförande",
 			"D-NOK",
 			"Kommunikatör",
-			// "KF-suppleant",
+			"KF-suppleant",
 		],
 	},
 	{
@@ -299,7 +299,7 @@ export const testCases: { kthid: string; roles: string[] }[] = [
 			"D-rek",
 			"Kårfullmäktige",
 			"Vice ordförande",
-			// "KF-suppleant",
+			"KF-suppleant",
 		],
 	},
 	{
@@ -330,7 +330,7 @@ export const testCases: { kthid: string; roles: string[] }[] = [
 			"Kårfullmäktige",
 			"Vice ordförande",
 			"Valberedningen",
-			// "KF-suppleant",
+			"KF-suppleant",
 			"Bakis",
 			"dFunkt",
 		],
@@ -362,7 +362,7 @@ export const testCases: { kthid: string; roles: string[] }[] = [
 			"Kårfullmäktige",
 			"Vice ordförande",
 			"Bakis",
-			// "KF-suppleant",
+			"KF-suppleant",
 		],
 	},
 	{
@@ -373,7 +373,7 @@ export const testCases: { kthid: string; roles: string[] }[] = [
 			"Kårfullmäktige",
 			"Vice ordförande",
 			"Bakis",
-			// "KF-suppleant",
+			"KF-suppleant",
 			"Kommunikatör",
 		],
 	},
@@ -432,7 +432,7 @@ export const expectedResults: Map<
 				"D-rek",
 				"D-NOK",
 				"Kommunikatör",
-				// "KF-suppleant",
+				"KF-suppleant",
 				"Vice ordförande",
 				"dFunkt",
 				"Kårfullmäktige",
@@ -451,7 +451,7 @@ export const expectedResults: Map<
 				"D-rek",
 				"D-NOK",
 				"Kommunikatör",
-				// "KF-suppleant",
+				"KF-suppleant",
 				"Vice ordförande",
 				"dFunkt",
 				"Kårfullmäktige",
@@ -468,7 +468,7 @@ export const expectedResults: Map<
 				"Bakis",
 				"D-rek",
 				"D-NOK",
-				// "KF-suppleant",
+				"KF-suppleant",
 				"Vice ordförande",
 				"dFunkt",
 				"Kårfullmäktige",
@@ -480,7 +480,7 @@ export const expectedResults: Map<
 		{
 			shouldHave: [
 				"Valberedningen",
-				// "KF-suppleant",
+				"KF-suppleant",
 				"dFunk",
 			],
 			shouldNotHave: [
@@ -505,7 +505,7 @@ export const expectedResults: Map<
 				"Ordförande",
 				"Bakis",
 				"Kommunikatör",
-				// "KF-suppleant",
+				"KF-suppleant",
 				"Vice ordförande",
 				"dFunkt",
 				"Kårfullmäktige",
@@ -527,7 +527,7 @@ export const expectedResults: Map<
 				"Bakis",
 				"D-NOK",
 				"Kommunikatör",
-				// "KF-suppleant",
+				"KF-suppleant",
 				"dFunkt",
 			],
 		},
@@ -544,7 +544,7 @@ export const expectedResults: Map<
 				"D-rek",
 				"D-NOK",
 				"Kommunikatör",
-				// "KF-suppleant",
+				"KF-suppleant",
 				"Vice ordförande",
 				"Kårfullmäktige",
 			],
