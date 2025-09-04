@@ -123,9 +123,6 @@ export async function updateDiscordDfunkRoles(
 			tagGroup.group_id,
 			tagGroup.group_domain
 		);
-		// if(tagGroup.tag_content == "Valberedningen") {
-		// 	console.log(groupMembers);
-		// }
 		// Find role by name
 		const dfunkDiscordRole = await findRoleCreateByName(
 			tagGroup.tag_content
