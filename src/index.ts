@@ -4,6 +4,7 @@ import { handleInteractions } from "./commands/handle-commands";
 import { registerCommands } from "./commands/register-commands";
 import * as db from "./db/db";
 import { userJoined } from "./shared/utils/userJoined";
+import * as log from "./shared/utils/log";
 
 /**p
  * Goes through all dotenv vars and checks if they are defined.
@@ -37,9 +38,9 @@ async function main(): Promise<void> {
 	validateEnvironment();
 
 	await db.init();
-	console.log("Initialized database");
+	log.info("Initialized database");
 	if (process.env.DISCORD_BOT_TOKEN) {
-		harmonyClient.once("ready", () => console.log("Logged into Harmony"));
+		harmonyClient.once("ready", () => log.info("Logged into Harmony"));
 		await harmonyClient.login(process.env.DISCORD_BOT_TOKEN);
 
 		harmonyClient.on("guildMemberAdd", (member) =>
@@ -51,7 +52,7 @@ async function main(): Promise<void> {
 	}
 	if (process.env.DISCORD_LIGHT_BOT_TOKEN) {
 		harmonyLightClient.once("ready", () =>
-			console.log("Logged into Harmony Light")
+			log.info("Logged into Harmony Light")
 		);
 		await harmonyLightClient.login(process.env.DISCORD_LIGHT_BOT_TOKEN);
 
@@ -66,4 +67,4 @@ async function main(): Promise<void> {
 	await registerCommands();
 }
 
-main().catch(console.error);
+main().catch(log.error);

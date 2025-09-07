@@ -10,6 +10,7 @@ import { VerifyNollanVariables } from "./verify-nollan.variables";
 import { MessageFlags } from "discord.js";
 import * as db from "../../../../db/db";
 import { isKthEmail } from "../util";
+import * as log from "../../../../shared/utils/log";
 
 export async function handleVerifyNollanBase(
 	email: string,
@@ -64,7 +65,7 @@ export async function handleVerifyNollanBase(
 		const kthId = email.split("@")[0];
 		db.insertNollan(kthId, user.id);
 	} catch (error) {
-		console.warn(error);
+		log.error(`${error}`);
 		await interaction.editReply({
 			content: "Något gick fel, var vänlig försök igen.",
 		});
@@ -92,7 +93,7 @@ export async function handleVerifyNollan(
 
 		await handleVerifyNollanBase(email, interaction, nolleKod);
 	} else {
-		console.warn(
+		log.warning(
 			"Unexpected call to handleVerifyNollan(). Origin was neither a slash command, nor a modal submission."
 		);
 	}

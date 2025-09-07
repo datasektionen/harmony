@@ -12,6 +12,7 @@ import {
 import { messageIsToken, verifyUser } from "../util";
 import { VerifySubmitVariables } from "./verify-submit.variables";
 import { GuildModalSubmitInteraction } from "../../../../shared/types/GuildModalSubmitInteraction";
+import * as log from "../../../../shared/utils/log";
 
 export async function handleVerifySubmitBase(
 	interaction: GuildChatInputCommandInteraction | GuildModalSubmitInteraction,
@@ -58,7 +59,7 @@ export async function handleVerifySubmitBase(
 			);
 		}
 	} catch (error) {
-		console.warn(error);
+		log.error(`${error}`);
 		await interaction.editReply({
 			content: "Something went wrong, please try again.",
 		});
@@ -92,7 +93,7 @@ export async function handleVerifySubmit(
 
 		await handleVerifySubmitBase(interaction, verificationCode);
 	} else {
-		console.warn(
+		log.warning(
 			"Unexpected call to handleVerifyNollan(). Origin was neither a slash command, nor a modal submission."
 		);
 	}

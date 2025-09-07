@@ -12,6 +12,7 @@ import {
 	handleVerifyButtonInteraction,
 } from "./subcommands/verify/buttons-verify.handler";
 import { MessageFlags } from "discord.js";
+import * as log from "../../shared/utils/log";
 
 export async function handleButtons(
 	interaction: GuildChatInputCommandInteraction
@@ -49,7 +50,7 @@ export async function handleButtonInteraction(
 	}
 	// Should be unreachable.
 	else {
-		console.warn(
+		log.warning(
 			`An unknown button was interacted with (customId = ${interaction.customId}).`
 		);
 	}
