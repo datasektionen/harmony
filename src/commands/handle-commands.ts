@@ -31,6 +31,7 @@ import { isDarkmode } from "../shared/utils/darkmode";
 import { handleVerifySubmit } from "./verify/subcommands/submit/verify-submit.handler";
 import { handleVerifyNollan } from "./verify/subcommands/nollan/verify-nollan.handler";
 import { handleNollegrupp } from "./nollegrupp/nollegrupp.handler";
+import * as log from "../shared/utils/log";
 
 export async function handleInteractions(
 	interaction: Interaction
@@ -73,11 +74,11 @@ export async function handleInteractions(
 					throw new CommandNotFoundError(interaction.commandName);
 			}
 		} else {
-			console.warn("Unknown interaction type");
+			log.warning("Unknown interaction type");
 		}
 	} catch (error) {
 		await interaction_error_reply(interaction);
-		console.warn(error);
+		log.error(error);
 	}
 }
 
@@ -113,13 +114,13 @@ async function modalSubmitInteractionHandler(
 				await handleVerifySubmit(interaction);
 				return;
 			default:
-				console.warn("Unexpected verify modal interaction");
+				log.warning("Unexpected verify modal interaction");
 				return;
 		}
 	}
 	// Should be unreachable.
 	else {
-		console.warn(
+		log.warning(
 			`An unknown modal was interacted with (customId: ${interaction.customId})`
 		);
 	}
@@ -196,7 +197,7 @@ const handleChatInputCommand = async (
 			}
 		}
 	} catch (error) {
-		console.warn(error);
+		log.error(error);
 	}
 };
 
@@ -217,6 +218,8 @@ async function interaction_error_reply(
 			}
 		}
 	} catch (error) {
-		console.warn("Error when trying to send error message to user:", error);
+		log.warning(
+			`Error when trying to send error message to user: ${error}`
+		);
 	}
 }

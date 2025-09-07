@@ -2,6 +2,7 @@ import { MessageFlags, Role, Snowflake } from "discord.js";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import { MessageVariables } from "./message.variables";
 import { sleep } from "../../shared/utils/channel-utils";
+import * as log from "../../shared/utils/log";
 
 export const handleMessage = async (
 	interaction: GuildChatInputCommandInteraction
@@ -45,7 +46,7 @@ export const handleMessage = async (
 			await interaction.editReply(`Amount of DMs sent: ${numSent}`);
 			sleep(1000);
 		} catch (err) {
-			console.error(err);
+			log.error(err);
 			numFailed++;
 		}
 	});

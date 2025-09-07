@@ -7,6 +7,7 @@ import {
 	isTranslationAvailable,
 	translateText,
 } from "../../shared/utils/translator";
+import * as log from "../../shared/utils/log";
 
 export const handleTranslateMsg = async (
 	interaction: MessageContextMenuCommandInteraction
@@ -45,7 +46,7 @@ export const handleTranslateMsg = async (
 			],
 		});
 	} catch (e) {
-		console.warn(e);
+		log.error(e);
 		await interaction.editReply(
 			"Something went wrong and therefore no translation is available."
 		);

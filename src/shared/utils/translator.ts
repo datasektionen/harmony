@@ -1,6 +1,7 @@
 import { Translator } from "deepl-node";
 import { readFile } from "fs/promises";
 import { decode } from "he";
+import * as log from "./log";
 
 const authKey = process.env.DEEPL_API_KEY;
 const glossaryPath = "./assets/glossary.json";
@@ -68,7 +69,7 @@ async function loadGlossary(): Promise<{ [k: string]: string }> {
 		delete obj["__as-is"];
 		return obj;
 	} catch {
-		console.warn(
+		log.warning(
 			"WARNING: A translation glossary was provided, but it doesn't exist or has an invalid structure"
 		);
 		return {};
