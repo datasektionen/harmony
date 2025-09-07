@@ -17,7 +17,7 @@ export const userJoined = async (
 		try {
 			verifyUser(member.user, member.guild, kthId, isLight);
 		} catch (error) {
-			log.error(error);
+			log.error(`${error}`);
 		}
 	}
 
@@ -27,7 +27,7 @@ export const userJoined = async (
 			try {
 				setN0llanRole(member.user, member.guild);
 			} catch (error) {
-				log.error(error);
+				log.error(`${error}`);
 			}
 		}
 	}

@@ -4,6 +4,8 @@ export function timestamp(): string {
 		now.toLocaleDateString("sv-SE") +
 		" " +
 		now.toLocaleTimeString("sv-SE") +
+		"." +
+		now.getUTCMilliseconds() +
 		" UTC"
 	);
 }

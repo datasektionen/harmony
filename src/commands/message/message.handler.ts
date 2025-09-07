@@ -46,7 +46,7 @@ export const handleMessage = async (
 			await interaction.editReply(`Amount of DMs sent: ${numSent}`);
 			sleep(1000);
 		} catch (err) {
-			log.error(err);
+			log.error(`${err}`);
 			numFailed++;
 		}
 	});

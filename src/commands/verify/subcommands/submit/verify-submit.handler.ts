@@ -59,7 +59,7 @@ export async function handleVerifySubmitBase(
 			);
 		}
 	} catch (error) {
-		log.error(error);
+		log.error(`${error}`);
 		await interaction.editReply({
 			content: "Something went wrong, please try again.",
 		});

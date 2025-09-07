@@ -46,7 +46,7 @@ export const handleTranslateMsg = async (
 			],
 		});
 	} catch (e) {
-		log.error(e);
+		log.error(`${e}`);
 		await interaction.editReply(
 			"Something went wrong and therefore no translation is available."
 		);

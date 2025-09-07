@@ -78,7 +78,7 @@ export async function handleInteractions(
 		}
 	} catch (error) {
 		await interaction_error_reply(interaction);
-		log.error(error);
+		log.error(`${error}`);
 	}
 }
 
@@ -197,7 +197,7 @@ const handleChatInputCommand = async (
 			}
 		}
 	} catch (error) {
-		log.error(error);
+		log.error(`${error}`);
 	}
 };
 
