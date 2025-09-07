@@ -65,7 +65,7 @@ export async function handleVerifyNollanBase(
 		const kthId = email.split("@")[0];
 		db.insertNollan(kthId, user.id);
 	} catch (error) {
-		log.error(error);
+		log.error(`${error}`);
 		await interaction.editReply({
 			content: "Något gick fel, var vänlig försök igen.",
 		});

@@ -89,7 +89,7 @@ export async function handleVerifyBeginBase(
 					);
 				}
 			} catch (error) {
-				log.error(error);
+				log.error(`${error}`);
 				await interaction.reply({
 					content: "Something went wrong, please try again.",
 					flags: MessageFlags.Ephemeral,
@@ -120,7 +120,7 @@ export async function handleVerifyBeginBase(
 			content: `Check the inbox of ${email} for your verification code: <https://webmail.kth.se/>\nSubmit your verification code by clicking the submit button above.\nNote that by submitting the verification code, you accept that Konglig Datasektionen may store your Discord ID and name together with your email address. This will be stored in accordance with the chapter's [information processing policy](<https://styrdokument.datasektionen.se/pm_informationshantering>).`,
 		});
 	} catch (error) {
-		log.error(error);
+		log.error(`${error}`);
 		await interaction.editReply({
 			content: "Something went wrong, please try again.",
 		});

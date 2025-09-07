@@ -8,14 +8,14 @@ export function timestamp(): string {
 	);
 }
 
-export function info(msg: any): void {
+export function info(msg: string): void {
 	console.log(`${timestamp()} ${msg}`);
 }
 
-export function warning(msg: any): void {
+export function warning(msg: string): void {
 	console.warn(`${timestamp()} ${msg}`);
 }
 
-export function error(msg: any): void {
+export function error(msg: string): void {
 	console.error(`${timestamp()} ${msg}`);
 }
