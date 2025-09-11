@@ -11,4 +11,5 @@ export enum CommandNames {
 	CLUB = "club",
 	KTHID = "kthid",
 	NOLLEGRUPP = "nollegrupp",
+	KILLMOTTAGNINGEN = "killmottagningen",
 }
