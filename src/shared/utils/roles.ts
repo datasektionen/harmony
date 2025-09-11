@@ -1,4 +1,4 @@
-import { Guild, User } from "discord.js";
+import { Guild, Role, User } from "discord.js";
 import { AliasName } from "../alias-mappings";
 
 export async function hasRole(
@@ -41,10 +41,7 @@ export async function setRole(
 	roleName: string,
 	guild: Guild
 ): Promise<void> {
-	const role = guild.roles.cache.find((r) => r.name === roleName);
-	if (!role) {
-		throw new Error(`Role ${roleName} does not exist on the Server!`);
-	}
+	const role = getRole(roleName, guild);
 	const guildMember = await guild.members.fetch(user);
 	await guildMember.roles.add(role);
 }
@@ -61,12 +58,17 @@ export async function removeRole(
 	roleName: string,
 	guild: Guild
 ): Promise<void> {
+	const role = getRole(roleName, guild);
+	const guildMember = await guild.members.fetch(user);
+	await guildMember.roles.remove(role);
+}
+
+export function getRole(roleName: string, guild: Guild): Role {
 	const role = guild.roles.cache.find((r) => r.name === roleName);
 	if (!role) {
 		throw new Error(`Role ${roleName} does not exist on the Server!`);
 	}
-	const guildMember = await guild.members.fetch(user);
-	await guildMember.roles.remove(role);
+	return role;
 }
 
 /**
