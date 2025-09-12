@@ -1,6 +1,7 @@
 import { Guild } from "discord.js";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import { getRole } from "../../shared/utils/roles";
+import { getCurrentYearRole } from "../../shared/utils/year";
 
 export const handleKillMottagningen = async (
 	interaction: GuildChatInputCommandInteraction
@@ -15,7 +16,7 @@ export const handleKillMottagningen = async (
 			.forEach((r) => guild.roles.delete(r)),
 
 		clearReceptionRoles(guild),
-		getRole("nØllan", guild).edit({ name: "D-25" }),
+		getRole("nØllan", guild).edit({ name: getCurrentYearRole() }),
 	]);
 };
 
