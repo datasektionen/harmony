@@ -5,7 +5,7 @@ import { GuildChatInputCommandInteraction } from "../../../../shared/types/Guild
 import { clientIsLight } from "../../../../shared/types/light-client";
 import { VerifyingUser } from "../../../../shared/types/VerifyingUser";
 import {
-    setDatasektionenRole,
+	setDatasektionenRole,
 	setIntisRole,
 	setPingRoles,
 	setRoleVerified,

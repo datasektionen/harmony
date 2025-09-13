@@ -1,18 +1,13 @@
-import {
-	ChannelType,
-	Collection,
-	Guild,
-	GuildBasedChannel,
-} from "discord.js";
+import { ChannelType, Collection, Guild, GuildBasedChannel, NonThreadGuildBasedChannel } from "discord.js";
 
 export const getCategory = (
 	categoryName: string,
 	guild: Guild
-): GuildBasedChannel => {
+): NonThreadGuildBasedChannel => {
 	const category = guild.channels.cache.find(
 		(channel) =>
-			channel.type === ChannelType.GuildCategory &&
-			channel.name.includes(categoryName)
+			channel?.type === ChannelType.GuildCategory &&
+			channel?.name.includes(categoryName)
 	);
 	if (!category)
 		throw new Error(
@@ -25,7 +20,7 @@ export const getChannelsInCategory = async (
 	guild: Guild,
 	categoryName: string,
 	channelsFilter?: string[]
-): Promise<Collection<string, GuildBasedChannel>> => {
+): Promise<Collection<string, NonThreadGuildBasedChannel>> => {
 	await guild.channels.fetch();
 	const category = getCategory(categoryName, guild);
 
