@@ -84,18 +84,15 @@ export async function setN0llanRole(user: User, guild: Guild): Promise<void> {
 	await setRole(user, "nØllan", guild);
 }
 
-export async function setYearRoles(
+export async function setDatasektionenRole(
 	user: User,
-	yearTagWithDash: string,
 	guild: Guild
 ): Promise<void> {
-	await setRole(user, yearTagWithDash, guild);
 	await setRole(user, "Datasektionen", guild);
 }
 
-export async function setIntisRoles(user: User, guild: Guild): Promise<void> {
+export async function setIntisRole(user: User, guild: Guild): Promise<void> {
 	await setRole(user, "D-intis", guild);
-	await setRole(user, "Datasektionen", guild);
 }
 
 export async function setExternRole(user: User, guild: Guild): Promise<void> {

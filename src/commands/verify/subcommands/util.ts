@@ -3,10 +3,11 @@ import {
 	hasAnyYearRole,
 	hasRole,
 	removeRole,
+	setDatasektionenRole,
 	setExternRole,
 	setPingRoles,
 	setRoleVerified,
-	setYearRoles,
+	setRole,
 } from "../../../shared/utils/roles";
 import { extractYearFromUser } from "../../../shared/utils/hodis";
 import { mapYearToAlias } from "../../../shared/utils/alias_to_year_mapper";
@@ -38,7 +39,8 @@ export const verifyUser = async (
 	const userHasYearRole = await hasAnyYearRole(user, guild);
 
 	if (yearRole && year) {
-		await setYearRoles(user, yearRole, guild);
+		if (!userHasYearRole) await setRole(user, yearRole, guild);
+		await setDatasektionenRole(user, guild);
 		const alias = mapYearToAlias(year);
 		if (alias) await handleChannelAlias(guild, user, alias, joinChannel);
 	} else if (!userHasYearRole) setExternRole(user, guild);
