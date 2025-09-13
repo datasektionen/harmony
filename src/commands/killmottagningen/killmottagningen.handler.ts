@@ -34,13 +34,14 @@ export const handleKillMottagningen = async (
 			name: getCurrentYearRole(),
 			icon: null,
 		}),
-		getCategory("nØllan", guild).edit({ name: getCurrentYearRole() }),
+		getCategory("nØllan", guild).edit({ name: `╒══════╣ ${getCurrentYearRole()} ╠══════╕`}),
+		// Note that the intis code is also removed.
 		clearNollegrupper(),
 		verifyAllNollan(guild),
 	]);
 
 	interaction.editReply(
-		`Finished! Now see the new era where ${getCurrentYearRole()} exists.`
+		`Finished! Now begins a new era where ${getCurrentYearRole()} exists.`
 	);
 };
 
@@ -64,6 +65,7 @@ const clearReceptionRoles = async (guild: Guild): Promise<void> => {
 	);
 
 	await getRole("Storasyskon", guild).setHoist(false);
+	await getRole("Ordförande", guild).setHoist(true);
 	await getRole("dFunk", guild).setHoist(true);
 	await getRole("D-rek", guild).setHoist(true);
 };
@@ -71,7 +73,7 @@ const clearReceptionRoles = async (guild: Guild): Promise<void> => {
 const dmErrorToNollan = async (user: User, kthid: string): Promise<void> => {
 	const dm = await user.createDM(true);
 	await dm.send(
-		`KTH-användarnamnet \`${kthid}\`, som du angav för några veckor sen, visar sig vara felaktigt!\n\n` +
+		`KTH-användarnamnet \`${kthid}\`, som du angav för några veckor sedan, visar sig vara felaktigt!\n\n` +
 			"Gå in och verifiera dig på nytt i https://discord.com/channels/687747877736546335/1021025877124976680 och skriv till en admin om det inte fungerar."
 	);
 };
@@ -95,12 +97,13 @@ const verifyAllNollan = async (guild: Guild): Promise<void> => {
 					clientIsLight(guild.client)
 				);
 				const insertSuccess = insertUser(kthid, member.id);
-				if (!insertSuccess)
+				if (!insertSuccess) {
 					// KTH ID already used by another user
 					dmErrorToNollan(member.user, kthid);
-				log.error(
-					`nØllan ${member.nickname} had typed KTH ID ${kthid} but it already existed in HarmonyDB!`
-				);
+					log.error(
+						`nØllan ${member.nickname} had typed KTH ID ${kthid} but it already existed in HarmonyDB!`
+					);
+				}
 			} else {
 				dmErrorToNollan(member.user, kthid);
 				log.error(
