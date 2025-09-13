@@ -34,7 +34,9 @@ export const handleKillMottagningen = async (
 			name: getCurrentYearRole(),
 			icon: null,
 		}),
-		getCategory("nØllan", guild).edit({ name: `╒══════╣ ${getCurrentYearRole()} ╠══════╕`}),
+		getCategory("nØllan", guild).edit({
+			name: `╒══════╣ ${getCurrentYearRole()} ╠══════╕`,
+		}),
 		// Note that the intis code is also removed.
 		clearNollegrupper(),
 		verifyAllNollan(guild),
