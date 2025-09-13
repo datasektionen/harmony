@@ -1,9 +1,9 @@
-import { ChannelType, Collection, Guild, GuildBasedChannel, NonThreadGuildBasedChannel } from "discord.js";
+import { ChannelType, Collection, Guild, GuildChannel } from "discord.js";
 
 export const getCategory = (
 	categoryName: string,
 	guild: Guild
-): NonThreadGuildBasedChannel => {
+): GuildChannel => {
 	const category = guild.channels.cache.find(
 		(channel) =>
 			channel?.type === ChannelType.GuildCategory &&
@@ -13,14 +13,14 @@ export const getCategory = (
 		throw new Error(
 			"Sorry! Could not find the requested channel category."
 		);
-	return category;
+	return category as GuildChannel;
 };
 
 export const getChannelsInCategory = async (
 	guild: Guild,
 	categoryName: string,
 	channelsFilter?: string[]
-): Promise<Collection<string, NonThreadGuildBasedChannel>> => {
+): Promise<Collection<string, GuildChannel>> => {
 	await guild.channels.fetch();
 	const category = getCategory(categoryName, guild);
 
@@ -33,5 +33,5 @@ export const getChannelsInCategory = async (
 				: true)
 	);
 
-	return channels;
+	return channels as Collection<string, GuildChannel>;
 };
