@@ -5,7 +5,8 @@ import { GuildChatInputCommandInteraction } from "../../../../shared/types/Guild
 import { clientIsLight } from "../../../../shared/types/light-client";
 import { VerifyingUser } from "../../../../shared/types/VerifyingUser";
 import {
-	setIntisRoles,
+	setDatasektionenRole,
+	setIntisRole,
 	setPingRoles,
 	setRoleVerified,
 } from "../../../../shared/utils/roles";
@@ -47,7 +48,8 @@ export async function handleVerifySubmitBase(
 		if (verifyingUser.isIntis) {
 			await Promise.all([
 				setRoleVerified(interaction.user, guild),
-				setIntisRoles(interaction.user, guild),
+				setIntisRole(interaction.user, guild),
+				setDatasektionenRole(interaction.user, guild),
 				setPingRoles(interaction.user, guild),
 			]);
 		} else {
