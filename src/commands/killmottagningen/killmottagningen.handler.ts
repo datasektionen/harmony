@@ -30,16 +30,16 @@ export const handleKillMottagningen = async (
 			.forEach((r) => guild.roles.delete(r)),
 
 		clearReceptionRoles(guild),
-		getRole("nØllan", guild).edit({
-			name: getCurrentYearRole(),
-			icon: null,
-		}),
 		getCategory("nØllan", guild).edit({
 			name: `╒══════╣ ${getCurrentYearRole()} ╠══════╕`,
 		}),
 		// Note that the intis code is also removed.
 		clearNollegrupper(),
 		verifyAllNollan(guild),
+		getRole("nØllan", guild).edit({
+			name: getCurrentYearRole(),
+			icon: null,
+		}),
 	]);
 
 	interaction.editReply(
