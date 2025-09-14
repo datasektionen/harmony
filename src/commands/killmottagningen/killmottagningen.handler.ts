@@ -9,7 +9,6 @@ import {
 	clearNollan,
 	clearNollegrupper,
 	getAllNollan,
-	getKthIdByNolleId,
 	insertUser,
 } from "../../db/db";
 import * as log from "../../shared/utils/log";
@@ -23,8 +22,6 @@ export const handleKillMottagningen = async (
 	guild.roles.fetch();
 
 	await Promise.all([
-		// Add group members to each group channel?
-
 		// Remove roles "Grupp A-Z"
 		guild.roles.cache
 			.filter((r) => /Grupp [A-Z]/.test(r.name))

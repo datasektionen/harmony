@@ -137,14 +137,14 @@ export async function insertNollan(
 }
 
 // nØllan is "special"...
-export async function getKthIdByNolleId(
+/* export async function getKthIdByNolleId(
 	discordId: string
 ): Promise<string | null> {
 	const users =
 		await sql`select kth_id from nollan where discord_id = ${discordId}`;
 	if (!users.length) return null;
 	return users[0].kth_id;
-}
+} */
 
 export async function getAllNollan(): Promise<
 	postgres.RowList<postgres.Row[]>
