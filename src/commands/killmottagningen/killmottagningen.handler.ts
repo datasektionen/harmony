@@ -8,6 +8,7 @@ import { verifyUser } from "../verify/subcommands/util";
 import {
 	clearNollan,
 	clearNollegrupper,
+	getAllNollan,
 	getKthIdByNolleId,
 	insertUser,
 } from "../../db/db";
@@ -35,15 +36,17 @@ export const handleKillMottagningen = async (
 		}),
 		// Note that the intis code is also removed.
 		clearNollegrupper(),
-		verifyAllNollan(guild),
 		getRole("nØllan", guild).edit({
 			name: getCurrentYearRole(),
 			icon: null,
 		}),
-	]);
+		verifyAllNollan(guild),
+	])
+
+	await clearNollan(); // Clear nollan DB table
 
 	interaction.editReply(
-		`Finished! Now begins a new era where ${getCurrentYearRole()} exists.`
+		`Finished! Welcome to a new era where ${getCurrentYearRole()} exists.`
 	);
 };
 
@@ -57,14 +60,12 @@ const clearReceptionRoles = async (guild: Guild): Promise<void> => {
 		"Doqumenteriet",
 	];
 
-	await Promise.all(
-		receptionRoles.map(async (roleName) => {
-			const role = getRole(roleName, guild);
-			await role.setHoist(false); // Not separate on member list
-			await role.setMentionable(false);
-			role.members.forEach((member) => member.roles.remove(role));
-		})
-	);
+	receptionRoles.map(async (roleName) => {
+		const role = getRole(roleName, guild);
+		await role.setHoist(false); // Not separate on member list
+		await role.setMentionable(false);
+		role.members.forEach((member) => member.roles.remove(role));
+	})
 
 	await getRole("Storasyskon", guild).setHoist(false);
 	await getRole("Ordförande", guild).setHoist(true);
@@ -81,39 +82,44 @@ const dmErrorToNollan = async (user: User, kthid: string): Promise<void> => {
 };
 
 const verifyAllNollan = async (guild: Guild): Promise<void> => {
-	const nollan = getRole("nØllan", guild).members;
+	const nollan = await getAllNollan();
 
+	// Cursed iteration over rows in the nollan table.
 	await Promise.all(
-		nollan.map(async (member) => {
-			const kthid = await getKthIdByNolleId(member.id);
-			if (!kthid)
-				return log.error(
-					`nØllan ${member.nickname} did not have a KTH ID in HarmonyDB!`
-				);
+		nollan.map(async (row) => {
+			let member = null;
+			try {
+				member = await guild.members.fetch(row.discord_id);
+			} catch (err) {
+				log.error(`${err}`)
+			}
 
-			if (await getHodisUser(kthid)) {
+			const hodisUser = await getHodisUser(row.kth_id)
+
+			// nØllan left :(
+			if (member === null) {
+				log.error(`nØllan with KTH-id ${row.kth_id} does not exist on the server (anymore).`)
+			} else if (hodisUser) {
 				verifyUser(
 					member.user,
 					guild,
-					kthid,
+					row.kth_id,
 					clientIsLight(guild.client)
 				);
-				const insertSuccess = insertUser(kthid, member.id);
+				const insertSuccess = await insertUser(row.kth_id, member.id);
+				// KTH ID already used by another user
 				if (!insertSuccess) {
-					// KTH ID already used by another user
-					dmErrorToNollan(member.user, kthid);
+					dmErrorToNollan(member.user, row.kth_id);
 					log.error(
-						`nØllan ${member.nickname} had typed KTH ID ${kthid} but it already existed in HarmonyDB!`
+						`nØllan ${member.user.username} had typed KTH ID ${row.kth_id} but it already existed in HarmonyDB!`
 					);
 				}
 			} else {
-				dmErrorToNollan(member.user, kthid);
+				dmErrorToNollan(member.user, row.kth_id);
 				log.error(
-					`nØllan ${member.nickname} had typed KTH ID ${kthid} but it doesn't exist on Hodis!`
+					`nØllan ${member.user.username} had typed KTH ID ${row.kth_id} but it doesn't exist on Hodis!`
 				);
 			}
 		})
 	);
-
-	clearNollan(); // Clear nollan DB table
 };

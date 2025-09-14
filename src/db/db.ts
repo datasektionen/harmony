@@ -146,6 +146,10 @@ export async function getKthIdByNolleId(
 	return users[0].kth_id;
 }
 
+export async function getAllNollan(): Promise<postgres.RowList<postgres.Row[]>> {
+	return await sql`select * from nollan`
+}
+
 export async function clearNollan(): Promise<void> {
 	await sql`delete from nollan`;
 }
