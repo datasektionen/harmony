@@ -41,7 +41,7 @@ export const handleKillMottagningen = async (
 			icon: null,
 		}),
 		verifyAllNollan(guild),
-	])
+	]);
 
 	await clearNollan(); // Clear nollan DB table
 
@@ -65,7 +65,7 @@ const clearReceptionRoles = async (guild: Guild): Promise<void> => {
 		await role.setHoist(false); // Not separate on member list
 		await role.setMentionable(false);
 		role.members.forEach((member) => member.roles.remove(role));
-	})
+	});
 
 	await getRole("Storasyskon", guild).setHoist(false);
 	await getRole("Ordförande", guild).setHoist(true);
@@ -91,14 +91,16 @@ const verifyAllNollan = async (guild: Guild): Promise<void> => {
 			try {
 				member = await guild.members.fetch(row.discord_id);
 			} catch (err) {
-				log.error(`${err}`)
+				log.error(`${err}`);
 			}
 
-			const hodisUser = await getHodisUser(row.kth_id)
+			const hodisUser = await getHodisUser(row.kth_id);
 
 			// nØllan left :(
 			if (member === null) {
-				log.error(`nØllan with KTH-id ${row.kth_id} does not exist on the server (anymore).`)
+				log.error(
+					`nØllan with KTH-id ${row.kth_id} does not exist on the server (anymore).`
+				);
 			} else if (hodisUser) {
 				verifyUser(
 					member.user,
