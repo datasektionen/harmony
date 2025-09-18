@@ -9,6 +9,7 @@ import {
 import {
 	createDfunkDiscordRoles /*removeDfunkDiscordRoles,*/,
 } from "../../../../jobs/update-dfunk-roles-get-post";
+import * as log from "../../../../shared/utils/log";
 export const handleDfunkTest = async (
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
@@ -49,7 +50,7 @@ export const handleDfunkTest = async (
 			break;
 		}
 	}
-	console.log(
+	log.error(
 		"Failed test cases: " + Array.from(failedData.keys()).join(", ")
 	);
 	failedData.forEach(
@@ -72,11 +73,11 @@ export const handleDfunkTest = async (
 			},
 			caseNumber: number
 		) => {
-			console.log("Test case " + caseNumber + ": ");
-			console.log(
+			log.info("Test case " + caseNumber + ": ");
+			log.info(
 				caseData.processedDfunkData.currentGroups.forEach(
 					(users: string[], group: string) => {
-						console.log(
+						log(
 							"The group " +
 								group +
 								" should have users: " +
@@ -85,19 +86,19 @@ export const handleDfunkTest = async (
 					}
 				)
 			);
-			console.log(
+			log.info(
 				"Users fetched from database: " +
 					Array.from(caseData.dbUsers.keys()).join(", ")
 			);
-			console.log("Fetched Discord Data: ");
-			console.log(
+			log.info("Fetched Discord Data: ");
+			log.info(
 				"Roles fetched:" +
 					caseData.discordData.guildRoles
 						.map((role) => role.name)
 						.join(", ")
 			);
 			caseData.discordData.guildRoles.each((role) =>
-				console.log(
+				log.info(
 					"Users having " +
 						role.name +
 						": " +
@@ -106,14 +107,14 @@ export const handleDfunkTest = async (
 							.join(", ")
 				)
 			);
-			console.log(
+			log.info(
 				"Users fetched: " +
 					caseData.discordData.guildMembers
 						.map((member) => member.displayName)
 						.join(", ")
 			);
 			caseData.discordData.guildMembers.each((member) =>
-				console.log(
+				log.info(
 					"(Cached) Roles of user " +
 						member.displayName +
 						": " +

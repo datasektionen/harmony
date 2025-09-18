@@ -7,7 +7,7 @@ import {
 import { getAllRoles } from "../shared/utils/dfunk";
 import { getDiscordIdByKthid } from "../db/db";
 import { getHiveGroupMembers, getHiveGroups } from "../shared/utils/hive";
-
+import * as log from "../shared/utils/log"
 // List group and special dfunk-related roles (names), expand these lists accordingly if more special
 // roles are added in the future
 const groupRoleNames = ["dFunk", "D-rek"];
@@ -45,7 +45,7 @@ export async function updateDiscordDfunkRoles(
 		toRemoveFromRole: typeof toRemove;
 	};
 }> {
-	console.log(
+	log.info(
 		"Running update on server " + guild.name + " (" + guild.id + ")"
 	);
 	// Data
@@ -244,17 +244,17 @@ export async function updateDiscordDfunkRoles(
 	}
 
 	// Print log data
-	console.error(
+	log.warning(
 		"Users (kthid) not updated (were not present in database): " +
 			Array.from(failedDatabaseKthIdQueries).join(", ") +
 			"."
 	);
-	console.error(
+	log.warning(
 		"Dfunk group roles (identifiers) not updated (they were not in `dfunkGroupToDiscordRoleMapping`): " +
 			Array.from(dfunkGroupRolesNotUpdated).join(", ") +
 			"."
 	);
-	console.error(
+	log.warning(
 		"Roles created during update (roles with names specified by Hive not in server during update): " +
 			Array.from(createdDiscordRoles).join(", ") +
 			"."

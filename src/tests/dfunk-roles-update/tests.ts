@@ -10,6 +10,7 @@ import { insertUser } from "../../db/db";
 import { expectedResults, testCases, testRoles } from "./test_cases";
 import { updateDiscordDfunkRoles } from "../../jobs/update-dfunk-roles-get-post";
 import { CronJob } from "cron";
+import * as log from "../../shared/utils/log";
 
 const sql = postgres(process.env.DATABASE_URL!, {
 	debug: process.env.NODE_ENV === "development",
@@ -47,10 +48,10 @@ export async function executeTestCase(
 		guildMembers: Collection<string, DiscordGuildMember>;
 	};
 }> {
-	console.log(
+	log.info(
 		"Test " + testCaseNr + " on Discord user ID " + testUserDiscordId
 	);
-	console.log(
+	log.info(
 		"KTH-ID: " + testCase.kthid + "; Initial Roles: " + testCase.roles
 	);
 	// Setup phase
@@ -78,13 +79,13 @@ export async function executeTestCase(
 	});
 	testUserRoleCache = await testDiscordMember.roles.cache;
 
-	console.log(
+	log.info(
 		"Initial roles before test setup for user " +
 			testDiscordMember.displayName +
 			":"
 	);
 	for (const [, role] of testUserRoleCache) {
-		console.log(role.id + " -> " + role.name);
+		log.info(role.id + " -> " + role.name);
 	}
 	// Add the roles that are in the test case
 	for (const roleName of testCase.roles) {
@@ -101,13 +102,13 @@ export async function executeTestCase(
 	});
 	testUserRoleCache = await testDiscordMember.roles.cache;
 
-	console.log(
+	log.info(
 		"Initial roles after test setup for user " +
 			testDiscordMember.displayName +
 			":"
 	);
 	for (const [, role] of testUserRoleCache) {
-		console.log(role.id + " -> " + role.name);
+		log.info(role.id + " -> " + role.name);
 	}
 	// Execution
 	const testResults = await updateDiscordDfunkRoles(guild, true);
@@ -117,20 +118,20 @@ export async function executeTestCase(
 		force: true,
 	});
 	testUserRoleCache = await testDiscordMember.roles.cache;
-	console.log(
+	log.info(
 		"Roles for user " +
 			testDiscordMember.displayName +
 			" after test execution:"
 	);
 	for (const [, role] of testUserRoleCache) {
-		console.log(role.id + " -> " + role.name);
+		log.info(role.id + " -> " + role.name);
 	}
 	const expected:
 		| { shouldHave: string[]; shouldNotHave: string[] }
 		| undefined = expectedResults.get(testCase.kthid);
 	if (expected === undefined) {
-		console.error("Unexpected error: Error fetching expected test result.");
-		console.log("=========================");
+		log.error("Unexpected error: Error fetching expected test result.");
+		log.info("=========================");
 		return {
 			result: false,
 			processedDfunkData: testResults!.processedDfunkData,
@@ -147,18 +148,18 @@ export async function executeTestCase(
 		);
 		if (!hasAllRolesShouldHave || hasSomeRolesShouldNotHave) {
 			if (!hasAllRolesShouldHave)
-				console.log(
+				log.error(
 					"Error in test evaluation, the user (" +
 						testCase.kthid +
 						") lacks roles they should have."
 				);
 			if (hasSomeRolesShouldNotHave)
-				console.log(
+				log.error(
 					"Error in test evaluation, the user (" +
 						testCase.kthid +
 						") has roles they should not have."
 				);
-			console.log("=========================");
+			log.info("=========================");
 			return {
 				result: false,
 				processedDfunkData: testResults!.processedDfunkData,
@@ -166,8 +167,8 @@ export async function executeTestCase(
 				discordData: testResults!.discordData,
 			};
 		} else {
-			console.log("Test passed");
-			console.log("=========================");
+			log.info("Test passed");
+			log.info("=========================");
 			return {
 				result: true,
 				processedDfunkData: testResults!.processedDfunkData,
@@ -204,7 +205,7 @@ export const createTestUpdateDfunktRolesJob = (
 
 	const onTick = async (): Promise<void> => {
 		try {
-			console.log("\n" + new Date() + ":\n ");
+			log.info("\n" + new Date() + ":\n ");
 			const guild = await client.guilds.fetch("1212823709706883122"); // Test server
 			const testResult = await executeTestCase(
 				guild,
@@ -215,12 +216,12 @@ export const createTestUpdateDfunktRolesJob = (
 			if (!testResult) failed.push(testCaseNumber + 1);
 			testCaseNumber++;
 			if (testCaseNumber == testCases.length) {
-				console.log("Failed: " + failed);
+				log.infor("Failed: " + failed);
 				testCaseNumber = 0;
 				failed = [];
 			}
 		} catch (e) {
-			console.error("CronJob Error:", e);
+			log.error("CronJob Error:", e);
 		}
 	};
 

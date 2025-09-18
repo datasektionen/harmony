@@ -3,6 +3,7 @@ import { CronJob } from "cron";
 // import { createTestUpdateDfunkRolesJob} from "../tests/dfunk-roles-update/tests"; // For testing purposes
 import { Client as DiscordClient } from "discord.js";
 import { updateDiscordDfunkRoles } from "./update-dfunk-roles-get-post";
+import * as log from "../shared/utils/log";
 
 const errorWebHookURL =
 	"https://mattermost.datasektionen.se/hooks/g6zrwz6r6p8fbjmz8ob1d7iaxw";
@@ -50,21 +51,21 @@ const createUpdateDfunkRolesJob = (client: DiscordClient): CronJob => {
 			}
 			retryCount = 0; // Reset on success
 		} catch (err) {
-			console.error("Job error:", err);
+			log.error("Job error:", err);
 			if (retryCount < 5) {
 				retryCount++;
-				console.log(`Retrying... (${retryCount})`);
+				log.warning(`Retrying... (${retryCount})`);
 				job.stop();
 				job = new CronJob(retryCronTime, onTick, null, true);
 			} else {
-				console.log(
+				log.warning(
 					"Max retries reached. Resetting to original interval."
 				);
 				retryCount = 0;
 				await sendWebHookError(
 					"Harmony Error: Error during Discord dfunk role update. Please take manual action by using the '/dfunk update' command on Discord."
 				).then((res) => {
-					console.log("Got response:", res);
+					log.info("Got response:", res);
 				});
 				job.stop();
 				job = createUpdateDfunkRolesJob(client); // recreate the job

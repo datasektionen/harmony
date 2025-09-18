@@ -9,6 +9,8 @@ import {
 	Mandate,
 } from "./dfunk-interfaces";
 
+import * as log from "../utils/log"
+
 const dfunktEndpoint: string = "https://dfunkt.datasektionen.se/";
 
 const APIUrls = {
@@ -53,7 +55,7 @@ async function dfunkAPICall(
 		const data: DfunkInterface = await response.json();
 		return data;
 	} catch (error) {
-		console.error("Error fetching user data:", error);
+		log.error("Error fetching user data:", error);
 		throw error;
 	}
 }

@@ -46,9 +46,9 @@ async function main(): Promise<void> {
 	log.info("Initialized database");
 	if (process.env.DISCORD_BOT_TOKEN) {
 		harmonyClient.once("ready", () => {
-			console.log("Logged into Harmony");
+			log.info("Logged into Harmony");
 			jobs = initJobs(harmonyClient);
-			console.log("Instantiated cron-jobs.");
+			log.info("Instantiated cron-jobs.");
 		});
 		await harmonyClient.login(process.env.DISCORD_BOT_TOKEN);
 
@@ -61,9 +61,9 @@ async function main(): Promise<void> {
 	}
 	if (process.env.DISCORD_LIGHT_BOT_TOKEN) {
 		harmonyLightClient.once("ready", () => {
-			console.log("Logged into Harmony Light");
+			log.info("Logged into Harmony Light");
 			jobs = initJobs(harmonyLightClient);
-			console.log("Instantiated cron-jobs.");
+			log.info("Instantiated cron-jobs.");
 		});
 		await harmonyLightClient.login(process.env.DISCORD_LIGHT_BOT_TOKEN);
 
