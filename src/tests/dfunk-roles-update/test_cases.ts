@@ -18,7 +18,7 @@ export const testRoles: string[] = [
  * test Discord user during the test case execution, and a list of Discord role ids representing the roles
  * assigned as setup to the user before the execution.
  *
- * WARNING: These test cases are valid until June 2025.
+ * WARNING: These test cases are valid until December 2025.
  */
 export const testCases: { kthid: string; roles: string[] }[] = [
 	{ kthid: "cwmr", roles: [] },
@@ -300,7 +300,7 @@ export const testCases: { kthid: string; roles: string[] }[] = [
  * expected results (oracle) for test cases, all test cases with the same kthid property have the same
  * expected result, given as the object in this list with the same kthid as key.
  *
- * WARNING: These test cases are valid until June 2025.
+ * WARNING: These test cases are valid until December 2025.
  */
 export const expectedResults: Map<
 	string,

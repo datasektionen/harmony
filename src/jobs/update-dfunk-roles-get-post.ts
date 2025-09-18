@@ -12,7 +12,9 @@ import { getHiveGroupMembers, getHiveGroups } from "../shared/utils/hive";
 // roles are added in the future
 const groupRoleNames = ["dFunk", "D-rek"];
 const specialRoleNames = ["dFunkt"];
-// Map dfunk group identifiers to their corresponding Discord role's name
+
+// Map dfunk group identifiers to their corresponding Discord role's name. This list is to be modified
+// if changes to these functionary groups are changed
 const dfunkGroupToDiscordRoleMapping = new Map([
 	["dfunk", "dFunk"],
 	["proj", "dFunk"],
@@ -21,12 +23,12 @@ const dfunkGroupToDiscordRoleMapping = new Map([
 
 /**
  * Script for updating the Discord roles according to the current mandates listed in
- * dfunkt.datasektionen.se. It updates the dFunk and dRek roles, giving/retaining them for those who have it
+ * Hive and dfunkt.datasektionen.se. It updates the dFunk and dRek roles, giving/retaining them for those who have it
  * and should have it, removing the roles from those users which should not have it, and add roles to the new users.
- * @param guild The guild to make the update on, it is assumed to be the 'Konglig Datasektionen' server, or at least
- * that said server have the mappings between functionary roles and the Discord roles defined in **dfunk-roles-mapping**.
- * @param testing A flag to turn on 'test mode', using different mappings than those in **dfunk-roles-mapping.ts**.
- * This is to be removed eventually when the correctness of the routine is [mostly] guaranteed.
+ * 
+ * Additionally, the script creates any missing Discord roles upon execution.
+ * @param guild The guild to make the update on.
+ * @param testing A flag to turn on 'test mode'. This is to be removed eventually when the reliability of the routine has been tested.
  */
 export async function updateDiscordDfunkRoles(
 	guild: Guild,
@@ -35,12 +37,10 @@ export async function updateDiscordDfunkRoles(
 	processedDfunkData: Awaited<ReturnType<typeof processDfunkData>>;
 	dbUsers: typeof dfunkDiscordUsers;
 	discordData: {
-		//ReturnType<Awaited<typeof fetchDiscordData>>
 		guildRoles: typeof guildRoles;
 		guildMembers: typeof guildMembers;
 	};
 	modifiedUsersMap: {
-		//ReturnType<typeof processDiscordData>
 		toAddToRole: typeof toAdd;
 		toRemoveFromRole: typeof toRemove;
 	};
@@ -71,7 +71,7 @@ export async function updateDiscordDfunkRoles(
 	 * `guildRoles`, if no such role is found, create a new one with that name. As a side-effect,
 	 * add this role to the scope structure `createdDiscordRoles` if created.
 	 * @param roleName The name of the role to search in the guild.
-	 * @returns The role if found on the server, or a new created role in the guild with said name .
+	 * @returns The role if found on the server, or a new created role in the guild with said name.
 	 */
 	async function findRoleCreateByName(
 		roleName: string
@@ -80,7 +80,7 @@ export async function updateDiscordDfunkRoles(
 		if (role === undefined) {
 			role = await guild.roles.create({
 				name: roleName,
-				color: "#ee2a7b",
+				color: "#ee2a7b", // Never forget the cerise.
 				reason: "Role not found during dfunk update.",
 			});
 			createdDiscordRoles.add(roleName);
@@ -92,7 +92,7 @@ export async function updateDiscordDfunkRoles(
 	 * return null and store the kthid in `failedDatabaseKthIdQueries`, representing a query to a user kthid
 	 * not registered in the database. If the kthid was already cached in the `dfunkDiscordUsers` map, return
 	 * the value associated with the kthid in said map.
-	 * @param kthid Kth-ID of user to query
+	 * @param kthid Kth-ID of user to query.
 	 * @returns The Discord ID of the user associated with the input Kth-ID, if it is registered in the
 	 * database. Otherwise return null.
 	 */
@@ -115,7 +115,6 @@ export async function updateDiscordDfunkRoles(
 	// Fetch kthid of users and mandate roles these should currently have from Hive,
 	// Construct a list of roles relevant to the update
 	const hiveTagGroups = await getHiveGroups("discord-role");
-	// console.log(hiveTagGroups);
 
 	for (const tagGroup of hiveTagGroups) {
 		// kthids of users with this mandate
@@ -123,7 +122,6 @@ export async function updateDiscordDfunkRoles(
 			tagGroup.group_id,
 			tagGroup.group_domain
 		);
-		// Find role by name
 		const dfunkDiscordRole = await findRoleCreateByName(
 			tagGroup.tag_content
 		);
@@ -246,17 +244,17 @@ export async function updateDiscordDfunkRoles(
 	}
 
 	// Print log data
-	console.log(
+	console.error(
 		"Users (kthid) not updated (were not present in database): " +
 			Array.from(failedDatabaseKthIdQueries).join(", ") +
 			"."
 	);
-	console.log(
+	console.error(
 		"Dfunk group roles (identifiers) not updated (they were not in `dfunkGroupToDiscordRoleMapping`): " +
 			Array.from(dfunkGroupRolesNotUpdated).join(", ") +
 			"."
 	);
-	console.log(
+	console.error(
 		"Roles created during update (roles with names specified by Hive not in server during update): " +
 			Array.from(createdDiscordRoles).join(", ") +
 			"."
@@ -265,18 +263,17 @@ export async function updateDiscordDfunkRoles(
 	if (testing)
 		return {
 			processedDfunkData: processedDfunkData,
-			dbUsers: dfunkDiscordUsers, //dbUsers,
-			discordData: { guildMembers: guildMembers, guildRoles: guildRoles }, // discordData,
+			dbUsers: dfunkDiscordUsers, 
+			discordData: { guildMembers: guildMembers, guildRoles: guildRoles },
 			modifiedUsersMap: {
 				toAddToRole: toAdd,
 				toRemoveFromRole: toRemove,
-			}, // processedDiscordData,
+			},
 		};
 }
 /**
  * Processes the data fetched from the dfunk API to be later used for the role updates.
  * @returns An object of processed data relevant for the update. Includes:
- *  - A mapping of kthid of users currently having mandates to the roles they have mandates on.
  *  - A mapping of dfunk functionary group identifiers to a list of kthid of users currently in this group
  *  - A list of objects representing special dfunk Discord roles and the users that should have them.
  */
@@ -305,7 +302,7 @@ async function processDfunkData(): Promise<{
  * @returns A map of which users (kthid) are in which dfunk groups (list of dfunk groups' identifiers).
  */
 function getGroupsUpdate(dfunkData: DfunkRoles): Map<string, string[]> {
-	// What is/are their functionary group?
+	// What is their functionary group?
 	// Make this as a map from functionary group identifiers to a list of kthids. Only those with current mandates
 	// are expected to be in this map
 	const currentGroups: Map<string, string[]> = new Map();
@@ -348,13 +345,12 @@ function getSpecialRolesUpdate(dfunkData: DfunkRoles): [
 	// First make a set kthids of those who has or have had some mandate, then find the difference with those that
 	// currently have mandates
 	const hasHadMandates: Set<string> = new Set();
-	const dfunkDiscordRoleLegible: Set<string> = new Set();
+	const dfunktDiscordRoleLegible: Set<string> = new Set();
 	// Get current mandates
 	const currentMandates = getCurrentDfunkMandates(dfunkData);
 
 	dfunkData.forEach((role: DfunkRole) => {
 		role.Mandates!.forEach((mandate: DfunkMandate) => {
-			// Add user's kthid to the set of those that have had some mandate ever.
 			hasHadMandates.add(mandate.User!.kthid);
 		});
 	});
@@ -362,7 +358,7 @@ function getSpecialRolesUpdate(dfunkData: DfunkRoles): [
 	// Find the difference of the set hasHadMandates w.r.t. to the keyset of currentMandates.
 	// Too bad the .difference() method is not available in this project.
 	hasHadMandates.forEach((kthid: string) => {
-		if (!currentMandates.has(kthid)) dfunkDiscordRoleLegible.add(kthid);
+		if (!currentMandates.has(kthid)) dfunktDiscordRoleLegible.add(kthid);
 	});
 
 	// // Next special role...
@@ -370,7 +366,7 @@ function getSpecialRolesUpdate(dfunkData: DfunkRoles): [
 	return [
 		{
 			roleName: "dFunkt",
-			specialRoleLegibles: dfunkDiscordRoleLegible,
+			specialRoleLegibles: dfunktDiscordRoleLegible,
 		},
 	];
 }
@@ -418,7 +414,7 @@ async function fetchFromDfunkAPI(): Promise<DfunkRoles> {
 }
 
 /**
- * Uses data from Hive to check and create missing dfunk-related roles on the Discord server
+ * For test purposes. Uses data from Hive to check and create missing dfunk-related roles on the Discord server
  */
 export async function createDfunkDiscordRoles(guild: Guild): Promise<void> {
 	// Fetch all tag groups on Hive related to Discord
@@ -440,8 +436,8 @@ export async function createDfunkDiscordRoles(guild: Guild): Promise<void> {
 }
 
 /**
- * Uses data from Hive to remove all dfunk-related roles on the Discord server based on their names.
- * It only removes one role of each name.
+ * For testing purposes. Uses data from Hive to remove all dfunk-related roles on the Discord server based on 
+ * their names. It only removes one role of each name.
  */
 export async function removeDfunkDiscordRoles(guild: Guild): Promise<boolean> {
 	let removedRole = false;
