@@ -19,4 +19,18 @@ command.addSubcommand((subCommand) =>
 		.setDescription("Start the dfunk role update test routine.")
 );
 
+command.addSubcommand((subCommand) =>
+	subCommand
+		.setName(DfunkSubcommands.TOGGLE)
+		.setDescription("Toggles the automatic dfunk role update routine.")
+);
+
+command.addSubcommand((subCommand) =>
+	subCommand
+		.setName(DfunkSubcommands.STATUS)
+		.setDescription(
+			"Reveals the current status of the automatic dfunk role update."
+		)
+);
+
 export const dfunkCommand = command;
