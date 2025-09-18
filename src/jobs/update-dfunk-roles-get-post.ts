@@ -25,7 +25,7 @@ const dfunkGroupToDiscordRoleMapping = new Map([
  * Script for updating the Discord roles according to the current mandates listed in
  * Hive and dfunkt.datasektionen.se. It updates the dFunk and dRek roles, giving/retaining them for those who have it
  * and should have it, removing the roles from those users which should not have it, and add roles to the new users.
- * 
+ *
  * Additionally, the script creates any missing Discord roles upon execution.
  * @param guild The guild to make the update on.
  * @param testing A flag to turn on 'test mode'. This is to be removed eventually when the reliability of the routine has been tested.
@@ -263,7 +263,7 @@ export async function updateDiscordDfunkRoles(
 	if (testing)
 		return {
 			processedDfunkData: processedDfunkData,
-			dbUsers: dfunkDiscordUsers, 
+			dbUsers: dfunkDiscordUsers,
 			discordData: { guildMembers: guildMembers, guildRoles: guildRoles },
 			modifiedUsersMap: {
 				toAddToRole: toAdd,
@@ -436,7 +436,7 @@ export async function createDfunkDiscordRoles(guild: Guild): Promise<void> {
 }
 
 /**
- * For testing purposes. Uses data from Hive to remove all dfunk-related roles on the Discord server based on 
+ * For testing purposes. Uses data from Hive to remove all dfunk-related roles on the Discord server based on
  * their names. It only removes one role of each name.
  */
 export async function removeDfunkDiscordRoles(guild: Guild): Promise<boolean> {
