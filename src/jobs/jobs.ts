@@ -4,7 +4,8 @@ import { CronJob } from "cron";
 import { Client as DiscordClient } from "discord.js";
 import { updateDiscordDfunkRoles } from "./update-dfunk-roles-get-post";
 
-const errorWebHookURL = "https://mattermost.datasektionen.se/hooks/g6zrwz6r6p8fbjmz8ob1d7iaxw";
+const errorWebHookURL =
+	"https://mattermost.datasektionen.se/hooks/g6zrwz6r6p8fbjmz8ob1d7iaxw";
 
 export function initJobs(
 	client: DiscordClient
@@ -79,19 +80,16 @@ const createUpdateDfunkRolesJob = (client: DiscordClient): CronJob => {
 async function sendWebHookError(message: string): Promise<Response> {
 	const headers: Headers = new Headers();
 	headers.set("Content-Type", "application/json");
-	const response = await fetch(
-		errorWebHookURL,
-		{
-			method: "POST",
-			headers: headers,
-			body: JSON.stringify({
-				text: message,
-				channel: "uptimerobot",
-				username: "harmony",
-				icon_url:
-					"https://dsekt-assets.s3.amazonaws.com/shield-color-white-delta.png",
-			}),
-		}
-	);
+	const response = await fetch(errorWebHookURL, {
+		method: "POST",
+		headers: headers,
+		body: JSON.stringify({
+			text: message,
+			channel: "uptimerobot",
+			username: "harmony",
+			icon_url:
+				"https://dsekt-assets.s3.amazonaws.com/shield-color-white-delta.png",
+		}),
+	});
 	return response;
 }

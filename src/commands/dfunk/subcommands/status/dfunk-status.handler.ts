@@ -17,14 +17,14 @@ export const handleDfunkStatus = async (
             The next automatic update will be executed ${dfunkUpdateJob.job.nextDate()}
             To toggle this functionality on/off, use the \`/dfunk toggle\` command.
             `,
-			flags: MessageFlags.Ephemeral
+			flags: MessageFlags.Ephemeral,
 		});
 	} else {
 		await interaction.reply({
 			content: `The automatic dfunk role update is inactive.
             The automatic update was last executed ${dfunkUpdateJob.job.lastExecution}.
             To toggle this functionality on/off, use the \`/dfunk toggle\` command.`,
-			flags: MessageFlags.Ephemeral
-	});
+			flags: MessageFlags.Ephemeral,
+		});
 	}
 };

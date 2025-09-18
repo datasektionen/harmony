@@ -11,17 +11,18 @@ export const handleDfunkToggle = async (
 	if (jobStatus) {
 		await dfunkUpdateJob.job.stop();
 		await interaction.reply({
-			content:`
+			content: `
             The automatic dfunk role update has been turned off.
             Use this same command (\`/dfunk toggle\`) to turn on this functionality.`,
-			flags: MessageFlags.Ephemeral});
+			flags: MessageFlags.Ephemeral,
+		});
 	} else {
 		await dfunkUpdateJob.job.start();
 		await interaction.reply({
-			content:`The automatic dfunk role update has been turned on.
+			content: `The automatic dfunk role update has been turned on.
             The next automatic update will be executed ${dfunkUpdateJob.job.nextDate()}.
             Use this same command (\`/dfunk toggle\`) to turn off this functionality.`,
-			flags: MessageFlags.Ephemeral
-	});
+			flags: MessageFlags.Ephemeral,
+		});
 	}
 };
