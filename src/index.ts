@@ -6,6 +6,7 @@ import * as db from "./db/db";
 import { userJoined } from "./shared/utils/userJoined";
 import { initJobs } from "./jobs/jobs";
 import { CronJob } from "cron";
+import * as log from "./shared/utils/log";
 
 /**p
  * Goes through all dotenv vars and checks if they are defined.
@@ -42,7 +43,7 @@ export let jobs: Map<string, { client: DiscordClient; job: CronJob }> =
 async function main(): Promise<void> {
 	validateEnvironment();
 	await db.init();
-	console.log("Initialized database");
+	log.info("Initialized database");
 	if (process.env.DISCORD_BOT_TOKEN) {
 		harmonyClient.once("ready", () => {
 			console.log("Logged into Harmony");
@@ -76,4 +77,4 @@ async function main(): Promise<void> {
 	await registerCommands();
 }
 
-main().catch(console.error);
+main().catch(log.error);

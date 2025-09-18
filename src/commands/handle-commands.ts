@@ -32,6 +32,8 @@ import { isDarkmode } from "../shared/utils/darkmode";
 import { handleVerifySubmit } from "./verify/subcommands/submit/verify-submit.handler";
 import { handleVerifyNollan } from "./verify/subcommands/nollan/verify-nollan.handler";
 import { handleNollegrupp } from "./nollegrupp/nollegrupp.handler";
+import * as log from "../shared/utils/log";
+import { handleKillMottagningen } from "./killmottagningen/killmottagningen.handler";
 
 export async function handleInteractions(
 	interaction: Interaction
@@ -74,11 +76,11 @@ export async function handleInteractions(
 					throw new CommandNotFoundError(interaction.commandName);
 			}
 		} else {
-			console.warn("Unknown interaction type");
+			log.warning("Unknown interaction type");
 		}
 	} catch (error) {
 		await interaction_error_reply(interaction);
-		console.warn(error);
+		log.error(`${error}`);
 	}
 }
 
@@ -114,13 +116,13 @@ async function modalSubmitInteractionHandler(
 				await handleVerifySubmit(interaction);
 				return;
 			default:
-				console.warn("Unexpected verify modal interaction");
+				log.warning("Unexpected verify modal interaction");
 				return;
 		}
 	}
 	// Should be unreachable.
 	else {
-		console.warn(
+		log.warning(
 			`An unknown modal was interacted with (customId: ${interaction.customId})`
 		);
 	}
@@ -174,6 +176,9 @@ const handleChatInputCommand = async (
 				case CommandNames.NOLLEGRUPP:
 					await handleNollegrupp(guildInteraction);
 					return;
+				case CommandNames.KILLMOTTAGNINGEN:
+					handleKillMottagningen(guildInteraction);
+					return;
 				default:
 					throw new CommandNotFoundError(
 						guildInteraction.commandName
@@ -189,7 +194,7 @@ const handleChatInputCommand = async (
 					guildInteraction.user,
 					guildInteraction.guild
 				))
-					? "Du är allt för schleeemig, kom tillbaka senare."
+					? "Endast en *teknolog* får använda det kommandot, nØllan."
 					: "Permission denied!\nYou first need to verify yourself using the '/verify' command.";
 				await guildInteraction.reply({
 					content: permissionDeniedMessage,
@@ -200,7 +205,7 @@ const handleChatInputCommand = async (
 			}
 		}
 	} catch (error) {
-		console.warn(error);
+		log.error(`${error}`);
 	}
 };
 
@@ -221,6 +226,8 @@ async function interaction_error_reply(
 			}
 		}
 	} catch (error) {
-		console.warn("Error when trying to send error message to user:", error);
+		log.warning(
+			`Error when trying to send error message to user: ${error}`
+		);
 	}
 }

@@ -1,5 +1,7 @@
 import postgres, { PostgresError } from "postgres";
 
+const UNIQUE_KEY_VIOLATION = "23505";
+
 const sql = postgres(process.env.DATABASE_URL!, {
 	debug: process.env.NODE_ENV === "development",
 });
@@ -19,7 +21,15 @@ export async function init(): Promise<void> {
 		create table if not exists nollegrupp (
 			name text primary key,
 			code text unique not null
-		)
+		);
+	`;
+
+	// Initialise table table for nØllan's KTH-ids and Discord ids.
+	await sql`
+		create table if not exists nollan (
+			kth_id text primary key,
+			discord_id text unique not null
+		);
 	`;
 }
 
@@ -30,10 +40,8 @@ export async function insertUser(
 	try {
 		await sql`insert into users (kth_id, discord_id) values (${kthId}, ${discordId})`;
 	} catch (err) {
-		if (err instanceof PostgresError && err.code == "23505") {
-			// code for unique key violation
+		if (err instanceof PostgresError && err.code == UNIQUE_KEY_VIOLATION)
 			return false;
-		}
 		throw err;
 	}
 	return true;
@@ -65,10 +73,8 @@ export async function insertNollegrupp(
 	try {
 		await sql`insert into nollegrupp (name, code) values (${name}, ${code})`;
 	} catch (err) {
-		if (err instanceof PostgresError && err.code == "23505") {
-			// code for unique key violation
+		if (err instanceof PostgresError && err.code == UNIQUE_KEY_VIOLATION)
 			return false;
-		}
 		throw err;
 	}
 	return true;
@@ -102,7 +108,6 @@ export async function getNollegruppCodeByName(
 
 export async function clearNollegrupper(): Promise<void> {
 	await sql`delete from nollegrupp`;
-	return;
 }
 
 export async function formatNollegruppData(): Promise<string> {
@@ -115,4 +120,32 @@ export async function formatNollegruppData(): Promise<string> {
 	});
 
 	return output;
+}
+
+export async function insertNollan(
+	kthId: string,
+	discordId: string
+): Promise<boolean> {
+	try {
+		await sql`insert into nollan (kth_id, discord_id) values (${kthId}, ${discordId})`;
+	} catch (err) {
+		if (err instanceof PostgresError && err.code == UNIQUE_KEY_VIOLATION)
+			return false;
+		throw err;
+	}
+	return true;
+}
+
+// nØllan is "special"...
+export async function getKthIdByNolleId(
+	discordId: string
+): Promise<string | null> {
+	const users =
+		await sql`select kth_id from nollan where discord_id = ${discordId}`;
+	if (!users.length) return null;
+	return users[0].kth_id;
+}
+
+export async function clearNollan(): Promise<void> {
+	await sql`delete from nollan`;
 }

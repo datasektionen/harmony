@@ -8,9 +8,12 @@ import {
 } from "../../../../shared/utils/roles";
 import { VerifyNollanVariables } from "./verify-nollan.variables";
 import { MessageFlags } from "discord.js";
-import { getNollegruppNameByCode } from "../../../../db/db";
+import * as db from "../../../../db/db";
+import { isKthEmail } from "../util";
+import * as log from "../../../../shared/utils/log";
 
 export async function handleVerifyNollanBase(
+	email: string,
 	interaction: GuildChatInputCommandInteraction | GuildModalSubmitInteraction,
 	nolleKod: string
 ): Promise<void> {
@@ -23,18 +26,27 @@ export async function handleVerifyNollanBase(
 	if (await hasRoleN0llan(user, guild)) {
 		await interaction.editReply({
 			content:
-				"Du är redan verifierad och schleeemig!\nOm du tror att det skett ett misstag, vänligen kontakta din Dadda.",
+				"Du är redan verifierad, nØllan.\nVänligen kontakta din Dadda om du tror att det har skett ett misstag.",
+		});
+		return;
+	}
+
+	// Hopefully nØllan knows how to activate their email address.
+	if (!isKthEmail(email)) {
+		await interaction.editReply({
+			content:
+				"Var vänlig och skriv in en *riktig* KTH-mejladress, nØllan.",
 		});
 		return;
 	}
 
 	try {
-		// Check if nolleKod is valid
-		const nollegruppRoleName = await getNollegruppNameByCode(nolleKod);
+		// Check if nolleKod is valid.
+		const nollegruppRoleName = await db.getNollegruppNameByCode(nolleKod);
 		if (nollegruppRoleName == null) {
 			await interaction.editReply({
 				content:
-					"Error: Invalid code!\nVänligen skriv in den personliga kod du fått från din Dadda.\nOm du har problem, kontakta din Dadda!",
+					"Error: Invalid code!\nVänligen skriv in den personliga kod du fått från din Dadda.\nFråga din Dadda om du behöver extra hjälp!",
 			});
 			return;
 		}
@@ -46,10 +58,14 @@ export async function handleVerifyNollanBase(
 
 		await interaction.editReply({
 			content:
-				"Välkommen nØllan! Du har nu blivit tillagd i några kanaler, inklusive kanaler för de första kurserna. Ha kul med schlemandet!",
+				"Välkommen, nØllan! Du har nu blivit tillagd i några nØllekanaler, samt kanaler för de första kurserna. Ha kul under dina första veckor på Teknis!",
 		});
+
+		// Add nØllan to database.
+		const kthId = email.split("@")[0];
+		db.insertNollan(kthId, user.id);
 	} catch (error) {
-		console.warn(error);
+		log.error(`${error}`);
 		await interaction.editReply({
 			content: "Något gick fel, var vänlig försök igen.",
 		});
@@ -62,20 +78,22 @@ export async function handleVerifyNollan(
 ): Promise<void> {
 	if (interaction.isModalSubmit()) {
 		const nolleKod = interaction.fields.getTextInputValue(
-			"VerifyNollanNollekod"
+			"verifyNollanNollekod"
 		);
+		const email = interaction.fields.getTextInputValue("verifyNollanEmail");
 
-		await handleVerifyNollanBase(interaction, nolleKod);
+		await handleVerifyNollanBase(email, interaction, nolleKod);
 	} else if (interaction.isChatInputCommand()) {
 		const { options } = interaction;
 		const nolleKod = options.getString(
 			VerifyNollanVariables.NOLLE_KOD,
 			true
 		);
+		const email = options.getString(VerifyNollanVariables.EMAIL, true);
 
-		await handleVerifyNollanBase(interaction, nolleKod);
+		await handleVerifyNollanBase(email, interaction, nolleKod);
 	} else {
-		console.warn(
+		log.warning(
 			"Unexpected call to handleVerifyNollan(). Origin was neither a slash command, nor a modal submission."
 		);
 	}

@@ -12,4 +12,5 @@ export enum CommandNames {
 	KTHID = "kthid",
 	NOLLEGRUPP = "nollegrupp",
 	DFUNK = "dfunk",
+	KILLMOTTAGNINGEN = "killmottagningen",
 }

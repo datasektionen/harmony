@@ -3,15 +3,17 @@ import {
 	hasAnyYearRole,
 	hasRole,
 	removeRole,
+	setDatasektionenRole,
 	setExternRole,
 	setPingRoles,
 	setRoleVerified,
-	setYearRoles,
+	setRole,
 } from "../../../shared/utils/roles";
 import { extractYearFromUser } from "../../../shared/utils/hodis";
 import { mapYearToAlias } from "../../../shared/utils/alias_to_year_mapper";
 import { handleChannelAlias } from "../../../shared/utils/channel-utils";
 import { joinChannel } from "../../join/join.handler";
+import * as log from "../../../shared/utils/log";
 
 export const isKthEmail = (messageText: string): boolean =>
 	new RegExp(/^[a-zA-Z0-9]+@kth[.]se$/).test(messageText);
@@ -25,7 +27,7 @@ export const verifyUser = async (
 	kthId: string,
 	isLight: boolean
 ): Promise<void> => {
-	console.log(
+	log.info(
 		`Verified user by kth email. kthid="${kthId}" user.id="${user.id}" user.username="${user.username}"`
 	);
 
@@ -37,7 +39,8 @@ export const verifyUser = async (
 	const userHasYearRole = await hasAnyYearRole(user, guild);
 
 	if (yearRole && year) {
-		await setYearRoles(user, yearRole, guild);
+		if (!userHasYearRole) await setRole(user, yearRole, guild);
+		await setDatasektionenRole(user, guild);
 		const alias = mapYearToAlias(year);
 		if (alias) await handleChannelAlias(guild, user, alias, joinChannel);
 	} else if (!userHasYearRole) setExternRole(user, guild);

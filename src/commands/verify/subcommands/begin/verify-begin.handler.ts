@@ -13,6 +13,7 @@ import {
 	getDiscordIdByKthid,
 	getNollegruppCodeByName,
 } from "../../../../db/db";
+import * as log from "../../../../shared/utils/log";
 
 // The basic logic of handleVerifyBegin() implemented in an
 // "interaction-agnostic manner".
@@ -49,7 +50,7 @@ export async function handleVerifyBeginBase(
 				content:
 					"Verification failed, please contact a server administrator to resolve the issue and complete your verification.",
 			});
-			console.log(
+			log.info(
 				"Entry (intis, intis code) missing from nollegrupp, please use the /nollegrupp command to add one."
 			);
 			return;
@@ -62,7 +63,9 @@ export async function handleVerifyBeginBase(
 
 	if ((await isDangerOfNollan(kthId, darkmode)) && !isIntis) {
 		await interaction.editReply({
-			content: "...!̵̾͌.̸͆̅.̷̊̈́.̵͛̋Ë̵̔R̴̓͝R̵̐OR come bẵ̴c̴̋̔k̷̽ 16 se͆͠p̸̀̐t̵̐͑e̶̓̌m̵ber...ERR̶̈́͋Ô̶͂R̷̾͝.̷̊́.̶̓͒.̵͊̑.̸̑ERROR...",
+			content:
+				"The verification system is currently restricted until mid-September." +
+				"\nIf you are a newly admitted student, check your KTH email inbox to see if you have received any information about how to verify. If you have not received any such information, please contact a server administrator.",
 		});
 		return;
 	}
@@ -88,7 +91,7 @@ export async function handleVerifyBeginBase(
 					);
 				}
 			} catch (error) {
-				console.warn(error);
+				log.error(`${error}`);
 				await interaction.reply({
 					content: "Something went wrong, please try again.",
 					flags: MessageFlags.Ephemeral,
@@ -101,7 +104,7 @@ export async function handleVerifyBeginBase(
 				content:
 					"Verification unsuccessful, your KTH account has already been used to verify another Discord account.",
 			});
-			console.log(
+			log.info(
 				`Failed to verify user due to KTH ID already being used for another Discord account. email="${email}" user.id="${user.id}" user.username="${user.username}"`
 			);
 			return;
@@ -119,7 +122,7 @@ export async function handleVerifyBeginBase(
 			content: `Check the inbox of ${email} for your verification code: <https://webmail.kth.se/>\nSubmit your verification code by clicking the submit button above.\nNote that by submitting the verification code, you accept that Konglig Datasektionen may store your Discord ID and name together with your email address. This will be stored in accordance with the chapter's [information processing policy](<https://styrdokument.datasektionen.se/pm_informationshantering>).`,
 		});
 	} catch (error) {
-		console.error(error);
+		log.error(`${error}`);
 		await interaction.editReply({
 			content: "Something went wrong, please try again.",
 		});
@@ -157,7 +160,7 @@ export async function handleVerifyBegin(
 			await handleVerifyBeginBase(email, interaction, darkmode, code);
 		}
 	} else {
-		console.warn(
+		log.warning(
 			"Unexpected call to handleVerifyBegin(). Origin was neither a slash command, nor a modal submission."
 		);
 	}

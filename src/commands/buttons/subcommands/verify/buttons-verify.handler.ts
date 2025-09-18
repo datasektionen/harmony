@@ -14,7 +14,6 @@ export async function handleButtonsVerify(
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> {
 	const mottagning = await isDarkmode();
-
 	let labels: string[];
 
 	if (mottagning) {
@@ -69,7 +68,7 @@ export async function handleVerifyButtonInteraction(
 			if (mottagning) {
 				const codeInput = new TextInputBuilder()
 					.setCustomId("beginVerifyCode")
-					.setLabel("Enter any special codes you may have received")
+					.setLabel("Enter a valid verification code")
 					.setStyle(TextInputStyle.Short)
 					.setRequired(false);
 
@@ -88,18 +87,31 @@ export async function handleVerifyButtonInteraction(
 				.setCustomId(VerifyModalCustomIds.NOLLAN)
 				.setTitle("nØllan...");
 
-			const nollekodInput = new TextInputBuilder()
-				.setCustomId("VerifyNollanNollekod")
-				.setLabel("Vad är din nØllekod, nØllan?")
+			const emailInput = new TextInputBuilder()
+				.setCustomId("verifyNollanEmail")
+				.setLabel("Vad är din KTH-mejladress?")
 				.setStyle(TextInputStyle.Short)
 				.setRequired(true);
 
-			const actionRow =
+			const actionRow1 =
+				new ActionRowBuilder<TextInputBuilder>().addComponents(
+					emailInput
+				);
+
+			modal.addComponents(actionRow1);
+
+			const nollekodInput = new TextInputBuilder()
+				.setCustomId("verifyNollanNollekod")
+				.setLabel("Vad är koden du har fått från din Dadda?")
+				.setStyle(TextInputStyle.Short)
+				.setRequired(true);
+
+			const actionRow2 =
 				new ActionRowBuilder<TextInputBuilder>().addComponents(
 					nollekodInput
 				);
 
-			modal.addComponents(actionRow);
+			modal.addComponents(actionRow2);
 
 			break;
 		}

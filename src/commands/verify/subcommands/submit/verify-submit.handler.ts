@@ -5,13 +5,15 @@ import { GuildChatInputCommandInteraction } from "../../../../shared/types/Guild
 import { clientIsLight } from "../../../../shared/types/light-client";
 import { VerifyingUser } from "../../../../shared/types/VerifyingUser";
 import {
-	setIntisRoles,
+	setDatasektionenRole,
+	setIntisRole,
 	setPingRoles,
 	setRoleVerified,
 } from "../../../../shared/utils/roles";
 import { messageIsToken, verifyUser } from "../util";
 import { VerifySubmitVariables } from "./verify-submit.variables";
 import { GuildModalSubmitInteraction } from "../../../../shared/types/GuildModalSubmitInteraction";
+import * as log from "../../../../shared/utils/log";
 
 export async function handleVerifySubmitBase(
 	interaction: GuildChatInputCommandInteraction | GuildModalSubmitInteraction,
@@ -46,7 +48,8 @@ export async function handleVerifySubmitBase(
 		if (verifyingUser.isIntis) {
 			await Promise.all([
 				setRoleVerified(interaction.user, guild),
-				setIntisRoles(interaction.user, guild),
+				setIntisRole(interaction.user, guild),
+				setDatasektionenRole(interaction.user, guild),
 				setPingRoles(interaction.user, guild),
 			]);
 		} else {
@@ -58,7 +61,7 @@ export async function handleVerifySubmitBase(
 			);
 		}
 	} catch (error) {
-		console.warn(error);
+		log.error(`${error}`);
 		await interaction.editReply({
 			content: "Something went wrong, please try again.",
 		});
@@ -92,7 +95,7 @@ export async function handleVerifySubmit(
 
 		await handleVerifySubmitBase(interaction, verificationCode);
 	} else {
-		console.warn(
+		log.warning(
 			"Unexpected call to handleVerifyNollan(). Origin was neither a slash command, nor a modal submission."
 		);
 	}
