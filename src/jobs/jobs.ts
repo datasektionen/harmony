@@ -4,6 +4,8 @@ import { CronJob } from "cron";
 import { Client as DiscordClient } from "discord.js";
 import { updateDiscordDfunkRoles } from "./update-dfunk-roles-get-post";
 
+const errorWebHookURL = "https://mattermost.datasektionen.se/hooks/g6zrwz6r6p8fbjmz8ob1d7iaxw";
+
 export function initJobs(
 	client: DiscordClient
 ): Map<string, { client: DiscordClient; job: CronJob }> {
@@ -70,7 +72,7 @@ const createUpdateDfunkRolesJob = (client: DiscordClient): CronJob => {
 		}
 	};
 
-	job = new CronJob(originalCronTime, onTick, null, true);
+	job = new CronJob(originalCronTime, onTick, null, false); //  The job is not active by default.
 	return job;
 };
 
@@ -78,7 +80,7 @@ async function sendWebHookError(message: string): Promise<Response> {
 	const headers: Headers = new Headers();
 	headers.set("Content-Type", "application/json");
 	const response = await fetch(
-		"https://mattermost.datasektionen.se/hooks/g6zrwz6r6p8fbjmz8ob1d7iaxw",
+		errorWebHookURL,
 		{
 			method: "POST",
 			headers: headers,
