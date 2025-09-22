@@ -15,13 +15,13 @@ export async function handleNollegrupp(
 
 	switch (subcommandName) {
 		case NollegruppSubcommands.ADD:
-			return handleNollegruppAdd(interaction);
+			return await handleNollegruppAdd(interaction);
 		case NollegruppSubcommands.CLEAR:
-			return handleNollegruppClear(interaction);
+			return await handleNollegruppClear(interaction);
 		case NollegruppSubcommands.LIST:
-			return handleNollegruppList(interaction);
+			return await handleNollegruppList(interaction);
 		case NollegruppSubcommands.REMOVE:
-			return handleNollegruppRemove(interaction);
+			return await handleNollegruppRemove(interaction);
 		default:
 			throw new CommandNotFoundError(interaction.commandName);
 	}
