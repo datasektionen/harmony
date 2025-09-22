@@ -1,4 +1,4 @@
 export enum MottagningenSubcommands {
-    CLEAR = "clear",
-    END = "end",
+	CLEAR = "clear",
+	END = "end",
 }

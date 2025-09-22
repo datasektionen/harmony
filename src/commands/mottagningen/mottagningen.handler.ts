@@ -6,17 +6,17 @@ import { handleMottagningenClear } from "./subcommands/clear/mottagningen-clear.
 import { handleMottagningenEnd } from "./subcommands/end/mottagningen-end.handler";
 
 export async function handleMottagningen(
-    interaction: GuildChatInputCommandInteraction
+	interaction: GuildChatInputCommandInteraction
 ): Promise<void> {
-    const subcommandName = interaction.options.getSubcommand(true);
-    await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+	const subcommandName = interaction.options.getSubcommand(true);
+	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-    switch (subcommandName) {
-        case MottagningenSubcommands.CLEAR:
-            return await handleMottagningenClear(interaction);
-        case MottagningenSubcommands.END:
-            return await handleMottagningenEnd(interaction);
-        default:
-            throw new CommandNotFoundError(interaction.commandName);
-    }
+	switch (subcommandName) {
+		case MottagningenSubcommands.CLEAR:
+			return await handleMottagningenClear(interaction);
+		case MottagningenSubcommands.END:
+			return await handleMottagningenEnd(interaction);
+		default:
+			throw new CommandNotFoundError(interaction.commandName);
+	}
 }
