@@ -38,7 +38,7 @@ export async function insertUser(
 	discordId: string
 ): Promise<boolean> {
 	try {
-		await sql`insert into users (kth_id, discord_id) values (${kthId}, ${discordId})`;
+		await sql`insert into users (kth_id, discord_id) values (${kthId.toLowerCase()}, ${discordId})`;
 	} catch (err) {
 		if (err instanceof PostgresError && err.code == UNIQUE_KEY_VIOLATION)
 			return false;
@@ -51,7 +51,7 @@ export async function getDiscordIdByKthid(
 	kthId: string
 ): Promise<string | null> {
 	const users =
-		await sql`select discord_id from users where kth_id = ${kthId}`;
+		await sql`select discord_id from users where kth_id = ${kthId.toLowerCase()}`;
 	if (!users.length) return null;
 	return users[0].discord_id;
 }
@@ -127,7 +127,7 @@ export async function insertNollan(
 	discordId: string
 ): Promise<boolean> {
 	try {
-		await sql`insert into nollan (kth_id, discord_id) values (${kthId}, ${discordId})`;
+		await sql`insert into nollan (kth_id, discord_id) values (${kthId.toLowerCase()}, ${discordId})`;
 	} catch (err) {
 		if (err instanceof PostgresError && err.code == UNIQUE_KEY_VIOLATION)
 			return false;
