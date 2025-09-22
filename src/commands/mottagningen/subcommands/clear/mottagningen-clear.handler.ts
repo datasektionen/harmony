@@ -4,6 +4,6 @@ import { GuildChatInputCommandInteraction } from "../../../../shared/types/Guild
 export async function handleMottagningenClear(
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> {
-	clearNollan();
+	await clearNollan();
 	interaction.editReply("Cleared 'nollan' database table");
 }
