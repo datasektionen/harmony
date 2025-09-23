@@ -2,7 +2,7 @@ import { CronJob } from "cron";
 // import { testCases } from "../tests/dfunk-roles-update/test_cases"; // For testing purposes
 // import { createTestUpdateDfunkRolesJob} from "../tests/dfunk-roles-update/tests"; // For testing purposes
 import { Client as DiscordClient } from "discord.js";
-import { updateDiscordDfunkRoles } from "./update-dfunk-roles-get-post";
+import { updateDiscordDfunkRoles } from "./update-dfunk-roles";
 import * as log from "../shared/utils/log";
 
 const errorWebHookURL =

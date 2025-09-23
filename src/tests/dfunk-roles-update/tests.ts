@@ -8,7 +8,7 @@ import {
 import postgres, { PostgresError } from "postgres";
 import { insertUser } from "../../db/db";
 import { expectedResults, testCases, testRoles } from "./test_cases";
-import { updateDiscordDfunkRoles } from "../../jobs/update-dfunk-roles-get-post";
+import { updateDiscordDfunkRoles } from "../../jobs/update-dfunk-roles";
 import { CronJob } from "cron";
 import * as log from "../../shared/utils/log";
 

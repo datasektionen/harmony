@@ -8,7 +8,7 @@ import {
 } from "discord.js";
 import {
 	createDfunkDiscordRoles /*removeDfunkDiscordRoles,*/,
-} from "../../../../jobs/update-dfunk-roles-get-post";
+} from "../../../../jobs/update-dfunk-roles";
 import * as log from "../../../../shared/utils/log";
 export const handleDfunkTest = async (
 	interaction: GuildChatInputCommandInteraction

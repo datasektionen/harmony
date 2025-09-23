@@ -1,4 +1,4 @@
-import { updateDiscordDfunkRoles } from "../../../../jobs/update-dfunk-roles-get-post";
+import { updateDiscordDfunkRoles } from "../../../../jobs/update-dfunk-roles";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 
 export const handleDfunkUpdate = async (
