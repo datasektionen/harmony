@@ -74,18 +74,17 @@ export const handleDfunkTest = async (
 			caseNumber: number
 		) => {
 			log.info("Test case " + caseNumber + ": ");
-			log.info(
-				caseData.processedDfunkData.currentGroups.forEach(
-					(users: string[], group: string) => {
-						log(
-							"The group " +
-								group +
-								" should have users: " +
-								users.join(", ")
-						);
-					}
-				)
-			);
+			caseData.processedDfunkData.currentGroups.forEach(
+				(users: string[], group: string) => {
+					log.info(
+						"The group " +
+							group +
+							" should have users: " +
+							users.join(", ")
+					);
+				}
+			)
+
 			log.info(
 				"Users fetched from database: " +
 					Array.from(caseData.dbUsers.keys()).join(", ")

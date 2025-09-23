@@ -216,7 +216,7 @@ export const createTestUpdateDfunktRolesJob = (
 			if (!testResult) failed.push(testCaseNumber + 1);
 			testCaseNumber++;
 			if (testCaseNumber == testCases.length) {
-				log.infor("Failed: " + failed);
+				log.info("Failed:", failed);
 				testCaseNumber = 0;
 				failed = [];
 			}
