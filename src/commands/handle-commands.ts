@@ -32,7 +32,7 @@ import { handleVerifySubmit } from "./verify/subcommands/submit/verify-submit.ha
 import { handleVerifyNollan } from "./verify/subcommands/nollan/verify-nollan.handler";
 import { handleNollegrupp } from "./nollegrupp/nollegrupp.handler";
 import * as log from "../shared/utils/log";
-import { handleKillMottagningen } from "./killmottagningen/killmottagningen.handler";
+import { handleMottagningen } from "./mottagningen/mottagningen.handler";
 
 export async function handleInteractions(
 	interaction: Interaction
@@ -172,8 +172,8 @@ const handleChatInputCommand = async (
 				case CommandNames.NOLLEGRUPP:
 					handleNollegrupp(guildInteraction);
 					return;
-				case CommandNames.KILLMOTTAGNINGEN:
-					handleKillMottagningen(guildInteraction);
+				case CommandNames.MOTTAGNINGEN:
+					handleMottagningen(guildInteraction);
 					return;
 				default:
 					throw new CommandNotFoundError(

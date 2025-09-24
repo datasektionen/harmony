@@ -11,7 +11,7 @@ import { clubCommand } from "./club/club.command";
 import { messageCommand } from "./message/message.command";
 import { ContextMenuCommandBuilder, SlashCommandBuilder } from "discord.js";
 import { kthIdCommand } from "./kthid/kthid.command";
-import { killMottagningenCommand } from "./killmottagningen/killmottagningen.command";
+import { mottagningenCommand } from "./mottagningen/mottagningen.command";
 
 type ApplicationCommandBuilder =
 	| SlashCommandBuilder
@@ -32,7 +32,7 @@ export const getOfficialBotCommands = async (): Promise<
 	messageCommand,
 	kthIdCommand,
 	nollegruppCommand,
-	killMottagningenCommand,
+	mottagningenCommand,
 ];
 
 export const getLightBotCommands = async (): Promise<
