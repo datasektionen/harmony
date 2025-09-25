@@ -97,9 +97,7 @@ const dmErrorToNollan = async (user: User, kthid: string): Promise<void> => {
 		);
 	} catch (err) {
 		log.error(`${err}`);
-		log.error(
-			`Failed to send message to user with KTH-id "${kthid}".`
-		);
+		log.error(`Failed to send message to user with KTH-id "${kthid}".`);
 	}
 };
 
