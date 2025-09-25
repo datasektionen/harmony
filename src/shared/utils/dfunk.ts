@@ -9,7 +9,7 @@ import {
 	Mandate,
 } from "./dfunk-interfaces";
 
-import * as log from "../utils/log"
+import * as log from "../utils/log";
 
 const dfunktEndpoint: string = "https://dfunkt.datasektionen.se/";
 

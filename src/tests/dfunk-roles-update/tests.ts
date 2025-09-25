@@ -48,9 +48,7 @@ export async function executeTestCase(
 		guildMembers: Collection<string, DiscordGuildMember>;
 	};
 }> {
-	log.info(
-		"Test " + testCaseNr + " on Discord user ID " + testUserDiscordId
-	);
+	log.info("Test " + testCaseNr + " on Discord user ID " + testUserDiscordId);
 	log.info(
 		"KTH-ID: " + testCase.kthid + "; Initial Roles: " + testCase.roles
 	);

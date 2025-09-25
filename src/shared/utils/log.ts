@@ -12,13 +12,13 @@ export function timestamp(): string {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function info(...msg: any[]): void {
-	console.log(...([timestamp()].concat(...msg)));
+	console.log(...[timestamp()].concat(...msg));
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function warning(...msg: any[]): void {
-	console.warn(...([timestamp()].concat(...msg)));
+	console.warn(...[timestamp()].concat(...msg));
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function error(...msg: any[]): void {
-	console.error(...([timestamp()].concat(...msg)));
+	console.error(...[timestamp()].concat(...msg));
 }

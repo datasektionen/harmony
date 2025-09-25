@@ -50,9 +50,7 @@ export const handleDfunkTest = async (
 			break;
 		}
 	}
-	log.error(
-		"Failed test cases: " + Array.from(failedData.keys()).join(", ")
-	);
+	log.error("Failed test cases: " + Array.from(failedData.keys()).join(", "));
 	failedData.forEach(
 		(
 			caseData: {
@@ -83,7 +81,7 @@ export const handleDfunkTest = async (
 							users.join(", ")
 					);
 				}
-			)
+			);
 
 			log.info(
 				"Users fetched from database: " +

@@ -36,7 +36,7 @@ const createUpdateDfunkRolesJob = (client: DiscordClient): CronJob => {
 
 	const originalCronTime = "0 0 * * 6"; // Saturday 12:00 AM
 	// const originalCronTime = "*/3 * * * *"; // Every 3 minutes
-	
+
 	const retryCronTime = "* * * * *"; // every minute
 
 	const onTick = async (): Promise<void> => {

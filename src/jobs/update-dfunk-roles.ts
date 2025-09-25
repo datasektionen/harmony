@@ -7,7 +7,7 @@ import {
 import { getAllRoles } from "../shared/utils/dfunk";
 import { getDiscordIdByKthid } from "../db/db";
 import { getHiveGroupMembers, getHiveGroups } from "../shared/utils/hive";
-import * as log from "../shared/utils/log"
+import * as log from "../shared/utils/log";
 // List group and special dfunk-related roles (names), expand these lists accordingly if more special
 // roles are added in the future
 const groupRoleNames = ["dFunk", "D-rek"];
@@ -45,9 +45,7 @@ export async function updateDiscordDfunkRoles(
 		toRemoveFromRole: typeof toRemove;
 	};
 }> {
-	log.info(
-		"Running update on server " + guild.name + " (" + guild.id + ")"
-	);
+	log.info("Running update on server " + guild.name + " (" + guild.id + ")");
 	// Data
 	// Variables containing log info
 	const failedDatabaseKthIdQueries: Set<string> = new Set();
