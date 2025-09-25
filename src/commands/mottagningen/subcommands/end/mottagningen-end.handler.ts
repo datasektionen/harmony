@@ -21,7 +21,7 @@ export const handleMottagningenEnd = async (
 		nollanCategory = getCategory("nØllan", guild);
 	} catch (err) {
 		interaction.editReply(
-			`Failed to end mottagningen! Cause given below:\n\n\`\`\`${err}\`\`\``
+			`Failed to end mottagningen! Cause given below:\n\`\`\`${err}\`\`\``
 		);
 		return;
 	}
@@ -31,7 +31,7 @@ export const handleMottagningenEnd = async (
 		nollanRole = getRole("nØllan", guild);
 	} catch (err) {
 		interaction.editReply(
-			`Failed to end mottagningen! Cause given below:\n\n\`\`\`${err}\`\`\``
+			`Failed to end mottagningen! Cause given below:\n\`\`\`${err}\`\`\``
 		);
 		return;
 	}
@@ -55,7 +55,7 @@ export const handleMottagningenEnd = async (
 		verifyAllNollan(guild),
 	]).catch((err) =>
 		interaction.editReply(
-			`Failed to end mottagningen! Cause given below:\n\n\`\`\`${err}\`\`\``
+			`Failed to end mottagningen! Cause given below:\n\`\`\`${err}\`\`\``
 		)
 	);
 
