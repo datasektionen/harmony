@@ -62,8 +62,6 @@ async function main(): Promise<void> {
 	if (process.env.DISCORD_LIGHT_BOT_TOKEN) {
 		harmonyLightClient.once("ready", () => {
 			log.info("Logged into Harmony Light");
-			jobs = initJobs(harmonyLightClient);
-			log.info("Instantiated cron-jobs.");
 		});
 		await harmonyLightClient.login(process.env.DISCORD_LIGHT_BOT_TOKEN);
 
