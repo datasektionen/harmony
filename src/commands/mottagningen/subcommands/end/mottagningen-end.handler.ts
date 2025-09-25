@@ -88,17 +88,12 @@ const clearReceptionRoles = async (guild: Guild): Promise<void> => {
 };
 
 const dmErrorToNollan = async (user: User, kthid: string): Promise<void> => {
-	try {
-		const dm = await user.createDM(true);
-
-		await dm.send(
-			"**OBS: Om du redan har verifierat dig på servern kan du ignorera detta meddelande. Vi ber om ursäkt för besväret!\n\n**" +
-				`KTH-användarnamnet \`${kthid}\`, som du angav för några veckor sedan, visar sig vara felaktigt!\n\n` +
-				"Gå in och verifiera dig på nytt i https://discord.com/channels/687747877736546335/1021025877124976680 och skriv till en admin om det inte fungerar."
-		);
-	} catch (err) {
-		throw err;
-	}
+	const dm = await user.createDM(true);
+	await dm.send(
+		"**OBS: Om du redan har verifierat dig på servern kan du ignorera detta meddelande. Vi ber om ursäkt för besväret!\n\n**" +
+			`KTH-användarnamnet \`${kthid}\`, som du angav för några veckor sedan, visar sig vara felaktigt!\n\n` +
+			"Gå in och verifiera dig på nytt i https://discord.com/channels/687747877736546335/1021025877124976680 och skriv till en admin om det inte fungerar."
+	);
 };
 
 const verifyAllNollan = async (guild: Guild): Promise<void> => {
