@@ -9,7 +9,7 @@ export async function handleMottagningen(
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> {
 	const subcommandName = interaction.options.getSubcommand(true);
-	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+	await interaction.deferReply();
 
 	switch (subcommandName) {
 		case MottagningenSubcommands.CLEAR:

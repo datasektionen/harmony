@@ -16,6 +16,26 @@ export const handleMottagningenEnd = async (
 	const guild = interaction.guild;
 	guild.roles.fetch();
 
+	let nollanCategory = null;
+	try {
+		nollanCategory = getCategory("nØllan", guild);
+	} catch (err) {
+		interaction.editReply(
+			`Failed to end mottagningen! Cause given below:\n\nCould not find the nØllan category.`
+		);
+		return;
+	}
+
+	let nollanRole = null;
+	try {
+		nollanRole = getRole("nØllan", guild);
+	} catch (err) {
+		interaction.editReply(
+			`Failed to end mottagningen! Cause given below:\n\n${err}`
+		);
+		return;
+	}
+
 	await Promise.all([
 		// Remove roles "Grupp A-Z"
 		guild.roles.cache
@@ -23,17 +43,21 @@ export const handleMottagningenEnd = async (
 			.forEach((r) => guild.roles.delete(r)),
 
 		clearReceptionRoles(guild),
-		getCategory("nØllan", guild).edit({
+		nollanCategory.edit({
 			name: `╒══════╣ ${getCurrentYearRole()} ╠══════╕`,
 		}),
 		// Note that the intis code is also removed.
 		clearNollegrupper(),
-		getRole("nØllan", guild).edit({
+		nollanRole.edit({
 			name: getCurrentYearRole(),
 			icon: null,
 		}),
 		verifyAllNollan(guild),
-	]);
+	]).catch((err) =>
+		interaction.editReply(
+			`Failed to end mottagningen! Cause given below:\n\n${err}`
+		)
+	);
 
 	interaction.editReply(
 		`Finished! Welcome to a new era where ${getCurrentYearRole()} exists.`
@@ -64,11 +88,17 @@ const clearReceptionRoles = async (guild: Guild): Promise<void> => {
 };
 
 const dmErrorToNollan = async (user: User, kthid: string): Promise<void> => {
-	const dm = await user.createDM(true);
-	await dm.send(
-		`KTH-användarnamnet \`${kthid}\`, som du angav för några veckor sedan, visar sig vara felaktigt!\n\n` +
-			"Gå in och verifiera dig på nytt i https://discord.com/channels/687747877736546335/1021025877124976680 och skriv till en admin om det inte fungerar."
-	);
+	try {
+		const dm = await user.createDM(true);
+
+		await dm.send(
+			"**OBS: Om du redan har verifierat dig på servern kan du ignorera detta meddelande. Vi ber om ursäkt för besväret!\n\n**" +
+				`KTH-användarnamnet \`${kthid}\`, som du angav för några veckor sedan, visar sig vara felaktigt!\n\n` +
+				"Gå in och verifiera dig på nytt i https://discord.com/channels/687747877736546335/1021025877124976680 och skriv till en admin om det inte fungerar."
+		);
+	} catch (err) {
+		throw err;
+	}
 };
 
 const verifyAllNollan = async (guild: Guild): Promise<void> => {
@@ -89,10 +119,10 @@ const verifyAllNollan = async (guild: Guild): Promise<void> => {
 			// nØllan left :(
 			if (member === null) {
 				log.error(
-					`nØllan with KTH-id ${row.kth_id} does not exist on the server (anymore).`
+					`nØllan with KTH-id \"${row.kth_id}\" does not exist on the server (anymore).`
 				);
 			} else if (hodisUser) {
-				verifyUser(
+				await verifyUser(
 					member.user,
 					guild,
 					row.kth_id,
@@ -101,15 +131,29 @@ const verifyAllNollan = async (guild: Guild): Promise<void> => {
 				const insertSuccess = await insertUser(row.kth_id, member.id);
 				// KTH ID already used by another user
 				if (!insertSuccess) {
-					dmErrorToNollan(member.user, row.kth_id);
+					try {
+						await dmErrorToNollan(member.user, row.kth_id);
+					} catch (err) {
+						log.error(`${err}`);
+						log.error(
+							`Failed to send message to user with KTH-id \"${row.kth_id}\".`
+						);
+					}
 					log.error(
-						`nØllan ${member.user.username} had typed KTH ID ${row.kth_id} but it already existed in HarmonyDB!`
+						`nØllan ${member.user.username} had typed KTH ID \"${row.kth_id}\" but it already existed in HarmonyDB!`
 					);
 				}
 			} else {
-				dmErrorToNollan(member.user, row.kth_id);
+				try {
+					await dmErrorToNollan(member.user, row.kth_id);
+				} catch (err) {
+					log.error(`${err}`);
+					log.error(
+						`Failed to send message to user with KTH-id \"${row.kth_id}\".`
+					);
+				}
 				log.error(
-					`nØllan ${member.user.username} had typed KTH ID ${row.kth_id} but it doesn't exist on Hodis!`
+					`nØllan ${member.user.username} had typed KTH ID \"${row.kth_id}\" but it doesn't exist on Hodis!`
 				);
 			}
 		})

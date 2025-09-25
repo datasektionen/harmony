@@ -10,9 +10,7 @@ export const getCategory = (
 			channel?.name.includes(categoryName)
 	);
 	if (!category)
-		throw new Error(
-			"Sorry! Could not find the requested channel category."
-		);
+		throw new Error("Could not find the requested channel category.");
 	return category as GuildChannel;
 };
 
