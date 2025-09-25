@@ -21,7 +21,7 @@ export const handleMottagningenEnd = async (
 		nollanCategory = getCategory("nØllan", guild);
 	} catch (err) {
 		interaction.editReply(
-			"Failed to end mottagningen! Cause given below:\n\nCould not find the nØllan category."
+			`Failed to end mottagningen! Cause given below:\n\n${err}`
 		);
 		return;
 	}
