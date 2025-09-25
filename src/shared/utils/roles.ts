@@ -66,7 +66,7 @@ export async function removeRole(
 export function getRole(roleName: string, guild: Guild): Role {
 	const role = guild.roles.cache.find((r) => r.name === roleName);
 	if (!role) {
-		throw new Error(`Role ${roleName} does not exist on the Server!`);
+		throw new Error(`Role ${roleName} does not exist on the server!`);
 	}
 	return role;
 }
