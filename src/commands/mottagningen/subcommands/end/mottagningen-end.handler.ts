@@ -1,6 +1,6 @@
 import { Guild, User } from "discord.js";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
-import { getRole } from "../../../../shared/utils/roles";
+import { getRole, hasRoleVerified } from "../../../../shared/utils/roles";
 import { getCurrentYearRole } from "../../../../shared/utils/year";
 import { getCategory } from "../../../../shared/utils/category";
 import { getHodisUser } from "../../../../shared/utils/hodis";
@@ -88,12 +88,19 @@ const clearReceptionRoles = async (guild: Guild): Promise<void> => {
 };
 
 const dmErrorToNollan = async (user: User, kthid: string): Promise<void> => {
-	const dm = await user.createDM(true);
-	await dm.send(
-		"**OBS: Om du redan har verifierat dig på servern kan du ignorera detta meddelande. Vi ber om ursäkt för besväret!\n\n**" +
-			`KTH-användarnamnet \`${kthid}\`, som du angav för några veckor sedan, visar sig vara felaktigt!\n\n` +
-			"Gå in och verifiera dig på nytt i https://discord.com/channels/687747877736546335/1021025877124976680 och skriv till en admin om det inte fungerar."
-	);
+	try {
+		const dm = await user.createDM(true);
+		await dm.send(
+			"**OBS: Om du redan har verifierat dig på servern kan du ignorera detta meddelande. Vi ber om ursäkt för besväret!\n\n**" +
+				`KTH-användarnamnet \`${kthid}\`, som du angav för några veckor sedan, visar sig vara felaktigt!\n\n` +
+				"Gå in och verifiera dig på nytt i https://discord.com/channels/687747877736546335/1021025877124976680 och skriv till en admin om det inte fungerar."
+		);
+	} catch (err) {
+		log.error(`${err}`);
+		log.error(
+			`Failed to send message to user with KTH-id "${kthid}".`
+		);
+	}
 };
 
 const verifyAllNollan = async (guild: Guild): Promise<void> => {
@@ -124,29 +131,16 @@ const verifyAllNollan = async (guild: Guild): Promise<void> => {
 					clientIsLight(guild.client)
 				);
 				const insertSuccess = await insertUser(row.kth_id, member.id);
+				const isVerified = await hasRoleVerified(member.user, guild);
 				// KTH ID already used by another user
-				if (!insertSuccess) {
-					try {
-						await dmErrorToNollan(member.user, row.kth_id);
-					} catch (err) {
-						log.error(`${err}`);
-						log.error(
-							`Failed to send message to user with KTH-id "${row.kth_id}".`
-						);
-					}
+				if (!insertSuccess && !isVerified) {
+					await dmErrorToNollan(member.user, row.kth_id);
 					log.error(
 						`nØllan ${member.user.username} had typed KTH ID "${row.kth_id}" but it already existed in HarmonyDB!`
 					);
 				}
 			} else {
-				try {
-					await dmErrorToNollan(member.user, row.kth_id);
-				} catch (err) {
-					log.error(`${err}`);
-					log.error(
-						`Failed to send message to user with KTH-id "${row.kth_id}".`
-					);
-				}
+				await dmErrorToNollan(member.user, row.kth_id);
 				log.error(
 					`nØllan ${member.user.username} had typed KTH ID "${row.kth_id}" but it doesn't exist on Hodis!`
 				);
