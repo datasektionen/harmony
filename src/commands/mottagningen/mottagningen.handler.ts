@@ -1,4 +1,3 @@
-import { MessageFlags } from "discord.js";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import { MottagningenSubcommands } from "./mottagningen-subcommands.names";
 import { CommandNotFoundError } from "../../shared/errors/command-not-founder.error";

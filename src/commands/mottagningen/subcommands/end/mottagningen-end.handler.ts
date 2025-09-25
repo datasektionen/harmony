@@ -21,7 +21,7 @@ export const handleMottagningenEnd = async (
 		nollanCategory = getCategory("nØllan", guild);
 	} catch (err) {
 		interaction.editReply(
-			`Failed to end mottagningen! Cause given below:\n\nCould not find the nØllan category.`
+			"Failed to end mottagningen! Cause given below:\n\nCould not find the nØllan category."
 		);
 		return;
 	}
@@ -119,7 +119,7 @@ const verifyAllNollan = async (guild: Guild): Promise<void> => {
 			// nØllan left :(
 			if (member === null) {
 				log.error(
-					`nØllan with KTH-id \"${row.kth_id}\" does not exist on the server (anymore).`
+					`nØllan with KTH-id "${row.kth_id}" does not exist on the server (anymore).`
 				);
 			} else if (hodisUser) {
 				await verifyUser(
@@ -136,11 +136,11 @@ const verifyAllNollan = async (guild: Guild): Promise<void> => {
 					} catch (err) {
 						log.error(`${err}`);
 						log.error(
-							`Failed to send message to user with KTH-id \"${row.kth_id}\".`
+							`Failed to send message to user with KTH-id "${row.kth_id}".`
 						);
 					}
 					log.error(
-						`nØllan ${member.user.username} had typed KTH ID \"${row.kth_id}\" but it already existed in HarmonyDB!`
+						`nØllan ${member.user.username} had typed KTH ID "${row.kth_id}" but it already existed in HarmonyDB!`
 					);
 				}
 			} else {
@@ -149,11 +149,11 @@ const verifyAllNollan = async (guild: Guild): Promise<void> => {
 				} catch (err) {
 					log.error(`${err}`);
 					log.error(
-						`Failed to send message to user with KTH-id \"${row.kth_id}\".`
+						`Failed to send message to user with KTH-id "${row.kth_id}".`
 					);
 				}
 				log.error(
-					`nØllan ${member.user.username} had typed KTH ID \"${row.kth_id}\" but it doesn't exist on Hodis!`
+					`nØllan ${member.user.username} had typed KTH ID "${row.kth_id}" but it doesn't exist on Hodis!`
 				);
 			}
 		})
