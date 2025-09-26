@@ -7,8 +7,7 @@ export const handleDfunkStatus = async (
 ): Promise<void> => {
 	// We assume that this job is loaded
 	const dfunkUpdateJob = jobs.get("updateDfunkRoles")!;
-	const jobStatus = dfunkUpdateJob.job.isActive;
-	if (jobStatus) {
+	if (dfunkUpdateJob.job.isActive) {
 		await interaction.reply({
 			content: `The automatic dfunk role update is active.
             The automatic update was last executed ${
