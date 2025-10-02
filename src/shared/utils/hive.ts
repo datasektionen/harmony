@@ -12,8 +12,7 @@ export async function getHiveGroups(tagId: string): Promise<HiveTagGroups> {
 	if (res.status !== 200) {
 		throw new Error(`Error fetching groups with tag ${tagId}.`);
 	}
-	const data: HiveTagGroups = await (res.json() as Promise<HiveTagGroups>);
-	return data;
+	return await (res.json() as Promise<HiveTagGroups>);
 }
 
 export async function getHiveGroupMembers(
@@ -35,8 +34,7 @@ export async function getHiveGroupMembers(
 			`Error fetching members of group ${groupId} from domain ${groupDomain}.`
 		);
 	}
-	const data: string[] = await (res.json() as Promise<string[]>);
-	return data;
+	return await (res.json() as Promise<string[]>);
 }
 
 export type HiveTagGroups = HiveTagGroup[];

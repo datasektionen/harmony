@@ -7,8 +7,7 @@ export const handleDfunkToggle = async (
 ): Promise<void> => {
 	// We assume that this job is loaded
 	const dfunkUpdateJob = jobs.get("updateDfunkRoles")!;
-	const jobStatus = dfunkUpdateJob.job.isActive;
-	if (jobStatus) {
+	if (dfunkUpdateJob.job.isActive) {
 		await dfunkUpdateJob.job.stop();
 		await interaction.reply({
 			content: `
