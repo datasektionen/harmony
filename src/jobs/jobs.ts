@@ -6,7 +6,7 @@ import { updateDiscordDfunkRoles } from "./update-dfunk-roles";
 import * as log from "../shared/utils/log";
 
 const errorWebHookURL =
-	"https://mattermost.datasektionen.se/hooks/g6zrwz6r6p8fbjmz8ob1d7iaxw";
+	"https://mattermost.datasektionen.se/hooks/" + process.env.MATTERMOST_WEBHOOK_TOKEN;
 
 export function initJobs(
 	client: DiscordClient
