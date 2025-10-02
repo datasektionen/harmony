@@ -24,11 +24,9 @@ Run the following (as root unless you're in the `docker` group) (supports hot-re
 docker compose up --build --watch
 ```
 
-To interact with the database:
+To interact with the database: `npm run db`
 
-```
-docker compose exec -it db psql -U harmony -d harmony
-```
+Before each push you should run `npm run format` to format the code, since pull requests not accepted by Prettier cannot be merged.
 
 ## Environment variables
 
