@@ -191,7 +191,7 @@ export async function updateDiscordDfunkRoles(
 
 	// Update `toAdd` for dfunk special roles
 	for (const specialRole of processedDfunkData.specialRoles) {
-		for (const kthid of specialRole.specialRoleLegibles) {
+		for (const kthid of specialRole.specialRoleElegibles) {
 			const memberDiscordId = await fetchUserFromDbCache(kthid);
 			if (memberDiscordId === null) {
 				continue;
@@ -280,7 +280,7 @@ async function processDfunkData(): Promise<{
 	specialRoles: [
 		{
 			roleName: string;
-			specialRoleLegibles: Set<string>;
+			specialRoleElegibles: Set<string>;
 		}
 	];
 }> {
@@ -329,12 +329,12 @@ function getGroupsUpdate(dfunkData: DfunkRoles): Map<string, string[]> {
  * @param dfunkData The data fetched from the dfunk API by the **fetchFromDfunkAPI()** function
  * @returns A list of objects, each with two attributes each:
  *  - **roleName**: The name of the special role on Discord, containing different structures relevant to the assignment of special roles.
- *  - **specialRoleLegibles**: A set of users (kthids) of the users that should have the special role.
+ *  - **specialRoleElegibles**: A set of users (kthids) of the users that should have the special role.
  */
 function getSpecialRolesUpdate(dfunkData: DfunkRoles): [
 	{
 		roleName: string;
-		specialRoleLegibles: Set<string>;
+		specialRoleElegibles: Set<string>;
 	}
 ] {
 	// 'dFunkt' role
@@ -364,7 +364,7 @@ function getSpecialRolesUpdate(dfunkData: DfunkRoles): [
 	return [
 		{
 			roleName: "dFunkt",
-			specialRoleLegibles: dfunktDiscordRoleLegible,
+			specialRoleElegibles: dfunktDiscordRoleLegible,
 		},
 	];
 }
