@@ -14,4 +14,4 @@ const command = new SlashCommandBuilder()
 // 		.setDescription("subcommand description.")
 // );
 
-export const dfunkCommand = command;
+export const testCommand = command;
