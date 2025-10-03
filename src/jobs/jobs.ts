@@ -1,6 +1,4 @@
 import { CronJob } from "cron";
-// import { testCases } from "../tests/dfunk-roles-update/test_cases"; // For testing purposes
-// import { createTestUpdateDfunkRolesJob} from "../tests/dfunk-roles-update/tests"; // For testing purposes
 import { Client as DiscordClient } from "discord.js";
 import { updateDiscordDfunkRoles } from "./update-dfunk-roles";
 import * as log from "../shared/utils/log";
@@ -15,10 +13,8 @@ export function initJobs(
 	const jobs: Map<string, { client: DiscordClient; job: CronJob }> =
 		new Map();
 
-	// const testUpdateDfunkRolesJob: CronJob<any, any> = createTestUpdateDfunkRolesJob(client); // For testing purposes only
 	const updateDfunkRolesJob: CronJob = createUpdateDfunkRolesJob(client);
 
-	// jobs.set("testUpdateDfunkRoles", {client: client, job: testUpdateDfunkRolesJob}); // For testing purposes only
 	jobs.set("updateDfunkRoles", {
 		client: client,
 		job: updateDfunkRolesJob,
