@@ -23,7 +23,7 @@ export const handleDfunkTest = async (
 				specialRoles: [
 					{
 						roleName: string;
-						specialRoleLegibles: Set<string>;
+						specialRoleElegibles: Set<string>;
 					}
 				];
 			};
@@ -59,7 +59,7 @@ export const handleDfunkTest = async (
 					specialRoles: [
 						{
 							roleName: string;
-							specialRoleLegibles: Set<string>;
+							specialRoleElegibles: Set<string>;
 						}
 					];
 				};
