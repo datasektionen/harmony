@@ -20,6 +20,7 @@ import {
 import { handleTranslateMsg } from "./translate/translateMsg.handler";
 import { handleClub } from "./club/club.handler";
 import { handleMessage } from "./message/message.handler";
+import { handleDfunk } from "./dfunk/dfunk.handler";
 import { BaseInteraction, MessageFlags, Interaction } from "discord.js";
 import { handleKthId } from "./kthid/kthid.handler";
 import {
@@ -33,6 +34,7 @@ import { handleVerifyNollan } from "./verify/subcommands/nollan/verify-nollan.ha
 import { handleNollegrupp } from "./nollegrupp/nollegrupp.handler";
 import * as log from "../shared/utils/log";
 import { handleMottagningen } from "./mottagningen/mottagningen.handler";
+import { handleTest } from "../tests/test.handler";
 
 export async function handleInteractions(
 	interaction: Interaction
@@ -166,15 +168,21 @@ const handleChatInputCommand = async (
 				case CommandNames.MESSAGE:
 					await handleMessage(guildInteraction);
 					return;
+				case CommandNames.DFUNK:
+					await handleDfunk(guildInteraction);
+					return;
 				case CommandNames.KTHID:
 					await handleKthId(guildInteraction);
 					return;
 				case CommandNames.NOLLEGRUPP:
-					handleNollegrupp(guildInteraction);
+					await handleNollegrupp(guildInteraction);
 					return;
 				case CommandNames.MOTTAGNINGEN:
 					handleMottagningen(guildInteraction);
 					return;
+				case "test":
+					await handleTest(guildInteraction);
+					return
 				default:
 					throw new CommandNotFoundError(
 						guildInteraction.commandName
