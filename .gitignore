@@ -130,3 +130,4 @@ src/shared/assets/state.json
 glossary.dev.json
 
 # tests directory
+src/tests/*
