@@ -131,3 +131,4 @@ glossary.dev.json
 
 # tests directory
 src/tests/*
+.github/hooks
