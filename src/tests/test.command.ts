@@ -15,4 +15,3 @@ const command = new SlashCommandBuilder()
 // );
 
 export const testCommand = command;
-// Some change
