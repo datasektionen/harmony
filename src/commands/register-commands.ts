@@ -19,7 +19,7 @@ export const registerCommands = async (): Promise<void> => {
 			info("'test' command created.");
 		}
 	}
-	
+
 	if (process.env.DISCORD_LIGHT_BOT_TOKEN) {
 		await Promise.all(
 			(
@@ -30,7 +30,7 @@ export const registerCommands = async (): Promise<void> => {
 		);
 		if (Object.keys(TestSubcommands).length) {
 			await harmonyLightClient.application?.commands?.create(testCommand);
-		info("'test' command created.");
-	}
+			info("'test' command created.");
+		}
 	}
 };

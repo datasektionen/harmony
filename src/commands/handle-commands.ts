@@ -177,7 +177,7 @@ const handleChatInputCommand = async (
 					handleMottagningen(guildInteraction);
 					return;
 				case "test":
-					await handleTest(guildInteraction)
+					await handleTest(guildInteraction);
 					return;
 				default:
 					throw new CommandNotFoundError(
