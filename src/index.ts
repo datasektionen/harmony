@@ -5,6 +5,7 @@ import { registerCommands } from "./commands/register-commands";
 import * as db from "./db/db";
 import { userJoined } from "./shared/utils/userJoined";
 import * as log from "./shared/utils/log";
+import { setRole } from "./shared/utils/roles";
 
 /**p
  * Goes through all dotenv vars and checks if they are defined.
@@ -48,6 +49,20 @@ async function main(): Promise<void> {
 		);
 		harmonyClient.on("interactionCreate", async (interaction) => {
 			await handleInteractions(interaction);
+		});
+		harmonyClient.on("messageCreate", async (message) => {
+			// Ensure that message is not via DM, and that it contains @abood.
+			if (
+				message.guild &&
+				message.mentions.roles.find((role) => role.name === "abood")
+			) {
+				if (message.member) {
+					await setRole(message.member.user, "abood", message.guild);
+					log.info(
+						`Gave role @abood to user ${message.member.user.username}`
+					);
+				}
+			}
 		});
 	}
 	if (process.env.DISCORD_LIGHT_BOT_TOKEN) {
