@@ -1,4 +1,8 @@
-import { COURSE_BUTTON_LABELS, UN_ABOOD_BUTTON_CUSTOMID, VERIFY_BUTTON_LABELS } from "./subcommands/util";
+import {
+	COURSE_BUTTON_LABELS,
+	UN_ABOOD_BUTTON_CUSTOMID,
+	VERIFY_BUTTON_LABELS,
+} from "./subcommands/util";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import { GuildButtonInteraction } from "../../shared/types/GuildButtonInteraction";
 import { ButtonsSubcommands } from "./buttons-subcommands.names";
@@ -48,7 +52,7 @@ export async function handleButtonInteraction(
 	// buttonInteraction originated from pressing a verify button.
 	else if (verifyButtonIds.includes(interaction.customId)) {
 		return await handleVerifyButtonInteraction(interaction);
-	} 
+	}
 	// buttonInteraction originated from the un-abood button.
 	else if (interaction.customId === UN_ABOOD_BUTTON_CUSTOMID) {
 		// Should never fail as this button can only be generated where @abood is mentioned.
@@ -56,7 +60,7 @@ export async function handleButtonInteraction(
 		log.info(
 			`Removed role @abood from user ${interaction.member?.user.username}`
 		);
-		
+
 		// I hope that people don't abuse this to spam channels with un-abood messages.
 		await interaction.reply("You have successfully been un-Abooded!");
 		return;

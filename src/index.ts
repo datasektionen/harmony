@@ -1,4 +1,10 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonStyle, Client as DiscordClient, GatewayIntentBits, MessagePayload } from "discord.js";
+import {
+	ActionRowBuilder,
+	ButtonBuilder,
+	ButtonStyle,
+	Client as DiscordClient,
+	GatewayIntentBits,
+} from "discord.js";
 import { LightClient as LightDiscordClient } from "./shared/types/light-client";
 import { handleInteractions } from "./commands/handle-commands";
 import { registerCommands } from "./commands/register-commands";
@@ -35,6 +41,14 @@ export const harmonyClient = new DiscordClient({ intents });
 
 export const harmonyLightClient = new LightDiscordClient({ intents });
 
+const aboodRow = new ActionRowBuilder<ButtonBuilder>();
+aboodRow.addComponents(
+	new ButtonBuilder()
+		.setCustomId("aboodnejtack")
+		.setLabel("@abood? No thanks!")
+		.setStyle(ButtonStyle.Primary)
+);
+
 async function main(): Promise<void> {
 	validateEnvironment();
 
@@ -57,7 +71,11 @@ async function main(): Promise<void> {
 				message.member &&
 				message.mentions.roles.find((role) => role.name === "abood")
 			) {
-				const hasRoleAbood = await hasRole(message.member.user, "abood", message.guild)
+				const hasRoleAbood = await hasRole(
+					message.member.user,
+					"abood",
+					message.guild
+				);
 
 				if (!hasRoleAbood) {
 					await setRole(message.member.user, "abood", message.guild);
@@ -65,15 +83,11 @@ async function main(): Promise<void> {
 						`Gave role @abood to user ${message.member.user.username}`
 					);
 
-					let row = new ActionRowBuilder<ButtonBuilder>();
-					row.addComponents(
-						new ButtonBuilder()
-							.setCustomId("aboodnejtack")
-							.setLabel("@abood? No thanks!")
-							.setStyle(ButtonStyle.Primary)
-					);
-
-					await message.reply({ content: "You have been Abooded! If you don't want to be @abood, please press the button below.", components: [row] });
+					await message.reply({
+						content:
+							"You have been Abooded! If you don't want to be @abood, please press the button below.",
+						components: [aboodRow],
+					});
 				}
 			}
 		});
