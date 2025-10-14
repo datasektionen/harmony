@@ -1,5 +1,5 @@
 ### Setup
-Before doing anything on this directory, follow the instructions in the root's [README.md](https://github.com/datasektionen/harmony/edit/addtest/src/tests/README.md) file
+Before doing anything on this directory, follow the instructions in the root's [README.md](https://github.com/datasektionen/harmony/edit/addtest/src/tests/README.md) file.
 
 ### Introduction
 This directory contains the baseline files of the provisional test framework. It contains the files `test-subcommands.ts`, 
