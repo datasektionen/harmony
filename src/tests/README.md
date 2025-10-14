@@ -23,24 +23,17 @@ As stated above, this provisional framework allows great degree of freedom to th
 is to define a subcommand for the `test` commands by changing the baseline files locally and/or adding new directories and 
 files to have a better structure. An example of an structure is the one shown in the tree below
 
+```
  src/tests/
- 
 ├─ example/
-
 │   ├─ test-cases.ts
-
 │   ├─ test-logic.ts
-
 │   ├─ test-example.handler.ts
-
 ├─ test-subcommands.ts
-
 ├─ test.command.ts
-
 ├─ test.handler.ts
-
 ├─ README.md
-
+```
 
 This tree represents how adding the `example` subcommand could look like, the command and subcommands follow the same 
 structure as the main application commands found in `src/commands` for the sake of familiarity. That is, the 
