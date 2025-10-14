@@ -176,7 +176,7 @@ const handleChatInputCommand = async (
 				case CommandNames.MOTTAGNINGEN:
 					handleMottagningen(guildInteraction);
 					return;
-				case "test":
+				case CommandNames.TEST:
 					await handleTest(guildInteraction);
 					return;
 				default:

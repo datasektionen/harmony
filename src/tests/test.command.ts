@@ -1,9 +1,10 @@
 import { SlashCommandBuilder, PermissionFlagsBits } from "discord.js";
+import { CommandNames } from "../commands/commands.names";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { TestSubcommands } from "./test-subcommands";
 
 const command = new SlashCommandBuilder()
-	.setName("test")
+	.setName(CommandNames.TEST)
 	.setDescription("Command to execute tests.")
 	.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild);
 
