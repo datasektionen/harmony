@@ -38,6 +38,8 @@ const subcommandHandlerMapping: Map<
 	(interaction: GuildChatInputCommandInteraction) => Promise<void>
 	> = new Map()
 
+export const testSubcommandNames = Array.from(subcommandHandlerMapping.keys());
+
 // Add subcommands and prepare structure for dynamically-create "test" handler
 if (subCommandConfig !== null) {
 	subCommandConfig.forEach(async (conf) => {

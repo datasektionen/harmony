@@ -1,7 +1,6 @@
 import { harmonyClient, harmonyLightClient } from "..";
 import { info } from "../shared/utils/log";
-import { TestSubcommands } from "../tests/test-subcommands";
-import { testCommand } from "../tests/test.command";
+import { testCommand, testSubcommandNames } from "../tests/test";
 import { getLightBotCommands, getOfficialBotCommands } from "./commands";
 
 export const registerCommands = async (): Promise<void> => {
@@ -14,7 +13,7 @@ export const registerCommands = async (): Promise<void> => {
 			)
 		);
 		// Only add 'test' command if some subcommands for it are defined
-		if (Object.keys(TestSubcommands).length) {
+		if (testSubcommandNames.length) {
 			await harmonyClient.application?.commands?.create(testCommand);
 			info("'test' command created.");
 		}
@@ -28,7 +27,7 @@ export const registerCommands = async (): Promise<void> => {
 				harmonyLightClient.application?.commands?.create(command)
 			)
 		);
-		if (Object.keys(TestSubcommands).length) {
+		if (testSubcommandNames.length) {
 			await harmonyLightClient.application?.commands?.create(testCommand);
 			info("'test' command created.");
 		}
