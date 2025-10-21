@@ -26,3 +26,7 @@ To interact with the database:
 ```
 docker compose exec -it db psql -U harmony -d harmony
 ```
+
+## Testing
+
+Testing in this application relies on the usage of the `test` command defined in the `src/tests` directory. Inside this directory there is a single file `test.ts`. This file defines the `test` command and functions for initializing and handling it when called by the user. The command is only visible and usable when some subcommands are added to it as specified in [README.md](https://github.com/datasektionen/harmony/blob/addtest/src/tests/README.md). Be sure to read that file carefully to learn how to set up the framework locally and how to use it.
