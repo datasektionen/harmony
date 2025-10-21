@@ -1,9 +1,10 @@
 import { harmonyClient, harmonyLightClient } from "..";
 import { info } from "../shared/utils/log";
-import { testCommand, testSubcommandNames } from "../tests/test";
+import { testCommand, initTestCommand } from "../tests/test";
 import { getLightBotCommands, getOfficialBotCommands } from "./commands";
 
 export const registerCommands = async (): Promise<void> => {
+	const loadedTestSubcommands = await initTestCommand();
 	if (process.env.DISCORD_BOT_TOKEN) {
 		await Promise.all(
 			(
@@ -12,10 +13,10 @@ export const registerCommands = async (): Promise<void> => {
 				harmonyClient.application?.commands?.create(command)
 			)
 		);
-		// Only add 'test' command if some subcommands for it are defined
-		if (testSubcommandNames.length) {
+		// Only add 'test' command if some subcommands for it were loaded
+		if (loadedTestSubcommands) {
 			await harmonyClient.application?.commands?.create(testCommand);
-			info("'test' command created.");
+			info("'test' command registered.");
 		}
 	}
 
@@ -27,9 +28,9 @@ export const registerCommands = async (): Promise<void> => {
 				harmonyLightClient.application?.commands?.create(command)
 			)
 		);
-		if (testSubcommandNames.length) {
-			await harmonyLightClient.application?.commands?.create(testCommand);
-			info("'test' command created.");
+		if (loadedTestSubcommands) {
+			await harmonyClient.application?.commands?.create(testCommand);
+			info("'test' command registered.");
 		}
 	}
 };
