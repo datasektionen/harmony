@@ -9,7 +9,9 @@ import { CommandNotFoundError } from "../shared/errors/command-not-founder.error
 // Relative path for the configuration file in Docker container.
 const relativeConfPath = "../../src/tests/local/testConf.json";
 
-type SubCommmandConfiguration = {
+const AcceptedSubcommandHandlerType = "(interaction: GuildChatInputCommandInteraction) => Promise<void>";
+
+type SubCommandConfiguration = {
 	subCommand: string;
 	subCommandFilePath: string;
 	subCommandHandlerName: string;
@@ -23,11 +25,11 @@ const command = new SlashCommandBuilder()
 export const testCommand = command;
 
 /**
- * Reads the file `src/tests/local/testConf.json` and parses its content into a **SubCommmandConfiguration[]**
+ * Reads the file `src/tests/local/testConf.json` and parses its content into a **SubCommandConfiguration[]**
  * containing relevant details for the dynamic imports made by the **readMapping** function.
- * @returns A **SubCommmandConfiguration[]** type if reading and parsing was successful, **null** otherwise. 
+ * @returns A **SubCommandConfiguration[]** type if reading and parsing was successful, **null** otherwise. 
  */
-function readConfFile(): SubCommmandConfiguration[] | null {
+function readConfFile(): SubCommandConfiguration[] | null {
 	let subCommandConfig = null;
 	// Parse "./local/testConf.json"
 	// The file lies in 'app/src/tests/local/testConf.json' in the container, but '__dirname' evaluates to
@@ -36,7 +38,7 @@ function readConfFile(): SubCommmandConfiguration[] | null {
 	if (fs.existsSync(jsonPath)) {
 		try {
 			const data = fs.readFileSync(jsonPath, "utf8");
-			subCommandConfig = JSON.parse(data) as SubCommmandConfiguration[];
+			subCommandConfig = JSON.parse(data) as SubCommandConfiguration[];
 		} catch (error) {
 			log.error(`Error reading JSON file: ${error}`);
 		}
@@ -44,12 +46,12 @@ function readConfFile(): SubCommmandConfiguration[] | null {
 	return subCommandConfig;
 }
 /**
- * Try to dynamically import a subcommand and its handler by reading a **SubCommmandConfiguration** type.
+ * Try to dynamically import a subcommand and its handler by reading a **SubCommandConfiguration** type.
  * Adds the imported subcommand to the `test` command upon successful import. 
  * @param conf The subcommand configuration type containing the details relevant for the dynamic import.
  * @returns a list containing the subcommand and its handler if successful, returns **undefined** otherwise.
  */
-async function dynamicImport(conf: SubCommmandConfiguration): 
+async function dynamicImport(conf: SubCommandConfiguration): 
 	Promise<[
 		SlashCommandSubcommandBuilder, 
 		(interaction: GuildChatInputCommandInteraction) => Promise<void>
@@ -57,21 +59,26 @@ async function dynamicImport(conf: SubCommmandConfiguration):
 	try {
 		// At runtime the code is translate into JavaScript thus `.ts` files become `.js` files. The conversion is
 		// handled here to spare the user of having to take this into account when writing their testConf.json file.
-		const subCommandFile = await import(__dirname + "/local" + conf.subCommandFilePath.replace(/\.ts$/, ".js"));
-		const subCommandHandlerFile = await import(__dirname + "/local" + conf.subCommandHandlerFilePath.replace(/\.ts$/, ".js"));
+		const subcommandFilepath = path.join(__dirname, "local", conf.subCommandFilePath.replace(/\.ts$/, ".js"));
+		const subcommandHandlerFilepath = path.join(__dirname, "local", conf.subCommandHandlerFilePath.replace(/\.ts$/, ".js"));
+		const subCommandFile = await import(subcommandFilepath);
+		const subCommandHandlerFile = await import(subcommandHandlerFilepath);
+		if (typeof subCommandFile[conf.subCommandHandlerName] !== "function") {
+			throw new Error(`${conf.subCommandHandlerName} is not a function, make sure that it is of type ${AcceptedSubcommandHandlerType}`);
+		}
 		command.addSubcommand(subCommandFile[conf.subCommand]);
 		return [subCommandFile[conf.subCommand], subCommandHandlerFile[conf.subCommandHandlerName]]
 	} catch (error) {
-		console.log(error);
+		log.error(`Error during dynamic import of subcommand: ${error}`);
 		return undefined;
 	}
 }
 /**
- * Dynamically import all commands specified in the argument list of parsed **SubCommmandConfiguration** types
+ * Dynamically import all commands specified in the argument list of parsed **SubCommandConfiguration** types
  * @param subCommandConfig The parsed contents of the `testConf.json` file, assumed to have been successfully parsed.
  * @returns A promise of a **Map** type mapping the names of the subcommands with their handler functions. 
  */
-async function readSubcommandMappings(subCommandConfig: SubCommmandConfiguration[]): 
+async function readSubcommandMappings(subCommandConfig: SubCommandConfiguration[]): 
 		Promise<Map<
 		string,
 		(interaction: GuildChatInputCommandInteraction) => Promise<void>
@@ -83,10 +90,13 @@ async function readSubcommandMappings(subCommandConfig: SubCommmandConfiguration
 		(interaction: GuildChatInputCommandInteraction) => Promise<void>
 	> = new Map();
 	for (const conf of subCommandConfig) {
+		if (!conf.subCommand || !conf.subCommandFilePath || !conf.subCommandHandlerFilePath || !conf.subCommandHandlerName) {
+			log.error(`Invalid subcommand configuration: ${JSON.stringify(conf)}`);
+			continue;
+		}
 		const subcommandImport = await dynamicImport(conf);
 		if (subcommandImport !== undefined) {
-			const subcommand = subcommandImport[0];
-			const handler = subcommandImport[1];
+			const [subcommand, handler] = subcommandImport;
 			subcommandHandlerMapping.set(subcommand.name, handler);
 		}
 	}
@@ -124,7 +134,7 @@ export async function handleTest(
 	// Read the subcommand handler map for the parsed subcommand name.
 	const handler = subcommandHandlerMapping.get(subcommandName);
 	if (!handler) { // Subcommand not found
-		throw new CommandNotFoundError(interaction.commandName);
+		throw new CommandNotFoundError(`${interaction.commandName} -> ${subcommandName}`);
 	}
 	await handler(interaction);
 }
