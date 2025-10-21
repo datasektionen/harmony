@@ -29,8 +29,4 @@ docker compose exec -it db psql -U harmony -d harmony
 
 ## Testing
 
-Testing in this application relies on the usage of the `test` command defined in the `src/tests` directory. Inside this directory there are three files `test-subcommands.ts`, `test.command.ts`, `test.handler.ts`. These files are baseline and no changes to them should be committed. To make git not track changes for these files locally, open the command line on the root directory (where this file is) and execute the following command:
-```
-git update-index --assume-unchanged "./src/tests/test-subcommands.ts" "./src/tests/test.command.ts" "./src/tests/test.handler.ts"
-```
-After doing that, you can modify these files and commit your work without it changing the baseline files in the repository. For more information on how to use the testing functionality see the `README.md` in the `src/tests` directory. It is quite important to read it, so don't miss it. 
+Testing in this application relies on the usage of the `test` command defined in the `src/tests` directory. Inside this directory there is a single file `test.ts`. This file defines the `test` command and functions for initializing and handling it when called by the user. The command is only visible and usable when some subcommands are added to it as specified in [README.md](https://github.com/datasektionen/harmony/blob/addtest/src/tests/README.md). Be sure to read that file carefully to learn how to set up the framework locally and how to use it.
