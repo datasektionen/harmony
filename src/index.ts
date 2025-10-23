@@ -1,7 +1,4 @@
-import {
-	Client as DiscordClient,
-	GatewayIntentBits,
-} from "discord.js";
+import { Client as DiscordClient, GatewayIntentBits } from "discord.js";
 import { LightClient as LightDiscordClient } from "./shared/types/light-client";
 import { handleInteractions } from "./commands/handle-commands";
 import { registerCommands } from "./commands/register-commands";
@@ -57,10 +54,14 @@ async function main(): Promise<void> {
 			// Ensure that message is not via DM, and that it contains @abood.
 			if (
 				message.guild &&
-				message.member && 
+				message.member &&
 				message.mentions.roles.find((role) => role.name === "abood")
 			) {
-				await handle_abood_mention(message, message.member.user, message.guild);
+				await handle_abood_mention(
+					message,
+					message.member.user,
+					message.guild
+				);
 			}
 		});
 	}

@@ -15,7 +15,7 @@ import {
 	handleButtonsVerify,
 	handleVerifyButtonInteraction,
 } from "./subcommands/verify/buttons-verify.handler";
-import { Message, MessageFlags } from "discord.js";
+import { MessageFlags } from "discord.js";
 import * as log from "../../shared/utils/log";
 import { removeRole } from "../../shared/utils/roles";
 
@@ -68,7 +68,10 @@ export async function handleButtonInteraction(
 			return;
 		} else {
 			// Ephemeral to prevent spam :)
-			await interaction.reply({ content: "This un-Abood button does not belong to you!", flags: MessageFlags.Ephemeral });
+			await interaction.reply({
+				content: "This un-Abood button does not belong to you!",
+				flags: MessageFlags.Ephemeral,
+			});
 			return;
 		}
 	}
