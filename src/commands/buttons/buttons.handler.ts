@@ -15,7 +15,7 @@ import {
 	handleButtonsVerify,
 	handleVerifyButtonInteraction,
 } from "./subcommands/verify/buttons-verify.handler";
-import { MessageFlags } from "discord.js";
+import { Message, MessageFlags } from "discord.js";
 import * as log from "../../shared/utils/log";
 import { removeRole } from "../../shared/utils/roles";
 
@@ -54,16 +54,23 @@ export async function handleButtonInteraction(
 		return await handleVerifyButtonInteraction(interaction);
 	}
 	// buttonInteraction originated from the un-abood button.
-	else if (interaction.customId === UN_ABOOD_BUTTON_CUSTOMID) {
-		// Should never fail as this button can only be generated where @abood is mentioned.
-		await removeRole(interaction.user, "abood", interaction.guild);
-		log.info(
-			`Removed role @abood from user ${interaction.member?.user.username}`
-		);
+	else if (interaction.customId.startsWith(UN_ABOOD_BUTTON_CUSTOMID)) {
+		// Each un-Abood button has a unique customId that ends with the Abooded user's id.
+		if (interaction.customId.endsWith(interaction.user.id)) {
+			// Should never fail as this button can only be generated where @abood is mentioned.
+			await removeRole(interaction.user, "abood", interaction.guild);
+			log.info(
+				`Removed role @abood from user ${interaction.member?.user.username}`
+			);
 
-		// I hope that people don't abuse this to spam channels with un-abood messages.
-		await interaction.reply("You have successfully been un-Abooded!");
-		return;
+			// I hope that people don't abuse this to spam channels with un-abood messages.
+			await interaction.reply("You have successfully been un-Abooded!");
+			return;
+		} else {
+			// Ephemeral to prevent spam :)
+			await interaction.reply({ content: "This un-Abood button does not belong to you!", flags: MessageFlags.Ephemeral });
+			return;
+		}
 	}
 	// Should be unreachable.
 	else {

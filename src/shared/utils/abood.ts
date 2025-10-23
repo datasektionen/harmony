@@ -19,6 +19,14 @@ export async function handle_abood_mention(message: Message, user: User, guild: 
         log.info(
             `Gave role @abood to user ${user.username}`
         );
+
+        const aboodRow = new ActionRowBuilder<ButtonBuilder>();
+        aboodRow.addComponents(
+            new ButtonBuilder()
+                .setCustomId(UN_ABOOD_BUTTON_CUSTOMID + user.id)
+                .setLabel("@abood? No thanks!")
+                .setStyle(ButtonStyle.Primary)
+        );
     
         await message.reply({
             content:
