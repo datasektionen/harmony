@@ -1,7 +1,4 @@
 import {
-	ActionRowBuilder,
-	ButtonBuilder,
-	ButtonStyle,
 	Client as DiscordClient,
 	GatewayIntentBits,
 } from "discord.js";
@@ -11,7 +8,7 @@ import { registerCommands } from "./commands/register-commands";
 import * as db from "./db/db";
 import { userJoined } from "./shared/utils/userJoined";
 import * as log from "./shared/utils/log";
-import { hasRole, setRole } from "./shared/utils/roles";
+import { handle_abood_mention } from "./shared/utils/abood";
 
 /**p
  * Goes through all dotenv vars and checks if they are defined.
@@ -41,14 +38,6 @@ export const harmonyClient = new DiscordClient({ intents });
 
 export const harmonyLightClient = new LightDiscordClient({ intents });
 
-const aboodRow = new ActionRowBuilder<ButtonBuilder>();
-aboodRow.addComponents(
-	new ButtonBuilder()
-		.setCustomId("aboodnejtack")
-		.setLabel("@abood? No thanks!")
-		.setStyle(ButtonStyle.Primary)
-);
-
 async function main(): Promise<void> {
 	validateEnvironment();
 
@@ -68,27 +57,10 @@ async function main(): Promise<void> {
 			// Ensure that message is not via DM, and that it contains @abood.
 			if (
 				message.guild &&
-				message.member &&
+				message.member && 
 				message.mentions.roles.find((role) => role.name === "abood")
 			) {
-				const hasRoleAbood = await hasRole(
-					message.member.user,
-					"abood",
-					message.guild
-				);
-
-				if (!hasRoleAbood) {
-					await setRole(message.member.user, "abood", message.guild);
-					log.info(
-						`Gave role @abood to user ${message.member.user.username}`
-					);
-
-					await message.reply({
-						content:
-							"You have been Abooded! If you don't want to be @abood, please press the button below.",
-						components: [aboodRow],
-					});
-				}
+				await handle_abood_mention(message, message.member.user, message.guild);
 			}
 		});
 	}
