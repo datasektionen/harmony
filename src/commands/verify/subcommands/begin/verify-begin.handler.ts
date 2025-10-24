@@ -40,7 +40,7 @@ export async function handleVerifyBeginBase(
 	// Bypass for international students.
 	let isIntis = false;
 
-	if (code != undefined) {
+	if (code !== undefined) {
 		// Requires the entry (intis, intis code) to be present in the nollegrupp table.
 		const intisCode = await getNollegruppCodeByName("intis");
 

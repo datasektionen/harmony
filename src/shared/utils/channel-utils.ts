@@ -60,7 +60,7 @@ export const handleChannelAlias = async (
 		channel = await channel.fetch();
 		const oldPermission = couldViewChannel.get(channel);
 		const newPermission = userCanViewChannel(user.id, channel);
-		if (oldPermission != newPermission) {
+		if (oldPermission !== newPermission) {
 			updateCount += 1;
 		}
 	}

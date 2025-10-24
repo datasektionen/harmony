@@ -41,7 +41,7 @@ export async function insertUser(
 	try {
 		await sql`insert into users (kth_id, discord_id) values (${kthId.toLowerCase()}, ${discordId})`;
 	} catch (err) {
-		if (err instanceof PostgresError && err.code == UNIQUE_KEY_VIOLATION)
+		if (err instanceof PostgresError && err.code === UNIQUE_KEY_VIOLATION)
 			return false;
 		throw err;
 	}
@@ -74,7 +74,7 @@ export async function insertNollegrupp(
 	try {
 		await sql`insert into nollegrupp (name, code) values (${name}, ${code})`;
 	} catch (err) {
-		if (err instanceof PostgresError && err.code == UNIQUE_KEY_VIOLATION)
+		if (err instanceof PostgresError && err.code === UNIQUE_KEY_VIOLATION)
 			return false;
 		throw err;
 	}
@@ -130,7 +130,7 @@ export async function insertNollan(
 	try {
 		await sql`insert into nollan (kth_id, discord_id) values (${kthId.toLowerCase()}, ${discordId})`;
 	} catch (err) {
-		if (err instanceof PostgresError && err.code == UNIQUE_KEY_VIOLATION)
+		if (err instanceof PostgresError && err.code === UNIQUE_KEY_VIOLATION)
 			return false;
 		throw err;
 	}

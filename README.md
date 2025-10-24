@@ -10,7 +10,7 @@ Harmony is a Bot developed for reducing discord on our Discord servers. Its main
 - Allow people to join or leave course channels and year/master categories.
 - Handle nØllan during the reception.
 - Translate Swedish messages to English with student vocabulary.
-- Message all users with a certain role (don't do this with >600 users or Discord gets angy! 😡).
+- Message all users with a certain role (don't do this with >600 users or Discord gets angry! 😡).
 
 > The bot is written in TypeScript. Discord interaction is facilitated by [Discord.js](https://discord.js.org/), while e-mails are sent via [Spam](https://github.com/datasektionen/spam).
 
