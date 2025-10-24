@@ -12,14 +12,18 @@ import * as log from "./shared/utils/log";
  */
 function validateEnvironment(): void {
 	if (
-		!process.env.SPAM_URL ||
-		!process.env.SPAM_API_TOKEN ||
-		(!process.env.DISCORD_BOT_TOKEN &&
-			!process.env.DISCORD_LIGHT_BOT_TOKEN) ||
-		!process.env.DATABASE_URL
+		!process.env.DISCORD_BOT_TOKEN &&
+		!process.env.DISCORD_LIGHT_BOT_TOKEN
 	) {
-		throw new Error("Missing proper configuration!");
+		throw new Error(
+			"DISCORD_BOT_TOKEN or DISCORD_LIGHT_BOT_TOKEN needs to be set"
+		);
 	}
+
+	if (!process.env.SPAM_API_TOKEN)
+		console.error("SPAM_API_TOKEN not set. Sending emails disabled.");
+	if (!process.env.DEEPL_API_KEY)
+		console.error("DEEPL_API_KEY not set. Translations disabled.");
 }
 
 const intents = [

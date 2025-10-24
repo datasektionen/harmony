@@ -17,7 +17,7 @@ export async function handleNollegruppAdd(
 	let result = false;
 
 	// The options should never be null because name and code are required.
-	if (name != null && code != null) {
+	if (name !== null && code !== null) {
 		result = await insertNollegrupp(name, code);
 	}
 

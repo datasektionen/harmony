@@ -18,7 +18,7 @@ export async function handleButtonsVerify(
 
 	if (mottagning) {
 		labels = VERIFY_BUTTON_LABELS.map((label, index) => {
-			if (index == 2) {
+			if (index === 2) {
 				return "n" + "Ø" + label.slice(2);
 			} else {
 				return label.charAt(0).toUpperCase() + label.slice(1);

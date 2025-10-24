@@ -11,7 +11,7 @@ export async function handleNollegruppRemove(
 	);
 
 	// name is never null.
-	if (name != null) {
+	if (name !== null) {
 		await deleteNollegrupp(name);
 	}
 

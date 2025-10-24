@@ -81,7 +81,7 @@ function createButtonsFromLabels(
 				.setStyle(ButtonStyle.Primary)
 		);
 
-		if (row.components.length == rowLength) {
+		if (row.components.length === rowLength) {
 			rows.push(row);
 			row = new ActionRowBuilder<ButtonBuilder>();
 		}
