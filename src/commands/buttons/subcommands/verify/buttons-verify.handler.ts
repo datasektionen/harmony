@@ -4,8 +4,9 @@ import { GuildChatInputCommandInteraction } from "../../../../shared/types/Guild
 import { isDarkmode } from "../../../../shared/utils/darkmode";
 import {
 	generateButtons,
+	VERIFY_BUTTON_CUSTOM_IDS,
 	VERIFY_BUTTON_LABELS,
-	VerifyButtonNames,
+	VerifyButtonCustomIds,
 	VerifyModalCustomIds,
 } from "../util";
 import { ActionRowBuilder, TextInputBuilder } from "@discordjs/builders";
@@ -14,26 +15,14 @@ export async function handleButtonsVerify(
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> {
 	const mottagning = await isDarkmode();
-	let labels: string[];
+	const labels = VERIFY_BUTTON_LABELS;
 
-	if (mottagning) {
-		labels = VERIFY_BUTTON_LABELS.map((label, index) => {
-			if (index === 2) {
-				return "n" + "Ø" + label.slice(2);
-			} else {
-				return label.charAt(0).toUpperCase() + label.slice(1);
-			}
-		});
-	} else {
-		labels = VERIFY_BUTTON_LABELS.map((label) => {
-			return label.charAt(0).toUpperCase() + label.slice(1);
-		});
-
-		// Remove nØllan.
+	// Remove nØllan.
+	if (!mottagning) {
 		labels.pop();
 	}
 
-	await generateButtons(interaction, labels, 2, VERIFY_BUTTON_LABELS);
+	await generateButtons(interaction, labels, 2, VERIFY_BUTTON_CUSTOM_IDS);
 }
 
 export async function handleVerifyButtonInteraction(
@@ -42,12 +31,12 @@ export async function handleVerifyButtonInteraction(
 	const mottagning = await isDarkmode();
 
 	// This will never fail.
-	const buttonName = interaction.customId as VerifyButtonNames;
+	const buttonName = interaction.customId as VerifyButtonCustomIds;
 
 	const modal = new ModalBuilder();
 
 	switch (buttonName) {
-		case VerifyButtonNames.BEGIN: {
+		case VerifyButtonCustomIds.BEGIN: {
 			modal
 				.setCustomId(VerifyModalCustomIds.BEGIN)
 				.setTitle("Begin Verification");
@@ -82,7 +71,7 @@ export async function handleVerifyButtonInteraction(
 
 			break;
 		}
-		case VerifyButtonNames.NOLLAN: {
+		case VerifyButtonCustomIds.NOLLAN: {
 			modal
 				.setCustomId(VerifyModalCustomIds.NOLLAN)
 				.setTitle("nØllan...");
@@ -115,7 +104,7 @@ export async function handleVerifyButtonInteraction(
 
 			break;
 		}
-		case VerifyButtonNames.SUBMIT: {
+		case VerifyButtonCustomIds.SUBMIT: {
 			modal
 				.setCustomId(VerifyModalCustomIds.SUBMIT)
 				.setTitle("Submit Verification Code");

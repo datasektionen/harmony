@@ -1,10 +1,9 @@
-import { COURSE_BUTTON_LABELS, VERIFY_BUTTON_LABELS } from "./subcommands/util";
+import { COURSE_BUTTON_CUSTOM_IDS, COURSE_BUTTON_LABELS, generateButtons, VERIFY_BUTTON_CUSTOM_IDS } from "./subcommands/util";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import { GuildButtonInteraction } from "../../shared/types/GuildButtonInteraction";
 import { ButtonsSubcommands } from "./buttons-subcommands.names";
 import { CommandNotFoundError } from "../../shared/errors/command-not-founder.error";
 import {
-	handleButtonsCourses,
 	handleCourseButtonInteraction,
 } from "./subcommands/courses/buttons-courses.handler";
 import {
@@ -22,7 +21,7 @@ export async function handleButtons(
 
 	switch (subcommandName) {
 		case ButtonsSubcommands.COURSES:
-			return await handleButtonsCourses(interaction);
+			return await generateButtons(interaction, COURSE_BUTTON_LABELS, 3, COURSE_BUTTON_CUSTOM_IDS);
 		case ButtonsSubcommands.VERIFY:
 			return await handleButtonsVerify(interaction);
 		default:
@@ -33,10 +32,10 @@ export async function handleButtons(
 export async function handleButtonInteraction(
 	interaction: GuildButtonInteraction
 ): Promise<void> {
-	const courseButtonIds = COURSE_BUTTON_LABELS.map((label) =>
+	const courseButtonIds = COURSE_BUTTON_CUSTOM_IDS.map((label) =>
 		label.toString()
 	);
-	const verifyButtonIds = VERIFY_BUTTON_LABELS.map((label) =>
+	const verifyButtonIds = VERIFY_BUTTON_CUSTOM_IDS.map((label) =>
 		label.toString()
 	);
 
