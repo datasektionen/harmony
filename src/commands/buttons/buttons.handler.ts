@@ -63,8 +63,10 @@ export async function handleButtonInteraction(
 				`Removed role @abood from user ${interaction.member?.user.username}`
 			);
 
-			// I hope that people don't abuse this to spam channels with un-abood messages.
-			await interaction.reply("You have successfully been un-Abooded!");
+			await interaction.message.edit({
+				content: "You have successfully been un-Abooded.",
+				components: [],
+			});
 			return;
 		} else {
 			// Ephemeral to prevent spam :)

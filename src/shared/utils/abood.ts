@@ -14,7 +14,7 @@ const aboodRow = new ActionRowBuilder<ButtonBuilder>();
 aboodRow.addComponents(
 	new ButtonBuilder()
 		.setCustomId(UN_ABOOD_BUTTON_CUSTOMID)
-		.setLabel("@abood? No thanks!")
+		.setLabel("@abood? No, don't ping me!")
 		.setStyle(ButtonStyle.Primary)
 );
 
@@ -38,8 +38,7 @@ export async function handle_abood_mention(
 		);
 
 		await message.reply({
-			content:
-				"You have been Abooded! If you don't want to be @abood, please press the button below.",
+			content: "You have been Abooded!",
 			components: [aboodRow],
 		});
 	}
