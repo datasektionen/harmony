@@ -4,7 +4,7 @@ export async function sendMail(to: string, token: string): Promise<string> {
 	const key = process.env.SPAM_API_TOKEN;
 	if (!key) throw new Error("SPAM_API_TOKEN is not set");
 
-	const res = await fetch(`${SPAM_URL}/api/sendmail`, {
+	const res = await fetch(`${SPAM_URL}/api/legacy/sendmail`, {
 		method: "post",
 		headers: {
 			"Content-Type": "application/json",
