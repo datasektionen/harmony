@@ -1,17 +1,17 @@
 import { GuildChatInputCommandInteraction } from "../../../shared/types/GuildChatInputCommandType";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
-import { AliasName } from "../../../shared/alias-mappings";
+import { roleAliases } from "../../../shared/alias-mappings";
 
-export const COURSE_BUTTON_LABELS = ["Year 1", "Year 2", "Year 3", "TCSCM", "TMAIM", "All Electives"];
-
-export const COURSE_BUTTON_CUSTOM_IDS = [
-	AliasName.YEAR1,
-	AliasName.YEAR2,
-	AliasName.YEAR3,
-	AliasName.CS_MASTER,
-	AliasName.ML_MASTER,
-	AliasName.ALL_ELECTIVES,
+export const COURSE_BUTTON_LABELS = [
+	"Year 1",
+	"Year 2",
+	"Year 3",
+	"TCSCM",
+	"TMAIM",
+	"All Electives",
 ];
+
+export const COURSE_BUTTON_CUSTOM_IDS = Array.from(roleAliases.keys());
 
 export enum VerifyButtonCustomIds {
 	BEGIN = "begin",

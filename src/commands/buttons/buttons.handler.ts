@@ -1,11 +1,14 @@
-import { COURSE_BUTTON_CUSTOM_IDS, COURSE_BUTTON_LABELS, generateButtons, VERIFY_BUTTON_CUSTOM_IDS } from "./subcommands/util";
+import {
+	COURSE_BUTTON_CUSTOM_IDS,
+	COURSE_BUTTON_LABELS,
+	generateButtons,
+	VERIFY_BUTTON_CUSTOM_IDS,
+} from "./subcommands/util";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import { GuildButtonInteraction } from "../../shared/types/GuildButtonInteraction";
 import { ButtonsSubcommands } from "./buttons-subcommands.names";
 import { CommandNotFoundError } from "../../shared/errors/command-not-founder.error";
-import {
-	handleCourseButtonInteraction,
-} from "./subcommands/courses/buttons-courses.handler";
+import { handleCourseButtonInteraction } from "./subcommands/courses/buttons-courses.handler";
 import {
 	handleButtonsVerify,
 	handleVerifyButtonInteraction,
@@ -21,7 +24,12 @@ export async function handleButtons(
 
 	switch (subcommandName) {
 		case ButtonsSubcommands.COURSES:
-			return await generateButtons(interaction, COURSE_BUTTON_LABELS, 3, COURSE_BUTTON_CUSTOM_IDS);
+			return await generateButtons(
+				interaction,
+				COURSE_BUTTON_LABELS,
+				3,
+				COURSE_BUTTON_CUSTOM_IDS
+			);
 		case ButtonsSubcommands.VERIFY:
 			return await handleButtonsVerify(interaction);
 		default:
