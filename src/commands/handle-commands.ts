@@ -8,7 +8,6 @@ import { hasRoleN0llan, hasRoleVerified } from "../shared/utils/roles";
 import type { GuildChatInputCommandInteraction } from "../shared/types/GuildChatInputCommandType";
 import type { GuildButtonInteraction } from "../shared/types/GuildButtonInteraction";
 import type { GuildModalSubmitInteraction } from "../shared/types/GuildModalSubmitInteraction";
-import { handlePeriod } from "./period/period.handler";
 import {
 	handleButtonInteraction,
 	handleButtons,
@@ -150,9 +149,6 @@ const handleChatInputCommand = async (
 					return;
 				case CommandNames.COURSES:
 					await handleCourses(guildInteraction);
-					return;
-				case CommandNames.PERIOD:
-					await handlePeriod(guildInteraction);
 					return;
 				case CommandNames.BUTTONS:
 					await handleButtons(guildInteraction);

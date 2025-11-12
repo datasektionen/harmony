@@ -3,7 +3,6 @@ export enum CommandNames {
 	JOIN = "join",
 	MESSAGE = "message",
 	LEAVE = "leave",
-	PERIOD = "period",
 	VERIFY = "verify",
 	BUTTONS = "buttons",
 	COMMUNITY = "community",
