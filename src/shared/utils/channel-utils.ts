@@ -106,7 +106,7 @@ export const handleChannel = async (
 			});
 		} else {
 			await interaction.editReply({
-				content: `Successfully updated visibility for ${channel}`,
+				content: `Successfully updated visibility for \`#${channel.name}\``,
 			});
 		}
 	}
