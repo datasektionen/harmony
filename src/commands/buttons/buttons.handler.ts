@@ -3,7 +3,7 @@ import {
 	COURSE_BUTTON_LABELS,
 	generateButtons,
 	VERIFY_BUTTON_CUSTOM_IDS,
-	UN_ABOOD_BUTTON_CUSTOMID,
+	UN_ABOOD_BUTTON_CUSTOM_ID,
 } from "./subcommands/util";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import { GuildButtonInteraction } from "../../shared/types/GuildButtonInteraction";
@@ -58,7 +58,7 @@ export async function handleButtonInteraction(
 		return await handleVerifyButtonInteraction(interaction);
 	}
 	// buttonInteraction originated from the un-abood button.
-	else if (interaction.customId.startsWith(UN_ABOOD_BUTTON_CUSTOMID)) {
+	else if (interaction.customId.startsWith(UN_ABOOD_BUTTON_CUSTOM_ID)) {
 		// Each un-Abood button has a unique customId that ends with the Abooded user's id.
 		if (interaction.customId.endsWith(interaction.user.id)) {
 			// Should never fail as this button can only be generated where @abood is mentioned.

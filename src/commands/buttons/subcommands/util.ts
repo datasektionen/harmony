@@ -2,6 +2,9 @@ import { GuildChatInputCommandInteraction } from "../../../shared/types/GuildCha
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import { roleAliases } from "../../../shared/alias-mappings";
 
+// CustomId for the un-abood button.
+export const UN_ABOOD_BUTTON_CUSTOM_ID = "aboodnejtack";
+
 export const COURSE_BUTTON_LABELS = [
 	"Year 1",
 	"Year 2",
