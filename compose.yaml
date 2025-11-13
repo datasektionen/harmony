@@ -11,6 +11,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    volumes:
+      - ./src/tests/local/testConf.json:/app/dist/tests/local/testConf.json:ro
     develop:
       watch:
         - action: sync

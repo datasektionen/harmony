@@ -28,6 +28,10 @@ To interact with the database: `npm run db`
 
 Before each push you should run `npm run format` to format the code, since pull requests not accepted by Prettier cannot be merged.
 
+## Testing
+
+Testing in this application relies on the usage of the `test` command defined in the `src/tests` directory. Inside this directory there is a single file `test.ts`. This file defines the `test` command and functions for initializing and handling it when called by the user. The command is only visible and usable when some subcommands are added to it as specified in [README.md](https://github.com/datasektionen/harmony/blob/addtest/src/tests/README.md). Be sure to read that file carefully to learn how to set up the framework locally and how to use it.
+
 ## Environment variables
 
 All necessary environment variables are set automatically when running with docker compose.
