@@ -11,10 +11,7 @@ import { GuildChatInputCommandInteraction } from "../shared/types/GuildChatInput
 import { CommandNotFoundError } from "../shared/errors/command-not-founder.error";
 
 // Relative path for the configuration file in Docker container.
-const relativeConfPath = "../../src/tests/local/testConf.json";
-
-const AcceptedSubcommandHandlerType =
-	"(interaction: GuildChatInputCommandInteraction) => Promise<void>";
+const relativeConfPath = "./local/testConf.json";
 
 type SubCommandConfiguration = {
 	subCommand: string;
@@ -65,35 +62,25 @@ async function dynamicImport(
 	  ]
 	| undefined
 > {
-	try {
-		// At runtime the code is translate into JavaScript thus `.ts` files become `.js` files. The conversion is
-		// handled here to spare the user of having to take this into account when writing their testConf.json file.
-		const subcommandFilepath = path.join(
-			__dirname,
-			"local",
-			conf.subCommandFilePath.replace(/\.ts$/, ".js")
-		);
-		const subcommandHandlerFilepath = path.join(
-			__dirname,
-			"local",
-			conf.subCommandHandlerFilePath.replace(/\.ts$/, ".js")
-		);
-		const subCommandFile = await import(subcommandFilepath);
-		const subCommandHandlerFile = await import(subcommandHandlerFilepath);
-		if (typeof subCommandFile[conf.subCommandHandlerName] !== "function") {
-			throw new Error(
-				`${conf.subCommandHandlerName} is not a function, make sure that it is of type ${AcceptedSubcommandHandlerType}`
-			);
-		}
-		command.addSubcommand(subCommandFile[conf.subCommand]);
-		return [
-			subCommandFile[conf.subCommand],
-			subCommandHandlerFile[conf.subCommandHandlerName],
-		];
-	} catch (error) {
-		log.error(`Error during dynamic import of subcommand: ${error}`);
-		return undefined;
-	}
+	// At runtime the code is translate into JavaScript thus `.ts` files become `.js` files. The conversion is
+	// handled here to spare the user of having to take this into account when writing their testConf.json file.
+	const subcommandFilepath = path.join(
+		__dirname,
+		"local",
+		conf.subCommandFilePath.replace(/\.ts$/, ".js")
+	);
+	const subcommandHandlerFilepath = path.join(
+		__dirname,
+		"local",
+		conf.subCommandHandlerFilePath.replace(/\.ts$/, ".js")
+	);
+	const subCommandFile = await import(subcommandFilepath);
+	const subCommandHandlerFile = await import(subcommandHandlerFilepath);
+	command.addSubcommand(subCommandFile[conf.subCommand]);
+	return [
+		subCommandFile[conf.subCommand],
+		subCommandHandlerFile[conf.subCommandHandlerName],
+	];
 }
 /**
  * Dynamically import all commands specified in the argument list of parsed **SubCommandConfiguration** types
