@@ -18,7 +18,7 @@ export async function handleButtonsCourses(
 ): Promise<void> {
 	const labels = COURSE_BUTTON_LABELS.map((alias, index) => {
 		// Special formatting for CS and ML master aliases.
-		if (index == 3 || index == 4) {
+		if (index === 3 || index === 4) {
 			return (
 				alias.charAt(0).toUpperCase() +
 				alias.charAt(1).toUpperCase() +

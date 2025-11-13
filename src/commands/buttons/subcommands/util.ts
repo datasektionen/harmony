@@ -2,6 +2,9 @@ import { GuildChatInputCommandInteraction } from "../../../shared/types/GuildCha
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
 import { AliasName } from "../../../shared/alias-mappings";
 
+// CustomId for the un-abood button.
+export const UN_ABOOD_BUTTON_CUSTOMID = "aboodnejtack";
+
 // Labels for course buttons
 //
 // - Used as button labels (first letter capitalised for all except for CS- and ML-master).
@@ -81,7 +84,7 @@ function createButtonsFromLabels(
 				.setStyle(ButtonStyle.Primary)
 		);
 
-		if (row.components.length == rowLength) {
+		if (row.components.length === rowLength) {
 			rows.push(row);
 			row = new ActionRowBuilder<ButtonBuilder>();
 		}

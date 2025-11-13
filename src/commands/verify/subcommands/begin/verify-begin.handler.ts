@@ -40,12 +40,12 @@ export async function handleVerifyBeginBase(
 	// Bypass for international students.
 	let isIntis = false;
 
-	if (code != undefined) {
+	if (code !== undefined) {
 		// Requires the entry (intis, intis code) to be present in the nollegrupp table.
 		const intisCode = await getNollegruppCodeByName("intis");
 
 		// In case the entry does not exist.
-		if (intisCode == null) {
+		if (intisCode === null) {
 			interaction.editReply({
 				content:
 					"Verification failed, please contact a server administrator to resolve the issue and complete your verification.",
@@ -56,7 +56,7 @@ export async function handleVerifyBeginBase(
 			return;
 		}
 
-		isIntis = code == intisCode;
+		isIntis = code === intisCode;
 	}
 
 	const kthId = email.split("@")[0];
@@ -111,10 +111,13 @@ export async function handleVerifyBeginBase(
 		}
 	}
 
-	const token = generateToken(parseInt(process.env.TOKEN_SIZE as string));
-	const timeout = parseInt(process.env.TOKEN_TIMEOUT as string);
+	// Be aware that token size is not necessarily the final length of the Token string,
+	// but the number of random bytes generated. 8 bytes (64 bits) together with the
+	// token timeout of 10 min, is secure enough.
+	const token = generateToken(8);
 	const verifyingUser = new VerifyingUser(email, user.id, isIntis);
-	await tokenUser.set(token, verifyingUser, timeout);
+	const tokenTimeout = 600000; // 10 min. Time-to-live for generated tokens in ms
+	await tokenUser.set(token, verifyingUser, tokenTimeout);
 
 	try {
 		await sendMail(email, token);

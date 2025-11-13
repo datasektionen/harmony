@@ -1,8 +1,9 @@
 import postgres, { PostgresError } from "postgres";
+import { DATABASE_URL } from "../shared/env";
 
 const UNIQUE_KEY_VIOLATION = "23505";
 
-const sql = postgres(process.env.DATABASE_URL!, {
+const sql = postgres(DATABASE_URL, {
 	debug: process.env.NODE_ENV === "development",
 });
 
@@ -40,7 +41,7 @@ export async function insertUser(
 	try {
 		await sql`insert into users (kth_id, discord_id) values (${kthId.toLowerCase()}, ${discordId})`;
 	} catch (err) {
-		if (err instanceof PostgresError && err.code == UNIQUE_KEY_VIOLATION)
+		if (err instanceof PostgresError && err.code === UNIQUE_KEY_VIOLATION)
 			return false;
 		throw err;
 	}
@@ -73,7 +74,7 @@ export async function insertNollegrupp(
 	try {
 		await sql`insert into nollegrupp (name, code) values (${name}, ${code})`;
 	} catch (err) {
-		if (err instanceof PostgresError && err.code == UNIQUE_KEY_VIOLATION)
+		if (err instanceof PostgresError && err.code === UNIQUE_KEY_VIOLATION)
 			return false;
 		throw err;
 	}
@@ -129,7 +130,7 @@ export async function insertNollan(
 	try {
 		await sql`insert into nollan (kth_id, discord_id) values (${kthId.toLowerCase()}, ${discordId})`;
 	} catch (err) {
-		if (err instanceof PostgresError && err.code == UNIQUE_KEY_VIOLATION)
+		if (err instanceof PostgresError && err.code === UNIQUE_KEY_VIOLATION)
 			return false;
 		throw err;
 	}

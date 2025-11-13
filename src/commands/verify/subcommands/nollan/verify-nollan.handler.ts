@@ -43,7 +43,7 @@ export async function handleVerifyNollanBase(
 	try {
 		// Check if nolleKod is valid.
 		const nollegruppRoleName = await db.getNollegruppNameByCode(nolleKod);
-		if (nollegruppRoleName == null) {
+		if (nollegruppRoleName === null) {
 			await interaction.editReply({
 				content:
 					"Error: Invalid code!\nVänligen skriv in den personliga kod du fått från din Dadda.\nFråga din Dadda om du behöver extra hjälp!",
