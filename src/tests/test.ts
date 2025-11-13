@@ -34,9 +34,7 @@ export const testCommand = command;
 function readConfFile(): SubCommandConfiguration[] | null {
 	let subCommandConfig = null;
 	// Parse "./local/testConf.json"
-	// The file lies in 'app/src/tests/local/testConf.json' in the container, but '__dirname' evaluates to
-	// 'app/dist/src/tests', where its `local` directory does not contain any .json files
-	const jsonPath = path.resolve(__dirname, relativeConfPath);
+	const jsonPath = path.resolve(__dirname, relativeConfPath); // Fuck TypeScript
 	if (fs.existsSync(jsonPath)) {
 		try {
 			const data = fs.readFileSync(jsonPath, "utf8");
