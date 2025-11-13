@@ -2,8 +2,8 @@ export enum AliasName {
 	YEAR1 = "year1",
 	YEAR2 = "year2",
 	YEAR3 = "year3",
-	TCSCM = "tcscm",
-	TMAIM = "tmaim",
+	TCSCM = "cs-master",
+	TMAIM = "ml-master",
 	ALL_ELECTIVES = "all-electives",
 }
 
@@ -11,8 +11,8 @@ export const roleAliases = new Map<string, string>([
 	[AliasName.YEAR1, "Kurser Åk 1"],
 	[AliasName.YEAR2, "Kurser Åk 2"],
 	[AliasName.YEAR3, "Kurser Åk 3"],
-	[AliasName.TCSCM, "TCSCM"],
-	[AliasName.TMAIM, "TMAIM"],
+	[AliasName.TCSCM, "CS Master"],
+	[AliasName.TMAIM, "ML Master"],
 	[AliasName.ALL_ELECTIVES, "All Electives"],
 ]);
 

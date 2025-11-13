@@ -9,8 +9,8 @@ export const COURSE_BUTTON_LABELS = [
 	"Year 1",
 	"Year 2",
 	"Year 3",
-	"TCSCM",
-	"TMAIM",
+	"CS Master",
+	"ML Master",
 	"All Electives",
 ];
 
