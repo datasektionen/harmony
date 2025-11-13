@@ -1,14 +1,13 @@
 import { JoinVariables } from "./join.variables";
 import {
-	CourseChannel,
 	handleCourseCode,
 	isCourseChannel,
+	joinChannel,
 } from "../../shared/utils/channel-utils";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import {
 	ApplicationCommandOptionChoiceData,
 	AutocompleteInteraction,
-	User,
 } from "discord.js";
 import { validCourseCode } from "../../shared/utils/valid-course-code";
 
@@ -21,15 +20,6 @@ export const handleJoin = async (
 		.trim()
 		.toLowerCase();
 	return await handleCourseCode(courseCode, interaction, joinChannel);
-};
-
-export const joinChannel = async (
-	channel: CourseChannel,
-	user: User
-): Promise<void> => {
-	await channel.permissionOverwrites.create(user, {
-		ViewChannel: true,
-	});
 };
 
 export const handleJoinAutocomplete = async (

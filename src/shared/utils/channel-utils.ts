@@ -11,10 +11,25 @@ import {
 import { courseAliases, roleAliases } from "../alias-mappings";
 import { GuildButtonOrCommandInteraction } from "../types/GuildButtonOrCommandInteraction";
 import { validCourseCode } from "./valid-course-code";
-import { setRole } from "./roles";
-import { joinChannel } from "../../commands/join/join.handler";
+import { removeRole, setRole } from "./roles";
 
 export type CourseChannel = ForumChannel | TextChannel;
+
+export const joinChannel = async (
+	channel: CourseChannel,
+	user: User
+): Promise<void> => {
+	await channel.permissionOverwrites.create(user, {
+		ViewChannel: true,
+	});
+};
+
+export const leaveChannel = async (
+	channel: CourseChannel,
+	user: User
+): Promise<void> => {
+	await channel.permissionOverwrites.delete(user);
+};
 
 export const isCourseChannel = (channel?: GuildBasedChannel): boolean => {
 	return (
@@ -38,9 +53,14 @@ export async function handleCourseCode(
 	// Role alias.
 	if (roleAliases.has(courseCode) && role !== undefined) {
 		await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-		setRole(interaction.user, role, interaction.guild);
+		// slightly cursed, but it works...
+		if (actionCallback === joinChannel) {
+			setRole(interaction.user, role, interaction.guild);
+		} else {
+			removeRole(interaction.user, role, interaction.guild);
+		}
 		await interaction.editReply({
-			content: `Successfully joined \`${courseCode}\`!`,
+			content: `Successfully updated visibility for \`${courseCode}\`!`,
 		});
 		return;
 	}

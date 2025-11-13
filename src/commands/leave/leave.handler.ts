@@ -1,8 +1,7 @@
-import { User } from "discord.js";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import {
-	CourseChannel,
 	handleCourseCode,
+	leaveChannel,
 } from "../../shared/utils/channel-utils";
 import { LeaveVariables } from "./leave.variables";
 
@@ -15,11 +14,4 @@ export const handleLeave = async (
 		.trim()
 		.toLowerCase();
 	return await handleCourseCode(courseCode, interaction, leaveChannel);
-};
-
-export const leaveChannel = async (
-	channel: CourseChannel,
-	user: User
-): Promise<void> => {
-	await channel.permissionOverwrites.delete(user);
 };
