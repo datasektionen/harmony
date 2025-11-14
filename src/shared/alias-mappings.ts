@@ -2,8 +2,8 @@ export enum AliasName {
 	YEAR1 = "year1",
 	YEAR2 = "year2",
 	YEAR3 = "year3",
-	TCSCM = "cs-master",
-	TMAIM = "ml-master",
+	CS_MASTER = "cs-master",
+	ML_MASTER = "ml-master",
 	ALL_ELECTIVES = "all-electives",
 }
 
@@ -11,8 +11,8 @@ export const roleAliases = new Map<string, string>([
 	[AliasName.YEAR1, "Kurser Åk 1"],
 	[AliasName.YEAR2, "Kurser Åk 2"],
 	[AliasName.YEAR3, "Kurser Åk 3"],
-	[AliasName.TCSCM, "CS Master"],
-	[AliasName.TMAIM, "ML Master"],
+	[AliasName.CS_MASTER, "CS Master"],
+	[AliasName.ML_MASTER, "ML Master"],
 	[AliasName.ALL_ELECTIVES, "All Electives"],
 ]);
 
@@ -53,7 +53,7 @@ export const mappings: Record<AliasName, string[]> = {
 		"sf1935",
 	],
 	[AliasName.YEAR3]: ["al1504", "da150x", "dd2350", "id1200", "sf1688"],
-	[AliasName.TCSCM]: [
+	[AliasName.CS_MASTER]: [
 		"da2210",
 		"dd2300",
 		"dd2380",
@@ -62,7 +62,7 @@ export const mappings: Record<AliasName, string[]> = {
 		"ik2218",
 		"da231x",
 	],
-	[AliasName.TMAIM]: [
+	[AliasName.ML_MASTER]: [
 		"dd2301",
 		"da233x",
 		"da2205",
