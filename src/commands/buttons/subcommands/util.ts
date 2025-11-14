@@ -1,38 +1,34 @@
 import { GuildChatInputCommandInteraction } from "../../../shared/types/GuildChatInputCommandType";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle } from "discord.js";
-import { AliasName } from "../../../shared/alias-mappings";
+import { roleAliases } from "../../../shared/alias-mappings";
 
 // CustomId for the un-abood button.
-export const UN_ABOOD_BUTTON_CUSTOMID = "aboodnejtack";
+export const UN_ABOOD_BUTTON_CUSTOM_ID = "aboodnejtack";
 
-// Labels for course buttons
-//
-// - Used as button labels (first letter capitalised for all except for CS- and ML-master).
-// - Used as button id (lowercase).
 export const COURSE_BUTTON_LABELS = [
-	AliasName.YEAR1,
-	AliasName.YEAR2,
-	AliasName.YEAR3,
-	AliasName.CS_MASTER,
-	AliasName.ML_MASTER,
-	AliasName.ALL_ELECTIVES,
+	"Year 1",
+	"Year 2",
+	"Year 3",
+	"CS Master",
+	"ML Master",
+	"All Electives",
 ];
 
-// Labels for verify buttons
-//
-// - Used as button labels (first letter capitalised).
-// - Used as button id (lowercase).
-export enum VerifyButtonNames {
+export const COURSE_BUTTON_CUSTOM_IDS = Array.from(roleAliases.keys());
+
+export enum VerifyButtonCustomIds {
 	BEGIN = "begin",
 	NOLLAN = "nollan",
 	SUBMIT = "submit",
 }
 
-export const VERIFY_BUTTON_LABELS = [
-	VerifyButtonNames.BEGIN,
-	VerifyButtonNames.SUBMIT,
-	VerifyButtonNames.NOLLAN,
+export const VERIFY_BUTTON_CUSTOM_IDS = [
+	VerifyButtonCustomIds.BEGIN,
+	VerifyButtonCustomIds.SUBMIT,
+	VerifyButtonCustomIds.NOLLAN,
 ];
+
+export const VERIFY_BUTTON_LABELS = ["Begin", "Submit", "nØllan"];
 
 export enum VerifyModalCustomIds {
 	BEGIN = "beginVerify",
@@ -56,9 +52,6 @@ export async function generateButtons(
 
 	const buttons = createButtonsFromLabels(labels, rowLength, customIds);
 
-	// Old code broke due to lack of a check for whether or not
-	// channel is sendable.
-	// await interaction.channel?.send({ components: buttons });
 	if (interaction.channel?.isSendable()) {
 		await interaction.channel?.send({ components: buttons });
 	}

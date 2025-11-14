@@ -1,5 +1,4 @@
 import { Guild, Role, User } from "discord.js";
-import { AliasName } from "../alias-mappings";
 
 export async function hasRole(
 	user: User,
@@ -103,31 +102,10 @@ export async function setPingRoles(user: User, guild: Guild): Promise<void> {
 export async function toggleYearCoursesRole(
 	user: User,
 	guild: Guild,
-	alias: AliasName
+	role: string
 ): Promise<void> {
-	const yearRoles = ["Kurser Åk 1", "Kurser Åk 2", "Kurser Åk 3"];
-	let selectedRole;
-	switch (alias) {
-		case AliasName.YEAR1:
-			selectedRole = yearRoles[0];
-			break;
-		case AliasName.YEAR2:
-			selectedRole = yearRoles[1];
-			break;
-		case AliasName.YEAR3:
-			selectedRole = yearRoles[2];
-			break;
-		default:
-			selectedRole = undefined;
-			break;
-	}
-	if (!selectedRole)
-		// Wrong alias supplied
-		return;
-
-	if (await hasRole(user, selectedRole, guild))
-		await removeRole(user, selectedRole, guild);
-	else await setRole(user, selectedRole, guild);
+	if (await hasRole(user, role, guild)) await removeRole(user, role, guild);
+	else await setRole(user, role, guild);
 }
 
 /**

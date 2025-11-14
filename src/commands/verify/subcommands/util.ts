@@ -11,9 +11,8 @@ import {
 } from "../../../shared/utils/roles";
 import { extractYearFromUser } from "../../../shared/utils/hodis";
 import { mapYearToAlias } from "../../../shared/utils/alias_to_year_mapper";
-import { handleChannelAlias } from "../../../shared/utils/channel-utils";
-import { joinChannel } from "../../join/join.handler";
 import * as log from "../../../shared/utils/log";
+import { roleAliases } from "../../../shared/alias-mappings";
 
 export const isKthEmail = (messageText: string): boolean =>
 	new RegExp(/^[a-zA-Z0-9]+@kth[.]se$/).test(messageText);
@@ -42,7 +41,12 @@ export const verifyUser = async (
 		if (!userHasYearRole) await setRole(user, yearRole, guild);
 		await setDatasektionenRole(user, guild);
 		const alias = mapYearToAlias(year);
-		if (alias) await handleChannelAlias(guild, user, alias, joinChannel);
+		if (alias) {
+			const role = roleAliases.get(alias);
+
+			// This should never be false.
+			if (role !== undefined) setRole(user, role, guild);
+		}
 	} else if (!userHasYearRole) setExternRole(user, guild);
 
 	await setPingRoles(user, guild);

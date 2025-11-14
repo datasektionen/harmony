@@ -5,18 +5,31 @@ import {
 	Snowflake,
 	TextChannel,
 	Guild,
-	PermissionFlagsBits,
 	User,
 	MessageFlags,
 } from "discord.js";
-import { AliasName, mappings } from "../alias-mappings";
+import { courseAliases, roleAliases } from "../alias-mappings";
 import { GuildButtonOrCommandInteraction } from "../types/GuildButtonOrCommandInteraction";
-import { getAliasChannels } from "./read-alias-mappings";
 import { validCourseCode } from "./valid-course-code";
-import { toggleYearCoursesRole } from "./roles";
-import { joinChannel } from "../../commands/join/join.handler";
+import { removeRole, setRole } from "./roles";
 
 export type CourseChannel = ForumChannel | TextChannel;
+
+export const joinChannel = async (
+	channel: CourseChannel,
+	user: User
+): Promise<void> => {
+	await channel.permissionOverwrites.create(user, {
+		ViewChannel: true,
+	});
+};
+
+export const leaveChannel = async (
+	channel: CourseChannel,
+	user: User
+): Promise<void> => {
+	await channel.permissionOverwrites.delete(user);
+};
 
 export const isCourseChannel = (channel?: GuildBasedChannel): boolean => {
 	return (
@@ -25,47 +38,39 @@ export const isCourseChannel = (channel?: GuildBasedChannel): boolean => {
 	);
 };
 
-export const handleChannelAlias = async (
-	guild: Guild,
-	user: User,
-	alias: string,
-	actionCallback: (channel: CourseChannel, user: User) => Promise<void>
-): Promise<number> => {
-	if (
-		[AliasName.YEAR1, AliasName.YEAR2, AliasName.YEAR3].includes(
-			alias as AliasName
-		)
-	) {
-		toggleYearCoursesRole(user, guild, alias as AliasName);
-		return mappings[alias as AliasName].length;
-	}
+// Unified handling of role aliases, course aliases, and course codes.
+export async function handleCourseCode(
+	courseCode: string,
+	interaction: GuildButtonOrCommandInteraction,
+	actionCallback: (
+		channel: ForumChannel | TextChannel,
+		user: User
+	) => Promise<void>
+): Promise<void> {
+	const role = roleAliases.get(courseCode);
+	const newCourseCode = courseAliases.get(courseCode);
 
-	const channels = await getAliasChannels(guild, alias as AliasName);
-	if (channels.size === 0) {
-		return 0;
-	}
-
-	const couldViewChannel = new Collection<CourseChannel, boolean>();
-	for (const channel of channels.values()) {
-		couldViewChannel.set(channel, userCanViewChannel(user.id, channel));
-	}
-
-	const promises = channels.map((channel) =>
-		actionCallback(channel as CourseChannel, user)
-	);
-	await Promise.allSettled(promises);
-
-	let updateCount = 0;
-	for (let channel of channels.values()) {
-		channel = await channel.fetch();
-		const oldPermission = couldViewChannel.get(channel);
-		const newPermission = userCanViewChannel(user.id, channel);
-		if (oldPermission !== newPermission) {
-			updateCount += 1;
+	// Role alias.
+	if (roleAliases.has(courseCode) && role !== undefined) {
+		await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+		// slightly cursed, but it works...
+		if (actionCallback === joinChannel) {
+			setRole(interaction.user, role, interaction.guild);
+		} else {
+			removeRole(interaction.user, role, interaction.guild);
 		}
+		await interaction.editReply({
+			content: `Successfully updated visibility for \`${courseCode}\`!`,
+		});
+		return;
 	}
-	return updateCount;
-};
+	// Course alias.
+	else if (courseAliases.has(courseCode) && newCourseCode !== undefined) {
+		return await handleChannel(newCourseCode, interaction, actionCallback);
+	}
+	// Course code.
+	return await handleChannel(courseCode, interaction, actionCallback);
+}
 
 export const handleChannel = async (
 	courseCode: string,
@@ -121,9 +126,7 @@ export const handleChannel = async (
 			});
 		} else {
 			await interaction.editReply({
-				content: `Successfully updated visibility for \`#${
-					(channel as CourseChannel).name
-				}\``,
+				content: `Successfully updated visibility for \`#${channel.name}\``,
 			});
 		}
 	}
@@ -190,27 +193,6 @@ export async function getCourseChannelsByName(
 		.filter(isCourseChannel)
 		.mapValues((channel) => channel as CourseChannel);
 	return channels;
-}
-
-function userCanViewChannel(
-	userId: Snowflake,
-	channel: CourseChannel
-): boolean {
-	return (
-		channel.permissionsFor(userId)?.has(PermissionFlagsBits.ViewChannel) ??
-		false
-	);
-}
-
-export async function isMemberOfAlias(
-	guild: Guild,
-	userId: Snowflake,
-	alias: AliasName
-): Promise<boolean> {
-	const aliasChannels = await getAliasChannels(guild, alias);
-	return !aliasChannels.some(
-		(channel) => !userCanViewChannel(userId, channel)
-	);
 }
 
 export async function getAllCourseChannels(

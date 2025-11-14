@@ -1,5 +1,4 @@
 export enum AliasName {
-	YEAR0 = "year0",
 	YEAR1 = "year1",
 	YEAR2 = "year2",
 	YEAR3 = "year3",
@@ -8,8 +7,28 @@ export enum AliasName {
 	ALL_ELECTIVES = "all-electives",
 }
 
+export const roleAliases = new Map<string, string>([
+	[AliasName.YEAR1, "Kurser Åk 1"],
+	[AliasName.YEAR2, "Kurser Åk 2"],
+	[AliasName.YEAR3, "Kurser Åk 3"],
+	[AliasName.CS_MASTER, "CS Master"],
+	[AliasName.ML_MASTER, "ML Master"],
+	[AliasName.ALL_ELECTIVES, "All Electives"],
+]);
+
+// Old courses mapped to their current counterparts.
+export const courseAliases = new Map<string, string>([
+	["dd1360", "dd1366"],
+	["dd1361", "dd1366"],
+	["dd1362", "dd1366"],
+	["sf1923", "sf1935"],
+	["sf1924", "sf1935"],
+	["sf1925", "sf1935"],
+	["dd1369", "dd1367"],
+	["dh1620", "dh1623"],
+]);
+
 export const mappings: Record<AliasName, string[]> = {
-	[AliasName.YEAR0]: ["sf0003"],
 	[AliasName.YEAR1]: [
 		"da1600",
 		"dd1337",
@@ -21,6 +40,7 @@ export const mappings: Record<AliasName, string[]> = {
 		"sf1625",
 		"sf1626",
 		"sf1671",
+		"sf0003",
 	],
 	[AliasName.YEAR2]: [
 		"dd1351",

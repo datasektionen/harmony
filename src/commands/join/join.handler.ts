@@ -1,18 +1,13 @@
 import { JoinVariables } from "./join.variables";
-import { aliasExists } from "../../shared/utils/read-alias-mappings";
 import {
-	CourseChannel,
-	handleChannel,
-	handleChannelAlias,
+	handleCourseCode,
 	isCourseChannel,
+	joinChannel,
 } from "../../shared/utils/channel-utils";
-import { AliasName } from "../../shared/alias-mappings";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import {
 	ApplicationCommandOptionChoiceData,
 	AutocompleteInteraction,
-	MessageFlags,
-	User,
 } from "discord.js";
 import { validCourseCode } from "../../shared/utils/valid-course-code";
 
@@ -24,30 +19,7 @@ export const handleJoin = async (
 		.getString(JoinVariables.COURSE_CODE, true)
 		.trim()
 		.toLowerCase();
-
-	if (aliasExists(courseCode as AliasName)) {
-		await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-		const updateCount = await handleChannelAlias(
-			interaction.guild,
-			interaction.user,
-			courseCode,
-			joinChannel
-		);
-		await interaction.editReply({
-			content: `Successfully joined \`${courseCode}\`! (${updateCount}) channels updated`,
-		});
-		return;
-	}
-	return await handleChannel(courseCode, interaction, joinChannel);
-};
-
-export const joinChannel = async (
-	channel: CourseChannel,
-	user: User
-): Promise<void> => {
-	await channel.permissionOverwrites.create(user, {
-		ViewChannel: true,
-	});
+	return await handleCourseCode(courseCode, interaction, joinChannel);
 };
 
 export const handleJoinAutocomplete = async (

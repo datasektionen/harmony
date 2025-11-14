@@ -12,8 +12,6 @@ export function mapYearToAlias(userYear: number): AliasName | null {
 			return AliasName.YEAR2;
 		case 2:
 			return AliasName.YEAR3;
-		case 3:
-			return AliasName.CS_MASTER;
 		default:
 			return null;
 	}
