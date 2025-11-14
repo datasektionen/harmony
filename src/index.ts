@@ -7,6 +7,7 @@ import { userJoined } from "./shared/utils/userJoined";
 import { initJobs } from "./jobs/jobs";
 import { CronJob } from "cron";
 import * as log from "./shared/utils/log";
+import { handle_abood_mention } from "./shared/utils/abood";
 
 /**p
  * Goes through all dotenv vars and checks if they are defined.
@@ -14,15 +15,18 @@ import * as log from "./shared/utils/log";
  */
 function validateEnvironment(): void {
 	if (
-		!process.env.SPAM_URL ||
-		!process.env.SPAM_API_TOKEN ||
-		(!process.env.DISCORD_BOT_TOKEN &&
-			!process.env.DISCORD_LIGHT_BOT_TOKEN) ||
-		!process.env.DATABASE_URL ||
-		!process.env.HIVE
+		!process.env.DISCORD_BOT_TOKEN &&
+		!process.env.DISCORD_LIGHT_BOT_TOKEN
 	) {
-		throw new Error("Missing proper configuration!");
+		throw new Error(
+			"DISCORD_BOT_TOKEN or DISCORD_LIGHT_BOT_TOKEN needs to be set"
+		);
 	}
+
+	if (!process.env.SPAM_API_TOKEN)
+		console.error("SPAM_API_TOKEN not set. Sending emails disabled.");
+	if (!process.env.DEEPL_API_KEY)
+		console.error("DEEPL_API_KEY not set. Translations disabled.");
 }
 
 const intents = [
@@ -57,6 +61,20 @@ async function main(): Promise<void> {
 		);
 		harmonyClient.on("interactionCreate", async (interaction) => {
 			await handleInteractions(interaction);
+		});
+		harmonyClient.on("messageCreate", async (message) => {
+			// Ensure that message is not via DM, and that it contains @abood.
+			if (
+				message.guild &&
+				message.member &&
+				message.mentions.roles.find((role) => role.name === "abood")
+			) {
+				await handle_abood_mention(
+					message,
+					message.member.user,
+					message.guild
+				);
+			}
 		});
 	}
 	if (process.env.DISCORD_LIGHT_BOT_TOKEN) {

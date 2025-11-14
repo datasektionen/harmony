@@ -1,4 +1,3 @@
-import { MessageFlags } from "discord.js";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import { MottagningenSubcommands } from "./mottagningen-subcommands.names";
 import { CommandNotFoundError } from "../../shared/errors/command-not-founder.error";
@@ -9,7 +8,7 @@ export async function handleMottagningen(
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> {
 	const subcommandName = interaction.options.getSubcommand(true);
-	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+	await interaction.deferReply();
 
 	switch (subcommandName) {
 		case MottagningenSubcommands.CLEAR:

@@ -11,7 +11,8 @@
 		"dev": "./node_modules/nodemon/bin/nodemon.js -e ts  --exec \"tsc && node -r dotenv/config ./dist/index.js\"",
 		"build": "tsc",
 		"watch": "tsc --watch",
-		"bs": "npm run build && node -r dotenv/config ./dist/index.js"
+		"bs": "npm run build && node -r dotenv/config ./dist/index.js",
+		"db": "docker compose exec -it db psql -U harmony -d harmony"
 	},
 	"repository": {
 		"type": "git",

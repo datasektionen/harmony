@@ -34,7 +34,7 @@ import { handleVerifyNollan } from "./verify/subcommands/nollan/verify-nollan.ha
 import { handleNollegrupp } from "./nollegrupp/nollegrupp.handler";
 import * as log from "../shared/utils/log";
 import { handleMottagningen } from "./mottagningen/mottagningen.handler";
-import { handleTest } from "../tests/test.handler";
+import { handleTest } from "../tests/test";
 
 export async function handleInteractions(
 	interaction: Interaction
@@ -180,7 +180,7 @@ const handleChatInputCommand = async (
 				case CommandNames.MOTTAGNINGEN:
 					handleMottagningen(guildInteraction);
 					return;
-				case "test":
+				case CommandNames.TEST:
 					await handleTest(guildInteraction);
 					return;
 				default:

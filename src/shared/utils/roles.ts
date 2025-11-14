@@ -18,11 +18,7 @@ export async function hasRoleVerified(
 	user: User,
 	guild: Guild
 ): Promise<boolean> {
-	return await hasRole(
-		user,
-		process.env.DISCORD_VERIFIED_ROLE as string,
-		guild
-	);
+	return await hasRole(user, "verified", guild);
 }
 
 /**
@@ -66,7 +62,7 @@ export async function removeRole(
 export function getRole(roleName: string, guild: Guild): Role {
 	const role = guild.roles.cache.find((r) => r.name === roleName);
 	if (!role) {
-		throw new Error(`Role ${roleName} does not exist on the Server!`);
+		throw new Error(`Role ${roleName} does not exist on the server!`);
 	}
 	return role;
 }
@@ -76,7 +72,7 @@ export function getRole(roleName: string, guild: Guild): Role {
  * and, if successful, assigns them the Verified role.
  */
 export async function setRoleVerified(user: User, guild: Guild): Promise<void> {
-	await setRole(user, process.env.DISCORD_VERIFIED_ROLE as string, guild);
+	await setRole(user, "verified", guild);
 }
 
 // Should spell with "o" instead of "0"

@@ -14,4 +14,5 @@ export enum CommandNames {
 	DFUNK = "dfunk",
 	KILLMOTTAGNINGEN = "killmottagningen",
 	MOTTAGNINGEN = "mottagningen",
+	TEST = "test",
 }
