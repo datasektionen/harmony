@@ -182,7 +182,7 @@ const handleChatInputCommand = async (
 					return;
 				case "test":
 					await handleTest(guildInteraction);
-					return
+					return;
 				default:
 					throw new CommandNotFoundError(
 						guildInteraction.commandName
