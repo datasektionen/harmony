@@ -1,0 +1,93 @@
+import { CronJob } from "cron";
+import { Client as DiscordClient } from "discord.js";
+import { updateDiscordDfunkRoles } from "./update-dfunk-roles";
+import * as log from "../shared/utils/log";
+
+const errorWebHookURL =
+	"https://mattermost.datasektionen.se/hooks/" +
+	process.env.MATTERMOST_WEBHOOK_TOKEN;
+
+export function initJobs(
+	client: DiscordClient
+): Map<string, { client: DiscordClient; job: CronJob }> {
+	// List of all CronJobs to start.
+	const jobs: Map<string, { client: DiscordClient; job: CronJob }> =
+		new Map();
+
+	const updateDfunkRolesJob: CronJob = createUpdateDfunkRolesJob(client);
+
+	jobs.set("updateDfunkRoles", {
+		client: client,
+		job: updateDfunkRolesJob,
+	});
+	return jobs;
+}
+
+/**
+ * Create Cronjob that updates the dfunk roles on Discord.
+ * @param client The Discord client (bot) that will be running this CronJob
+ * */
+const createUpdateDfunkRolesJob = (client: DiscordClient): CronJob => {
+	let retryCount = 0;
+	let job: CronJob;
+
+	const originalCronTime = "0 0 * * 6"; // Saturday 12:00 AM
+	// const originalCronTime = "*/3 * * * *"; // Every 3 minutes
+
+	const retryCronTime = "* * * * *"; // every minute
+
+	const onTick = async (): Promise<void> => {
+		try {
+			// Execute the update on each guild the bot is in
+			// Is it a good idea to always make the bot do this no matter the server it is in?
+			// const guild = await client.guilds.fetch("687747877736546335"); // Konglig Datasektionen
+			const oAuthGuilds = await client.guilds.fetch();
+			for (const [, oAuthGuild] of oAuthGuilds) {
+				const guild = await oAuthGuild.fetch();
+				await updateDiscordDfunkRoles(guild);
+			}
+			retryCount = 0; // Reset on success
+		} catch (err) {
+			log.error("Job error:", err);
+			if (retryCount < 5) {
+				retryCount++;
+				log.warning(`Retrying... (${retryCount})`);
+				job.stop();
+				job = new CronJob(retryCronTime, onTick, null, true);
+			} else {
+				log.warning(
+					"Max retries reached. Resetting to original interval."
+				);
+				retryCount = 0;
+				await sendWebHookError(
+					"Harmony Error: Error during Discord dfunk role update. Please take manual action by using the '/dfunk update' command on Discord."
+				).then((res) => {
+					log.info("Got response:", res);
+				});
+				job.stop();
+				job = createUpdateDfunkRolesJob(client); // recreate the job
+				job.start();
+			}
+		}
+	};
+
+	job = new CronJob(originalCronTime, onTick, null, false); //  The job is not active by default.
+	return job;
+};
+
+async function sendWebHookError(message: string): Promise<Response> {
+	const headers: Headers = new Headers();
+	headers.set("Content-Type", "application/json");
+	const response = await fetch(errorWebHookURL, {
+		method: "POST",
+		headers: headers,
+		body: JSON.stringify({
+			text: message,
+			channel: "uptimerobot",
+			username: "harmony",
+			icon_url:
+				"https://dsekt-assets.s3.amazonaws.com/shield-color-white-delta.png",
+		}),
+	});
+	return response;
+}
