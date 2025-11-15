@@ -11,25 +11,22 @@ import {
 
 import * as log from "../utils/log";
 
-const dfunktEndpoint: string = "https://dfunkt.datasektionen.se/";
+const dfunktEndpoint: string = "https://dfunkt.datasektionen.se/api/";
 
+/**
+ * Defines the endpoints of dfunk API, may be expanded if needed with new endpoints.
+ * In case a parameterized request is to be made, such as 
+ * https://dfunkt.datasektionen.se/api/role/dsys 
+ * the '@' is used as placeholder, the such endpoint would be added to this object as 
+ * getIdentifierMandateRole: dfunktEndpoint + "role/@"
+ */
 const APIUrls = {
-	getMandateRoles: dfunktEndpoint + "api/roles",
-	getIdentifierMandateRole: dfunktEndpoint + "api/role/@",
-	getIdentifierMandateRoleCurrent: dfunktEndpoint + "api/role/@/current",
-	getIdMandateRole: dfunktEndpoint + "api/role/id/@",
-	getIdMandateRoleCurrent: dfunktEndpoint + "api/role/id/@/current",
-	getRolesByGroupId: dfunktEndpoint + "api/roles/type/@/all",
-	getCurrentRolesByGroupId: dfunktEndpoint + "api/roles/type/@/all/current",
-	getAllRoles: dfunktEndpoint + "api/roles/all",
-	getAllRolesCurrent: dfunktEndpoint + "api/roles/all/current",
-	getKthUsers: dfunktEndpoint + "api/users",
-	getKthUserCurrentMandates: dfunktEndpoint + "api/user/kthid/@/current",
-	getKthUserMandates: dfunktEndpoint + "api/user/kthid/@",
-	getUgkthUserCurrentMandates: dfunktEndpoint + "api/user/ugkthid/@/current",
-	getUgkthUserMandates: dfunktEndpoint + "api/user/ugkthid/@",
+	getAllRoles: dfunktEndpoint + "roles/all",
 };
 
+/**
+ * Type representing any data fetched from the dfunk API.
+ */
 type DfunkInterface =
 	| User
 	| Role
@@ -40,9 +37,16 @@ type DfunkInterface =
 	| UserMandates
 	| Users;
 
+/**
+ * Function that executes a fetch query to the dfunk API.
+ * @param url The endpoint for the query. May contain '@' signs to represent query parameters.
+ * @param arg Optional, parameters for the query, replaces '@' signs in **url**. Has **null** value by
+ * default, representing a query without parameters.
+ * @returns Fetched data from the dfunk API.
+ */
 async function dfunkAPICall(
 	url: string,
-	arg: string | null
+	arg: string | null = null
 ): Promise<DfunkInterface> {
 	if (arg !== null && url.includes("@")) {
 		url = url.replace("@", arg);
@@ -63,5 +67,5 @@ async function dfunkAPICall(
  * Sends an API call to dfunkt.se to get all roles and their mandates ever.
  */
 export async function getAllRoles(): Promise<Roles> {
-	return (await dfunkAPICall(APIUrls.getAllRoles, null)) as Roles;
+	return (await dfunkAPICall(APIUrls.getAllRoles)) as Roles;
 }
