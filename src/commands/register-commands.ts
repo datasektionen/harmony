@@ -2,8 +2,6 @@ import { harmonyClient, harmonyLightClient } from "..";
 import { info } from "../shared/utils/log";
 import { testCommand, initTestCommand } from "../tests/test";
 import { getLightBotCommands, getOfficialBotCommands } from "./commands";
-import { testCommand } from "../tests/test.command";
-import { TestSubcommands } from "../tests/test-subcommands";
 
 export const registerCommands = async (): Promise<void> => {
 	const loadedTestSubcommands = await initTestCommand();
