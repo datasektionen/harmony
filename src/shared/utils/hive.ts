@@ -5,12 +5,12 @@ export async function getHiveGroups(tagId: string): Promise<HiveTagGroups> {
 			method: "get",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${process.env.HIVE}`,
+				Authorization: `Bearer ${process.env.HIVE_TOKEN}`,
 			},
 		}
 	);
 	if (res.status !== 200) {
-		throw new Error(`Error fetching groups with tag ${tagId}.`);
+		throw new Error(`Error fetching groups with tag ${tagId}.\nError code: ${res.status}\n${res.statusText}`);
 	}
 	return await (res.json() as Promise<HiveTagGroups>);
 }
@@ -25,7 +25,7 @@ export async function getHiveGroupMembers(
 			method: "get",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${process.env.HIVE}`,
+				Authorization: `Bearer ${process.env.HIVE_TOKEN}`,
 			},
 		}
 	);
