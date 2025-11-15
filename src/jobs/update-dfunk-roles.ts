@@ -31,12 +31,10 @@ const dfunkGroupToDiscordRoleMapping = new Map([
  * @returns Information about the performed update, more specifically:
  * - **processedDfunkData**: Contains the processed data from the dfunk API by the update program.
  * - **dbUsers**: A map mapping a user's kthid to their Discord ID according to the application's database.
- * - **discordData**: An object containing the roles (**guildRoles**) and members (**guildMembers**) from the guild updated before the update took place. 
- * - **modifiedUsersMap**: An object containing information about which roles where added to/removed from users during the update by mapping the user's Discord ID to a list of roles to add/remove. 
+ * - **discordData**: An object containing the roles (**guildRoles**) and members (**guildMembers**) from the guild updated before the update took place.
+ * - **modifiedUsersMap**: An object containing information about which roles where added to/removed from users during the update by mapping the user's Discord ID to a list of roles to add/remove.
  */
-export async function updateDiscordDfunkRoles(
-	guild: Guild,
-): Promise<{
+export async function updateDiscordDfunkRoles(guild: Guild): Promise<{
 	processedDfunkData: Awaited<ReturnType<typeof processDfunkData>>;
 	dbUsers: typeof dfunkDiscordUsers;
 	discordData: {
@@ -59,9 +57,9 @@ export async function updateDiscordDfunkRoles(
 	const toRemove: Map<string, string[]> = new Map();
 	// Fetch current Discord Role data
 	const guildRoles = await guild.roles.fetch();
-	console.log("Fetching members...")
+	console.log("Fetching members...");
 	const guildMembers = await guild.members.fetch();
-	console.log("Fetched members...")
+	console.log("Fetched members...");
 	// Map of dfunk-related Discord roles' names to the roles themselves, useful to avoid
 	// creation of duplicate roles in the case that these do not exist
 	const dfunkDiscordRoles: Map<string, DiscordRole> = new Map();

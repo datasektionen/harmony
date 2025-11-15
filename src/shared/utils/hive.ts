@@ -10,7 +10,9 @@ export async function getHiveGroups(tagId: string): Promise<HiveTagGroups> {
 		}
 	);
 	if (res.status !== 200) {
-		throw new Error(`Error fetching groups with tag ${tagId}.\nError code: ${res.status}\n${res.statusText}`);
+		throw new Error(
+			`Error fetching groups with tag ${tagId}.\nError code: ${res.status}\n${res.statusText}`
+		);
 	}
 	return await (res.json() as Promise<HiveTagGroups>);
 }
