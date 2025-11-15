@@ -15,12 +15,6 @@ command.addSubcommand((subCommand) =>
 
 command.addSubcommand((subCommand) =>
 	subCommand
-		.setName(DfunkSubcommands.TEST)
-		.setDescription("Start the dfunk role update test routine.")
-);
-
-command.addSubcommand((subCommand) =>
-	subCommand
 		.setName(DfunkSubcommands.TOGGLE)
 		.setDescription("Toggles the automatic dfunk role update routine.")
 );
