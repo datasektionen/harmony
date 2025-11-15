@@ -28,12 +28,15 @@ const dfunkGroupToDiscordRoleMapping = new Map([
  *
  * Additionally, the script creates any missing Discord roles upon execution.
  * @param guild The guild to make the update on.
- * @param testing A flag to turn on 'test mode'. This is to be removed eventually when the reliability of the routine has been tested.
+ * @returns Information about the performed update, more specifically:
+ * - **processedDfunkData**: Contains the processed data from the dfunk API by the update program.
+ * - **dbUsers**: A map mapping a user's kthid to their Discord ID according to the application's database.
+ * - **discordData**: An object containing the roles (**guildRoles**) and members (**guildMembers**) from the guild updated before the update took place. 
+ * - **modifiedUsersMap**: An object containing information about which roles where added to/removed from users during the update by mapping the user's Discord ID to a list of roles to add/remove. 
  */
 export async function updateDiscordDfunkRoles(
 	guild: Guild,
-	testing: boolean = false // For testing purposes only, remove after ensuring correctness
-): Promise<void | {
+): Promise<{
 	processedDfunkData: Awaited<ReturnType<typeof processDfunkData>>;
 	dbUsers: typeof dfunkDiscordUsers;
 	discordData: {
@@ -56,7 +59,9 @@ export async function updateDiscordDfunkRoles(
 	const toRemove: Map<string, string[]> = new Map();
 	// Fetch current Discord Role data
 	const guildRoles = await guild.roles.fetch();
+	console.log("Fetching members...")
 	const guildMembers = await guild.members.fetch();
+	console.log("Fetched members...")
 	// Map of dfunk-related Discord roles' names to the roles themselves, useful to avoid
 	// creation of duplicate roles in the case that these do not exist
 	const dfunkDiscordRoles: Map<string, DiscordRole> = new Map();
@@ -258,16 +263,15 @@ export async function updateDiscordDfunkRoles(
 			"."
 	);
 
-	if (testing)
-		return {
-			processedDfunkData: processedDfunkData,
-			dbUsers: dfunkDiscordUsers,
-			discordData: { guildMembers: guildMembers, guildRoles: guildRoles },
-			modifiedUsersMap: {
-				toAddToRole: toAdd,
-				toRemoveFromRole: toRemove,
-			},
-		};
+	return {
+		processedDfunkData: processedDfunkData,
+		dbUsers: dfunkDiscordUsers,
+		discordData: { guildMembers: guildMembers, guildRoles: guildRoles },
+		modifiedUsersMap: {
+			toAddToRole: toAdd,
+			toRemoveFromRole: toRemove,
+		},
+	};
 }
 /**
  * Processes the data fetched from the dfunk API to be later used for the role updates.
@@ -431,26 +435,4 @@ export async function createDfunkDiscordRoles(guild: Guild): Promise<void> {
 			});
 		}
 	}
-}
-
-/**
- * For testing purposes. Uses data from Hive to remove all dfunk-related roles on the Discord server based on
- * their names. It only removes one role of each name.
- */
-export async function removeDfunkDiscordRoles(guild: Guild): Promise<boolean> {
-	let removedRole = false;
-	// Fetch all tag groups on Hive related to Discord
-	const hiveTagGroups = await getHiveGroups("discord-role");
-	// Fetch Discord roles
-	const guildRoles = await guild.roles.fetch();
-	// For each group, try finding its 'tag_content' field value as a role name on the server
-	for (const hiveTagGroup of hiveTagGroups) {
-		const roleName = hiveTagGroup.tag_content;
-		const role = guildRoles.find((role) => role.name === roleName);
-		if (role !== undefined) {
-			await guild.roles.delete(role);
-			removedRole = true;
-		}
-	}
-	return removedRole;
 }
