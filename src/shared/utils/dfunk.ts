@@ -15,9 +15,9 @@ const dfunktEndpoint: string = "https://dfunkt.datasektionen.se/api/";
 
 /**
  * Defines the endpoints of dfunk API, may be expanded if needed with new endpoints.
- * In case a parameterized request is to be made, such as 
- * https://dfunkt.datasektionen.se/api/role/dsys 
- * the '@' is used as placeholder, the such endpoint would be added to this object as 
+ * In case a parameterized request is to be made, such as
+ * https://dfunkt.datasektionen.se/api/role/dsys
+ * the '@' is used as placeholder, the such endpoint would be added to this object as
  * getIdentifierMandateRole: dfunktEndpoint + "role/@"
  */
 const APIUrls = {
