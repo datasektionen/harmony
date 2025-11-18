@@ -1,36 +1,11 @@
-import { generateButtons, COURSE_BUTTON_LABELS } from "../util";
 import { MessageFlags } from "discord.js";
-import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 import { GuildButtonInteraction } from "../../../../shared/types/GuildButtonInteraction";
-import { joinChannel } from "../../../join/join.handler";
-import { leaveChannel } from "../../../leave/leave.handler";
-import { AliasName } from "../../../../shared/alias-mappings";
-import { aliasExists } from "../../../../shared/utils/read-alias-mappings";
+import { roleAliases } from "../../../../shared/alias-mappings";
 import {
-	handleChannel,
-	handleChannelAlias,
-	isMemberOfAlias,
-} from "../../../../shared/utils/channel-utils";
-import { hasRoleVerified } from "../../../../shared/utils/roles";
-
-export async function handleButtonsCourses(
-	interaction: GuildChatInputCommandInteraction
-): Promise<void> {
-	const labels = COURSE_BUTTON_LABELS.map((alias, index) => {
-		// Special formatting for CS and ML master aliases.
-		if (index === 3 || index === 4) {
-			return (
-				alias.charAt(0).toUpperCase() +
-				alias.charAt(1).toUpperCase() +
-				alias.slice(2)
-			);
-		} else {
-			return alias.charAt(0).toUpperCase() + alias.slice(1);
-		}
-	});
-
-	await generateButtons(interaction, labels, 3, COURSE_BUTTON_LABELS);
-}
+	hasRole,
+	hasRoleVerified,
+	toggleYearCoursesRole,
+} from "../../../../shared/utils/roles";
 
 export async function handleCourseButtonInteraction(
 	interaction: GuildButtonInteraction
@@ -48,27 +23,21 @@ export async function handleCourseButtonInteraction(
 		return;
 	}
 
-	const courseCode = interaction.customId;
-	const alias = courseCode as AliasName;
-	if (aliasExists(alias)) {
-		const joining = !(await isMemberOfAlias(
-			interaction.guild,
-			interaction.user.id,
-			alias
-		));
-		const action = joining ? joinChannel : leaveChannel;
-		const actionVerb = joining ? "joined" : "left";
-		const updateCount = await handleChannelAlias(
-			interaction.guild,
+	// interaction.customId will always be a valid alias, and
+	// all course button aliases are role aliases.
+	const role = roleAliases.get(interaction.customId);
+	if (role !== undefined) {
+		await toggleYearCoursesRole(interaction.user, interaction.guild, role);
+
+		const isMemberOfAlias = await hasRole(
 			interaction.user,
-			alias,
-			action
+			role,
+			interaction.guild
 		);
+		const actionVerb = isMemberOfAlias ? "joined" : "left";
 
 		await interaction.editReply({
-			content: `Successfully ${actionVerb} \`${alias}\`! (${updateCount}) channels updated`,
+			content: `Successfully ${actionVerb} \`${interaction.customId}\`!`,
 		});
-	} else {
-		await handleChannel(courseCode, interaction, joinChannel);
 	}
 }

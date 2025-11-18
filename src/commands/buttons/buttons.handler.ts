@@ -1,16 +1,15 @@
 import {
+	COURSE_BUTTON_CUSTOM_IDS,
 	COURSE_BUTTON_LABELS,
-	UN_ABOOD_BUTTON_CUSTOMID,
-	VERIFY_BUTTON_LABELS,
+	generateButtons,
+	VERIFY_BUTTON_CUSTOM_IDS,
+	UN_ABOOD_BUTTON_CUSTOM_ID,
 } from "./subcommands/util";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import { GuildButtonInteraction } from "../../shared/types/GuildButtonInteraction";
 import { ButtonsSubcommands } from "./buttons-subcommands.names";
 import { CommandNotFoundError } from "../../shared/errors/command-not-founder.error";
-import {
-	handleButtonsCourses,
-	handleCourseButtonInteraction,
-} from "./subcommands/courses/buttons-courses.handler";
+import { handleCourseButtonInteraction } from "./subcommands/courses/buttons-courses.handler";
 import {
 	handleButtonsVerify,
 	handleVerifyButtonInteraction,
@@ -27,7 +26,12 @@ export async function handleButtons(
 
 	switch (subcommandName) {
 		case ButtonsSubcommands.COURSES:
-			return await handleButtonsCourses(interaction);
+			return await generateButtons(
+				interaction,
+				COURSE_BUTTON_LABELS,
+				3,
+				COURSE_BUTTON_CUSTOM_IDS
+			);
 		case ButtonsSubcommands.VERIFY:
 			return await handleButtonsVerify(interaction);
 		default:
@@ -38,10 +42,10 @@ export async function handleButtons(
 export async function handleButtonInteraction(
 	interaction: GuildButtonInteraction
 ): Promise<void> {
-	const courseButtonIds = COURSE_BUTTON_LABELS.map((label) =>
+	const courseButtonIds = COURSE_BUTTON_CUSTOM_IDS.map((label) =>
 		label.toString()
 	);
-	const verifyButtonIds = VERIFY_BUTTON_LABELS.map((label) =>
+	const verifyButtonIds = VERIFY_BUTTON_CUSTOM_IDS.map((label) =>
 		label.toString()
 	);
 
@@ -54,7 +58,7 @@ export async function handleButtonInteraction(
 		return await handleVerifyButtonInteraction(interaction);
 	}
 	// buttonInteraction originated from the un-abood button.
-	else if (interaction.customId.startsWith(UN_ABOOD_BUTTON_CUSTOMID)) {
+	else if (interaction.customId.startsWith(UN_ABOOD_BUTTON_CUSTOM_ID)) {
 		// Each un-Abood button has a unique customId that ends with the Abooded user's id.
 		if (interaction.customId.endsWith(interaction.user.id)) {
 			// Should never fail as this button can only be generated where @abood is mentioned.
