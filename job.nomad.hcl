@@ -18,6 +18,10 @@ DISCORD_LIGHT_BOT_TOKEN={{ .light_bot_token }}
 DEEPL_API_KEY={{ .deepl_api_key }}
 
 SPAM_API_TOKEN={{ .spam_api_token }}
+
+HIVE_TOKEN={{ .hive_token }}
+
+MATTERMOST_WEBHOOK_TOKEN={{ .mattermost_webhook_token }}
 {{ end }}
 
 NODE_ENV=production
