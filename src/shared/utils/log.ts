@@ -10,14 +10,15 @@ export function timestamp(): string {
 	);
 }
 
-export function info(msg: string): void {
-	console.log(`${timestamp()} ${msg}`);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function info(...msg: any[]): void {
+	console.log(...[timestamp()].concat(...msg));
 }
-
-export function warning(msg: string): void {
-	console.warn(`${timestamp()} ${msg}`);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function warning(...msg: any[]): void {
+	console.warn(...[timestamp()].concat(...msg));
 }
-
-export function error(msg: string): void {
-	console.error(`${timestamp()} ${msg}`);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function error(...msg: any[]): void {
+	console.error(...[timestamp()].concat(...msg));
 }

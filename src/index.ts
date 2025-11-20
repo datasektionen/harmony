@@ -4,6 +4,8 @@ import { handleInteractions } from "./commands/handle-commands";
 import { registerCommands } from "./commands/register-commands";
 import * as db from "./db/db";
 import { userJoined } from "./shared/utils/userJoined";
+import { initJobs } from "./jobs/jobs";
+import { CronJob } from "cron";
 import * as log from "./shared/utils/log";
 import { handle_abood_mention } from "./shared/utils/abood";
 
@@ -39,13 +41,19 @@ export const harmonyClient = new DiscordClient({ intents });
 
 export const harmonyLightClient = new LightDiscordClient({ intents });
 
+export let jobs: Map<string, { client: DiscordClient; job: CronJob }> =
+	new Map();
+
 async function main(): Promise<void> {
 	validateEnvironment();
-
 	await db.init();
 	log.info("Initialized database");
 	if (process.env.DISCORD_BOT_TOKEN) {
-		harmonyClient.once("ready", () => log.info("Logged into Harmony"));
+		harmonyClient.once("ready", () => {
+			log.info("Logged into Harmony");
+			jobs = initJobs(harmonyClient);
+			log.info("Instantiated cron-jobs.");
+		});
 		await harmonyClient.login(process.env.DISCORD_BOT_TOKEN);
 
 		harmonyClient.on("guildMemberAdd", (member) =>
@@ -70,9 +78,9 @@ async function main(): Promise<void> {
 		});
 	}
 	if (process.env.DISCORD_LIGHT_BOT_TOKEN) {
-		harmonyLightClient.once("ready", () =>
-			log.info("Logged into Harmony Light")
-		);
+		harmonyLightClient.once("ready", () => {
+			log.info("Logged into Harmony Light");
+		});
 		await harmonyLightClient.login(process.env.DISCORD_LIGHT_BOT_TOKEN);
 
 		harmonyLightClient.on("guildMemberAdd", (member) =>
@@ -82,7 +90,6 @@ async function main(): Promise<void> {
 			await handleInteractions(interaction);
 		});
 	}
-
 	await registerCommands();
 }
 
