@@ -34,3 +34,68 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+  nyckeln:
+    image: ghcr.io/datasektionen/nyckeln-under-dorrmattan:latest
+    configs:
+      - source: nyckeln.yaml
+        target: /config.yaml
+    ports:
+      - 7001:7001
+      - 7002:7002
+      - 7003:7003
+      - 7004:7004
+      - 7005:7005
+
+configs:
+  nyckeln.yaml:
+    content: |
+      clients:
+        - id: "client-id" # use this in your oidc client
+          secret: "client-secret" # use this in your oidc client
+          allows_guests: false
+          redirect_uris: # URIs of your oidc client
+            - http://localhost:4000/oidcc/callback
+
+      users:
+        - ug_kth_id: some-id
+          kth_id: turetek
+          email: turetek@kth.se
+          first_name: Ture
+          family_name: Teknolog
+          picture: https://thskth.se/wp-content/uploads/2023/06/ths-logo-bla-01-300x294-1.png
+          thumbnail: https://thskth.se/wp-content/uploads/2019/12/ths-logo-svart-01.png
+          pls_permissions:
+            sso:
+              - admin
+            calypso:
+              - drek
+              - dfunk
+          hive_tags:
+            - id: personal_email
+              content: turetek@gmail.com
+
+      hive:
+        tokens:
+          - secret: aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaa
+            permissions:
+              - id: admin
+                scope: null
+        groups:
+          - name: Systemansvarig
+            id: d-sys
+            domain: example.com
+            members:
+              - turetek
+            tags:
+              - id: author-pseudonym
+                content: D-Sys
+              - id: mandate
+            permissions:
+              - id: admin
+                scope: null
+
+      ldap:
+        - ug_kth_id: some-other-id
+          kth_id: marmas
+          first_name: Markus
+          family_name: Maskinare
