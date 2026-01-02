@@ -7,7 +7,7 @@ import { userJoined } from "./shared/utils/userJoined";
 import * as log from "./shared/utils/log";
 import { handle_abood_mention } from "./shared/utils/abood";
 
-/**p
+/**
  * Goes through all dotenv vars and checks if they are defined.
  * If not, the service will throw an error
  */
@@ -47,9 +47,8 @@ async function main(): Promise<void> {
 	if (process.env.DISCORD_BOT_TOKEN) {
 		harmonyClient.once("ready", () => log.info("Logged into Harmony"));
 		await harmonyClient.login(process.env.DISCORD_BOT_TOKEN);
-
-		harmonyClient.on("guildMemberAdd", (member) =>
-			userJoined(member, false)
+		harmonyClient.on("guildMemberAdd", async (member) =>
+			await userJoined(member, false)
 		);
 		harmonyClient.on("interactionCreate", async (interaction) => {
 			await handleInteractions(interaction);
