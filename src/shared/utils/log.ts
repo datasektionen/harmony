@@ -20,4 +20,7 @@ export function warning(msg: string): void {
 
 export function error(msg: string): void {
 	console.error(`${timestamp()} ${msg}`);
+
+	// Give me a stack trace!
+	console.trace("Another day another error...")
 }
