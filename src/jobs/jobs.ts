@@ -1,11 +1,13 @@
 import { CronJob } from "cron";
-import { Client as DiscordClient } from "discord.js";
+import { Client as DiscordClient, Guild } from "discord.js";
 import { updateDiscordDfunkRoles } from "./update-dfunk-roles";
 import * as log from "../shared/utils/log";
+import fs from "fs";
+import path from "path";
 
-const errorWebHookURL =
-	"https://mattermost.datasektionen.se/hooks/" +
-	process.env.MATTERMOST_WEBHOOK_TOKEN;
+const relativeLogChannelPath = "../../assets/log_channel.txt";
+let logChannel = null;
+const kongligDatasektionenGuildId = "687747877736546335";
 
 export function initJobs(
 	client: DiscordClient
@@ -32,20 +34,14 @@ const createUpdateDfunkRolesJob = (client: DiscordClient): CronJob => {
 	let job: CronJob;
 
 	const originalCronTime = "0 0 * * 6"; // Saturday 12:00 AM
-	// const originalCronTime = "*/3 * * * *"; // Every 3 minutes
 
 	const retryCronTime = "* * * * *"; // every minute
 
 	const onTick = async (): Promise<void> => {
+		// Execute the update only on Konglig Datasektionen
+		const guild = await client.guilds.fetch(kongligDatasektionenGuildId);
 		try {
-			// Execute the update on each guild the bot is in
-			// Is it a good idea to always make the bot do this no matter the server it is in?
-			// const guild = await client.guilds.fetch("687747877736546335"); // Konglig Datasektionen
-			const oAuthGuilds = await client.guilds.fetch();
-			for (const [, oAuthGuild] of oAuthGuilds) {
-				const guild = await oAuthGuild.fetch();
-				await updateDiscordDfunkRoles(guild);
-			}
+			await updateDiscordDfunkRoles(guild);
 			retryCount = 0; // Reset on success
 		} catch (err) {
 			log.error("Job error:", err);
@@ -59,8 +55,10 @@ const createUpdateDfunkRolesJob = (client: DiscordClient): CronJob => {
 					"Max retries reached. Resetting to original interval."
 				);
 				retryCount = 0;
-				await sendWebHookError(
-					"Harmony Error: Error during Discord dfunk role update. Please take manual action by using the '/dfunk update' command on Discord."
+				await reportCronjobError(
+					"Harmony Error: Error during Discord dfunk role update. Please take manual action by using the '/dfunk update' command on Discord.",
+					guild
+
 				).then((res) => {
 					log.info("Got response:", res);
 				});
@@ -75,19 +73,34 @@ const createUpdateDfunkRolesJob = (client: DiscordClient): CronJob => {
 	return job;
 };
 
-async function sendWebHookError(message: string): Promise<Response> {
-	const headers: Headers = new Headers();
-	headers.set("Content-Type", "application/json");
-	const response = await fetch(errorWebHookURL, {
-		method: "POST",
-		headers: headers,
-		body: JSON.stringify({
-			text: message,
-			channel: "uptimerobot",
-			username: "harmony",
-			icon_url:
-				"https://dsekt-assets.s3.amazonaws.com/shield-color-white-delta.png",
-		}),
-	});
-	return response;
+async function reportCronjobError(message:string, guild: Guild): Promise<void> {
+	// Try reading file containing the channel ID of the harmony log channel
+	// Try setting the log channel
+	const logPath = path.resolve(__dirname, relativeLogChannelPath);
+	let channelId = "";
+	if (fs.existsSync(logPath)) {
+		channelId = fs.readFileSync(logPath, "utf8").trim();
+		logChannel = await guild.channels.fetch(channelId);
+		if (!logChannel) {
+			log.error(`Error loading log channel with ID ${channelId} from file.`);
+			return;
+		}
+	}
+	else {
+		log.error("Error loading log channel id from file (path not found).")
+		return;
+	}
+	if(logChannel.isTextBased()) {
+		try {
+			await logChannel.send(message);	
+		} catch (error) {
+			log.error("Error writing to log channel, did you set the channel with the `/log channel <channel>` command?")
+			return;
+		}
+	}
+	else {
+		log.error(`The log channel ${logChannel.name} is not a text-based channel.`)
+		return;
+	}
+	return;	
 }
