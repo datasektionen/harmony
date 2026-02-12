@@ -21,4 +21,12 @@ command.addSubcommand((subCommand) =>
 		)
 );
 
+command.addSubcommand((subCommand) =>
+	subCommand
+		.setName(MottagningenSubcommands.START)
+		.setDescription(
+			"Start the reception on this server by creating and reconfiguring channels and roles"
+		)
+);
+
 export const mottagningenCommand = command;

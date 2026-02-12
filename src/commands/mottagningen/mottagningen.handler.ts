@@ -3,6 +3,7 @@ import { MottagningenSubcommands } from "./mottagningen-subcommands.names";
 import { CommandNotFoundError } from "../../shared/errors/command-not-founder.error";
 import { handleMottagningenClear } from "./subcommands/clear/mottagningen-clear.handler";
 import { handleMottagningenEnd } from "./subcommands/end/mottagningen-end.handler";
+import { handleMottagningenStart } from "./subcommands/start/mottagningen-start.handler";
 
 export async function handleMottagningen(
 	interaction: GuildChatInputCommandInteraction
@@ -15,6 +16,8 @@ export async function handleMottagningen(
 			return await handleMottagningenClear(interaction);
 		case MottagningenSubcommands.END:
 			return await handleMottagningenEnd(interaction);
+		case MottagningenSubcommands.START:
+			return await handleMottagningenStart(interaction);
 		default:
 			throw new CommandNotFoundError(interaction.commandName);
 	}
