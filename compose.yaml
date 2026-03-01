@@ -99,3 +99,43 @@ configs:
           kth_id: marmas
           first_name: Markus
           family_name: Maskinare
+        - ug_kth_id: some-other-id
+          kth_id: hej
+          first_name: Markus
+          family_name: Maskinare
+        - ug_kth_id: some-other-id
+          kth_id: jag
+          first_name: Markus
+          family_name: Maskinare
+        - ug_kth_id: some-other-id
+          kth_id: vill
+          first_name: Markus
+          family_name: Maskinare
+        - ug_kth_id: some-other-id
+          kth_id: testa
+          first_name: Markus
+          family_name: Maskinare
+        - ug_kth_id: some-other-id
+          kth_id: ldapproxy
+          first_name: Markus
+          family_name: Maskinare
+        - ug_kth_id: some-other-id
+          kth_id: for
+          first_name: Markus
+          family_name: Maskinare
+        - ug_kth_id: some-other-id
+          kth_id: verifikation
+          first_name: Markus
+          family_name: Maskinare
+        - ug_kth_id: some-other-id
+          kth_id: snalla
+          first_name: Markus
+          family_name: Maskinare
+        - ug_kth_id: some-other-id
+          kth_id: also
+          first_name: Markus
+          family_name: Maskinare
+        - ug_kth_id: some-other-id
+          kth_id: uwu
+          first_name: Markus
+          family_name: Maskinare
