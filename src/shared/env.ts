@@ -5,3 +5,6 @@ export const DATABASE_URL =
 	process.env.DATABASE_URL || "postgres://harmony:harmony@db/harmony";
 export const DARKMODE_URL =
 	process.env.DARKMODE_URL || "https://darkmode.datasektionen.se";
+
+// Configure presets for local testing using nyckeln-under-dorrmattan.
+export const LDAP_PROXY_URL = process.env.LDAP_PROXY_URL || "http://nyckeln:7005/user?kthid=";
