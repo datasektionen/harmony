@@ -9,8 +9,10 @@ import { translateMsgCommand } from "./translate/translateMsg.command";
 import { clubCommand } from "./club/club.command";
 import { messageCommand } from "./message/message.command";
 import { ContextMenuCommandBuilder, SlashCommandBuilder } from "discord.js";
+import { dfunkCommand } from "./dfunk/dfunk.command";
 import { kthIdCommand } from "./kthid/kthid.command";
 import { mottagningenCommand } from "./mottagningen/mottagningen.command";
+import { logCommand } from "./log/log.command";
 
 type ApplicationCommandBuilder =
 	| SlashCommandBuilder
@@ -28,9 +30,11 @@ export const getOfficialBotCommands = async (): Promise<
 	translateMsgCommand,
 	clubCommand,
 	messageCommand,
+	dfunkCommand,
 	kthIdCommand,
 	nollegruppCommand,
 	mottagningenCommand,
+	logCommand
 ];
 
 export const getLightBotCommands = async (): Promise<

@@ -10,6 +10,7 @@ RUN npm ci
 
 COPY src/ src/
 COPY tsconfig.json ./
+COPY ./assets ./assets
 
 FROM src AS build
 
@@ -20,6 +21,6 @@ FROM base AS run
 COPY --from=build /app/package.json ./
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
-COPY ./assets ./assets
+COPY --from=build /app/assets ./assets
 
 CMD ["npm", "start"]
