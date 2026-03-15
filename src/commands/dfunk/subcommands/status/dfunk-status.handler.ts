@@ -7,23 +7,22 @@ export const handleDfunkStatus = async (
 ): Promise<void> => {
 	// We assume that this job is loaded
 	const dfunkUpdateJob = jobs.get("updateDfunkRoles")!;
-	if (dfunkUpdateJob.job.isActive) {
-		await interaction.reply({
-			content: `The automatic dfunk role update is active.
-            The automatic update was last executed ${
-				dfunkUpdateJob.job.lastExecution
-			}.
-            The next automatic update will be executed ${dfunkUpdateJob.job.nextDate()}
-            To toggle this functionality on/off, use the \`/dfunk toggle\` command.
-            `,
-			flags: MessageFlags.Ephemeral,
-		});
+	const lastExecution = dfunkUpdateJob.job.lastExecution;
+	const activeJob = dfunkUpdateJob.job.isActive;
+	let content = "The automatic dfunk role update is "
+	if (!activeJob) content += "in";
+	content += "active. The automatic update ";
+	if (lastExecution !== null) {
+		content += `was last executed ${ lastExecution }.`;
 	} else {
-		await interaction.reply({
-			content: `The automatic dfunk role update is inactive.
-            The automatic update was last executed ${dfunkUpdateJob.job.lastExecution}.
-            To toggle this functionality on/off, use the \`/dfunk toggle\` command.`,
-			flags: MessageFlags.Ephemeral,
-		});
+		content += "has not been executed yet.";
 	}
+	if (activeJob) {
+		content += ` The next automatic update will be executed ${dfunkUpdateJob.job.nextDate()}.`;
+	}
+	content += " To toggle this functionality on/off, use the `/dfunk toggle` command.";
+	await interaction.reply({
+			content: content,
+			flags: MessageFlags.Ephemeral,
+	});
 };
