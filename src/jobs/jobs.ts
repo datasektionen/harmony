@@ -42,7 +42,7 @@ const createUpdateDfunkRolesJob = (client: DiscordClient): CronJob => {
 		try {
 			const guild = await client.guilds.fetch(kongligDatasektionenGuildId);
 			try {
-				// await updateDiscordDfunkRoles(guild);
+				await updateDiscordDfunkRoles(guild);
 				retryCount = 0; // Reset on success
 			} catch (err) {
 				log.error("Job error:", err);
