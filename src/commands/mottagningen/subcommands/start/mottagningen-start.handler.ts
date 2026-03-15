@@ -1,57 +1,36 @@
-import { Guild, User } from "discord.js"; import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
-import { getRole, hasRoleVerified } from "../../../../shared/utils/roles";
+import {
+	ChannelType,
+	Colors,
+	Guild,
+	PermissionFlagsBits,
+	Role,
+} from "discord.js";
+import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
+import { getRole } from "../../../../shared/utils/roles";
 import { getCurrentYearRole } from "../../../../shared/utils/year";
-import { getCategory } from "../../../../shared/utils/category";
-import { getHodisUser } from "../../../../shared/utils/hodis";
-import { verifyUser } from "../../../verify/subcommands/util";
-import { clearNollegrupper, getAllNollan, insertUser } from "../../../../db/db";
-import * as log from "../../../../shared/utils/log";
-import { clientIsLight } from "../../../../shared/types/light-client";
+import { clearNollegrupper } from "../../../../db/db";
 
 export const handleMottagningenStart = async (
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
-	interaction.editReply("Start mottagningen...");
+	interaction.editReply("Starting mottagningen...");
 	const guild = interaction.guild;
 	guild.roles.fetch();
 
-	let nollanCategory = null;
-	try {
-		nollanCategory = getCategory("nØllan", guild);
-	} catch (err) {
-		interaction.editReply(
-			`Failed to start mottagningen! Cause given below:\n\`\`\`${err}\`\`\``
-		);
-		return;
-	}
+	const nollanRole = await guild.roles.create({
+		name: "nØllan",
+		color: "#e980ff",
+		mentionable: true,
+		hoist: true,
+	});
 
-	let nollanRole = null;
-	try {
-		nollanRole = getRole("nØllan", guild);
-	} catch (err) {
-		interaction.editReply(
-			`Failed to start mottagningen! Cause given below:\n\`\`\`${err}\`\`\``
-		);
-		return;
-	}
+	await getRole(getCurrentYearRole(1), guild)
+		.setColor(Colors.Default);
 
 	await Promise.all([
-		// Remove roles "Grupp A-Z"
-		guild.roles.cache
-			.filter((r) => /Grupp [A-Z]/.test(r.name))
-			.forEach((r) => guild.roles.delete(r)),
-
-		clearReceptionRoles(guild),
-		nollanCategory.edit({
-			name: `╒══════╣ ${getCurrentYearRole()} ╠══════╕`,
-		}),
-		// Note that the intis code is also removed.
+		createNollanCategory(guild, nollanRole),
+		setupReceptionRoles(guild),
 		clearNollegrupper(),
-		nollanRole.edit({
-			name: getCurrentYearRole(),
-			icon: null,
-		}),
-		verifyAllNollan(guild),
 	]).catch((err) =>
 		interaction.editReply(
 			`Failed to start mottagningen! Cause given below:\n\`\`\`${err}\`\`\``
@@ -59,14 +38,73 @@ export const handleMottagningenStart = async (
 	);
 
 	interaction.editReply(
-		`Finished! Watch out for schlem, nØllan is coming.`
+		"Started mottagningen! Watch out for schlem, nØllan is coming."
 	);
 };
 
-const clearReceptionRoles = async (guild: Guild): Promise<void> => {
+async function createNollanCategory(
+	guild: Guild,
+	nollanRole: Role
+): Promise<void> {
+	const category = await guild.channels.create({
+		name: "╒═════╣  nØllan  ╠═════╕",
+		type: ChannelType.GuildCategory,
+		permissionOverwrites: [
+			{
+				id: guild.id,
+				deny: PermissionFlagsBits.ViewChannel,
+			},
+			{
+				id: nollanRole.id,
+				allow: PermissionFlagsBits.ViewChannel,
+			},
+			{
+				id: getRole("Mottagare", guild).id,
+				allow: PermissionFlagsBits.ViewChannel,
+			},
+			{
+				id: getRole("D-rek", guild).id,
+				allow: PermissionFlagsBits.ViewChannel,
+			},
+			{
+				id: getRole("Hypervisor", guild).id,
+				allow: PermissionFlagsBits.ViewChannel,
+			},
+		],
+	});
+
+	const announcements = await category.children.create({
+		name: "「📣」announcements",
+		topic: "Annonsering av evenemang och annat viktigt.",
+	});
+	announcements.permissionOverwrites.edit(guild.id, {
+		SendMessages: false,
+		CreatePublicThreads: false,
+		CreatePrivateThreads: false,
+	});
+	announcements.permissionOverwrites.edit(getRole("Mottagare", guild).id, {
+		SendMessages: false,
+	});
+
+	await category.children.create({
+		name: "「💬」allmänt",
+		topic: "Allmän diskussion, studierelaterade diskussioner förs i kurskanalerna.",
+	});
+
+	await category.children.create({
+		name: "「🤡」memes",
+		topic: "Memes och citat.",
+	});
+
+	await category.children.create({
+		name: "「🎧」röst",
+		type: ChannelType.GuildVoice,
+	});
+};
+
+const setupReceptionRoles = async (guild: Guild): Promise<void> => {
 	const receptionRoles = [
-		"Titel",
-		"Mottagare",
+		"Storasyskon",
 		"Dadderiet",
 		"Quisineriet",
 		"Ekonomeriet",
@@ -75,13 +113,11 @@ const clearReceptionRoles = async (guild: Guild): Promise<void> => {
 
 	receptionRoles.map(async (roleName) => {
 		const role = getRole(roleName, guild);
-		await role.setHoist(false); // Not separate on member list
-		await role.setMentionable(false);
-		role.members.forEach((member) => member.roles.remove(role));
+		await role.setHoist(true); // Not separate on member list
+		await role.setMentionable(true);
 	});
 
-	await getRole("Storasyskon", guild).setHoist(false);
-	await getRole("Ordförande", guild).setHoist(true);
-	await getRole("dFunk", guild).setHoist(true);
-	await getRole("D-rek", guild).setHoist(true);
+	await getRole("Ordförande", guild).setHoist(false);
+	await getRole("dFunk", guild).setHoist(false);
+	await getRole("D-rek", guild).setHoist(false);
 };
