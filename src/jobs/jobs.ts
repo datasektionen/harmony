@@ -1,5 +1,5 @@
 import { CronJob } from "cron";
-import { Client as DiscordClient, Guild } from "discord.js";
+import { Client as DiscordClient, Guild, DiscordAPIError } from "discord.js";
 import { updateDiscordDfunkRoles } from "./update-dfunk-roles";
 import * as log from "../shared/utils/log";
 import fs from "fs";
@@ -33,38 +33,46 @@ const createUpdateDfunkRolesJob = (client: DiscordClient): CronJob => {
 	let retryCount = 0;
 	let job: CronJob;
 
-	const originalCronTime = "0 0 * * 6"; // Saturday 12:00 AM
+	const originalCronTime = "* * * * *"; // Saturday 12:00 AM
 
 	const retryCronTime = "* * * * *"; // every minute
 
 	const onTick = async (): Promise<void> => {
 		// Execute the update only on Konglig Datasektionen
-		const guild = await client.guilds.fetch(kongligDatasektionenGuildId);
 		try {
-			await updateDiscordDfunkRoles(guild);
-			retryCount = 0; // Reset on success
-		} catch (err) {
-			log.error("Job error:", err);
-			if (retryCount < 5) {
-				retryCount++;
-				log.warning(`Retrying... (${retryCount})`);
-				job.stop();
-				job = new CronJob(retryCronTime, onTick, null, true);
-			} else {
-				log.warning(
-					"Max retries reached. Resetting to original interval."
-				);
-				retryCount = 0;
-				await reportCronjobError(
-					"Harmony Error: Error during Discord dfunk role update. Please take manual action by using the '/dfunk update' command on Discord.",
-					guild
+			const guild = await client.guilds.fetch(kongligDatasektionenGuildId);
+			try {
+				// await updateDiscordDfunkRoles(guild);
+				retryCount = 0; // Reset on success
+			} catch (err) {
+				log.error("Job error:", err);
+				if (retryCount < 5) {
+					retryCount++;
+					log.warning(`Retrying... (${retryCount})`);
+					job.stop();
+					job = new CronJob(retryCronTime, onTick, null, true);
+				} else {
+					log.warning(
+						"Max retries reached. Resetting to original interval."
+					);
+					retryCount = 0;
+					await reportCronjobError(
+						"Harmony Error: Error during Discord dfunk role update. Please take manual action by using the '/dfunk update' command on Discord.",
+						guild
 
-				).then((res) => {
-					log.info("Got response:", res);
-				});
-				job.stop();
-				job = createUpdateDfunkRolesJob(client); // recreate the job
-				job.start();
+					).then((res) => {
+						log.info("Got response:", res);
+					});
+					job.stop();
+					job = createUpdateDfunkRolesJob(client); // recreate the job
+					job.start();
+				}
+			}
+		} catch (error) {
+			if (error instanceof DiscordAPIError && error.code === 10004) {
+				console.log(`Job Error: Target guild ${kongligDatasektionenGuildId} does not exist (Unknown Guild).`);
+			} else {
+				console.error("Job Error: Unexpected error fetching guild:", error);
 			}
 		}
 	};
