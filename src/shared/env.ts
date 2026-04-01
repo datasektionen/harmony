@@ -8,3 +8,4 @@ export const DARKMODE_URL =
 
 // Configure presets for local testing using nyckeln-under-dorrmattan.
 export const LDAP_PROXY_URL = process.env.LDAP_PROXY_URL || "http://nyckeln:7005/user?kthid=";
+export const SSO_URL = process.env.SSO_URL || "http://nyckeln:7003/api/users?format=single&u="
