@@ -9,7 +9,7 @@ import {
 import { VerifyNollanVariables } from "./verify-nollan.variables";
 import { MessageFlags } from "discord.js";
 import * as db from "../../../../db/db";
-import { isKthEmail } from "../util";
+import { isKthEmail } from "../../../../shared/utils/auth";
 import * as log from "../../../../shared/utils/log";
 
 export async function handleVerifyNollanBase(
