@@ -1,5 +1,7 @@
 import { LDAP_PROXY_URL, SSO_URL } from "../env";
 import * as log from "../../shared/utils/log";
+import { Guild, User } from "discord.js";
+import { setDatasektionenRole, setExternRole, setPingRoles, setRole, setRoleVerified } from "./roles";
 
 type LDAPUser = {
     kthid: string,
@@ -15,7 +17,7 @@ type SSOUser = {
     yearTag: string
 }
 
-type LookupResult = {
+export type LookupResult = {
     email: string | null,
     ugKthId: string | null,
     kthId: string | null,
@@ -24,7 +26,7 @@ type LookupResult = {
 }
 
 // Check if a KTH-ID is present in the LDAP database.
-export async function ldapLookup(kthId: string): Promise<LDAPUser | null> {
+async function ldapLookup(kthId: string): Promise<LDAPUser | null> {
     const response = await fetch(LDAP_PROXY_URL + kthId.toLowerCase());
     switch (response.status) {
         case 200:
@@ -38,7 +40,7 @@ export async function ldapLookup(kthId: string): Promise<LDAPUser | null> {
 }
 
 // Check if a KTH-ID is present in the SSO system.
-export async function ssoLookup(kthId: string): Promise<SSOUser | null> {
+async function ssoLookup(kthId: string): Promise<SSOUser | null> {
     const response = await fetch(SSO_URL + kthId.toLowerCase());
     switch (response.status) {
         case 200:
@@ -83,4 +85,59 @@ export async function lookupUser(kthId: string): Promise<LookupResult | null> {
     result.yearTag = ssoUser.yearTag;
 
     return result;
+}
+
+export function isKthEmail(email: string): boolean {
+    return new RegExp(/^[a-zA-Z0-9]+@kth[.]se$/).test(email);
+}
+
+export function messageIsToken(messageText: string): RegExpMatchArray | null {
+    return messageText.match(/^[a-zA-Z0-9_-]+$/);
+}
+
+// Validate that the email is from KTH, i.e. @kth.se.
+export async function lookupUserByEmail(email: string): Promise<LookupResult | null> {
+    if (isKthEmail(email)) {
+        return lookupUser(email.split("@")[0]);
+    }
+
+    return null;
+}
+
+// Look up and verify user.
+export async function verifyUser(
+    user: User,
+    guild: Guild,
+    kthId: string,
+    isLight: boolean
+): Promise<void> {
+    const lookup = await lookupUser(kthId);
+
+    await setRoleVerified(user, guild);
+
+    log.info(
+        `Verified user by kth email. kthid="${kthId}" user.id="${user.id}" user.username="${user.username}"`
+    );
+
+    // The light bot only gives @verified, if lookup is null
+    // we are unable to determine additional information about the user.
+    if (isLight) {
+        return;
+    } else if (!lookup) {
+        await setExternRole(user, guild);
+        return;
+    }
+
+    // Continue giving the user roles.
+    if (lookup.external) {
+        await setExternRole(user, guild);
+    } else {
+        await setDatasektionenRole(user, guild);
+        if (lookup.yearTag) {
+            await setRole(user, lookup.yearTag, guild);
+        }
+    }
+
+    // Finally, set some default notification roles.
+    await setPingRoles(user, guild);
 }
