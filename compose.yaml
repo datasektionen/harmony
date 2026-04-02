@@ -62,6 +62,39 @@ configs:
           email: turetek@kth.se
           first_name: Ture
           family_name: Teknolog
+          year_tag: D-83
+          picture: https://thskth.se/wp-content/uploads/2023/06/ths-logo-bla-01-300x294-1.png
+          thumbnail: https://thskth.se/wp-content/uploads/2019/12/ths-logo-svart-01.png
+          pls_permissions:
+            sso:
+              - admin
+            calypso:
+              - drek
+              - dfunk
+          hive_tags:
+            - id: personal_email
+              content: turetek@gmail.com
+        - ug_kth_id: some-other-id
+          kth_id: teknokrat
+          email: tureteknokrat@kth.se
+          first_name: Ture
+          family_name: Teknokrat
+          picture: https://thskth.se/wp-content/uploads/2023/06/ths-logo-bla-01-300x294-1.png
+          thumbnail: https://thskth.se/wp-content/uploads/2019/12/ths-logo-svart-01.png
+          pls_permissions:
+            sso:
+              - admin
+            calypso:
+              - drek
+              - dfunk
+          hive_tags:
+            - id: personal_email
+              content: turetek@gmail.com
+        - ug_kth_id: idk-what-this-means
+          kth_id: turetek67
+          email: turetek67@kth.se
+          first_name: Ture
+          family_name: Teknolog
           picture: https://thskth.se/wp-content/uploads/2023/06/ths-logo-bla-01-300x294-1.png
           thumbnail: https://thskth.se/wp-content/uploads/2019/12/ths-logo-svart-01.png
           pls_permissions:
@@ -96,7 +129,7 @@ configs:
 
       ldap:
         - ug_kth_id: some-other-id
-          kth_id: marmas
+          kth_id: turetek
           first_name: Markus
           family_name: Maskinare
         - ug_kth_id: some-other-id
@@ -132,7 +165,7 @@ configs:
           first_name: Markus
           family_name: Maskinare
         - ug_kth_id: some-other-id
-          kth_id: also
+          kth_id: owo
           first_name: Markus
           family_name: Maskinare
         - ug_kth_id: some-other-id
