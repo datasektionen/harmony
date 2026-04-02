@@ -90,22 +90,6 @@ configs:
           hive_tags:
             - id: personal_email
               content: turetek@gmail.com
-        - ug_kth_id: idk-what-this-means
-          kth_id: turetek67
-          email: turetek67@kth.se
-          first_name: Ture
-          family_name: Teknolog
-          picture: https://thskth.se/wp-content/uploads/2023/06/ths-logo-bla-01-300x294-1.png
-          thumbnail: https://thskth.se/wp-content/uploads/2019/12/ths-logo-svart-01.png
-          pls_permissions:
-            sso:
-              - admin
-            calypso:
-              - drek
-              - dfunk
-          hive_tags:
-            - id: personal_email
-              content: turetek@gmail.com
 
       hive:
         tokens:
@@ -130,45 +114,9 @@ configs:
       ldap:
         - ug_kth_id: some-other-id
           kth_id: turetek
-          first_name: Markus
-          family_name: Maskinare
+          first_name: Ture
+          family_name: Teknolog
         - ug_kth_id: some-other-id
-          kth_id: hej
-          first_name: Markus
-          family_name: Maskinare
-        - ug_kth_id: some-other-id
-          kth_id: jag
-          first_name: Markus
-          family_name: Maskinare
-        - ug_kth_id: some-other-id
-          kth_id: vill
-          first_name: Markus
-          family_name: Maskinare
-        - ug_kth_id: some-other-id
-          kth_id: testa
-          first_name: Markus
-          family_name: Maskinare
-        - ug_kth_id: some-other-id
-          kth_id: ldapproxy
-          first_name: Markus
-          family_name: Maskinare
-        - ug_kth_id: some-other-id
-          kth_id: for
-          first_name: Markus
-          family_name: Maskinare
-        - ug_kth_id: some-other-id
-          kth_id: verifikation
-          first_name: Markus
-          family_name: Maskinare
-        - ug_kth_id: some-other-id
-          kth_id: snalla
-          first_name: Markus
-          family_name: Maskinare
-        - ug_kth_id: some-other-id
-          kth_id: owo
-          first_name: Markus
-          family_name: Maskinare
-        - ug_kth_id: some-other-id
-          kth_id: uwu
+          kth_id: marmas
           first_name: Markus
           family_name: Maskinare
