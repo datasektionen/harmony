@@ -26,9 +26,7 @@ export async function handleVerifyBeginBase(
 
 	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-	if (
-		(await lookupUserByEmail(email)) === null
-	) {
+	if ((await lookupUserByEmail(email)) === null) {
 		await interaction.editReply({
 			content: "Please enter a valid KTH email address.",
 		});

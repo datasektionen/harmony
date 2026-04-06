@@ -22,5 +22,5 @@ export function error(msg: string): void {
 	console.error(`${timestamp()} ${msg}`);
 
 	// Give me a stack trace!
-	console.trace("Another day another error...")
+	console.trace("Another day another error...");
 }

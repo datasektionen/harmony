@@ -47,8 +47,9 @@ async function main(): Promise<void> {
 	if (process.env.DISCORD_BOT_TOKEN) {
 		harmonyClient.once("ready", () => log.info("Logged into Harmony"));
 		await harmonyClient.login(process.env.DISCORD_BOT_TOKEN);
-		harmonyClient.on("guildMemberAdd", async (member) =>
-			await userJoined(member, false)
+		harmonyClient.on(
+			"guildMemberAdd",
+			async (member) => await userJoined(member, false)
 		);
 		harmonyClient.on("interactionCreate", async (interaction) => {
 			await handleInteractions(interaction);
