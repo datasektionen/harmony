@@ -42,7 +42,7 @@ async function ldapLookup(kthId: string): Promise<LDAPUser | null> {
 			return null;
 		default:
 			log.error(
-				`An error occurred when looking up \"${kthId}\" in the LDAP database.\nReceived error message \"${await response.text()}\"`
+				`An error occurred when looking up "${kthId}" in the LDAP database.\nReceived error message "${await response.text()}"`
 			);
 			return null;
 	}
@@ -58,7 +58,7 @@ async function ssoLookup(kthId: string): Promise<SSOUser | null> {
 			return null;
 		default:
 			log.error(
-				`An error occurred when looking up \"${kthId}\" in the SSO database.\nReceived error message \"${await response.text()}\"`
+				`An error occurred when looking up "${kthId}" in the SSO database.\nReceived error message "${await response.text()}"`
 			);
 			return null;
 	}
@@ -66,7 +66,7 @@ async function ssoLookup(kthId: string): Promise<SSOUser | null> {
 
 // getHodisUser() but better. (And not Hodis.)
 export async function lookupUser(kthId: string): Promise<LookupResult | null> {
-	let result: LookupResult = {
+	const result: LookupResult = {
 		email: null,
 		ugKthId: null,
 		kthId: null,
