@@ -2,6 +2,7 @@ import { LDAP_PROXY_URL, SSO_URL } from "../env";
 import * as log from "../../shared/utils/log";
 import { Guild, User } from "discord.js";
 import { setDatasektionenRole, setExternRole, setPingRoles, setRole, setRoleVerified } from "./roles";
+import { AliasName, roleAliases } from "../alias-mappings";
 
 type LDAPUser = {
     kthid: string,
@@ -104,6 +105,51 @@ export async function lookupUserByEmail(email: string): Promise<LookupResult | n
     return null;
 }
 
+// Assume DXX or D-XX year tags.
+function isYearTag(tag: string): boolean {
+    return tag.match(/^D\d{2}$/) !== null || tag.match(/^D-\d{2}$/) !== null;
+}
+
+export async function setAliasRole(user: User, tag: string, guild: Guild): Promise<void> {
+    let alias = null;
+
+    if (isYearTag(tag)) {
+        let year = 0;
+
+        if (tag.length == 3) {
+            year = parseInt(tag.slice(1));
+        } else {
+            year = parseInt(tag.slice(2));
+        }
+
+        year += 2000;
+
+        log.info(`${year}`);
+
+        const date = new Date();
+        const difference = date.getFullYear() - year - (date.getMonth() < 8 ? 1 : 0);
+
+        switch (difference) {
+            case 0:
+                alias = AliasName.YEAR1;
+                break;
+            case 1:
+                alias = AliasName.YEAR2;
+                break;
+            case 2:
+                alias = AliasName.YEAR3;
+                break;
+        }
+    }
+
+    if (alias) {
+        const aliasRole = roleAliases.get(alias);
+        if (aliasRole !== undefined) {
+            await setRole(user, aliasRole, guild);
+        }
+    }
+}
+
 // Look up and verify user.
 export async function verifyUser(
     user: User,
@@ -134,7 +180,12 @@ export async function verifyUser(
     } else {
         await setDatasektionenRole(user, guild);
         if (lookup.yearTag) {
-            await setRole(user, lookup.yearTag, guild);
+            try {
+                await setRole(user, lookup.yearTag, guild);
+            } catch {
+                log.warning(`Year role "${lookup.yearTag}" does not exist on the server.`);
+            }
+            await setAliasRole(user, lookup.yearTag, guild);
         }
     }
 
