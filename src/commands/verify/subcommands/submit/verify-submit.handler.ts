@@ -10,7 +10,7 @@ import {
 	setPingRoles,
 	setRoleVerified,
 } from "../../../../shared/utils/roles";
-import { messageIsToken, verifyUser } from "../util";
+import { messageIsToken, verifyUser } from "../../../../shared/utils/auth";
 import { VerifySubmitVariables } from "./verify-submit.variables";
 import { GuildModalSubmitInteraction } from "../../../../shared/types/GuildModalSubmitInteraction";
 import * as log from "../../../../shared/utils/log";

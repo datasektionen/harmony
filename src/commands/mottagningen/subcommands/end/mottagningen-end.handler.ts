@@ -3,11 +3,10 @@ import { GuildChatInputCommandInteraction } from "../../../../shared/types/Guild
 import { getRole, hasRoleVerified } from "../../../../shared/utils/roles";
 import { getCurrentYearRole } from "../../../../shared/utils/year";
 import { getCategory } from "../../../../shared/utils/category";
-import { getHodisUser } from "../../../../shared/utils/hodis";
-import { verifyUser } from "../../../verify/subcommands/util";
 import { clearNollegrupper, getAllNollan, insertUser } from "../../../../db/db";
 import * as log from "../../../../shared/utils/log";
 import { clientIsLight } from "../../../../shared/types/light-client";
+import { lookupUser, verifyUser } from "../../../../shared/utils/auth";
 
 export const handleMottagningenEnd = async (
 	interaction: GuildChatInputCommandInteraction
@@ -114,14 +113,14 @@ const verifyAllNollan = async (guild: Guild): Promise<void> => {
 				log.error(`${err}`);
 			}
 
-			const hodisUser = await getHodisUser(row.kth_id);
+			const lookup = await lookupUser(row.kth_id);
 
 			// nØllan left :(
 			if (member === null) {
 				log.error(
-					`nØllan with KTH-id "${row.kth_id}" does not exist on the server (anymore).`
+					`nØllan with KTH-ID "${row.kth_id}" does not exist on the server (anymore).`
 				);
-			} else if (hodisUser) {
+			} else if (lookup) {
 				await verifyUser(
 					member.user,
 					guild,
@@ -134,13 +133,13 @@ const verifyAllNollan = async (guild: Guild): Promise<void> => {
 				if (!insertSuccess && !isVerified) {
 					await dmErrorToNollan(member.user, row.kth_id);
 					log.error(
-						`nØllan ${member.user.username} had typed KTH ID "${row.kth_id}" but it already existed in HarmonyDB!`
+						`nØllan ${member.user.username} had typed KTH-ID "${row.kth_id}" but it already existed in HarmonyDB!`
 					);
 				}
 			} else {
 				await dmErrorToNollan(member.user, row.kth_id);
 				log.error(
-					`nØllan ${member.user.username} had typed KTH ID "${row.kth_id}" but it doesn't exist on Hodis!`
+					`nØllan ${member.user.username} had typed KTH-ID "${row.kth_id}" but it doesn't exist in LDAP!`
 				);
 			}
 		})

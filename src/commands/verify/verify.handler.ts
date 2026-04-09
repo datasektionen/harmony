@@ -25,7 +25,7 @@ export const handleVerify = async (
 				return await handleVerifyNollan(interaction);
 			else
 				interaction.reply({
-					content: "Nøllan has already been dealt with...",
+					content: "nØllan has already been dealt with...",
 					flags: MessageFlags.Ephemeral,
 				});
 			return;

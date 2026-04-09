@@ -2,9 +2,7 @@ import { tokenUser } from "../../../../database-config";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 import { generateToken } from "../../../../shared/utils/generate-token";
 import { sendMail } from "../../../../shared/utils/mail";
-import { isKthEmail, verifyUser } from "../util";
 import { VerifyBeginVariables } from "./verify-begin.variables";
-import { getHodisUser, isDangerOfNollan } from "../../../../shared/utils/hodis";
 import { VerifyingUser } from "../../../../shared/types/VerifyingUser";
 import { MessageFlags } from "discord.js";
 import { GuildModalSubmitInteraction } from "../../../../shared/types/GuildModalSubmitInteraction";
@@ -14,9 +12,10 @@ import {
 	getNollegruppCodeByName,
 } from "../../../../db/db";
 import * as log from "../../../../shared/utils/log";
+import { lookupUserByEmail, verifyUser } from "../../../../shared/utils/auth";
 
 // The basic logic of handleVerifyBegin() implemented in an
-// "interaction-agnostic manner".
+// "interaction-agnostic" manner.
 export async function handleVerifyBeginBase(
 	email: string,
 	interaction: GuildChatInputCommandInteraction | GuildModalSubmitInteraction,
@@ -27,10 +26,7 @@ export async function handleVerifyBeginBase(
 
 	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-	if (
-		!isKthEmail(email) &&
-		(await getHodisUser(email.split("@")[0])) !== null
-	) {
+	if ((await lookupUserByEmail(email)) === null) {
 		await interaction.editReply({
 			content: "Please enter a valid KTH email address.",
 		});
@@ -50,7 +46,7 @@ export async function handleVerifyBeginBase(
 				content:
 					"Verification failed, please contact a server administrator to resolve the issue and complete your verification.",
 			});
-			log.info(
+			log.error(
 				"Entry (intis, intis code) missing from nollegrupp, please use the /nollegrupp command to add one."
 			);
 			return;
@@ -61,7 +57,7 @@ export async function handleVerifyBeginBase(
 
 	const kthId = email.split("@")[0];
 
-	if ((await isDangerOfNollan(kthId, darkmode)) && !isIntis) {
+	if (darkmode && !isIntis) {
 		await interaction.editReply({
 			content:
 				"The verification system is currently restricted until mid-September." +
@@ -81,7 +77,7 @@ export async function handleVerifyBeginBase(
 					"It seems you're already verified on another Konglig server. Welcome!",
 			});
 			try {
-				// Should always be true, so long as the command is only used in a guild.
+				// Should always be true, as long as the command is only used in a guild.
 				if (interaction.guild !== null) {
 					await verifyUser(
 						interaction.user,
@@ -111,7 +107,7 @@ export async function handleVerifyBeginBase(
 		}
 	}
 
-	// Be aware that token size is not necessarily the final length of the Token string,
+	// Beware that token size is not necessarily the final length of the Token string,
 	// but the number of random bytes generated. 8 bytes (64 bits) together with the
 	// token timeout of 10 min, is secure enough.
 	const token = generateToken(8);
