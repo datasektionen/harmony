@@ -140,8 +140,6 @@ export async function setAliasRole(
 
 		year += 2000;
 
-		log.info(`${year}`);
-
 		const date = new Date();
 		const difference =
 			date.getFullYear() - year - (date.getMonth() < 8 ? 1 : 0);
