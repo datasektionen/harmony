@@ -21,6 +21,10 @@ SPAM_API_TOKEN={{ .spam_api_token }}
 {{ end }}
 
 NODE_ENV=production
+
+SSO_URL=http://sso.nomad.dsekt.internal/api/users?format=single&u=
+LDAP_PROXY_URL=http://ldap-proxy.dsekt.internal:38980/user?kthid=
+
 ENV
         destination = "local/.env"
         env         = true
