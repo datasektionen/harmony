@@ -1,3 +1,3 @@
 export enum UnverifyVariables {
-    USER = "user",
+	USER = "user",
 }
