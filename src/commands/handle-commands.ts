@@ -33,6 +33,7 @@ import { handleNollegrupp } from "./nollegrupp/nollegrupp.handler";
 import * as log from "../shared/utils/log";
 import { handleMottagningen } from "./mottagningen/mottagningen.handler";
 import { handleTest } from "../tests/test";
+import { handleUnverify } from "./unverify/unverify.handler";
 
 export async function handleInteractions(
 	interaction: Interaction
@@ -174,6 +175,9 @@ const handleChatInputCommand = async (
 					return;
 				case CommandNames.TEST:
 					await handleTest(guildInteraction);
+					return;
+				case CommandNames.UNVERIFY:
+					await handleUnverify(guildInteraction);
 					return;
 				default:
 					throw new CommandNotFoundError(

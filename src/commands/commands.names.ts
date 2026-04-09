@@ -12,4 +12,5 @@ export enum CommandNames {
 	NOLLEGRUPP = "nollegrupp",
 	MOTTAGNINGEN = "mottagningen",
 	TEST = "test",
+	UNVERIFY = "unverify",
 }
