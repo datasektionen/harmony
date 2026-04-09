@@ -23,7 +23,7 @@ export async function handleUnverify(
 	}
 
 	// And now, remove the verified role on all servers.
-	const guilds = await interaction.client.guilds.fetch();
+	const guilds = interaction.client.guilds.cache;
 
 	Promise.all(
 		guilds.map(async (e): Promise<void> => {
@@ -32,7 +32,9 @@ export async function handleUnverify(
 		})
 	);
 
-	interaction.editReply({ content: "You have been unverified!" });
+	interaction.editReply({
+		content: `You have successfully unverified user "${user.username}"!`,
+	});
 	log.info(
 		`Successfully unverified user with user.id = "${user.id}", user.username = "${user.username})".`
 	);
