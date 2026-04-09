@@ -48,6 +48,15 @@ export async function insertUser(
 	return true;
 }
 
+export async function deleteUser(discordId: string): Promise<boolean> {
+	try {
+		await sql`delete from users where discord_id = ${discordId}`;
+	} catch (err) {
+		return false;
+	}
+	return true;
+}
+
 export async function getDiscordIdByKthid(
 	kthId: string
 ): Promise<string | null> {
