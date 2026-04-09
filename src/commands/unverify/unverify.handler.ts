@@ -32,7 +32,9 @@ export async function handleUnverify(
 		})
 	);
 
-	interaction.editReply({ content: `You have successfully unverified user "${user.username}"!` });
+	interaction.editReply({
+		content: `You have successfully unverified user "${user.username}"!`,
+	});
 	log.info(
 		`Successfully unverified user with user.id = "${user.id}", user.username = "${user.username})".`
 	);
