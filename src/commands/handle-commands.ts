@@ -34,6 +34,7 @@ import * as log from "../shared/utils/log";
 import { handleMottagningen } from "./mottagningen/mottagningen.handler";
 import { handleTest } from "../tests/test";
 import { handleUnverify } from "./unverify/unverify.handler";
+import { handleNotice } from "./notice/notice.handler";
 
 export async function handleInteractions(
 	interaction: Interaction
@@ -178,6 +179,9 @@ const handleChatInputCommand = async (
 					return;
 				case CommandNames.UNVERIFY:
 					await handleUnverify(guildInteraction);
+					return;
+				case CommandNames.NOTICE:
+					await handleNotice(guildInteraction);
 					return;
 				default:
 					throw new CommandNotFoundError(

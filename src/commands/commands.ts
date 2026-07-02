@@ -12,6 +12,7 @@ import { ContextMenuCommandBuilder, SlashCommandBuilder } from "discord.js";
 import { kthIdCommand } from "./kthid/kthid.command";
 import { mottagningenCommand } from "./mottagningen/mottagningen.command";
 import { unverifyCommand } from "./unverify/unverify.command";
+import { noticeCommand } from "./notice/notice.command";
 
 type ApplicationCommandBuilder =
 	| SlashCommandBuilder
@@ -33,6 +34,7 @@ export const getOfficialBotCommands = async (): Promise<
 	nollegruppCommand,
 	mottagningenCommand,
 	unverifyCommand,
+	noticeCommand,
 ];
 
 export const getLightBotCommands = async (): Promise<
