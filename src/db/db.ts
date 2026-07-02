@@ -32,6 +32,17 @@ export async function init(): Promise<void> {
 			discord_id text unique not null
 		);
 	`;
+
+	// Initialise table for guild(server)-specific settings.
+	// Used by notice-command to set which channel should be used,
+	// without hardcoding it, so that different servers using Harmony
+	// can all have their own designated channel
+	await sql`
+		create table if not exists guild_settings (
+			guild_id text primary key,
+			notice_channel_id text
+		);
+	`;
 }
 
 export async function insertUser(
@@ -164,4 +175,31 @@ export async function getAllNollan(): Promise<
 
 export async function clearNollan(): Promise<void> {
 	await sql`delete from nollan`;
+}
+
+export async function setNoticeChannel(
+	guildId: string,
+	channelId: string
+): Promise<void> {
+	// If the server already has a notice-channel, update it to usethe newly provided one
+	await sql`
+		insert into guild_settings (guild_id, notice_channel_id)
+		values (${guildId}, ${channelId})
+		on conflict (guild_id)
+		do update
+		set notice_channel_id = excluded.notice_channel_id
+	`;
+}
+
+export async function getNoticeChannel(
+	guildId: string
+): Promise<string | null> {
+	const result =
+		await sql`select notice_channel_id from guild_settings where guild_id = ${guildId}`;
+
+	if (result.length === 0) {
+		return null;
+	}
+
+	return result[0].notice_channel_id;
 }
