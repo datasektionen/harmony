@@ -26,10 +26,7 @@ export const handleNoticeSetChannel = async (
 			true
 		);
 
-        await setNoticeChannel(
-            interaction.guildId!,
-            channel.id
-        );
+		await setNoticeChannel(interaction.guildId!, channel.id);
 
 		await interaction.editReply({
 			content: `Notice-channel set to ${channel.toString()}`,

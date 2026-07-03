@@ -18,13 +18,11 @@ export const handleNoticeSend = async (
 	} else {
 		const channel = await interaction.guild!.channels.fetch(channelId);
 		if (!channel?.isTextBased()) {
-    		await interaction.editReply({
-        		content: "The configured notice channel no longer exists."
-    		});
+			await interaction.editReply({
+				content: "The configured notice channel no longer exists.",
+			});
 		} else {
-			await channel.send(
-				`${user} \n${message}`
-			);
+			await channel.send(`${user} \n${message}`);
 			await interaction.editReply({
 				content: `Sent a notice to ${user}`,
 			});
