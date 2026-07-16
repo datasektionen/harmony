@@ -1,4 +1,8 @@
-import { PermissionFlagsBits, SlashCommandBuilder } from "discord.js";
+import {
+	ChannelType,
+	PermissionFlagsBits,
+	SlashCommandBuilder,
+} from "discord.js";
 import { CommandNames } from "../commands.names";
 import { NoticeSubcommandNames } from "./notice-subcommands.names";
 import { NoticeSendVariables } from "./subcommands/send/notice-send.variables";
@@ -39,6 +43,7 @@ noticeCommand.addSubcommand((subcommand) =>
 				.setDescription(
 					"The channel where the notices of the server should be sent"
 				)
+				.addChannelTypes(ChannelType.GuildText)
 				.setRequired(true)
 		)
 );
