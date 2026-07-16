@@ -7,6 +7,7 @@ import { CommandNames } from "../commands.names";
 import { NoticeSubcommandNames } from "./notice-subcommands.names";
 import { NoticeSendVariables } from "./subcommands/send/notice-send.variables";
 import { NoticeSetChannelVariables } from "./subcommands/set-channel/notice-set-channel.variables";
+import { NoticeEditVariables } from "./subcommands/edit/notice-edit.variables";
 
 export const noticeCommand = new SlashCommandBuilder()
 	.setName(CommandNames.NOTICE)
@@ -44,6 +45,29 @@ noticeCommand.addSubcommand((subcommand) =>
 					"The channel where the notices of the server should be sent"
 				)
 				.addChannelTypes(ChannelType.GuildText)
+				.setRequired(true)
+		)
+);
+
+noticeCommand.addSubcommand((subcommand) =>
+	subcommand
+		.setName(NoticeSubcommandNames.EDIT)
+		.setDescription(
+			"Edit a previously sent notice (good for editing typos)"
+		)
+		.addChannelOption((option) =>
+			option
+				.setName(NoticeEditVariables.NOTICE_THREAD)
+				.setDescription(
+					"The thread of the notice that should be edited"
+				)
+				.addChannelTypes(ChannelType.PrivateThread)
+				.setRequired(true)
+		)
+		.addStringOption((option) =>
+			option
+				.setName(NoticeEditVariables.NEW_MESSAGE)
+				.setDescription("The updated message of the notice")
 				.setRequired(true)
 		)
 );
