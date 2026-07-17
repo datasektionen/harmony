@@ -2,7 +2,6 @@ import { ChannelType, ThreadAutoArchiveDuration } from "discord.js";
 import { getNoticeChannel } from "../../../../db/db";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 import { NoticeSendVariables } from "./notice-send.variables";
-import { timestamp } from "../../../../shared/utils/log";
 
 export const handleNoticeSend = async (
 	interaction: GuildChatInputCommandInteraction
