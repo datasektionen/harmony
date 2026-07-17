@@ -2,6 +2,7 @@ import { ChannelType, ThreadAutoArchiveDuration } from "discord.js";
 import { getNoticeChannel } from "../../../../db/db";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 import { NoticeSendVariables } from "./notice-send.variables";
+import { timestamp } from "../../../../shared/utils/log";
 
 export const handleNoticeSend = async (
 	interaction: GuildChatInputCommandInteraction
@@ -24,15 +25,20 @@ export const handleNoticeSend = async (
 					"The configured notice channel either no longer exists, or is of an unsupported channel type.",
 			});
 		} else {
+			const threadTime = new Intl.DateTimeFormat("en-SE", {
+				dateStyle: "short",
+				timeStyle: "medium",
+				timeZone: "Europe/Stockholm",
+			});
 			const thread = await channel.threads.create({
-				name: `Notice ${user.tag}`,
+				name: `Notice ${user.tag} ${threadTime.format(new Date())}`,
 				autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
 				type: ChannelType.PrivateThread,
 				invitable: false,
 			});
 			await thread.send(`${message}\n\n${user}`);
 			await interaction.editReply({
-				content: `Sent a notice to ${user}`,
+				content: `Sent a notice to ${user} in ${thread}`,
 			});
 		}
 	}
