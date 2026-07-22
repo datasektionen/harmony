@@ -70,20 +70,6 @@ export async function handleVerifyButtonInteraction(
 				modal.addLabelComponents(codeLabel);
 			}
 
-			const gdpr = new CheckboxGroupBuilder()
-				.setCustomId("HatsuneMikuGDPR")		// This is stupid, but we just need people to agree.
-				.addOptions([
-					{ label: "I agree", value: "I love Hatsune Miku! :3" }
-				])
-				.setRequired(true);
-
-			const gdprLabel = new LabelBuilder()
-				.setLabel("Do you agree to our GDPR statement?")
-				.setDescription("If you have any questions, please contact a server administrator.")
-				.setCheckboxGroupComponent(gdpr);
-			
-				modal.addLabelComponents(gdprLabel);
-
 			break;
 		}
 		case VerifyButtonCustomIds.NOLLAN: {
@@ -93,29 +79,29 @@ export async function handleVerifyButtonInteraction(
 
 			const emailInput = new TextInputBuilder()
 				.setCustomId("verifyNollanEmail")
-				.setLabel("Vad är din KTH-mejladress?")
+				.setPlaceholder("turetek@kth.se")
 				.setStyle(TextInputStyle.Short)
 				.setRequired(true);
 
-			const actionRow1 =
-				new ActionRowBuilder<TextInputBuilder>().addComponents(
-					emailInput
-				);
+			const emailLabel = new LabelBuilder()
+				.setLabel("Vad är din KTH-mejladress?")
+				.setDescription("Använd din @kth.se-adress, inte @ug.kth.se!")
+				.setTextInputComponent(emailInput);
 
-			modal.addComponents(actionRow1);
+			modal.addLabelComponents(emailLabel);
 
 			const nollekodInput = new TextInputBuilder()
 				.setCustomId("verifyNollanNollekod")
-				.setLabel("Vad är koden du har fått från din Dadda?")
+				.setPlaceholder("1234abcdef")
 				.setStyle(TextInputStyle.Short)
 				.setRequired(true);
+			
+			const nollekodLabel = new LabelBuilder()
+				.setLabel("Vad är koden du har fått från din Dadda?")
+				.setDescription("Har du glömt bort koden? Kontakta din Dadda!")
+				.setTextInputComponent(nollekodInput);
 
-			const actionRow2 =
-				new ActionRowBuilder<TextInputBuilder>().addComponents(
-					nollekodInput
-				);
-
-			modal.addComponents(actionRow2);
+			modal.addLabelComponents(nollekodLabel);
 
 			break;
 		}
