@@ -112,16 +112,16 @@ export async function handleVerifyButtonInteraction(
 
 			const verificationCodeInput = new TextInputBuilder()
 				.setCustomId("verifySubmitCode")
-				.setLabel("Enter your verification code")
+				.setPlaceholder("1234abcdef")
 				.setStyle(TextInputStyle.Short)
 				.setRequired(true);
 
-			const actionRow =
-				new ActionRowBuilder<TextInputBuilder>().addComponents(
-					verificationCodeInput
-				);
+			const verificationCodeLabel = new LabelBuilder()
+				.setLabel("Enter your verification code")
+				.setDescription("You will receive one in your KTH inbox shortly.")
+				.setTextInputComponent(verificationCodeInput);
 
-			modal.addComponents(actionRow);
+			modal.addLabelComponents(verificationCodeLabel);
 
 			break;
 		}
