@@ -1,4 +1,4 @@
-import { ModalBuilder, TextInputStyle } from "discord.js";
+import { CheckboxGroupBuilder, ModalBuilder, TextInputStyle } from "discord.js";
 import { GuildButtonInteraction } from "../../../../shared/types/GuildButtonInteraction";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 import { isDarkmode } from "../../../../shared/utils/darkmode";
@@ -10,6 +10,7 @@ import {
 	VerifyModalCustomIds,
 } from "../util";
 import { ActionRowBuilder, TextInputBuilder } from "@discordjs/builders";
+import { LabelBuilder } from "discord.js";
 
 export async function handleButtonsVerify(
 	interaction: GuildChatInputCommandInteraction
@@ -43,31 +44,45 @@ export async function handleVerifyButtonInteraction(
 
 			const emailInput = new TextInputBuilder()
 				.setCustomId("beginVerifyEmail")
-				.setLabel("Enter your KTH email address")
+				.setPlaceholder("turetek@kth.se")
 				.setStyle(TextInputStyle.Short)
 				.setRequired(true);
 
-			const actionRow =
-				new ActionRowBuilder<TextInputBuilder>().addComponents(
-					emailInput
-				);
+			const emailLabel = new LabelBuilder()
+				.setLabel("Enter your KTH email address")
+				.setDescription("An @kth.se email address, not e.g. @ug.kth.se.")
+				.setTextInputComponent(emailInput);
 
-			modal.addComponents(actionRow);
+			modal.addLabelComponents(emailLabel)
 
 			if (mottagning) {
 				const codeInput = new TextInputBuilder()
 					.setCustomId("beginVerifyCode")
-					.setLabel("Enter a valid verification code")
+					.setPlaceholder("1234abcdef")
 					.setStyle(TextInputStyle.Short)
 					.setRequired(false);
 
-				const actionRow =
-					new ActionRowBuilder<TextInputBuilder>().addComponents(
-						codeInput
-					);
+				const codeLabel = new LabelBuilder()
+					.setLabel("Enter a valid verification code")
+					.setDescription("You may have received one in your inbox.")
+					.setTextInputComponent(codeInput);
 
-				modal.addComponents(actionRow);
+				modal.addLabelComponents(codeLabel);
 			}
+
+			const gdpr = new CheckboxGroupBuilder()
+				.setCustomId("HatsuneMikuGDPR")		// This is stupid, but we just need people to agree.
+				.addOptions([
+					{ label: "I agree", value: "I love Hatsune Miku! :3" }
+				])
+				.setRequired(true);
+
+			const gdprLabel = new LabelBuilder()
+				.setLabel("Do you agree to our GDPR statement?")
+				.setDescription("If you have any questions, please contact a server administrator.")
+				.setCheckboxGroupComponent(gdpr);
+			
+				modal.addLabelComponents(gdprLabel);
 
 			break;
 		}
