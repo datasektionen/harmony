@@ -1,4 +1,4 @@
-import { CheckboxGroupBuilder, ModalBuilder, TextInputStyle } from "discord.js";
+import { ModalBuilder, TextInputStyle } from "discord.js";
 import { GuildButtonInteraction } from "../../../../shared/types/GuildButtonInteraction";
 import { GuildChatInputCommandInteraction } from "../../../../shared/types/GuildChatInputCommandType";
 import { isDarkmode } from "../../../../shared/utils/darkmode";
@@ -9,7 +9,7 @@ import {
 	VerifyButtonCustomIds,
 	VerifyModalCustomIds,
 } from "../util";
-import { ActionRowBuilder, TextInputBuilder } from "@discordjs/builders";
+import { TextInputBuilder } from "@discordjs/builders";
 import { LabelBuilder } from "discord.js";
 
 export async function handleButtonsVerify(
