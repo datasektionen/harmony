@@ -22,6 +22,8 @@ import { handleMessage } from "./message/message.handler";
 import { BaseInteraction, MessageFlags, Interaction } from "discord.js";
 import { handleKthId } from "./kthid/kthid.handler";
 import {
+	MSCVERIFY_MODAL_CUSTOM_IDS,
+	MScVerifyModalCustomIds,
 	VERIFY_MODAL_CUSTOM_IDS,
 	VerifyModalCustomIds,
 } from "./buttons/subcommands/util";
@@ -91,6 +93,9 @@ async function modalSubmitInteractionHandler(
 	const verifyModalCustomIds = VERIFY_MODAL_CUSTOM_IDS.map((id) =>
 		id.toString()
 	);
+	const mscVerifyModalCustomIds = MSCVERIFY_MODAL_CUSTOM_IDS.map((id) =>
+		id.toString()
+	);
 
 	// Add check for whether user has already been verified.
 	if (verifyModalCustomIds.includes(interaction.customId)) {
@@ -113,6 +118,28 @@ async function modalSubmitInteractionHandler(
 				await handleVerifyNollan(interaction);
 				return;
 			case VerifyModalCustomIds.SUBMIT:
+				await handleVerifySubmit(interaction);
+				return;
+			default:
+				log.warning("Unexpected verify modal interaction");
+				return;
+		}
+	} 
+	// Master server-specific verification logic.
+	else if (mscVerifyModalCustomIds.includes(interaction.customId)) {
+		if ((await hasRoleVerified(interaction.user, interaction.guild))) {
+			await interaction.reply({
+				content: "You are already verified!",
+				flags: MessageFlags.Ephemeral,
+			});
+			return;
+		}
+
+		switch (interaction.customId) {
+			case MScVerifyModalCustomIds.BEGIN:
+				await handleVerifyBegin(interaction, false);
+				return;
+			case MScVerifyModalCustomIds.SUBMIT:
 				await handleVerifySubmit(interaction);
 				return;
 			default:

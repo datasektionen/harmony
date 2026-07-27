@@ -21,4 +21,10 @@ command.addSubcommand((subCommand) =>
 		.setDescription("Generate buttons for verify subcommand modals")
 );
 
+command.addSubcommand((subCommand) =>
+	subCommand
+		.setName(ButtonsSubcommands.MSCVERIFY)
+		.setDescription("Generate buttons for verify subcommand modals on a Master server (Warning: Bypasses Darkmode.)")
+);
+
 export const buttonsCommand = command;
