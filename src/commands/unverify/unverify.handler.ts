@@ -35,7 +35,7 @@ export async function handleUnverify(
 
 	// And now, remove the verified role on all servers.
 	const guilds = interaction.client.guilds.cache;
-	let failures: Guild[] = [];
+	const failures: Guild[] = [];
 
 	for (const e of guilds) {
 		const guild = await e[1].fetch();
