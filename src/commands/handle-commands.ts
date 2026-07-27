@@ -124,10 +124,10 @@ async function modalSubmitInteractionHandler(
 				log.warning("Unexpected verify modal interaction");
 				return;
 		}
-	} 
+	}
 	// Master server-specific verification logic.
 	else if (mscVerifyModalCustomIds.includes(interaction.customId)) {
-		if ((await hasRoleVerified(interaction.user, interaction.guild))) {
+		if (await hasRoleVerified(interaction.user, interaction.guild)) {
 			await interaction.reply({
 				content: "You are already verified!",
 				flags: MessageFlags.Ephemeral,

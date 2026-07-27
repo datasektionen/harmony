@@ -45,7 +45,9 @@ async function main(): Promise<void> {
 	await db.init();
 	log.info("Initialized database");
 	if (process.env.DISCORD_BOT_TOKEN) {
-		harmonyClient.once("clientReady", () => log.info("Logged into Harmony"));
+		harmonyClient.once("clientReady", () =>
+			log.info("Logged into Harmony")
+		);
 		await harmonyClient.login(process.env.DISCORD_BOT_TOKEN);
 		harmonyClient.on(
 			"guildMemberAdd",

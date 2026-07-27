@@ -18,7 +18,10 @@ import {
 import { MessageFlags } from "discord.js";
 import * as log from "../../shared/utils/log";
 import { removeRole } from "../../shared/utils/roles";
-import { handleButtonsMScVerify, handleMScVerifyButtonInteraction } from "./subcommands/mscverify/buttons-mscverify.handler";
+import {
+	handleButtonsMScVerify,
+	handleMScVerifyButtonInteraction,
+} from "./subcommands/mscverify/buttons-mscverify.handler";
 
 export async function handleButtons(
 	interaction: GuildChatInputCommandInteraction

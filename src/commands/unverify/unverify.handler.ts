@@ -18,17 +18,19 @@ export async function handleUnverify(
 
 		if (!success) {
 			await interaction.editReply({
-				content:
-					`Failed to remove user with user.id = "${user.id}", user.username = "${user.username}" from HarmonyDB.`,
+				content: `Failed to remove user with user.id = "${user.id}", user.username = "${user.username}" from HarmonyDB.`,
 			});
-			log.info(`Failed to remove user with user.id = "${user.id}", user.username = "${user.username}" from HarmonyDB.`);
+			log.info(
+				`Failed to remove user with user.id = "${user.id}", user.username = "${user.username}" from HarmonyDB.`
+			);
 		}
 
 		await interaction.editReply({
-			content:
-				`Successfully removed user with user.id = "${user.id}", user.username = "${user.username}" from HarmonyDB.`,
+			content: `Successfully removed user with user.id = "${user.id}", user.username = "${user.username}" from HarmonyDB.`,
 		});
-		log.info(`Successfully removed user with user.id = "${user.id}", user.username = "${user.username}" from HarmonyDB.`);
+		log.info(
+			`Successfully removed user with user.id = "${user.id}", user.username = "${user.username}" from HarmonyDB.`
+		);
 	}
 
 	// And now, remove the verified role on all servers.
@@ -40,18 +42,25 @@ export async function handleUnverify(
 		try {
 			await removeRole(user, "verified", guild);
 		} catch {
-			log.info(`Failed to unverify user with user.id = "${user.id}", user.username = "${user.username}" on guild "${guild.name}".`)
+			log.info(
+				`Failed to unverify user with user.id = "${user.id}", user.username = "${user.username}" on guild "${guild.name}".`
+			);
 			failures.push(guild);
 		}
 	}
 
-	let fmt = ""
+	let fmt = "";
 	for (const e of failures) {
-		fmt += `- ${e.name}\n`
+		fmt += `- ${e.name}\n`;
 	}
 
 	await interaction.editReply({
-		content: `Successfully unverified user with user.id = "${user.id}", user.username = "${user.username}" on ${guilds.size - failures.length}/${guilds.size} guilds.\n`
-		+ `Guilds where unverification has failed are listed below.\n${fmt}Make sure to manually unverify the user on those servers or re-run the command after investigating the issue further.`
-	})
+		content:
+			`Successfully unverified user with user.id = "${
+				user.id
+			}", user.username = "${user.username}" on ${
+				guilds.size - failures.length
+			}/${guilds.size} guilds.\n` +
+			`Guilds where unverification has failed are listed below.\n${fmt}Make sure to manually unverify the user on those servers or re-run the command after investigating the issue further.`,
+	});
 }

@@ -50,10 +50,12 @@ export async function handleVerifyButtonInteraction(
 
 			const emailLabel = new LabelBuilder()
 				.setLabel("Enter your KTH email address")
-				.setDescription("An @kth.se email address, not e.g. @ug.kth.se.")
+				.setDescription(
+					"An @kth.se email address, not e.g. @ug.kth.se."
+				)
 				.setTextInputComponent(emailInput);
 
-			modal.addLabelComponents(emailLabel)
+			modal.addLabelComponents(emailLabel);
 
 			if (mottagning) {
 				const codeInput = new TextInputBuilder()
@@ -95,7 +97,7 @@ export async function handleVerifyButtonInteraction(
 				.setPlaceholder("1234abcdef")
 				.setStyle(TextInputStyle.Short)
 				.setRequired(true);
-			
+
 			const nollekodLabel = new LabelBuilder()
 				.setLabel("Vad är koden du har fått från din Dadda?")
 				.setDescription("Har du glömt bort koden? Kontakta din Dadda!")
@@ -118,7 +120,9 @@ export async function handleVerifyButtonInteraction(
 
 			const verificationCodeLabel = new LabelBuilder()
 				.setLabel("Enter your verification code")
-				.setDescription("You will receive one in your KTH inbox shortly.")
+				.setDescription(
+					"You will receive one in your KTH inbox shortly."
+				)
 				.setTextInputComponent(verificationCodeInput);
 
 			modal.addLabelComponents(verificationCodeLabel);
