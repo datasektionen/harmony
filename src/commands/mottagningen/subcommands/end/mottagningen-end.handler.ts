@@ -66,6 +66,7 @@ const clearReceptionRoles = async (guild: Guild): Promise<void> => {
 		"Quisineriet",
 		"Ekonomeriet",
 		"Doqumenteriet",
+		"Syssleriet",
 	];
 
 	receptionRoles.map(async (roleName) => {
