@@ -21,4 +21,12 @@ command.addSubcommand((subCommand) =>
 		)
 );
 
+command.addSubcommand((subCommand) =>
+	subCommand
+		.setName(MottagningenSubcommands.RMGROUPS)
+		.setDescription(
+			"Remove all nØllegrupp roles, i.e. '@Grupp A-Z'"
+		)
+);
+
 export const mottagningenCommand = command;
