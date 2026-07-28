@@ -35,7 +35,10 @@ import { handleNollegrupp } from "./nollegrupp/nollegrupp.handler";
 import * as log from "../shared/utils/log";
 import { handleMottagningen } from "./mottagningen/mottagningen.handler";
 import { handleTest } from "../tests/test";
-import { handleUnverify, handleUnverifyLight } from "./unverify/unverify.handler";
+import {
+	handleUnverify,
+	handleUnverifyLight,
+} from "./unverify/unverify.handler";
 
 export async function handleInteractions(
 	interaction: Interaction

@@ -11,7 +11,10 @@ import { messageCommand } from "./message/message.command";
 import { ContextMenuCommandBuilder, SlashCommandBuilder } from "discord.js";
 import { kthIdCommand } from "./kthid/kthid.command";
 import { mottagningenCommand } from "./mottagningen/mottagningen.command";
-import { unverifyCommand, unverifyLightCommand } from "./unverify/unverify.command";
+import {
+	unverifyCommand,
+	unverifyLightCommand,
+} from "./unverify/unverify.command";
 
 type ApplicationCommandBuilder =
 	| SlashCommandBuilder

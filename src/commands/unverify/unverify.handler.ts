@@ -70,8 +70,8 @@ export async function handleUnverify(
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> {
 	const { options } = interaction;
- 	const user = options.getUser(UnverifyVariables.USER, true);
- 	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+	const user = options.getUser(UnverifyVariables.USER, true);
+	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
 	removeDBUser(user, interaction);
 	removeVerifiedRole(user, interaction);
@@ -82,8 +82,8 @@ export async function handleUnverifyLight(
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> {
 	const { options } = interaction;
- 	const user = options.getUser(UnverifyVariables.USER, true);
- 	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+	const user = options.getUser(UnverifyVariables.USER, true);
+	await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
 	removeVerifiedRole(user, interaction);
 }
