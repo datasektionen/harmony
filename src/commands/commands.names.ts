@@ -13,4 +13,5 @@ export enum CommandNames {
 	MOTTAGNINGEN = "mottagningen",
 	TEST = "test",
 	UNVERIFY = "unverify",
+	UNVERIFY_LIGHT = "unverify-light",
 }

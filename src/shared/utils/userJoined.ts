@@ -12,6 +12,9 @@ export const userJoined = async (
 	const kthId = await db.getKthIdByUserId(member.id);
 	const darkmode = await isDarkmode();
 
+	// Do not allow auto-verification of users during the Reception. This is
+	// because users are still able to get verified on Master servers, which would
+	// allow nØllan to bypass the system!
 	if (kthId !== null && !darkmode) {
 		try {
 			verifyUser(member.user, member.guild, kthId, isLight);

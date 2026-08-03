@@ -4,6 +4,7 @@ import {
 	generateButtons,
 	VERIFY_BUTTON_CUSTOM_IDS,
 	UN_ABOOD_BUTTON_CUSTOM_ID,
+	MSCVERIFY_BUTTON_CUSTOM_IDS,
 } from "./subcommands/util";
 import { GuildChatInputCommandInteraction } from "../../shared/types/GuildChatInputCommandType";
 import { GuildButtonInteraction } from "../../shared/types/GuildButtonInteraction";
@@ -17,6 +18,10 @@ import {
 import { MessageFlags } from "discord.js";
 import * as log from "../../shared/utils/log";
 import { removeRole } from "../../shared/utils/roles";
+import {
+	handleButtonsMScVerify,
+	handleMScVerifyButtonInteraction,
+} from "./subcommands/mscverify/buttons-mscverify.handler";
 
 export async function handleButtons(
 	interaction: GuildChatInputCommandInteraction
@@ -34,6 +39,8 @@ export async function handleButtons(
 			);
 		case ButtonsSubcommands.VERIFY:
 			return await handleButtonsVerify(interaction);
+		case ButtonsSubcommands.MSCVERIFY:
+			return await handleButtonsMScVerify(interaction);
 		default:
 			throw new CommandNotFoundError(interaction.commandName);
 	}
@@ -48,6 +55,9 @@ export async function handleButtonInteraction(
 	const verifyButtonIds = VERIFY_BUTTON_CUSTOM_IDS.map((label) =>
 		label.toString()
 	);
+	const mscVerifyButtonIds = MSCVERIFY_BUTTON_CUSTOM_IDS.map((label) =>
+		label.toString()
+	);
 
 	// interaction originated from pressing a course button.
 	if (courseButtonIds.includes(interaction.customId)) {
@@ -56,6 +66,10 @@ export async function handleButtonInteraction(
 	// buttonInteraction originated from pressing a verify button.
 	else if (verifyButtonIds.includes(interaction.customId)) {
 		return await handleVerifyButtonInteraction(interaction);
+	}
+	// buttonInteraction originated from pressing an MSc-verify button.
+	else if (mscVerifyButtonIds.includes(interaction.customId)) {
+		return await handleMScVerifyButtonInteraction(interaction);
 	}
 	// buttonInteraction originated from the un-abood button.
 	else if (interaction.customId.startsWith(UN_ABOOD_BUTTON_CUSTOM_ID)) {

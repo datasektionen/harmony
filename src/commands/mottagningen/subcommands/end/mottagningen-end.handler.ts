@@ -36,11 +36,6 @@ export const handleMottagningenEnd = async (
 	}
 
 	await Promise.all([
-		// Remove roles "Grupp A-Z"
-		guild.roles.cache
-			.filter((r) => /Grupp [A-Z]/.test(r.name))
-			.forEach((r) => guild.roles.delete(r)),
-
 		clearReceptionRoles(guild),
 		nollanCategory.edit({
 			name: `╒══════╣ ${getCurrentYearRole()} ╠══════╕`,
@@ -71,6 +66,7 @@ const clearReceptionRoles = async (guild: Guild): Promise<void> => {
 		"Quisineriet",
 		"Ekonomeriet",
 		"Doqumenteriet",
+		"Syssleriet",
 	];
 
 	receptionRoles.map(async (roleName) => {
