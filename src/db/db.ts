@@ -33,12 +33,11 @@ export async function init(): Promise<void> {
 		);
 	`;
 
-	// Initialise table for guild(server)-specific settings.
-	// Used by notice-command to set which channel should be used,
-	// without hardcoding it, so that different servers using Harmony
-	// can all have their own designated channel
+	// Used by the /notice command to select which channel to use for notices
+	// without hardcoding so that different servers using Harmony
+	// can all have their own notice channel.
 	await sql`
-		create table if not exists guild_settings (
+		create table if not exists notice_channel (
 			guild_id text primary key,
 			notice_channel_id text
 		);
@@ -183,7 +182,7 @@ export async function setNoticeChannel(
 ): Promise<void> {
 	// If the server already has a notice-channel, update it to usethe newly provided one
 	await sql`
-		insert into guild_settings (guild_id, notice_channel_id)
+		insert into notice_channel (guild_id, notice_channel_id)
 		values (${guildId}, ${channelId})
 		on conflict (guild_id)
 		do update
@@ -195,7 +194,7 @@ export async function getNoticeChannel(
 	guildId: string
 ): Promise<string | null> {
 	const result =
-		await sql`select notice_channel_id from guild_settings where guild_id = ${guildId}`;
+		await sql`select notice_channel_id from notice_channel where guild_id = ${guildId}`;
 
 	if (result.length === 0) {
 		return null;
