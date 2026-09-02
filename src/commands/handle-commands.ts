@@ -212,7 +212,7 @@ const handleChatInputCommand = async (
 					return;
 				case CommandNames.NOTICE:
 					await handleNotice(guildInteraction);
-          return;
+          			return;
 				case CommandNames.UNVERIFY_LIGHT:
 					await handleUnverifyLight(guildInteraction);
 					return;
