@@ -7,7 +7,7 @@ export const handleNoticeSetChannel = async (
 	interaction: GuildChatInputCommandInteraction
 ): Promise<void> => {
 	/* 
-    Only administrators should be allowed to set the notice-channel.
+    Only administrators should be allowed to set the notice channel.
     Since subcommands cannot have their own default permissions, 
     the check has to be done manually
     */
@@ -29,7 +29,7 @@ export const handleNoticeSetChannel = async (
 		await setNoticeChannel(interaction.guildId!, channel.id);
 
 		await interaction.editReply({
-			content: `Notice-channel set to ${channel.toString()}`,
+			content: `Notice channel set to ${channel.toString()}`,
 		});
 	}
 };

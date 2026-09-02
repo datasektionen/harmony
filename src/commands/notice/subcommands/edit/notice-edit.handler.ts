@@ -11,7 +11,9 @@ export const handleNoticeEdit = async (
 	const thread = options.getChannel(
 		NoticeEditVariables.NOTICE_THREAD,
 		true
-	) as ThreadChannel; // notice.commands.ts already ensures this, cast only used in order to make TypeScript comply
+	) as ThreadChannel; 
+	
+	// notice.commands.ts already ensures this, cast only used in order to make TypeScript comply
 	const updatedMessage = options.getString(
 		NoticeEditVariables.NEW_MESSAGE,
 		true
@@ -20,7 +22,7 @@ export const handleNoticeEdit = async (
 	if (thread.parentId !== channelId) {
 		await interaction.editReply({
 			content:
-				"Please only select threads belonging to the notice-channel",
+				"Please only select threads belonging to the notice channel",
 		});
 	} else {
 		const messages = await thread.messages.fetch({ limit: 100 });
