@@ -11,8 +11,8 @@ export const handleNoticeEdit = async (
 	const thread = options.getChannel(
 		NoticeEditVariables.NOTICE_THREAD,
 		true
-	) as ThreadChannel; 
-	
+	) as ThreadChannel;
+
 	// notice.commands.ts already ensures this, cast only used in order to make TypeScript comply
 	const updatedMessage = options.getString(
 		NoticeEditVariables.NEW_MESSAGE,
