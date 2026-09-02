@@ -9,7 +9,8 @@ import {
 	VerifyButtonCustomIds,
 	VerifyModalCustomIds,
 } from "../util";
-import { ActionRowBuilder, TextInputBuilder } from "@discordjs/builders";
+import { TextInputBuilder } from "@discordjs/builders";
+import { LabelBuilder } from "discord.js";
 
 export async function handleButtonsVerify(
 	interaction: GuildChatInputCommandInteraction
@@ -43,30 +44,32 @@ export async function handleVerifyButtonInteraction(
 
 			const emailInput = new TextInputBuilder()
 				.setCustomId("beginVerifyEmail")
-				.setLabel("Enter your KTH email address")
+				.setPlaceholder("turetek@kth.se")
 				.setStyle(TextInputStyle.Short)
 				.setRequired(true);
 
-			const actionRow =
-				new ActionRowBuilder<TextInputBuilder>().addComponents(
-					emailInput
-				);
+			const emailLabel = new LabelBuilder()
+				.setLabel("Enter your KTH email address")
+				.setDescription(
+					"An @kth.se email address, not e.g. @ug.kth.se."
+				)
+				.setTextInputComponent(emailInput);
 
-			modal.addComponents(actionRow);
+			modal.addLabelComponents(emailLabel);
 
 			if (mottagning) {
 				const codeInput = new TextInputBuilder()
 					.setCustomId("beginVerifyCode")
-					.setLabel("Enter a valid verification code")
+					.setPlaceholder("1234abcdef")
 					.setStyle(TextInputStyle.Short)
 					.setRequired(false);
 
-				const actionRow =
-					new ActionRowBuilder<TextInputBuilder>().addComponents(
-						codeInput
-					);
+				const codeLabel = new LabelBuilder()
+					.setLabel("Enter a valid verification code")
+					.setDescription("You may have received one in your inbox.")
+					.setTextInputComponent(codeInput);
 
-				modal.addComponents(actionRow);
+				modal.addLabelComponents(codeLabel);
 			}
 
 			break;
@@ -78,29 +81,29 @@ export async function handleVerifyButtonInteraction(
 
 			const emailInput = new TextInputBuilder()
 				.setCustomId("verifyNollanEmail")
-				.setLabel("Vad är din KTH-mejladress?")
+				.setPlaceholder("turetek@kth.se")
 				.setStyle(TextInputStyle.Short)
 				.setRequired(true);
 
-			const actionRow1 =
-				new ActionRowBuilder<TextInputBuilder>().addComponents(
-					emailInput
-				);
+			const emailLabel = new LabelBuilder()
+				.setLabel("Vad är din KTH-mejladress?")
+				.setDescription("Använd din @kth.se-adress, inte @ug.kth.se!")
+				.setTextInputComponent(emailInput);
 
-			modal.addComponents(actionRow1);
+			modal.addLabelComponents(emailLabel);
 
 			const nollekodInput = new TextInputBuilder()
 				.setCustomId("verifyNollanNollekod")
-				.setLabel("Vad är koden du har fått från din Dadda?")
+				.setPlaceholder("1234abcdef")
 				.setStyle(TextInputStyle.Short)
 				.setRequired(true);
 
-			const actionRow2 =
-				new ActionRowBuilder<TextInputBuilder>().addComponents(
-					nollekodInput
-				);
+			const nollekodLabel = new LabelBuilder()
+				.setLabel("Vad är koden du har fått från din Dadda?")
+				.setDescription("Har du glömt bort koden? Kontakta din Dadda!")
+				.setTextInputComponent(nollekodInput);
 
-			modal.addComponents(actionRow2);
+			modal.addLabelComponents(nollekodLabel);
 
 			break;
 		}
@@ -111,16 +114,18 @@ export async function handleVerifyButtonInteraction(
 
 			const verificationCodeInput = new TextInputBuilder()
 				.setCustomId("verifySubmitCode")
-				.setLabel("Enter your verification code")
+				.setPlaceholder("1234abcdef")
 				.setStyle(TextInputStyle.Short)
 				.setRequired(true);
 
-			const actionRow =
-				new ActionRowBuilder<TextInputBuilder>().addComponents(
-					verificationCodeInput
-				);
+			const verificationCodeLabel = new LabelBuilder()
+				.setLabel("Enter your verification code")
+				.setDescription(
+					"You will receive one in your KTH inbox shortly."
+				)
+				.setTextInputComponent(verificationCodeInput);
 
-			modal.addComponents(actionRow);
+			modal.addLabelComponents(verificationCodeLabel);
 
 			break;
 		}

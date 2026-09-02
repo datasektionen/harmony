@@ -42,6 +42,28 @@ export const VERIFY_MODAL_CUSTOM_IDS = [
 	VerifyModalCustomIds.SUBMIT,
 ];
 
+export enum MScVerifyButtonCustomIds {
+	BEGIN = "MScBegin",
+	SUBMIT = "MScSubmit",
+}
+
+export const MSCVERIFY_BUTTON_CUSTOM_IDS = [
+	MScVerifyButtonCustomIds.BEGIN,
+	MScVerifyButtonCustomIds.SUBMIT,
+];
+
+export const MSCVERIFY_BUTTON_LABELS = ["Begin", "Submit"];
+
+export enum MScVerifyModalCustomIds {
+	BEGIN = "beginMScVerify",
+	SUBMIT = "MScVerifySubmit",
+}
+
+export const MSCVERIFY_MODAL_CUSTOM_IDS = [
+	MScVerifyModalCustomIds.BEGIN,
+	MScVerifyModalCustomIds.SUBMIT,
+];
+
 export async function generateButtons(
 	interaction: GuildChatInputCommandInteraction,
 	labels: string[],

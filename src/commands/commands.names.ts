@@ -14,4 +14,5 @@ export enum CommandNames {
 	TEST = "test",
 	UNVERIFY = "unverify",
 	NOTICE = "notice",
+	UNVERIFY_LIGHT = "unverify-light",
 }
