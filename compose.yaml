@@ -22,6 +22,7 @@ services:
         - action: rebuild
           path: package-lock.json
   
+  # Postgres database
   db:
     image: postgres:16-alpine
     environment:
@@ -37,6 +38,7 @@ services:
       retries: 5
       start_period: 10s
 
+  # Nyckeln under dörrmattan
   nyckeln:
     image: ghcr.io/datasektionen/nyckeln-under-dorrmattan:latest
     configs:
@@ -49,6 +51,7 @@ services:
       - 7004:7004
       - 7005:7005
   
+  # Spam
   spam:
     image: ghcr.io/datasektionen/spam-rs:latest
     ports:
