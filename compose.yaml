@@ -6,6 +6,7 @@ services:
     command: npm run dev
     environment:
       - NODE_ENV=development
+      - SPAM_API_TOKEN=spam-secret
     env_file:
       - .env
     depends_on:
@@ -169,10 +170,12 @@ configs:
 
       hive:
         tokens:
-          - secret: the-token-of-power
+          - secret: hive-admin-secret
             permissions:
               - id: admin
                 scope: null
+          - secret: spam-secret
+            permissions:
               - id: send
                 scope: null
         groups:

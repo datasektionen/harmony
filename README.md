@@ -36,13 +36,13 @@ Testing in this application relies on the usage of the `test` command defined in
 
 All necessary environment variables are set automatically when running with docker compose.
 
-| Name                         | Note                                 | Default                               |
-| ---------------------------- | ------------------------------------ | ------------------------------------- |
-| DISCORD_BOT_TOKEN            | ---                                  | ---                                   |
-| DISCORD_LIGHT_BOT_TOKEN      | Set to use light version             | ---                                   |
-| SPAM_API_TOKEN               | ---                                  | ---                                   |
-| DEEPL_API_KEY                | Translation disabled if unset        | ---                                   |
-| DARKMODE_URL                 | URL to darkmode or `true` or `false` | https://darkmode.datasektionen.se     |
-| SPAM_URL                     | Email system                         | https://spam.datasektionen.se         |
-| DATABASE_URL                 | Postgres DB                          | postgres://harmony:harmony@db/harmony |
-| NODE_ENV                     | `development` or `production`        | development                           |
+| Name                         | Note                                  | Default                               |
+| ---------------------------- | ------------------------------------- | ------------------------------------- |
+| DISCORD_BOT_TOKEN            | ---                                   | ---                                   |
+| DISCORD_LIGHT_BOT_TOKEN      | Set to use light version              | ---                                   |
+| SPAM_API_TOKEN               | Hive token with the `send` permission | spam-secret                           |
+| DEEPL_API_KEY                | Translation disabled if unset         | ---                                   |
+| DARKMODE_URL                 | URL to Darkmode or `true` or `false`  | https://darkmode.datasektionen.se     |
+| SPAM_URL                     | URL to the email system               | http://spam:3000                      |
+| DATABASE_URL                 | Postgres DB                           | postgres://harmony:harmony@db/harmony |
+| NODE_ENV                     | `development` or `production`         | development                           |
