@@ -129,5 +129,8 @@ dist
 src/shared/assets/state.json
 glossary.dev.json
 
+# Stupid MacOS bullshit that pisses me off...
+.DS_Store
+
 # tests directory
 src/tests/*
