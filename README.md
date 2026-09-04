@@ -32,17 +32,20 @@ Before each push you should run `npm run format` to format the code, since pull 
 
 Testing in this application relies on the usage of the `test` command defined in the `src/tests` directory. Inside this directory there is a single file `test.ts`. This file defines the `test` command and functions for initializing and handling it when called by the user. The command is only visible and usable when some subcommands are added to it as specified in [README.md](https://github.com/datasektionen/harmony/blob/addtest/src/tests/README.md). Be sure to read that file carefully to learn how to set up the framework locally and how to use it.
 
+## Testing the verification system
+When running the application using `docker compose`, an instance of the Spam system and an SMTP (email) server are started which you can use to go through the verification process without interacting with the _real_ Spam system. You can access the SMTP server where all messages with verification codes are sent at `http://localhost:8080`.
+
 ## Environment variables
 
-All necessary environment variables are set automatically when running with docker compose.
+All necessary environment variables are set automatically when running with `docker compose`.
 
-| Name                         | Note                                 | Default                               |
-| ---------------------------- | ------------------------------------ | ------------------------------------- |
-| DISCORD_BOT_TOKEN            | ---                                  | ---                                   |
-| DISCORD_LIGHT_BOT_TOKEN      | Set to use light version             | ---                                   |
-| SPAM_API_TOKEN               | ---                                  | ---                                   |
-| DEEPL_API_KEY                | Translation disabled if unset        | ---                                   |
-| DARKMODE_URL                 | URL to darkmode or `true` or `false` | https://darkmode.datasektionen.se     |
-| SPAM_URL                     | Email system                         | https://spam.datasektionen.se         |
-| DATABASE_URL                 | Postgres DB                          | postgres://harmony:harmony@db/harmony |
-| NODE_ENV                     | `development` or `production`        | development                           |
+| Name                         | Note                                  | Default                               |
+| ---------------------------- | ------------------------------------- | ------------------------------------- |
+| DISCORD_BOT_TOKEN            | ---                                   | ---                                   |
+| DISCORD_LIGHT_BOT_TOKEN      | Set to use light version              | ---                                   |
+| SPAM_API_TOKEN               | Hive token with the `send` permission | spam-secret                           |
+| DEEPL_API_KEY                | Translation disabled if unset         | ---                                   |
+| DARKMODE_URL                 | URL to Darkmode or `true` or `false`  | https://darkmode.datasektionen.se     |
+| SPAM_URL                     | URL to the email system               | http://spam:3000                      |
+| DATABASE_URL                 | Postgres DB                           | postgres://harmony:harmony@db/harmony |
+| NODE_ENV                     | `development` or `production`         | development                           |
