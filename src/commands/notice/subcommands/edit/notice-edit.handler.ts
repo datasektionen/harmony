@@ -25,10 +25,13 @@ export const handleNoticeEdit = async (
 				"Please only select threads belonging to the notice channel",
 		});
 	} else {
+		// Find oldest message from the bot in the thread, this will always be the message we want to edit
 		const messages = await thread.messages.fetch({ limit: 100 });
-		const noticeMessage = messages.find(
-			(message) => message.author.id === interaction.client.user.id
-		);
+		const noticeMessage = [...messages.values()]
+			.reverse()
+			.find(
+				(message) => message.author.id === interaction.client.user.id
+			);
 
 		if (!noticeMessage) {
 			await interaction.editReply({
@@ -36,8 +39,10 @@ export const handleNoticeEdit = async (
 					"Could not find the notice message in this thread. If the thread has more than 100 messages, it is no longer possible to edit the notice.",
 			});
 		} else {
+			// We want to keep the mention of the user after editing
+			const userMention = noticeMessage.mentions.users.first();
 			await noticeMessage.edit({
-				content: updatedMessage,
+				content: updatedMessage + `\n\n${userMention}`,
 			});
 			await interaction.editReply({
 				content: `Notice ${thread} updated!`,
