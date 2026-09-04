@@ -47,4 +47,5 @@ export const getLightBotCommands = async (): Promise<
 	translateMsgCommand,
 	buttonsCommand,
 	unverifyLightCommand,
+	noticeCommand,
 ];
