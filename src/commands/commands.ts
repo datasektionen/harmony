@@ -11,6 +11,7 @@ import { messageCommand } from "./message/message.command";
 import { ContextMenuCommandBuilder, SlashCommandBuilder } from "discord.js";
 import { kthIdCommand } from "./kthid/kthid.command";
 import { mottagningenCommand } from "./mottagningen/mottagningen.command";
+import { noticeCommand } from "./notice/notice.command";
 import {
 	unverifyCommand,
 	unverifyLightCommand,
@@ -36,6 +37,7 @@ export const getOfficialBotCommands = async (): Promise<
 	nollegruppCommand,
 	mottagningenCommand,
 	unverifyCommand,
+	noticeCommand,
 ];
 
 export const getLightBotCommands = async (): Promise<
@@ -45,4 +47,5 @@ export const getLightBotCommands = async (): Promise<
 	translateMsgCommand,
 	buttonsCommand,
 	unverifyLightCommand,
+	noticeCommand,
 ];

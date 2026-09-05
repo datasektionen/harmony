@@ -35,6 +35,7 @@ import { handleNollegrupp } from "./nollegrupp/nollegrupp.handler";
 import * as log from "../shared/utils/log";
 import { handleMottagningen } from "./mottagningen/mottagningen.handler";
 import { handleTest } from "../tests/test";
+import { handleNotice } from "./notice/notice.handler";
 import {
 	handleUnverify,
 	handleUnverifyLight,
@@ -208,6 +209,9 @@ const handleChatInputCommand = async (
 					return;
 				case CommandNames.UNVERIFY:
 					await handleUnverify(guildInteraction);
+					return;
+				case CommandNames.NOTICE:
+					await handleNotice(guildInteraction);
 					return;
 				case CommandNames.UNVERIFY_LIGHT:
 					await handleUnverifyLight(guildInteraction);
