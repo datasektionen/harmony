@@ -10,12 +10,20 @@ export async function handleNollegruppRemove(
 		true
 	);
 
+	let result = false;
+
 	// name is never null.
 	if (name !== null) {
-		await deleteNollegrupp(name);
+		result = await deleteNollegrupp(name);
 	}
 
-	await interaction.editReply(
-		`Successfully removed nØllegrupp ${name} from database.`
-	);
+	if (!result) {
+		await interaction.editReply(
+			`Failed to remove nØllegrupp ${name} from database.`
+		);
+	} else {
+		await interaction.editReply(
+			`Successfully removed nØllegrupp ${name} from database.`
+		);
+	}
 }
