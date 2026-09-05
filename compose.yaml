@@ -7,6 +7,7 @@ services:
     environment:
       - NODE_ENV=development
       - SPAM_API_TOKEN=spam-secret
+      - SPAM_URL=http://spam:3000
     env_file:
       - .env
     depends_on:

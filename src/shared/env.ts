@@ -1,10 +1,15 @@
-// Set default values for some environment variables
-export const NODE_ENV = process.env.NODE_ENV || "development";
-export const SPAM_URL = process.env.SPAM_URL || "http://spam:3000";
-export const DATABASE_URL =
-	process.env.DATABASE_URL || "postgres://harmony:harmony@db/harmony";
+// DO NOT TOUCH THESE! THEY ARE NOT SET IN PRODUCTION
+// FOR SOME REASON AND THE "DEFAULTS" ARE THE ACTUAL
+// VALUES IN PRODUCTION! THE LOCAL TESTING PRESETS ARE
+// SET IN "compose.yaml"!
 export const DARKMODE_URL =
 	process.env.DARKMODE_URL || "https://darkmode.datasektionen.se";
+export const SPAM_URL = process.env.SPAM_URL || "https://spam.datasektionen.se";
+
+// Set default values for some environment variables
+export const NODE_ENV = process.env.NODE_ENV || "development";
+export const DATABASE_URL =
+	process.env.DATABASE_URL || "postgres://harmony:harmony@db/harmony";
 
 // Configure presets for local testing using nyckeln-under-dorrmattan.
 export const LDAP_PROXY_URL =
