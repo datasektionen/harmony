@@ -52,8 +52,7 @@ export async function handleVerifyNollanBase(
 					"We see that you have received a verification code for international students.\nTo get verified, please use the **Begin** and **Submit** buttons according to the instructions in this channel, and enter your code in the **verification code** field.",
 			});
 			return;
-		}
-		else if (nollegruppRoleName === null) {
+		} else if (nollegruppRoleName === null) {
 			await interaction.editReply({
 				content:
 					"Error: Invalid code!\nVänligen skriv in den personliga kod du fått från din Dadda.\nFråga din Dadda om du behöver extra hjälp!",
