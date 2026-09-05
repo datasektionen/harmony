@@ -25,7 +25,7 @@ export async function init(): Promise<void> {
 		);
 	`;
 
-	// Initialise table table for nØllan's KTH-ids and Discord ids.
+	// Initialise table for nØllan's KTH-ids and Discord ids.
 	await sql`
 		create table if not exists nollan (
 			kth_id text primary key,
@@ -92,7 +92,11 @@ export async function insertNollegrupp(
 
 // Return true on success.
 export async function deleteNollegrupp(name: string): Promise<boolean> {
-	await sql`delete from nollegrupp where name = ${name}`;
+	try {
+		await sql`delete from nollegrupp where name = ${name}`;
+	} catch (err) {
+		return false;
+	}
 	return true;
 }
 
