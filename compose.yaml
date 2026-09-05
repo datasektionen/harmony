@@ -148,6 +148,10 @@ configs:
 
       ldap:
         - ug_kth_id: some-other-id
+          kth_id: mrmhm
+          first_name: Ture
+          family_name: Teknolog
+        - ug_kth_id: some-other-id
           kth_id: turetek
           first_name: Ture
           family_name: Teknolog
