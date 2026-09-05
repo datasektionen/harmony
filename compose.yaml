@@ -55,6 +55,7 @@ services:
   # Spam
   spam:
     image: ghcr.io/datasektionen/spam-rs:latest
+    platform: linux/amd64
     ports:
       - 3000:3000
     environment:
