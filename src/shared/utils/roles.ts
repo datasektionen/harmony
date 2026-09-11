@@ -95,7 +95,7 @@ export async function setExternRole(user: User, guild: Guild): Promise<void> {
 }
 
 export async function setPingRoles(user: User, guild: Guild): Promise<void> {
-	const pingRoles = ["StudyInfo", "ChapterInfo", "IndustryInfo"];
+	const pingRoles = ["StudyInfo", "Events", "IndustryInfo"];
 	await Promise.all(pingRoles.map((role) => setRole(user, role, guild)));
 }
 
