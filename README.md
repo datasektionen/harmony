@@ -2,7 +2,7 @@
 
 > When you're tired of discord on Discord.
 
-Harmony is a bot that maintains peace and harmony on our servers by ensuring that users have to verify themselves using a KTH email address (e.g. `turetek@kth.se`) can read and write messages. The bot also provides various other features which are practical for managing a student Discord server, e.g. commands for joining and leaving course discussion channels.
+Harmony is a bot that maintains peace and harmony on our servers by ensuring that users have to verify themselves using a KTH email address (e.g. turetek@kth.se) can read and write messages. The bot also provides various other features which are practical for managing a student Discord server, e.g. commands for joining and leaving course discussion channels.
 
 The bot is written in TypeScript and uses the [Discord.js](https://discord.js.org/) package to interact with the Discord API.
 
@@ -35,7 +35,10 @@ For a complete list of all commands provided by Harmony, see [`src/commands/comm
 
 ### Other Environment Variables.
 
-Aside from the environment variables set in `.env`, Harmony may be configured using the following environment variables. The default values are used in [`src/shared/env.ts`](src/shared/env.ts) and when running locally with `docker compose`. `DARKMODE_URL` is not set in `compose.yaml`, so you can override its default value by setting it in your `.env` file.
+Aside from the environment variables set in `.env`, Harmony may be configured using the following environment variables. The default values are used in [`src/shared/env.ts`](src/shared/env.ts) and when running locally with `docker compose`. 
+
+> [!TIP]
+> `DARKMODE_URL` is not set in `compose.yaml`, so you can override its default value by setting it in your `.env` file.
 
 | Name                         | Default value                                    | Notes                                                                                |
 | ---------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------ |
@@ -50,19 +53,44 @@ Aside from the environment variables set in `.env`, Harmony may be configured us
 
 ## Build and Run
 
-## Run locally
+>[!IMPORTANT]
+> To use Docker, you must be a member of the `docker` group. Otherwise, all commands in this section must be run with superuser privileges.
 
-Firstly, set the environment variables for the functionality you want to test. A token for a Discord bot is required to run at all. Either ask for someone else's token or create your own test bot through Discord Developer Portal.
+After setting one of the Discord bot environment variables and any environment variables necessary for the functionality you want to test, run the following command
 
-Run the following (as root unless you're in the `docker` group) (supports hot-reload):
+```
+docker compose up --build
+```
+
+Hot reload may be enabled using the `--watch` flag, i.e. by running
 
 ```
 docker compose up --build --watch
 ```
 
-To interact with the database: `npm run db`
+You can interact with Harmony's database using `npm run db`, perform linting using `npm run lint`, and format your code using `npm run format`, which will run `prettier` on the [`src/`](src/) directory.
 
-Before each push you should run `npm run format` to format the code, since pull requests not accepted by Prettier cannot be merged.
+> [!WARNING]
+> Any code with linting or formatting errors cannot be merged, so make sure to resolve them before opening a pull request.
+
+## Development
+
+### Adding a New Slash-command
+
+### The Verification System
+
+## Testing
+
+### Mock Testing
+
+### The `/test` command
+
+### Testing in Production
+
+> [!CAUTION]
+> Testing in production is not recommended since it can lead to unforeseen consequences, especially when dealing with commands that perform database operations such as `/verify` and `/mottagningen`. This may, however, be the only way to test certain changes such as patches and bug fixes, since the error may not be reproducible locally.
+
+If you want to test a new feature in production, contact the Head of Communications (Swe: Kommunikatör) via info@datasektionen.se. They have access to Harmony's logs, which are of great use when you want to identify or debug errors in the production environment.
 
 ## Testing
 
