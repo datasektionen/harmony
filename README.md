@@ -88,9 +88,11 @@ You can interact with Harmony's database using `npm run db`, perform linting usi
 ### Testing in Production
 
 > [!CAUTION]
-> Testing in production is not recommended since it can lead to unforeseen consequences, especially when dealing with commands that perform database operations such as `/verify` and `/mottagningen`. This may, however, be the only way to test certain changes such as patches and bug fixes, since the error may not be reproducible locally.
+> Testing in production is not recommended since it can lead to unforeseen consequences, especially when dealing with commands that perform database operations such as `/verify` and `/mottagningen`. This may, however, be the only way to test certain changes such as patches and bug fixes, since errors may not be reproducible locally.
 
-If you want to test a new feature in production, contact the Head of Communications (Swe: Kommunikatör) via info@datasektionen.se. They have access to Harmony's logs, which are of great use when you want to identify or debug errors in the production environment.
+If you want to test a new feature in production, contact the Head of Communications (Swe: Kommunikatör) via info@datasektionen.se. They have access to Harmony's logs, which are of great use when you want to identify or debug errors in the production environment. 
+
+Remember to thoroughly test any feature you review or implement yourself. Subtle bugs have lead to the production database being cleared in the past and recovering from that was **not** fun at all.
 
 ## Testing
 
