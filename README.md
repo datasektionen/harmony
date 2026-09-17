@@ -4,7 +4,8 @@
 
 Harmony is a bot that maintains peace and harmony on our servers by ensuring that users have to verify themselves using a KTH email address (e.g. turetek@kth.se) can read and write messages. The bot also provides various other features which are practical for managing a student Discord server, e.g. commands for joining and leaving course discussion channels.
 
-The bot is written in TypeScript and uses the [Discord.js](https://discord.js.org/) package to interact with the Discord API.
+> [!NOTE]
+> The bot is written in TypeScript and uses the [Discord.js](https://discord.js.org/) package to interact with the Discord API.
 
 ## Overview of Features
 
