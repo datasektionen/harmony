@@ -109,9 +109,21 @@ To make your new command available on the bot, follow the steps below.
 
 ### Adding Buttons and Modals
 
+> [!IMPORTANT]
+> Make sure that you do not use any `customId` values that are already in use by other buttons or modals.
+
+For an example of how button and modal interactions are handled in Harmony's code, you may refer to the source code of [`/buttons`](src/commands/buttons/).
+- To add new buttons, you must edit `handleButtonInteraction()` in [`src/commands/buttons/buttons.handler.ts`](src/commands/buttons/buttons.handler.ts) to account for your new buttons.
+- To add new modals, you must edit `modalSubmitInteractionHandler()` in [`src/commands/handle-commands.ts`](src/commands/handle-commands.ts) to account for your new modals.
+
 ### The Verification System
 
 ### Harmony's Production Environment
+
+> [!WARNING]
+> If you want to add a new secret, e.g. an API key or something else you would like to keep private, contact the Head of Systems (Swe: Systemansvarig) via dsys@datasektionen.se. Do **not** follow the steps in this section.
+
+The values of Harmony's environment variables that are used in production are set in [`job.nomad.hcl`](/job.nomad.hcl). To set a new environment variable, e.g. `EXAMPLE`, add the line `EXAMPLE=<value>` to the file.
 
 ## Testing
 
