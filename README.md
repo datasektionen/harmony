@@ -54,8 +54,11 @@ Aside from the environment variables set in `.env`, Harmony may be configured us
 
 ## Build and Run
 
->[!IMPORTANT]
-> To use Docker, you must be a member of the `docker` group. Otherwise, all commands in this section must be run with superuser privileges.
+> [!IMPORTANT]
+> To use Docker in a Linux environment, you must be a member of the `docker` group. Otherwise, all commands in this section must be run with superuser privileges.
+
+> [!IMPORTANT]
+> It is recommended to use Docker Desktop on MacOS or Windows to avoid unnecessary trouble with setting up Docker.
 
 After setting one of the Discord bot environment variables and any environment variables necessary for the functionality you want to test, run the following command
 
