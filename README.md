@@ -96,7 +96,7 @@ src/commands/example
 Aside from minor differences, e.g. having a `example/subcommands/utils.ts` file containing shared functionality used by several subcommands, all commands follow this general tree structure. For representative examples, see the source code of [`/verify`](src/commands/verify/), [`/unverify`](src/commands/unverify/), and [`/buttons`](src/commands/buttons/).
 
 > [!TIP]
-> You can reuse large parts of other commands' `-subcommands.names.ts`, `.command.ts` and `.handler.ts` when developing your own commands.
+> You can reuse large parts of other commands' `-subcommands.names.ts`, `.command.ts` and `.handler.ts` files when developing your own commands.
 
 To make your new command available on the bot, follow the steps below.
 
