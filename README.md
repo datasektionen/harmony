@@ -17,7 +17,7 @@ Harmony is a bot that maintains peace and harmony on our servers by ensuring tha
     - `/nollegrupp` allows setting roles and codes for all nØllegrupper.
     - `/mottagningen` provides various subcommands that automate starting and ending "reception mode" on the server.
 - Allow users to translate messages from Swedish to English using custom translations of chapter-related vocabulary.
-- Allow moderators to create and manage notices using the `/notice` command.
+- Allow moderators to create and manage notices, e.g. for warnings, using the `/notice` command.
 - Message all users with a certain roles using `/message`. (Do not attempt this with `>600` users, otherwise Discord gets angry.)
 
 ## Environment Variables
@@ -78,6 +78,32 @@ You can interact with Harmony's database using `npm run db`, perform linting usi
 
 ### Adding a Command
 
+To add a new command, say `/example`, with two subcommands `/example a <variable>` and `/example b`, you should create a new subdirectory in [`src/commands/`](src/commands/) named `example`. That subdirectory should have the following tree structure.
+
+```
+src/commands/example
+├── subcommands
+|   ├── a
+|   |   ├── example-a.handler.ts
+|   |   └── example-a.variables.ts
+|   └── b
+|       └── example-b.handler.ts
+├── examples-subcommands.names.ts
+├── example.command.ts
+└── example.handler.ts 
+```
+
+Aside from minor differences, e.g. having a `example/subcommands/utils.ts` file containing shared functionality used by several subcommands, all commands follow this general tree structure. For representative examples, see the source code of [`/verify`](src/commands/verify/), [`/unverify`](src/commands/unverify/), and [`/buttons`](src/commands/buttons/).
+
+To make your new command available on the bot, follow the steps below.
+
+1. Add your command's name, i.e. `example` in this case, to [`src/commands/commands.names.ts`](src/commands/commands.names.ts).
+2. Add your command to [`src/commands/commands.ts`](src/commands/commands.ts).
+    - Add your command to the return value of `getOfficialBotCommands()` to make it available on "Main" Harmony.
+    - Add your command to the return value of `getLightBotCommands()` to make it available on Harmony Light.
+3. Add logic for handling your command to [`src/commands/handle-commands.ts`](src/commands/handle-commands.ts).
+    - Simply update the `switch` statement in `handleChatInputCommand()` to match your command's name.
+
 ### Adding Buttons and Modals
 
 ### The Verification System
@@ -91,6 +117,7 @@ You can interact with Harmony's database using `npm run db`, perform linting usi
 [Nyckeln under dörrmattan](https://github.com/datasektionen/nyckeln-under-dorrmattan) provides mock versions of the Chapter systems [LDAP proxy](https://github.com/datasektionen/ldap-proxy), [SSO](https://github.com/datasektionen/sso) and [Hive](https://github.com/datasektionen/hive), which may be used to test e.g. verification and automatic assignment of Discord roles based on a user's membership in Hive groups. Nyckeln under dörrmattan's README contains more information about how to configure the mock system.
 
 ### What About Spam?
+
 [Spam](https://github.com/datasektionen/spam-rs) is required to test verification, since `/verify begin` attempts to send an email to the user's KTH email address which is then submitted using `/verify submit`. Spam is not mocked by default since starting Spam and an SMTP (email) server significantly increases build times.
 
 If you want to test the verification system, you may build with the overrides in [`compose.email.yaml`](/compose.email.yaml) using the command
@@ -111,4 +138,5 @@ If you want to test a new feature in production, contact the Head of Communicati
 Remember to thoroughly test any feature you review or implement yourself. Subtle bugs have lead to the production database being cleared in the past and recovering from that was **not** fun at all.
 
 ### The `/test` Command
+
 The `/test` command allows you to test new functionality without creating a new slash-command. The command is only visible and usable when some subcommands are added to it. For more information, read the [`src/tests/README.md`](src/tests/README.md).
