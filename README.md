@@ -151,7 +151,7 @@ Note that **any** user, Chapter member or not, that already exists in Harmony's 
 | KTH student, Chapter member       | `@Datasektionen`, `@D-XX` (fetched from SSO), and various announcement roles.                                               |
 | Former Chapter members            | Same as members if they exist in SSO, otherwise same as non-members.                                                        |
 
-The behavior of the verification system also depends on the current value of Darkmode, i.e. whether it is `true` or `false`. Specifically, if Darkmode is `true` all means of verification on "Main" Harmony, i.e. `/verify` and `/buttons verify`, are disabled while Harmony Light retains the ability to verify users using the modals created by `/buttons mscverify`. When Darkmode is `true`, "Main" Harmony also allows verifying as nØllan using the `/verify nollan` command and the "nØllan" verification modal. Darkmode being `false` has no effect on the verification system at all.
+The behavior of the verification system also depends on the current value of Darkmode, i.e. whether it is `true` or `false`. Specifically, if Darkmode is `true` all means of verification on "Main" Harmony, i.e. `/verify` and `/buttons verify`, are disabled while Harmony Light retains the ability to verify users using the modals created by `/buttons mscverify`. When Darkmode is `true`, "Main" Harmony also allows verifying as nØllan using the `/verify nollan` command and the nØllan verification modal. Darkmode being `false` has no effect on the verification system at all.
 
 ### Harmony's Production Environment
 
