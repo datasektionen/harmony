@@ -158,8 +158,8 @@ The behavior of the verification system also depends on the current value of Dar
 
 ### Harmony's Production Environment
 
-> [!WARNING]
-> If you want to add a new secret, e.g. an API key or something else you would like to keep private, contact the Head of Systems (Swe: Systemansvarig) via dsys@datasektionen.se. Do **not** follow the steps in this section.
+> [!CAUTION]
+> If you want to add a new secret, e.g. an API key or something else you would like to keep private, contact the Head of Systems (Swe: Systemansvarig) via dsys@datasektionen.se. Do not follow the steps in this section.
 
 The values of Harmony's environment variables that are used in production are set in [`job.nomad.hcl`](/job.nomad.hcl). To set a new environment variable, e.g. `EXAMPLE`, add the line `EXAMPLE=<value>` to the file.
 
