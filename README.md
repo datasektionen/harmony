@@ -88,7 +88,7 @@ You can interact with Harmony's database using `npm run db`, perform linting usi
 
 ### Mock Testing
 
-[Nyckeln under dörrmattan](https://github.com/datasektionen/nyckeln-under-dorrmattan) provides mock versions of the Chapter systems [LDAP proxy](https://github.com/datasektionen/ldap-proxy), [SSO](https://github.com/datasektionen/sso), and [Hive](https://github.com/datasektionen/hive) which may be used to test e.g. verification and automatic assignment of Discord roles based on a user's membership in Hive groups. Nyckeln under dörrmattan's README contains more information about how to configure the mock system.
+[Nyckeln under dörrmattan](https://github.com/datasektionen/nyckeln-under-dorrmattan) provides mock versions of the Chapter systems [LDAP proxy](https://github.com/datasektionen/ldap-proxy), [SSO](https://github.com/datasektionen/sso) and [Hive](https://github.com/datasektionen/hive), which may be used to test e.g. verification and automatic assignment of Discord roles based on a user's membership in Hive groups. Nyckeln under dörrmattan's README contains more information about how to configure the mock system.
 
 ### What About Spam?
 [Spam](https://github.com/datasektionen/spam-rs) is required to test verification, since `/verify begin` attempts to send an email to the user's KTH email address which is then submitted using `/verify submit`. Spam is not mocked by default since starting Spam and an SMTP (email) server significantly increases build times.
