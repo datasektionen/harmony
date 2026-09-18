@@ -1,6 +1,6 @@
 # Harmony
 
-> When you're tired of discord on Discord.
+**When you're tired of discord on Discord.**
 
 Harmony is a bot that maintains peace and harmony on our servers by ensuring that users have to verify themselves using a KTH email address (e.g. turetek@kth.se) can read and write messages. The bot also provides various other features which are practical for managing a student Discord server, e.g. commands for joining and leaving course discussion channels.
 
@@ -47,7 +47,7 @@ Aside from the environment variables set in `.env`, Harmony may be configured us
 | `SPAM_API_TOKEN`             | `spam-secret`                                    | Hive token with the `send` permission.                                               |
 | `DEEPL_API_KEY`              | Not set                                          | Set to enable message translation.                                                   |
 | `DARKMODE_URL`               | `https://darkmode.datasektionen.se`              | URL to the Darkmode system. Set to `true` to enable Darkmode, `false` to disable it. |
-| `SPAM_URL`                   | `http://spam:3000`                               | URL to the [Spam email system](https://github.com/datasektionen/spam-rs).            |
+| `SPAM_URL`                   | `http://spam:3000`                               | URL to the [Spam](https://github.com/datasektionen/spam-rs) email system.            |
 | `DATABASE_URL`               | `postgres://harmony:harmony@db/harmony`          | URL to the Postgres database.                                                        |
 | `LDAP_PROXY_URL`             | `http://nyckeln:7005/user?kthid=`                | URL used to fetch users from the LDAP proxy system.                                  |
 | `SSO_URL`                    | `http://nyckeln:7003/api/users?format=single&u=` | URL used to fetch users from the SSO system.                                         |
@@ -76,15 +76,30 @@ You can interact with Harmony's database using `npm run db`, perform linting usi
 
 ## Development
 
-### Adding a New Slash-command
+### Adding a Slash-command
+
+### Adding Buttons and Modals
 
 ### The Verification System
+
+### Harmony's Production Environment
 
 ## Testing
 
 ### Mock Testing
 
-### The `/test` command
+[Nyckeln under dörrmattan](https://github.com/datasektionen/nyckeln-under-dorrmattan) provides mock versions of the Chapter systems [LDAP proxy](https://github.com/datasektionen/ldap-proxy), [SSO](https://github.com/datasektionen/sso), and [Hive](https://github.com/datasektionen/hive) which may be used to test e.g. verification and automatic assignment of Discord roles based on a user's membership in Hive groups. Nyckeln under dörrmattan's README contains more information about how to configure the mock system.
+
+### What About Spam?
+[Spam](https://github.com/datasektionen/spam-rs) is required to test verification, since `/verify begin` attempts to send an email to the user's KTH email address which is then submitted using `/verify submit`. Spam is not mocked by default since starting Spam and an SMTP (email) server significantly increases build times.
+
+If you want to test the verification system, you may build with the overrides in `compose.email.yaml` using the command
+
+```
+docker compose -f compose.yaml -f compose.email.yaml up --build
+```
+
+You may then access the SMTP server via your browser of choice at `http://localhost:8080`.
 
 ### Testing in Production
 
@@ -95,9 +110,8 @@ If you want to test a new feature in production, contact the Head of Communicati
 
 Remember to thoroughly test any feature you review or implement yourself. Subtle bugs have lead to the production database being cleared in the past and recovering from that was **not** fun at all.
 
+### The `/test` command
+
 ## Testing
 
 Testing in this application relies on the usage of the `test` command defined in the `src/tests` directory. Inside this directory there is a single file `test.ts`. This file defines the `test` command and functions for initializing and handling it when called by the user. The command is only visible and usable when some subcommands are added to it as specified in [README.md](https://github.com/datasektionen/harmony/blob/addtest/src/tests/README.md). Be sure to read that file carefully to learn how to set up the framework locally and how to use it.
-
-## Testing the verification system
-When running the application using `docker compose`, an instance of the Spam system and an SMTP (email) server are started which you can use to go through the verification process without interacting with the _real_ Spam system. You can access the SMTP server where all messages with verification codes are sent at `http://localhost:8080`.
