@@ -29,7 +29,7 @@ To run Harmony, you need to get a Discord bot token from [Discord's Developer Po
 
 | Name                         | Version                               | Notes                                                                                |
 | ---------------------------- | ------------------------------------- | ------------------------------------------------------------------------------------ |
-| `DISCORD_BOT_TOKEN`          | Harmony ("Main" Harmony)              | Has access to all commands except certain light-only commands like `/unverify-light` |
+| `DISCORD_BOT_TOKEN`          | "Main" Harmony                        | Has access to all commands except certain light-only commands like `/unverify-light` |
 | `DISCORD_LIGHT_BOT_TOKEN`    | Harmony Light                         | Has a more limited set of commands, used on all committee and MSc community servers. |
 
 For a complete list of all commands provided by Harmony, see [`src/commands/commands.ts`](src/commands/commands.ts).
@@ -76,7 +76,7 @@ You can interact with Harmony's database using `npm run db`, perform linting usi
 
 ## Development
 
-### Adding a Slash-command
+### Adding a Command
 
 ### Adding Buttons and Modals
 
@@ -110,8 +110,5 @@ If you want to test a new feature in production, contact the Head of Communicati
 
 Remember to thoroughly test any feature you review or implement yourself. Subtle bugs have lead to the production database being cleared in the past and recovering from that was **not** fun at all.
 
-### The `/test` command
-
-## Testing
-
-Testing in this application relies on the usage of the `test` command defined in the `src/tests` directory. Inside this directory there is a single file `test.ts`. This file defines the `test` command and functions for initializing and handling it when called by the user. The command is only visible and usable when some subcommands are added to it as specified in [README.md](https://github.com/datasektionen/harmony/blob/addtest/src/tests/README.md). Be sure to read that file carefully to learn how to set up the framework locally and how to use it.
+### The `/test` Command
+The `/test` command allows you to test new functionality without creating a new slash-command. The command is only visible and usable when some subcommands are added to it. For more information, read the [`src/tests/README.md`](src/tests/README.md).
