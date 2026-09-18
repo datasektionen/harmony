@@ -25,7 +25,7 @@ Harmony is a bot that maintains peace and harmony on our servers by ensuring tha
 To run Harmony, you need to get a Discord bot token from [Discord's Developer Portal](https://discord.com/developers/applications). You should then create a `.env` file where you set one of the following environment variables depending on the version of Harmony you want to test.
 
 > [!CAUTION]
-> Do not under any circumstances add secrets such as your Discord bot token to `compose.yaml` or any files committed to the repository. Secrets should be set in `.env`, which is not tracked by source control.
+> Do not under any circumstances add secrets such as your Discord bot token to [`compose.yaml`](/compose.yaml) or any files committed to the repository. Secrets should be set in `.env`, which is not tracked by source control.
 
 | Name                         | Version                               | Notes                                                                                |
 | ---------------------------- | ------------------------------------- | ------------------------------------------------------------------------------------ |
@@ -39,7 +39,7 @@ For a complete list of all commands provided by Harmony, see [`src/commands/comm
 Aside from the environment variables set in `.env`, Harmony may be configured using the following environment variables. The default values are used in [`src/shared/env.ts`](src/shared/env.ts) and when running locally with `docker compose`. 
 
 > [!TIP]
-> `DARKMODE_URL` is not set in `compose.yaml`, so you can override its default value by setting it in your `.env` file.
+> `DARKMODE_URL` is not set in [`compose.yaml`](/compose.yaml), so you can override its default value by setting it in your `.env` file.
 
 | Name                         | Default value                                    | Notes                                                                                |
 | ---------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------ |
@@ -93,7 +93,7 @@ You can interact with Harmony's database using `npm run db`, perform linting usi
 ### What About Spam?
 [Spam](https://github.com/datasektionen/spam-rs) is required to test verification, since `/verify begin` attempts to send an email to the user's KTH email address which is then submitted using `/verify submit`. Spam is not mocked by default since starting Spam and an SMTP (email) server significantly increases build times.
 
-If you want to test the verification system, you may build with the overrides in `compose.email.yaml` using the command
+If you want to test the verification system, you may build with the overrides in [`compose.email.yaml`](/compose.email.yaml) using the command
 
 ```
 docker compose -f compose.yaml -f compose.email.yaml up --build
