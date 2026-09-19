@@ -6,6 +6,9 @@ services:
     command: npm run dev
     environment:
       - NODE_ENV=development
+      - DATABASE_URL=postgres://harmony:harmony@db/harmony
+      - LDAP_PROXY_URL=http://nyckeln:7005/user?kthid=
+      - SSO_URL=http://nyckeln:7003/api/users?format=single&u=
     env_file:
       - .env
     depends_on:
