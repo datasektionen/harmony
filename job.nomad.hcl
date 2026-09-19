@@ -16,12 +16,13 @@ DATABASE_URL=postgres://harmony:{{ .db_password }}@postgres.dsekt.internal:5432/
 DISCORD_BOT_TOKEN={{ .bot_token }}
 DISCORD_LIGHT_BOT_TOKEN={{ .light_bot_token }}
 DEEPL_API_KEY={{ .deepl_api_key }}
-
 SPAM_API_TOKEN={{ .spam_api_token }}
 {{ end }}
 
 NODE_ENV=production
 
+DARKMODE_URL=https://darkmode.datasektionen.se
+SPAM_URL=https://spam.datasektionen.se
 SSO_URL=http://sso.nomad.dsekt.internal/api/users?format=single&u=
 LDAP_PROXY_URL=http://ldap-proxy.dsekt.internal:38980/user?kthid=
 
