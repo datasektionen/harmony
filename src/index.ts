@@ -6,12 +6,13 @@ import * as db from "./db/db";
 import { userJoined } from "./shared/utils/userJoined";
 import * as log from "./shared/utils/log";
 import { handle_abood_mention } from "./shared/utils/abood";
+import { isDarkmode } from "./shared/utils/darkmode";
 
 /**
  * Goes through all dotenv vars and checks if they are defined.
  * If not, the service will throw an error
  */
-function validateEnvironment(): void {
+async function validateEnvironment(): Promise<void> {
 	if (
 		!process.env.DISCORD_BOT_TOKEN &&
 		!process.env.DISCORD_LIGHT_BOT_TOKEN
@@ -22,9 +23,11 @@ function validateEnvironment(): void {
 	}
 
 	if (!process.env.SPAM_API_TOKEN)
-		console.error("SPAM_API_TOKEN not set. Sending emails disabled.");
+		log.warning("SPAM_API_TOKEN not set. Sending emails disabled.");
 	if (!process.env.DEEPL_API_KEY)
-		console.error("DEEPL_API_KEY not set. Translations disabled.");
+		log.warning("DEEPL_API_KEY not set. Translations disabled.");
+	if (!(await isDarkmode()))
+		log.warning("DARKMODE_URL not set. Darkmode is off.");
 }
 
 const intents = [
@@ -40,7 +43,7 @@ export const harmonyClient = new DiscordClient({ intents });
 export const harmonyLightClient = new LightDiscordClient({ intents });
 
 async function main(): Promise<void> {
-	validateEnvironment();
+	await validateEnvironment();
 
 	await db.init();
 	log.info("Initialized database");
