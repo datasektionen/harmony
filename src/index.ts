@@ -25,8 +25,7 @@ function validateEnvironment(): void {
 		log.warning("SPAM_API_TOKEN not set. Sending emails disabled.");
 	if (!process.env.DEEPL_API_KEY)
 		log.warning("DEEPL_API_KEY not set. Translations disabled.");
-	if (!process.env.DARKMODE_URL)
-		log.warning("DARKMODE_URL not set.");
+	if (!process.env.DARKMODE_URL) log.warning("DARKMODE_URL not set.");
 }
 
 const intents = [
