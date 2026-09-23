@@ -11,7 +11,7 @@ import { handle_abood_mention } from "./shared/utils/abood";
  * Goes through all dotenv vars and checks if they are defined.
  * If not, the service will throw an error
  */
-function validateEnvironment() {
+function validateEnvironment(): void {
 	if (
 		!process.env.DISCORD_BOT_TOKEN &&
 		!process.env.DISCORD_LIGHT_BOT_TOKEN
@@ -25,6 +25,8 @@ function validateEnvironment() {
 		log.warning("SPAM_API_TOKEN not set. Sending emails disabled.");
 	if (!process.env.DEEPL_API_KEY)
 		log.warning("DEEPL_API_KEY not set. Translations disabled.");
+	if (!process.env.DARKMODE_URL)
+		log.warning("DARKMODE_URL not set.");
 }
 
 const intents = [
